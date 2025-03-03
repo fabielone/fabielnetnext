@@ -54,7 +54,7 @@ export default function RootLayout({
     >
       <body className="antialiased ">
       <Navbar />
-      <main className="flex-auto min-w-0 pt-16 flex flex-col px-2 md:px-0">         
+      <main className="flex-auto bg-yellow-50 min-w-0 pt-16 flex flex-col px-2 md:px-0">         
           {children}
           <Footer />
           <Analytics />
