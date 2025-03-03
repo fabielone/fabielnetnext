@@ -1,61 +1,173 @@
-function ArrowIcon() {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M2.07102 11.3494L0.963068 10.2415L9.2017 1.98864H2.83807L2.85227 0.454545H11.8438V9.46023H10.2955L10.3097 3.09659L2.07102 11.3494Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="mb-16">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
-        <li>
-          <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="/rss"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">rss</p>
-          </a>
-        </li>
-        <li>
-          <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/vercel/next.js"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">github</p>
-          </a>
-        </li>
-        <li>
-          <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://vercel.com/templates/next.js/portfolio-starter-kit"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">view source</p>
-          </a>
-        </li>
-      </ul>
-      <p className="mt-8 text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} MIT Licensed
-      </p>
+    <footer className="bg-gray-900 text-white py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Column 1: About and Social Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold">Business Formation & Software Development</h3>
+            <p className="text-sm text-gray-400">
+              We help you form your business and build powerful software solutions to grow your brand.
+            </p>
+            <div className="flex space-x-4">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <FaFacebook className="w-5 h-5" />
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <FaInstagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <FaTwitter className="w-5 h-5" />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <FaLinkedin className="w-5 h-5" />
+              </a>
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <FaYoutube className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="/services" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Services
+                </a>
+              </li>
+              <li>
+                <a href="/portfolio" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Portfolio
+                </a>
+              </li>
+              <li>
+                <a href="/blog" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Blog
+                </a>
+              </li>
+              <li>
+                <a href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Privacy Notice
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Services */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold">Our Services</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="/services/business-formations" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Business Formations
+                </a>
+              </li>
+              <li>
+                <a href="/services/software-development" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Software Development
+                </a>
+              </li>
+              <li>
+                <a href="/services/marketing" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Marketing
+                </a>
+              </li>
+              <li>
+                <a href="/services/registered-agent" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Registered Agent
+                </a>
+              </li>
+              <li>
+                <a href="/services/compliance" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Compliance
+                </a>
+              </li>
+              <li>
+                <a href="/services/concierge-service" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Concierge Service
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Email Subscription */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold">Subscribe to Our Newsletter</h3>
+            <p className="text-sm text-gray-400">
+              Get the latest updates on business formation, software development, and marketing tips.
+            </p>
+            <form className="flex flex-col space-y-2">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+          <p className="text-sm text-gray-400">
+            © {new Date().getFullYear()} Fabiel. All rights reserved.
+          </p>
+          <p className="text-sm text-gray-400 mt-2">
+            <a href="/terms" className="hover:text-white transition-colors">
+              Terms of Service
+            </a>{' '}
+            |{' '}
+            <a href="/privacy" className="hover:text-white transition-colors">
+              Privacy Notice
+            </a>
+          </p>
+        </div>
+      </div>
     </footer>
-  )
+  );
 }
