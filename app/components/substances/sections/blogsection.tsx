@@ -95,7 +95,7 @@ export default function BlogList(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col items-center py-12">
+    <div className="flex flex-col items-center py-12 bg-yellow-300">
       {/* Header Section */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-slate-900 mb-3">
@@ -108,12 +108,12 @@ export default function BlogList(): JSX.Element {
 
       {/* Blog Cards Carousel */}
       <div className="relative w-full overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-transparent to-white z-10" />
+        <div className="absolute inset-0 pointer-events-none z-10" />
         
-        <div className="relative px-12">
+        <div className="relative px-8">
           <div 
             ref={scrollRef}
-            className="flex overflow-x-auto whitespace-nowrap gap-6 py-8 scrollbar-hide items-center min-h-[600px]"
+            className="flex overflow-x-auto whitespace-nowrap gap-6 py-4 scrollbar-hide items-center "
             onScroll={handleScrollCheck}
           >
             {blogs.map((blog, index) => (
@@ -145,10 +145,10 @@ export default function BlogList(): JSX.Element {
       </div>
 
       {/* Call to Action Section */}
-      <div className="text-center mt-8">
+      <div className="text-center mt-2">
         <a 
           href="/blog"
-          className="inline-flex items-center gap-2 bg-amber-100 text-slate-900 px-6 py-3 rounded-lg hover:bg-amber-200 transition-colors duration-300 font-semibold"
+          className="inline-flex items-center gap-2 bg-amber-100 text-slate-900 px-2 py-3 rounded-lg hover:bg-amber-200 transition-colors duration-300 font-semibold"
         >
           <FaBookReader className="w-5 h-5" />
           Ver Biblioteca Completa

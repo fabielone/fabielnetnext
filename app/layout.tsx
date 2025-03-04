@@ -11,16 +11,16 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Fabiel.Net : Establece tu Negocio en EE.UU. - Formación de Empresas y Marketing Digital',
+    template: '%s | Fabiel.Net Establece tu Negocio en EE.UU. - Formación de Empresas y Marketing Digital',
   },
-  description: 'This is my portfolio.',
+  description: 'Fabiel.Net es tu aliado para establecer y crear un negocio exitoso en los Estados Unidos. Ofrecemos formación de empresas, desarrollo web y marketing digital para emprendedores latinos.',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Establece tu Negocio en EE.UU. con Fabiel.Net - Formación de Empresas y Marketing Digital',
+    description: 'Fabiel.Net es tu aliado para establecer y crear un negocio exitoso en los Estados Unidos. Ofrecemos formación de empresas, desarrollo web y marketing digital para emprendedores latinos.',
     url: baseUrl,
-    siteName: 'My Portfolio',
-    locale: 'en_US',
+    siteName: 'Fabiel.Net',
+    locale: 'es_US',
     type: 'website',
   },
   robots: {

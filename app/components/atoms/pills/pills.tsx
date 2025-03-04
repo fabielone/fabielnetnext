@@ -12,7 +12,7 @@ const Pills: React.FC<PillsProps> = (
     bgColor}) => {
     return(
         <>
-        <p className={`px-1 py-1 rounded-full text-xs ${color} ${bgColor} inline-block`}>{text}</p>
+        <p className={`px-1 py-1 rounded-full ${color} ${bgColor} inline-block`}>{text}</p>
         </>
     )
 }

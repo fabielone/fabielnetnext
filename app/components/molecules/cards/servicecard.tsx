@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({
   });
 
   return (
-    <div ref={contentRef} className="relative px-4 mx-auto lg:py-2 md:px-8 xl:px-20 sm:max-w-xl md:max-w-full">
+    <div ref={contentRef} className="relative px-4 mx-auto lg:py-2 md:px-8 xl:px-12 sm:max-w-xl md:max-w-full">
       <div className={`max-w-xl border-t-2 py-2 mx-auto lg:max-w-screen-xl lg:flex ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
         <animated.div style={imageSlideProps} className="flex justify-center h-full overflow-hidden lg:w-2/3 xl:w-1/2 lg:justify-start lg:items-end">
           <img
