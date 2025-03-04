@@ -45,8 +45,8 @@ const Header: React.FC<HeaderProps> = ({
   });
 
   return (
-    <div ref={contentRef} className="relative px-4 mx-auto lg:py-2 md:px-8 xl:px-12 sm:max-w-xl md:max-w-full">
-      <div className={`max-w-xl border-t-2 py-2 mx-auto lg:max-w-screen-xl lg:flex ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
+    <div ref={contentRef} className="relative px-4 lg:py-2 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full">
+      <div className={` border-t-2 py-2 mx-auto lg:flex ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
         <animated.div style={imageSlideProps} className="flex justify-center h-full overflow-hidden lg:w-2/3 xl:w-1/2 lg:justify-start lg:items-end">
           <img
             src={imageUrl}
@@ -63,9 +63,10 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
               {title}
-              <br className="hidden md:block" />
-              {subtitle}
             </h2>
+            <h3 className="max-w-lg mb-6 font-sans text-2xl font-medium tracking-tight text-gray-900 sm:text-3xl sm:leading-none"> 
+            {subtitle}
+              </h3>
             <p className="text-base text-gray-700 md:text-lg">
               {description}
             </p>
@@ -73,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center mb-6">
             <a
               href={buttonLink}
-              className="inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+              className="inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-black border-2 border-black bg-yellow-200 transition duration-200 rounded-2xl shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
             >
               {buttonText}
             </a>
@@ -82,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({
               aria-label=""
               className="inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
             >
-              Learn more
+              Conoce más
             </a>
           </div>
           <ul className="list-disc pl-5">

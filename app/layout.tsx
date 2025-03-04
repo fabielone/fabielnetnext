@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   title: {
     default: 'Fabiel.Net : Establece tu Negocio en EE.UU. - Formación de Empresas y Marketing Digital',
     template: '%s | Fabiel.Net Establece tu Negocio en EE.UU. - Formación de Empresas y Marketing Digital',
+    
+  },
+  icons: {
+    icon: '/favicon.ico', // Path to your favicon in the public folder
   },
   description: 'Fabiel.Net es tu aliado para establecer y crear un negocio exitoso en los Estados Unidos. Ofrecemos formación de empresas, desarrollo web y marketing digital para emprendedores latinos.',
   openGraph: {

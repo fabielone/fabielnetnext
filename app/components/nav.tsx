@@ -1,5 +1,5 @@
 'use client'; // Mark this as a Client Component since we're using hooks and interactivity
-
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -122,7 +122,12 @@ export default function Navbar() {
               className="text-xl font-bold text-gray-800 dark:text-white"
               onClick={handleNavigationClick} // Close menu on logo click
             >
-              Logo
+              <Image
+        src="/logo.png" // Path to your logo in the public folder
+        alt="Company Logo"
+        width={150} // Adjust width as needed
+        height={50} // Adjust height as needed
+      />
             </Link>
           </div>
 

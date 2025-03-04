@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { FaCheckCircle } from "react-icons/fa";
+import Image from 'next/image'; // Import the Image component
 
 export default function HeroRight() {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ export default function HeroRight() {
   };
 
   return (
-    <section className="pt-4  flex ">
+    <section className="pt-4 flex">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center h-full">
           <div className="bg-colors-background-dark overflow-hidden flex flex-col h-full w-full max-w-xl">
@@ -38,13 +39,22 @@ export default function HeroRight() {
             </div>
 
             <div className="p-6 flex-grow">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-  Tu Aliado Empresarial
-</h2>
-<p className="text-slate-800 mt-4 text-lg">
-  🌟 ¡Bienvenido a <span className="text-yellow-600 font-semibold">Fabiel.Net</span>! 
-  Estamos aquí para ayudarte a establecer y crecer tu negocio en los Estados Unidos.
-</p>
+              <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+                Tu Aliado Empresarial
+              </h2>
+              <p className="text-slate-800 mt-4 text-lg">
+                🌟 ¡Bienvenido a{' '}
+                <span className="inline-flex items-center">
+                  <Image
+                    src="/logo.png" // Path to your logo in the public folder
+                    alt="Fabiel.Net Logo"
+                    width={80} // Adjust width as needed
+                    height={32} // Adjust height as needed
+                    className="inline-block align-middle mr-1" // Make the logo inline
+                  />
+                </span>
+                ! Estamos aquí para ayudarte a establecer y crecer tu negocio en los Estados Unidos.
+              </p>
 
               {/* Newsletter Subscription Form */}
               <div className="mt-8">
@@ -62,7 +72,7 @@ export default function HeroRight() {
                   />
                   <button
                     type="submit"
-                    className="mt-3 w-full bg-yellow-500 text-slate-900 px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-300 font-semibold"
+                    className="mt-3 w-full bg-white border-black border-2 text-slate-900 px-6 py-2 rounded-lg hover:bg-yellow-50 transition-colors duration-300 font-semibold"
                   >
                     Suscribirse
                   </button>

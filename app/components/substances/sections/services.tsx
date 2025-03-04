@@ -56,7 +56,7 @@ const services = [
 const MyServices = () => {
   return (
     <div className="flex flex-col items-center p-6 bg-yellow-50">
-      <h2 className="text-3xl font-bold text-center mb-4">Mis Servicios</h2>
+      <h2 className="text-3xl font-bold text-center mb-4">Nuestros Servicios</h2>
       <span className="text-xl font-semibold text-center mb-8">Soluciones para tu Negocio</span>
       <div className="flex flex-col space-y-12">
         {services.map((service, index) => (
