@@ -95,7 +95,7 @@ export default function BlogList(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col items-center py-12 bg-yellow-300">
+    <div className="flex flex-col items-center py-12 bg-yellow-200">
       {/* Header Section */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-slate-900 mb-3">

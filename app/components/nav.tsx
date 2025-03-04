@@ -1,30 +1,110 @@
-'use client'; // Mark this as a Client Component since we're using hooks and interactivity
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import LanguageSelector from '../components/molecules/languageselector';
+
+interface NavItem {
+  name: string;
+  path?: string;
+  subItems?: {
+    name: string;
+    subSections: {
+      name: string;
+      path: string;
+    }[];
+  }[];
+}
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
   const menuRef = useRef<HTMLDivElement>(null);
-  const languageDropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const pathname = usePathname();
 
-  // Toggle menu
-  const toggleMenu = () => {
+  const navItems: NavItem[] = [
+    {
+      name: 'Servicios',
+      subItems: [
+        {
+          name: 'Desarrollo de Software',
+          subSections: [
+            { name: 'Web', path: '/services/software-development/web' },
+            { name: 'Tienda En Línea', path: '/services/software-development/applications' },
+            { name: 'Automatización', path: '/services/software-development/solutions' },
+          ],
+        },
+        {
+          name: 'Marketing',
+          subSections: [
+            { name: 'Redes Sociales', path: '/services/marketing/social-media' },
+            { name: 'Creación de Contenido', path: '/services/marketing/content-creation' },
+            { name: 'Blog', path: '/services/marketing/blog' },
+          ],
+        },
+        {
+          name: 'Formación de Empresas',
+          subSections: [
+            { name: 'Forma tu LLC', path: '/services/business-formations/form-your-llc' },
+            { name: 'Agente Registrado', path: '/services/business-formations/registered-agent' },
+            { name: 'Cumplimiento', path: '/services/business-formations/compliance' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Clientes',
+      path: '/clientes',
+    },
+    {
+      name: 'Servicio Black',
+      subItems: [
+        {
+          name: 'Servicio de Concierge',
+          subSections: [
+            { name: 'Paquete Todo Incluido', path: '/services/vip/concierge' },
+          ],
+        },
+        {
+          name: 'Asesoría Exclusiva',
+          subSections: [
+            { name: 'Consultoría Personalizada', path: '/services/vip/consulting' },
+            { name: 'Soporte Prioritario', path: '/services/vip/priority-support' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Blog',
+      path: '/blog',
+    },
+    {
+      name: 'Contacto',
+      path: '/contact',
+    },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && 
+          !menuRef.current.contains(event.target as Node) && 
+          !(event.target as Element).closest('.menu-icon')) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Toggle language dropdown
-  const toggleLanguageDropdown = () => {
-    setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
-  };
-
-  // Toggle category collapse
   const toggleCategory = (category: string) => {
     setOpenCategories((prev) => ({
       ...prev,
@@ -32,102 +112,28 @@ export default function Navbar() {
     }));
   };
 
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
-      if (
-        languageDropdownRef.current &&
-        !languageDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsLanguageDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  // Change language
-  const changeLanguage = (lng: string) => {
-    const newPath = `/${lng}${pathname}`; // Prepend the new locale to the current path
-    router.replace(newPath); // Update the URL with the new locale
-    setIsLanguageDropdownOpen(false); // Close the dropdown
-    setIsMenuOpen(false); // Close the mobile menu
-  };
-
-  // Handle navigation click (closes the mobile menu)
   const handleNavigationClick = () => {
     setIsMenuOpen(false);
   };
 
-  // Navigation items
-  const navItems = [
-    {
-      name: 'Services',
-      subItems: [
-        {
-          name: 'Software Development',
-          subSections: [
-            { name: 'Web', path: '/services/software-development/web' },
-            { name: 'Applications', path: '/services/software-development/applications' },
-            { name: 'Solutions', path: '/services/software-development/solutions' },
-          ],
-        },
-        {
-          name: 'Marketing',
-          subSections: [
-            { name: 'Social Media', path: '/services/marketing/social-media' },
-            { name: 'Content Creation', path: '/services/marketing/content-creation' },
-            { name: 'Blog', path: '/services/marketing/blog' },
-          ],
-        },
-        {
-          name: 'Business Formations',
-          subSections: [
-            { name: 'Form Your LLC', path: '/services/business-formations/form-your-llc' },
-            { name: 'Registered Agent', path: '/services/business-formations/registered-agent' },
-            { name: 'Compliance', path: '/services/business-formations/compliance' },
-            { name: 'Concierge Service', path: '/services/business-formations/concierge-service' },
-          ],
-        },
-      ],
-    },
-    {
-      name: 'Portfolio',
-      path: '/portfolio',
-    },
-    {
-      name: 'Blog',
-      path: '/blog',
-    },
-    {
-      name: 'Contact',
-      path: '/contact',
-    },
-  ];
-
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md fixed w-full z-50">
+    <nav className="bg-white shadow-md fixed w-full z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link
               href="/"
-              className="text-xl font-bold text-gray-800 dark:text-white"
-              onClick={handleNavigationClick} // Close menu on logo click
+              className="text-xl font-bold text-gray-800 "
+              onClick={handleNavigationClick}
             >
               <Image
-        src="/logo.png" // Path to your logo in the public folder
-        alt="Company Logo"
-        width={150} // Adjust width as needed
-        height={50} // Adjust height as needed
-      />
+                src="/logo.png"
+                alt="Company Logo"
+                width={150}
+                height={50}
+                priority
+              />
             </Link>
           </div>
 
@@ -135,7 +141,8 @@ export default function Navbar() {
           <div className="flex md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-gray-800 dark:text-white focus:outline-none"
+              className="text-gray-800 dark:text-white focus:outline-none menu-icon"
+              aria-label="Toggle menu"
             >
               <svg
                 className="h-6 w-6"
@@ -155,7 +162,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex md:items-center md:space-x-4 flex-grow justify-center">
+          <div className="hidden md:flex md:items-center md:space-x-1  justify-center">
             {/* Navigation Links */}
             {navItems.map((item, index) => (
               <div key={index} className="relative group">
@@ -169,28 +176,33 @@ export default function Navbar() {
                 ) : (
                   <div className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
                     {item.name}
-                    {/* Full-width dropdown */}
-                    <div className="absolute right-auto mt-2 w-3xl bg-white dark:bg-gray-800 shadow-lg rounded-lg py-4 hidden group-hover:block">
-                      <div className="grid grid-cols-3 gap-8 px-8">
-                        {item.subItems?.map((subItem, subIndex) => (
-                          <div key={subIndex} className="border-r border-gray-200 dark:border-gray-700 pr-8 last:border-r-0">
-                            <p className="text-gray-800 dark:text-white font-semibold mb-2">
-                              {subItem.name}
-                            </p>
-                            {subItem.subSections?.map((subSection, subSecIndex) => (
-                              <Link
-                                key={subSecIndex}
-                                href={subSection.path}
-                                className="block text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
-                                onClick={handleNavigationClick} // Close menu on submenu click
-                              >
-                                {subSection.name}
-                              </Link>
-                            ))}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    {/* Mega Menu Dropdown */}
+                    <div className="fixed left-1/2 transform -translate-x-1/2 mt-2 w-3xl bg-amber-100 dark:bg-gray-800 shadow-lg rounded-lg py-4 hidden group-hover:block z-50">
+  <div className="grid grid-cols-3 gap-8 px-8">
+    {item.subItems?.map((subItem, subIndex) => (
+      <div 
+        key={subIndex} 
+        className="border-r border-gray-200 dark:border-gray-700 pr-8 last:border-r-0"
+      >
+        <p className="text-gray-800 dark:text-white font-semibold mb-2">
+          {subItem.name}
+        </p>
+        <div>
+          {subItem.subSections?.map((subSection, subSecIndex) => (
+            <Link
+              key={subSecIndex}
+              href={subSection.path}
+              className="block text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
+              onClick={handleNavigationClick}
+            >
+              {subSection.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
                   </div>
                 )}
               </div>
@@ -233,40 +245,14 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Language Dropdown and Log In / Sign Up */}
+          {/* Language Selector and Login */}
           <div className="flex items-center space-x-4">
-            {/* Language Dropdown */}
-            <div className="relative" ref={languageDropdownRef}>
-              <button
-                onClick={toggleLanguageDropdown}
-                className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                {pathname.startsWith('/es') ? 'Español' : 'English'}
-              </button>
-              {isLanguageDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-24 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2">
-                  <button
-                    onClick={() => changeLanguage('en')}
-                    className="block w-full text-left text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-4 py-2"
-                  >
-                    English
-                  </button>
-                  <button
-                    onClick={() => changeLanguage('es')}
-                    className="block w-full text-left text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-4 py-2"
-                  >
-                    Español
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Log In / Sign Up */}
+            <LanguageSelector />
             <Link
               href="/login"
               className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
             >
-              Login / Signup
+              Iniciar Sesión / Registrarse
             </Link>
           </div>
         </div>
@@ -281,7 +267,7 @@ export default function Navbar() {
                     <Link
                       href={item.path}
                       className="block text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                      onClick={handleNavigationClick} // Close menu on link click
+                      onClick={handleNavigationClick}
                     >
                       {item.name}
                     </Link>
@@ -321,7 +307,7 @@ export default function Navbar() {
                                   key={subSecIndex}
                                   href={subSection.path}
                                   className="block text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
-                                  onClick={handleNavigationClick} // Close menu on submenu click
+                                  onClick={handleNavigationClick}
                                 >
                                   {subSection.name}
                                 </Link>
@@ -334,41 +320,6 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-
-              {/* Language Dropdown (Mobile) */}
-              <div className="relative">
-                <button
-                  onClick={toggleLanguageDropdown}
-                  className="block text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  {pathname.startsWith('/es') ? 'Español' : 'English'}
-                </button>
-                {isLanguageDropdownOpen && (
-                  <div className="mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2">
-                    <button
-                      onClick={() => changeLanguage('en')}
-                      className="block w-full text-left text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-4 py-2"
-                    >
-                      English
-                    </button>
-                    <button
-                      onClick={() => changeLanguage('es')}
-                      className="block w-full text-left text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-4 py-2"
-                    >
-                      Español
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Log In / Sign Up (Mobile) */}
-              <Link
-                href="/login"
-                className="block text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                onClick={handleNavigationClick} // Close menu on link click
-              >
-                Login / Signup
-              </Link>
             </div>
           </div>
         )}
