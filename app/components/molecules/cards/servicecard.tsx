@@ -71,7 +71,7 @@ const Header: React.FC<HeaderProps> = ({
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-200 to-amber-100 rounded-2xl blur opacity-30 group-hover:opacity-40 transition duration-1000"></div>
             <img
               src={imageUrl}
-              className="relative object-cover w-full h-64 lg:h-[500px] rounded-2xl shadow-xl transition-transform duration-700 group-hover:scale-[1.01]"
+              className="relative object-fill w-full h-64 lg:h-[450px] rounded-2xl shadow-xl transition-transform duration-700 group-hover:scale-[1.01]"
               alt=""
             />
           </div>

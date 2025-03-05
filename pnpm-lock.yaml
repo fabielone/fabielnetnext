@@ -35,6 +35,9 @@ importers:
       geist:
         specifier: 1.2.2
         version: 1.2.2(next@14.2.0-canary.62(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
+      heroicons:
+        specifier: ^2.2.0
+        version: 2.2.0
       next:
         specifier: canary
         version: 14.2.0-canary.62(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -47,6 +50,9 @@ importers:
       next-themes:
         specifier: ^0.4.4
         version: 0.4.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      outline:
+        specifier: link:@heroicons/react/24/outline
+        version: link:@heroicons/react/24/outline
       postcss:
         specifier: ^8.4.35
         version: 8.4.35
@@ -451,6 +457,9 @@ packages:
 
   hast-util-whitespace@2.0.1:
     resolution: {integrity: sha512-nAxA0v8+vXSBDt3AnRUNjyRIQ0rD+ntpbAp4LnPkumc5M9yUbSMa4XDU9Q6etY4f1Wp4bNgvc1yjiZtsTTrSng==}
+
+  heroicons@2.2.0:
+    resolution: {integrity: sha512-yOwvztmNiBWqR946t+JdgZmyzEmnRMC2nxvHFC90bF1SUttwB6yJKYeme1JeEcBfobdOs827nCyiWBS2z/brog==}
 
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
@@ -1300,6 +1309,8 @@ snapshots:
       - supports-color
 
   hast-util-whitespace@2.0.1: {}
+
+  heroicons@2.2.0: {}
 
   hoist-non-react-statics@3.3.2:
     dependencies:

@@ -11,7 +11,7 @@ const services = [
     buttonText: 'Comienza Ahora',
     buttonLink: '#',
     learnMoreLink: '#',
-    imageUrl: 'https://placehold.co/600x400',
+    imageUrl: './formacion.jpeg',
     items: [
       { icon: '📈', text: 'Registro de Empresa' },
       { icon: '📊', text: 'Planificación Fiscal' },
@@ -27,7 +27,7 @@ const services = [
     buttonText: 'Desarrolla tu Sitio Web',
     buttonLink: '#',
     learnMoreLink: '#',
-    imageUrl: 'https://placehold.co/600x400',
+    imageUrl: './web.jpeg',
     items: [
       { icon: '📱', text: 'Diseño Responsivo' },
       { icon: '💻', text: 'Desarrollo Personalizado' },
@@ -43,7 +43,7 @@ const services = [
     buttonText: 'Aumenta tu Visibilidad',
     buttonLink: '#',
     learnMoreLink: '#',
-    imageUrl: 'https://placehold.co/600x400',
+    imageUrl: './marketing.jpeg',
     items: [
       { icon: '📈', text: 'SEO y Posicionamiento' },
       { icon: '💼', text: 'Gestión de Redes Sociales' },
@@ -55,7 +55,7 @@ const services = [
 
 const MyServices = () => {
   return (
-    <div className="flex flex-col items-center p-6 bg-yellow-50">
+    <div className="flex flex-col items-center p-6 ">
       <h2 className="text-3xl font-bold text-center mb-4">Nuestros Servicios</h2>
       <span className="text-xl font-semibold text-center mb-8">Soluciones para tu Negocio</span>
       <div className="flex flex-col space-y-12">

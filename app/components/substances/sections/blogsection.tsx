@@ -95,7 +95,7 @@ export default function BlogList(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col items-center py-12 bg-yellow-200">
+    <div className="flex flex-col items-center py-12 bg-gradient-to-t from-amber-100 to-white">
       {/* Header Section */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-slate-900 mb-3">
@@ -148,7 +148,7 @@ export default function BlogList(): JSX.Element {
       <div className="text-center mt-2">
         <a 
           href="/blog"
-          className="inline-flex items-center gap-2 bg-amber-100 text-slate-900 px-2 py-3 rounded-lg hover:bg-amber-200 transition-colors duration-300 font-semibold"
+          className="inline-flex items-center gap-2 bg-amber-200 text-slate-900 px-2 py-3 rounded-lg hover:bg-amber-200 transition-colors duration-300 font-semibold"
         >
           <FaBookReader className="w-5 h-5" />
           Ver Biblioteca Completa
