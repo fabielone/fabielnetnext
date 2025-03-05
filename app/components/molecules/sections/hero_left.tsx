@@ -54,7 +54,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
               className="mx-auto mb-4 drop-shadow-lg"
             />
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-              <span className="text-orange-500">:</span>{" "}
+              
               <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-transparent bg-clip-text">
                 Soluciones Personalizadas para tu Negocio
               </span>
@@ -65,7 +65,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
           <motion.div 
             animate={{ x: [-20, 0, -20] }}
             transition={{ duration: 10, repeat: Infinity }}
-            className="overflow-hidden whitespace-nowrap mb-8"
+            className="hidden md:flex overflow-hidden whitespace-nowrap mb-8"
           >
             <div className="flex justify-center space-x-4">
               {pills.map((pill, index) => (
@@ -82,7 +82,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 
           {/* Benefits Section */}
           <motion.div 
-            className="text-lg text-gray-800 my-8 p-6 bg-white rounded-3xl shadow-2xl border-2 border-amber-200"
+            className=" text-gray-800 my-8 p-6 bg-white rounded-3xl shadow-2xl border-2 border-amber-200"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -98,7 +98,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
                   <span className="mr-4 transform hover:scale-110 transition-transform">
                     {benefit.icon}
                   </span>
-                  <span className="font-medium">{benefit.text}</span>
+                  <span className="font-xs md:font-medium">{benefit.text}</span>
                 </motion.li>
               ))}
             </ul>
