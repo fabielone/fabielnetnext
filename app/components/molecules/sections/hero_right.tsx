@@ -1,12 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { FaCheckCircle } from "react-icons/fa";
-import Image from 'next/image'; // Import the Image component
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaCheckCircle, FaEnvelope } from "react-icons/fa";
+import { IoIosPlay } from "react-icons/io";
+import Image from 'next/image';
 
 export default function HeroRight() {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isVideoHovered, setIsVideoHovered] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,16 +21,34 @@ export default function HeroRight() {
   };
 
   return (
-    <section className="pt-4 flex">
+    <motion.section 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8, delay: 0.2 }}
+      className="pt-4 flex"
+    >
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center h-full">
-          <div className="bg-colors-background-dark overflow-hidden flex flex-col h-full w-full max-w-xl">
+          <motion.div 
+            className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden flex flex-col h-full w-full max-w-xl border border-gray-100"
+            whileHover={{ boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+          >
             {/* Video Section */}
-            <div className="w-full aspect-video rounded-lg overflow-hidden">
+            <motion.div 
+              className="relative w-full aspect-video rounded-t-2xl overflow-hidden"
+              onHoverStart={() => setIsVideoHovered(true)}
+              onHoverEnd={() => setIsVideoHovered(false)}
+            >
+              <div className="absolute inset-0 bg-black/20 z-10 flex items-center justify-center">
+                <motion.div
+                  animate={{ scale: isVideoHovered ? 1.1 : 1 }}
+                  className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <IoIosPlay className="text-amber-500 w-8 h-8 ml-1" />
+                </motion.div>
+              </div>
               <video
                 className="w-full h-full object-cover"
-                controls
-                preload="metadata"
                 poster="https://img.youtube.com/vi/SABZN5JfGAQ/maxresdefault.jpg"
               >
                 <source
@@ -36,62 +57,89 @@ export default function HeroRight() {
                 />
                 Your browser does not support the video tag.
               </video>
-            </div>
+            </motion.div>
 
-            <div className="p-6 flex-grow">
-              <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            <div className="p-8 flex-grow bg-gradient-to-b from-amber-50/50 to-white/50">
+              <motion.h2 
+                className="text-2xl font-semibold text-gray-800 mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
                 Tu Aliado Empresarial
-              </h2>
-              <p className="text-slate-800 mt-4 text-lg">
-                🌟 ¡Bienvenido a{' '}
+              </motion.h2>
+              
+              <motion.p 
+                className="text-gray-600 mt-4 text-lg leading-relaxed"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                ¡Bienvenido a{' '}
                 <span className="inline-flex items-center">
                   <Image
-                    src="/logo.png" // Path to your logo in the public folder
+                    src="/logo.png"
                     alt="Fabiel.Net Logo"
-                    width={80} // Adjust width as needed
-                    height={32} // Adjust height as needed
-                    className="inline-block align-middle mr-1" // Make the logo inline
+                    width={80}
+                    height={32}
+                    className="inline-block align-middle mr-1 opacity-90"
                   />
                 </span>
                 ! Estamos aquí para ayudarte a establecer y crecer tu negocio en los Estados Unidos.
-              </p>
+              </motion.p>
 
               {/* Newsletter Subscription Form */}
-              <div className="mt-8">
-                <h3 className="text-slate-900 text-lg mb-3 font-semibold">
+              <motion.div 
+                className="mt-8"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <h3 className="text-gray-700 text-lg mb-3 font-medium">
                   Recibe consejos y actualizaciones empresariales
                 </h3>
                 <form onSubmit={handleSubmit} className="relative">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Tu correo electrónico"
-                    className="w-full px-4 py-2 rounded-lg bg-white text-slate-900 placeholder-slate-500 border border-slate-300 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                    required
-                  />
-                  <button
+                  <div className="relative mb-3">
+                    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Tu correo electrónico"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white text-gray-700 placeholder-gray-400 border border-gray-200 focus:outline-none focus:border-amber-300 focus:ring-2 focus:ring-amber-100 transition-all duration-300"
+                      required
+                    />
+                  </div>
+                  <motion.button
                     type="submit"
-                    className="mt-3 w-full bg-white border-black border-2 text-slate-900 px-6 py-2 rounded-lg hover:bg-yellow-50 transition-colors duration-300 font-semibold"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-amber-50 text-gray-700 px-6 py-2.5 rounded-lg hover:bg-amber-100 transition-colors duration-300 font-medium border border-amber-200"
                   >
                     Suscribirse
-                  </button>
+                  </motion.button>
 
-                  {/* Success Animation */}
-                  {isSubmitted && (
-                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white rounded-lg shadow-lg transition-all duration-300">
-                      <div className="flex items-center text-green-600">
-                        <FaCheckCircle className="text-2xl mr-2" />
-                        <span className="font-semibold">¡Gracias por suscribirte!</span>
-                      </div>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {isSubmitted && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white/95 rounded-lg backdrop-blur-sm"
+                      >
+                        <div className="flex items-center text-green-600">
+                          <FaCheckCircle className="text-2xl mr-2" />
+                          <span className="font-medium">¡Gracias por suscribirte!</span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </form>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

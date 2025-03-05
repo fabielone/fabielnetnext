@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import { baseUrl } from './sitemap'
 
+
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -48,6 +49,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    
     <html
       lang="en"
       className={cx(
@@ -56,6 +58,7 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
+     
       <body className="antialiased ">
       <Navbar />
       <main className="flex-auto bg-yellow-50 min-w-0 pt-16 flex flex-col px-2 md:px-0">         
@@ -65,6 +68,8 @@ export default function RootLayout({
           <SpeedInsights />
         </main>
       </body>
+      
     </html>
+
   )
 }

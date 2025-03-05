@@ -1,11 +1,13 @@
 'use client';
 
+import { motion } from 'framer-motion'; // Add animation
 import { FaGithub, FaLinkedin, FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 import { IoIosCalendar, IoIosCheckmarkCircle, IoIosRocket } from "react-icons/io";
-import { IoFlash } from 'react-icons/io5'; // Import the thunderbolt
+import { IoFlash } from 'react-icons/io5';
 import { HiArrowRight } from "react-icons/hi";
-import Image from 'next/image'; // Import the Image component
+import Image from 'next/image';
 import Pills, { PillsProps } from '../../atoms/pills/pills';
+import { SocialIcons } from '../socials/socialicons';
 
 interface HeroLeftProps {
   heading: string;
@@ -29,97 +31,115 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
   ];
 
   return (
-    <div className="relative px-2 pt-4 mx-auto overflow-hidden">
-      <div className="max-w-xl mx-auto lg:flex">
-        <div className="mb-16 lg:mb-0">
-          <div className="bg-white">
-            <div className="max-w-xl mb-6">
-              {/* Heading Section with Inline Logo */}
-              <h1 className="text-4xl font-bold text-gray-900 text-center mb-8">
-                {/* Logo */}
-                <Image
-                  src="/logo.png" // Path to your logo in the public folder
-                  alt="Fabiel.Net Logo"
-                  width={250} // Adjust width as needed
-                  height={100} // Adjust height as needed
-                  className="inline-block align-middle mr-2" // Make the logo inline
-                />
-                {/* Colon and Text */}
-                <span className="text-orange-500 text-4xl align-middle">:</span> Soluciones Personalizadas para tu Negocio
-              </h1>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="relative px-4 pt-6 mx-auto overflow-hidden "
+    >
+      <div className="max-w-2xl mx-auto">
+        <div className="mb-16">
+          {/* Heading Section with Animated Logo */}
+          <motion.div 
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <Image
+              src="/logo.png"
+              alt="Fabiel.Net Logo"
+              width={300}
+              height={120}
+              className="mx-auto mb-4 drop-shadow-lg"
+            />
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+              <span className="text-orange-500">:</span>{" "}
+              <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-transparent bg-clip-text">
+                Soluciones Personalizadas para tu Negocio
+              </span>
+            </h1>
+          </motion.div>
 
-              {/* Scrolling Pills Band */}
-              <div className="overflow-hidden whitespace-nowrap mb-4">
-                <div className="flex justify-center" style={{ animationDuration: '30s' }}>
-                  {pills.map((pill, index) => (
-                    <span key={index} className="inline-block text-med mx-4">
-                      <Pills text={pill.text} color={pill.color} bgColor={pill.bgColor} />
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <hr className="border-t border-amber-100 my-4" />
-
-              {/* Benefits Section */}
-              <div className="text-lg text-gray-800 mt-2 mb-4 p-4 bg-yellow-100 border-2 border-dashed border-gray-500 rounded-2xl">
-                <ul className="list-none list-inside space-y-4">
-                  {benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="mr-3">{benefit.icon}</span>
-                      <span>{benefit.text}</span>
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-orange-500 font-bold text-center mt-4 text-2xl">
-                  <span className="underline">Te ayudamos</span> a establecer y crecer tu negocio
-                </p>
-              </div>
-
-              {/* Social Media Links */}
-              <div className="flex justify-center space-x-4 mb-6">
-                <a href="https://github.com/fabielone" target="_blank" rel="noopener noreferrer">
-                  <FaGithub className="text-black h-6 w-6 hover:text-red-500 transition-colors" />
-                </a>
-                <a href="https://www.linkedin.com/in/fabielone" target="_blank" rel="noopener noreferrer">
-                  <FaLinkedin className="text-black h-6 w-6 hover:text-red-500 transition-colors" />
-                </a>
-                <a href="https://www.facebook.com/fabielone" target="_blank" rel="noopener noreferrer">
-                  <FaFacebook className="text-black h-6 w-6 hover:text-red-500 transition-colors" />
-                </a>
-                <a href="https://www.instagram.com/fabielone" target="_blank" rel="noopener noreferrer">
-                  <FaInstagram className="text-black h-6 w-6 hover:text-red-500 transition-colors" />
-                </a>
-                <a href="https://www.tiktok.com/@fabiel.one" target="_blank" rel="noopener noreferrer">
-                  <FaTiktok className="text-black h-6 w-6 hover:text-red-500 transition-colors" />
-                </a>
-                <a href="https://www.youtube.com/c/fabielone" target="_blank" rel="noopener noreferrer">
-                  <FaYoutube className="text-black h-6 w-6 hover:text-red-500 transition-colors" />
-                </a>
-              </div>
-
-              {/* Call-to-Action Buttons */}
-              <div className="flex items-center space-x-4 justify-center mt-8">
-                <a
-                  href="/contact"
-                  className="bg-amber-100 text-black px-6 py-3 rounded-lg flex items-center hover:bg-amber-200 transition-colors"
+          {/* Animated Pills Band */}
+          <motion.div 
+            animate={{ x: [-20, 0, -20] }}
+            transition={{ duration: 10, repeat: Infinity }}
+            className="overflow-hidden whitespace-nowrap mb-8"
+          >
+            <div className="flex justify-center space-x-4">
+              {pills.map((pill, index) => (
+                <motion.span
+                  key={index}
+                  whileHover={{ scale: 1.1 }}
+                  className="inline-block"
                 >
-                  <IoIosCalendar className="mr-2 h-5 w-5" />
-                  Consulta Gratis
-                </a>
-                <button
-                  className="bg-yellow-300 text-back border-2 border-black px-6 py-3 rounded-lg flex items-center hover:bg-green-50 transition-colors"
-                >
-                  Empezar Ahora
-                  <HiArrowRight className="ml-2 h-5 w-5" />
-                </button>
-              </div>
+                  <Pills text={pill.text} color={pill.color} bgColor={pill.bgColor} />
+                </motion.span>
+              ))}
             </div>
+          </motion.div>
 
-            <hr className="border-t border-amber-100 my-4" />
+          {/* Benefits Section */}
+          <motion.div 
+            className="text-lg text-gray-800 my-8 p-6 bg-white rounded-3xl shadow-2xl border-2 border-amber-200"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <ul className="space-y-6">
+              {benefits.map((benefit, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.2 }}
+                  className="flex items-center bg-amber-50 p-4 rounded-xl"
+                >
+                  <span className="mr-4 transform hover:scale-110 transition-transform">
+                    {benefit.icon}
+                  </span>
+                  <span className="font-medium">{benefit.text}</span>
+                </motion.li>
+              ))}
+            </ul>
+          
+          </motion.div>
+
+          
+          {/* Call-to-Action Buttons */}
+          <motion.div 
+            className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <motion.a
+              href="/contact"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-amber-400 to-orange-400 text-white px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+            >
+              <IoIosCalendar className="mr-2 h-6 w-6" />
+              Consulta Gratis
+            </motion.a>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-yellow-300 text-black border-2 border-black px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+            >
+              <span className="relative z-10">Empezar Ahora</span>
+              <HiArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                initial={false}
+              />
+            </motion.button>
+          </motion.div>
+          <div className='flex justify-center p-4'>
+          <SocialIcons />
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,6 +1,7 @@
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring, animated, config } from '@react-spring/web';
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
+import { HiArrowRight } from 'react-icons/hi';
 
 interface HeaderProps {
   pill: string;
@@ -12,7 +13,7 @@ interface HeaderProps {
   learnMoreLink: string;
   imageUrl: string;
   items: { icon: string; text: string }[];
-  imagePosition?: 'left' | 'right'; // Optional prop to position the image
+  imagePosition?: 'left' | 'right';
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -25,72 +26,109 @@ const Header: React.FC<HeaderProps> = ({
   learnMoreLink,
   imageUrl,
   items,
-  imagePosition = 'right', // Default value
+  imagePosition = 'right',
 }) => {
   const [contentRef, inView] = useInView({
-    triggerOnce: false, // Trigger animation once
-    rootMargin: '-100px 0px', // Adjust root margin as needed
+    triggerOnce: false,
+    threshold: 0.2,
   });
 
   const imageSlideProps = useSpring({
-    from: { transform: imagePosition === 'left' ? 'translateX(-100%)' : 'translateX(100%)' },
-    to: { transform: 'translateX(0)' },
-    config: { mass: 1, tension: 200, friction: 20 },
+    from: { 
+      transform: imagePosition === 'left' ? 'translateX(-100%)' : 'translateX(100%)',
+      opacity: 0 
+    },
+    to: { 
+      transform: 'translateX(0)',
+      opacity: 1 
+    },
+    config: config.molasses,
   });
 
   const contentSlideProps = useSpring({
-    from: { opacity: 0, transform: 'translateX(-50px)' },
-    to: { opacity: inView ? 1 : 0, transform: inView ? 'translateX(0)' : 'translateX(-50px)' },
-    config: { mass: 1, tension: 200, friction: 20 },
+    from: { 
+      opacity: 0, 
+      transform: 'translateY(30px)',
+      scale: 0.95
+    },
+    to: { 
+      opacity: inView ? 1 : 0, 
+      transform: inView ? 'translateY(0)' : 'translateY(30px)',
+      scale: inView ? 1 : 0.95
+    },
+    config: config.gentle,
   });
 
   return (
-    <div ref={contentRef} className="relative px-4 lg:py-2 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full">
-      <div className={` border-t-2 py-2 mx-auto lg:flex ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
-        <animated.div style={imageSlideProps} className="flex justify-center h-full overflow-hidden lg:w-2/3 xl:w-1/2 lg:justify-start lg:items-end">
-          <img
-            src={imageUrl}
-            className="object-cover object-top w-full h-64 max-w-xl rounded shadow-2xl lg:h-auto lg:max-w-screen-md"
-            alt=""
-          />
+    <div ref={contentRef} className="relative px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white">
+      <div className={`max-w-7xl mx-auto lg:flex items-center gap-12 ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
+        {/* Image Section */}
+        <animated.div 
+          style={imageSlideProps} 
+          className="flex justify-center h-full overflow-hidden lg:w-1/2"
+        >
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-amber-200 to-amber-100 rounded-2xl blur opacity-30 group-hover:opacity-40 transition duration-1000"></div>
+            <img
+              src={imageUrl}
+              className="relative object-cover w-full h-64 lg:h-[500px] rounded-2xl shadow-xl transition-transform duration-700 group-hover:scale-[1.01]"
+              alt=""
+            />
+          </div>
         </animated.div>
-        <animated.div style={contentSlideProps} className="mb-16 lg:max-w-lg lg:mb-0 lg:ml-8">
-          <div className="max-w-xl mb-6">
-            <div>
-              <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
-                {pill}
-              </p>
-            </div>
-            <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
+
+        {/* Content Section */}
+        <animated.div 
+          style={contentSlideProps} 
+          className="lg:w-1/2 space-y-8"
+        >
+          {/* Pill and Titles */}
+          <div className="space-y-6">
+            <span className="inline-block px-4 py-2 text-sm font-semibold text-amber-800 bg-amber-100 rounded-full shadow-sm">
+              {pill}
+            </span>
+            
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
               {title}
             </h2>
-            <h3 className="max-w-lg mb-6 font-sans text-2xl font-medium tracking-tight text-gray-900 sm:text-3xl sm:leading-none"> 
-            {subtitle}
-              </h3>
-            <p className="text-base text-gray-700 md:text-lg">
+            
+            <h3 className="text-2xl lg:text-3xl font-medium text-gray-700">
+              {subtitle}
+            </h3>
+            
+            <p className="text-lg text-gray-600 leading-relaxed">
               {description}
             </p>
           </div>
-          <div className="flex items-center mb-6">
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-6">
             <a
               href={buttonLink}
-              className="inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-black border-2 border-black bg-yellow-200 transition duration-200 rounded-2xl shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+              className="inline-flex items-center px-8 py-3 text-lg font-semibold text-black bg-gradient-to-r from-yellow-200 to-amber-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-black"
             >
               {buttonText}
+              <HiArrowRight className="ml-2 w-5 h-5" />
             </a>
+            
             <a
               href={learnMoreLink}
-              aria-label=""
-              className="inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
+              className="text-lg font-medium text-amber-700 hover:text-amber-800 transition-colors duration-200 flex items-center gap-2"
             >
               Conoce más
+              <span className="text-xl">→</span>
             </a>
           </div>
-          <ul className="list-disc pl-5">
+
+          {/* Features List */}
+          <ul className="space-y-4 mt-8">
             {items.map((item, index) => (
-              <li key={index} className="mb-2 flex items-center">
-                <span className="mr-2">{item.icon}</span>
-                <span>{item.text}</span>
+              <li 
+                key={index} 
+                className="flex items-center gap-3 text-gray-700 bg-amber-50 px-4 py-3 rounded-lg shadow-sm"
+              >
+                <span className="text-amber-500 text-xl">{item.icon}</span>
+                <span className="text-lg">{item.text}</span>
               </li>
             ))}
           </ul>

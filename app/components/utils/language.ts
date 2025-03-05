@@ -1,5 +1,5 @@
 // utils/language.ts
-import { Language } from './types';
+import { Language } from '../types/types';
 
 export const getLanguageFromPath = (pathname: string): Language => {
   return pathname.startsWith('/en') ? 'en' : 'es';

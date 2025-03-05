@@ -3,7 +3,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Language } from '../types';
+import { Language } from '../types/types';
 
 interface LanguageOption {
   code: Language;
