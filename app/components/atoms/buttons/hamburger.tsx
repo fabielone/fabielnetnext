@@ -9,7 +9,7 @@ export const HamburgerButton: React.FC<HamburgerButtonProps> = ({ onClick }) => 
   <div className="flex md:hidden">
     <button
       onClick={onClick}
-      className="text-gray-800 dark:text-white focus:outline-none menu-icon"
+      className="text-gray-800  focus:outline-none menu-icon"
       aria-label="Toggle menu"
     >
       <svg

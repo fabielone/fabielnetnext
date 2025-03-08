@@ -35,7 +35,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="relative px-4 pt-6 mx-auto overflow-hidden "
+      className="relative px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden "
     >
       <div className="max-w-2xl mx-auto">
         <div className="mb-16">
@@ -44,18 +44,12 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+            className="text-center mb-2 md:mb-12"
           >
-            <Image
-              src="/logo.png"
-              alt="Fabiel.Net Logo"
-              width={300}
-              height={120}
-              className="mx-auto mb-4 drop-shadow-lg"
-            />
+           
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
               
-              <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-transparent bg-clip-text">
+              <span className="bg-gradient-to-r from-red-500 to-orange-500 text-transparent bg-clip-text">
                 Soluciones Personalizadas para tu Negocio
               </span>
             </h1>
@@ -82,18 +76,18 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 
           {/* Benefits Section */}
           <motion.div 
-            className=" text-gray-800 my-8 p-6 bg-white rounded-3xl shadow-2xl border-2 border-amber-200"
+            className=" text-gray-800 my-8 p-2 md:p-6 bg-white rounded-3xl shadow-2xl border-2 border-amber-200"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <ul className="space-y-6">
+            <ul className="space-y-2 md:space-y-6">
               {benefits.map((benefit, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="flex items-center bg-amber-50 p-4 rounded-xl"
+                  className="flex items-center bg-white md:bg-amber-50  p-1 md:p-4 rounded-xl"
                 >
                   <span className="mr-4 transform hover:scale-110 transition-transform">
                     {benefit.icon}
