@@ -18,15 +18,15 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
   const benefits = [
     {
       text: "Establece tu negocio con confianza.",
-      icon: <IoIosCheckmarkCircle className="text-blue-500 w-6 h-6" />,
+      icon: <IoIosCheckmarkCircle className="text-amber-500 w-6 h-6" />,
     },
     {
       text: "Potencia tu presencia en línea, nosotros nos encargamos.",
-      icon: <IoFlash className="text-blue-500 w-6 h-6" />,
+      icon: <IoFlash className="text-amber-500 w-6 h-6" />,
     },
     {
       text: "Impulsa el crecimiento de tu negocio, sin estrés.",
-      icon: <IoIosRocket className="text-blue-500 w-6 h-6" />,
+      icon: <IoIosRocket className="text-amber-500 w-6 h-6" />,
     },
   ];
 
@@ -119,7 +119,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-yellow-300 text-black border-2 border-black px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+              className="bg-green-300 text-black border-2 border-black px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
             >
               <span className="relative z-10">Empezar Ahora</span>
               <HiArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
