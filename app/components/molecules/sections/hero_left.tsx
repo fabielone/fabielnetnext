@@ -44,12 +44,12 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-2 md:mb-12"
+            className="text-center sm:mt-2  mb-2 md:mb-12"
           >
            
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+            <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold text-gray-900">
               
-              <span className="bg-gradient-to-r from-red-500 to-orange-500 text-transparent bg-clip-text">
+              <span className="text-gray-600">
                 Soluciones Personalizadas para tu Negocio
               </span>
             </h1>
@@ -76,7 +76,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 
           {/* Benefits Section */}
           <motion.div 
-            className=" text-gray-800 my-8 p-2 md:p-6 bg-white rounded-3xl shadow-2xl border-2 border-amber-200"
+            className=" text-gray-800 my-8 p-2 sm:p-8 md:p-8 sm:mx-8 md:mx-8 bg-white rounded-3xl shadow-xl md:shadow-2xl border-2 border-amber-200"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -102,7 +102,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
           
           {/* Call-to-Action Buttons */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
+            className="text-lg mb-4 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -111,20 +111,20 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
               href="/contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-amber-400 to-orange-400 text-white px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+              className=" text-gray-600 px-8 md:px-2 py-4 md:py-1 flex items-center transition-all transform hover:-translate-y-1"
             >
-              <IoIosCalendar className="mr-2 h-6 w-6" />
+              <IoIosCalendar className="mr-2 h-6 w-6 md:w-8" />
               Consulta Gratis
             </motion.a>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-green-300 text-black border-2 border-black px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+              className="bg-green-600 text-white border-2 border-green-700 px-8 md:px-4 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
             >
               <span className="relative z-10">Empezar Ahora</span>
               <HiArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity"
                 initial={false}
               />
             </motion.button>

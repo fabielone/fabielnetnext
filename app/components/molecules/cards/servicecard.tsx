@@ -65,24 +65,26 @@ const Header: React.FC<HeaderProps> = ({
         {/* Image Section */}
         <animated.div 
           style={imageSlideProps} 
-          className="flex justify-center h-full overflow-hidden lg:w-1/2"
+          className="flex justify-center lg:w-1/2"
         >
-          <div className="relative group">
+          <div className="relative group w-full">
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-200 to-amber-100 rounded-2xl blur opacity-30 group-hover:opacity-40 transition duration-1000"></div>
-            <img
-              src={imageUrl}
-              className="relative object-fill w-full h-64 lg:h-[450px] rounded-2xl shadow-xl transition-transform duration-700 group-hover:scale-[1.01]"
-              alt=""
-            />
+            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-xl">
+              <img
+                src={imageUrl}
+                className="w-full h-full object-fit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition-transform duration-700 group-hover:scale-[1.01]"
+                alt=""
+              />
+            </div>
           </div>
         </animated.div>
 
         {/* Content Section */}
-        <animated.div 
+        <animated.div
           style={contentSlideProps} 
           className="lg:w-1/2 space-y-8"
         >
-          {/* Pill and Titles */}
+          {/* Pill and Titles */}                                                                    
           <div className="space-y-6">
             <span className="inline-block px-4 py-2 text-sm font-semibold text-amber-800 bg-amber-100 rounded-full shadow-sm">
               {pill}
@@ -105,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-6">
             <a
               href={buttonLink}
-              className="inline-flex items-center px-8 py-3 text-lg font-semibold text-black bg-gradient-to-r from-yellow-200 to-amber-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-black"
+              className="inline-flex items-center px-8 py-3 text-lg font-semibold text-white bg-green-500 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-green-700"
             >
               {buttonText}
               <HiArrowRight className="ml-2 w-5 h-5" />

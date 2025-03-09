@@ -27,7 +27,7 @@ export default function HeroRight() {
       transition={{ duration: 0.8, delay: 0.2 }}
       className="pt-4 flex"
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-0 md:px-4">
         <div className="flex flex-col items-center h-full">
           <motion.div 
             className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden flex flex-col h-full w-full max-w-xl border border-gray-100"
