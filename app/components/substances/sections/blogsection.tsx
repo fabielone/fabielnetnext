@@ -3,13 +3,17 @@
 import { useState, useRef } from 'react';
 import BlogCard from '../../molecules/cards/blogcard';
 import { FaChevronLeft, FaChevronRight, FaBookReader } from 'react-icons/fa';
+import BlogCarousel from 'app/components/molecules/carousels/blogcarousel';
 
 interface Blog {
   title: string;
   description: string;
   image: string;
   date: string;
-  author: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
   category: string;
   slug: string;
   readTime: string;
@@ -26,7 +30,8 @@ export default function BlogList(): JSX.Element {
       description: "Una guía completa para emprendedores latinos que desean establecer su negocio en EE.UU. Aprende los pasos necesarios, requisitos y beneficios de formar una LLC.",
       image: "https://placehold.co/600x400/png",
       date: "2024-01-15",
-      author: "Fabiel Ramirez",
+      author: {name:"Fabiel Ramirez",
+        avatar:'/'},
       category: "Negocios",
       slug: "formar-llc-eeuu",
       readTime: "7 min"
@@ -36,7 +41,8 @@ export default function BlogList(): JSX.Element {
       description: "Descubre las mejores prácticas de marketing digital para alcanzar a tu audiencia hispana en Estados Unidos. Incluye SEO, redes sociales y email marketing.",
       image: "https://placehold.co/600x400/png",
       date: "2024-01-20",
-      author: "Fabiel Ramirez",
+      author: {name:"Fabiel Ramirez",
+        avatar:'/'},
       category: "Marketing",
       slug: "marketing-digital-latinos",
       readTime: "5 min"
@@ -46,7 +52,8 @@ export default function BlogList(): JSX.Element {
       description: "Todo lo que necesitas saber sobre impuestos, reportes financieros y cumplimiento legal para tu negocio en EE.UU. Mantén tu empresa al día con las regulaciones.",
       image: "https://placehold.co/600x400/png",
       date: "2024-01-25",
-      author: "Fabiel Ramirez",
+      author: {name:"Fabiel Ramirez",
+        avatar:'/'},
       category: "Legal",
       slug: "cumplimiento-fiscal",
       readTime: "6 min"
@@ -56,7 +63,8 @@ export default function BlogList(): JSX.Element {
       description: "Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.",
       image: "https://placehold.co/600x400/png",
       date: "2024-01-30",
-      author: "Fabiel Ramirez",
+      author: {name:"Fabiel Ramirez",
+        avatar:'/'},
       category: "Crecimiento",
       slug: "expansion-nacional",
       readTime: "8 min"
@@ -95,6 +103,7 @@ export default function BlogList(): JSX.Element {
   };
 
   return (
+    <>
     <div className="flex flex-col items-center py-12 bg-gradient-to-t from-amber-100 to-white">
       {/* Header Section */}
       <div className="text-center mb-8">
@@ -155,5 +164,42 @@ export default function BlogList(): JSX.Element {
         </a>
       </div>
     </div>
+    
+    <BlogCarousel
+      blogs={blogs}
+      title="Latest from Our Blog"
+      description="Stay updated with our latest insights"
+      variant="default"
+    />
+
+
+    <div className="space-y-12">
+      {/* Featured Posts */}
+      <BlogCarousel
+        blogs={blogs}
+        title="Featured Posts"
+        variant="featured"
+        showCTA={false}
+      />
+
+      {/* Latest Posts */}
+      <BlogCarousel
+        blogs={blogs}
+        title="Latest Posts"
+        variant="default"
+        showCTA={false}
+      />
+
+      {/* Category-specific Posts */}
+      <BlogCarousel
+        blogs={blogs}
+        title="Technology"
+        variant="minimal"
+        showHeader={false}
+        showCTA={false}
+      />
+    </div>
+
+    </>
   );
 }

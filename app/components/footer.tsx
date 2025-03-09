@@ -1,5 +1,6 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa';
 import Image from 'next/image'; // Import the Image component
+import Newsletter from './molecules/newsletter/subscribe';
 
 export default function Footer() {
   return (
@@ -140,26 +141,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Email Subscription */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold text-gray-100">Subscribe to Our Newsletter</h3>
-            <p className="text-sm text-gray-300">
-              Get the latest updates on business formation, software development, and marketing tips.
-            </p>
-            <form className="flex flex-col space-y-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
+           {/* Newsletter Subscription Form */}
+                        <Newsletter
+                        variant='dark'
+                        title='Newsletter'
+                        /> 
         </div>
 
         {/* Bottom Section */}

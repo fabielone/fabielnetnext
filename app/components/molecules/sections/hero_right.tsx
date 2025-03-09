@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheckCircle, FaEnvelope } from "react-icons/fa";
 import { IoIosPlay } from "react-icons/io";
 import Image from 'next/image';
+import Newsletter from '../newsletter/subscribe';
 
 export default function HeroRight() {
   const [email, setEmail] = useState('');
@@ -89,53 +90,10 @@ export default function HeroRight() {
               </motion.p>
 
               {/* Newsletter Subscription Form */}
-              <motion.div 
-                className="mt-8"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <h3 className="text-gray-700 text-lg mb-3 font-medium">
-                  Recibe consejos y actualizaciones empresariales
-                </h3>
-                <form onSubmit={handleSubmit} className="relative">
-                  <div className="relative mb-3">
-                    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Tu correo electrónico"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white text-gray-700 placeholder-gray-400 border border-gray-200 focus:outline-none focus:border-amber-300 focus:ring-2 focus:ring-amber-100 transition-all duration-300"
-                      required
-                    />
-                  </div>
-                  <motion.button
-                    type="submit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full bg-amber-50 text-gray-700 px-6 py-2.5 rounded-lg hover:bg-amber-100 transition-colors duration-300 font-medium border border-amber-200"
-                  >
-                    Suscribirse
-                  </motion.button>
-
-                  <AnimatePresence>
-                    {isSubmitted && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white/95 rounded-lg backdrop-blur-sm"
-                      >
-                        <div className="flex items-center text-green-600">
-                          <FaCheckCircle className="text-2xl mr-2" />
-                          <span className="font-medium">¡Gracias por suscribirte!</span>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </form>
-              </motion.div>
+              <Newsletter
+              variant='light'
+              title='Noticias, Consejos y mas '
+              /> 
             </div>
           </motion.div>
         </div>
