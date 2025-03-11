@@ -34,7 +34,7 @@ export default function Newsletter({
 
   const variants = {
     light: {
-      container: "bg-white/80 backdrop-blur-sm border border-gray-200",
+      container: "bg-white/80 backdrop-blur-sm ",
       input: "bg-white border-gray-200 focus:border-amber-300 focus:ring-amber-100",
       button: "bg-amber-50 text-gray-700 border border-amber-200 hover:bg-amber-100",
       text: "text-gray-700"
@@ -50,7 +50,7 @@ export default function Newsletter({
   const styles = variants[variant];
 
   return (
-    <div className={`rounded-xl shadow-lg p-6 sm:p-8 ${styles.container} ${className}`}>
+    <div className={`rounded-xl  p-6 sm:p-8 ${styles.container} ${className}`}>
       {!compact && (
         <div className="mb-6">
           <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${styles.text}`}>

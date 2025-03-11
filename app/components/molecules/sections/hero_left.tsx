@@ -76,7 +76,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 
           {/* Benefits Section */}
           <motion.div 
-            className=" text-gray-800 my-8 p-2 sm:p-8 md:p-8 sm:mx-8 md:mx-8 bg-white rounded-3xl shadow-xl md:shadow-2xl border-2 border-amber-200"
+            className=" text-gray-800 my-8 p-4 mx-6 sm:p-8 md:p-8 sm:mx-8 md:mx-8 bg-white rounded-3xl shadow-xl md:shadow-2xl border-2 border-amber-200"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >

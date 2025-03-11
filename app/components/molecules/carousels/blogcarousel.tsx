@@ -36,7 +36,7 @@ interface BlogCarouselProps {
 
 export default function BlogCarousel({
   title = "Explora Nuestro Blog",
-  description = "Recursos y guías para emprendedores latinos",
+  description = "",
   blogs = [],
   variant = 'default',
   showHeader = true,
@@ -83,7 +83,7 @@ export default function BlogCarousel({
     },
     featured: {
       container: "py-8 bg-white",
-      wrapper: "px-4 sm:px-6",
+      wrapper: "px-4 sm:px-6 ",
       cardWidth: "w-full sm:w-[400px] lg:w-[500px]",
       gap: "gap-6 sm:gap-8"
     },
@@ -98,11 +98,11 @@ export default function BlogCarousel({
   const styles = variantStyles[variant];
 
   return (
-    <div className={`flex flex-col items-center ${styles.container} ${className}`}>
+    <div className={`flex font-serif flex-col items-center ${styles.container} ${className}`}>
       {/* Header Section */}
       {showHeader && (
         <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mb-2 sm:mb-3">
             {title}
           </h2>
           <p className="text-slate-600 text-base sm:text-lg">
