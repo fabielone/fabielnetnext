@@ -35,7 +35,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="relative px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden "
+      className="relative font-serif px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden "
     >
       <div className="max-w-2xl mx-auto">
         <div className="mb-16">
@@ -76,7 +76,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 
           {/* Benefits Section */}
           <motion.div 
-            className=" text-gray-800 my-8 p-4 mx-6 sm:p-8 md:p-8 sm:mx-8 md:mx-8 bg-white rounded-3xl shadow-xl md:shadow-2xl border-2 border-amber-200"
+            className=" text-gray-800 my-8 p-4 mx-6 sm:p-8 md:p-8 sm:mx-8 md:mx-8 bg-white rounded-3xl shadow-xl md:shadow-2xl border-2 border-gray-100"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >

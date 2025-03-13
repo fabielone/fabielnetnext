@@ -164,29 +164,6 @@ export default function BlogList(): JSX.Element {
         </a>
       </div>
     </div>
-    
-    <BlogCarousel
-      blogs={blogs}
-      title="Latest from Our Blog"
-      description="Stay updated with our latest insights"
-      variant="default"
-    />
-
-
-    <div className="space-y-12">
-      
-
-
-      {/* Category-specific Posts */}
-      <BlogCarousel
-        blogs={blogs}
-        title="Technology"
-        variant="minimal"
-        showHeader={true}
-        showCTA={false}
-      />
-    </div>
-
     </>
   );
 }

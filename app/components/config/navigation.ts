@@ -8,17 +8,17 @@ export const navItems: NavItem[] = [
       {
         name: 'Desarrollo de Software',
         subSections: [
-          { name: 'Web', path: '/services/software-development/web' },
-          { name: 'Tienda En Línea', path: '/services/software-development/applications' },
-          { name: 'Automatización', path: '/services/software-development/solutions' },
+          { name: 'Desarrollo Web ', path: '/software-development/web' },
+          { name: 'Tienda En Línea', path: '/software-development/applications' },
+          { name: 'Automatización', path: '/software-development/solutions' },
         ],
       },
       {
         name: 'Marketing',
         subSections: [
-          { name: 'Redes Sociales', path: '/services/marketing/social-media' },
-          { name: 'Creación de Contenido', path: '/services/marketing/content-creation' },
-          { name: 'Blog', path: '/services/marketing/blog' },
+          { name: 'Redes Sociales', path: '/marketing/social-media' },
+          { name: 'Creación de Contenido', path: '/marketing/content-creation' },
+          { name: 'Blog Posts', path: '/marketing/blog-posts' },
         ],
       },
       {
@@ -26,14 +26,14 @@ export const navItems: NavItem[] = [
         subSections: [
           { name: 'Forma tu LLC', path: '/services/business-formations/form-your-llc' },
           { name: 'Agente Registrado', path: '/services/business-formations/registered-agent' },
-          { name: 'Cumplimiento', path: '/services/business-formations/compliance' },
+          { name: 'Cumplimiento Anual', path: '/services/business-formations/compliance' },
         ],
       },
     ],
   },
   {
     name: 'Clientes',
-    path: '/clientes',
+    path: '/allies',
   },
   {
     name: 'Servicio Black',
@@ -52,6 +52,10 @@ export const navItems: NavItem[] = [
         ],
       },
     ],
+  },
+  {
+    name: 'Nuestro Proceso',
+    path: '/ourprocess',
   },
   {
     name: 'Blog',

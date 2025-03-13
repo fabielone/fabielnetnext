@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({
   });
 
   return (
-    <div ref={contentRef} className="relative px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white">
+    <div ref={contentRef} className="relative font-serif px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white">
       <div className={`max-w-7xl mx-auto lg:flex items-center gap-12 ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
         {/* Image Section */}
         <animated.div 

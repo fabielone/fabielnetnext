@@ -27,34 +27,38 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
   return (
     <div ref={menuRef} className="md:hidden mt-2">
-        
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-      <Link
-              href="/login"
-              className=" text-gray-800  hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Iniciar Sesión
-            </Link>
-            <br/>
-            <Link
-              href="/join"
-              className=" text-gray-800 hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
-            >
-            Registrarse
-            </Link>
+        {/* Log In Link */}
+        <Link
+          href="/login"
+          className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+          onClick={onNavigate} // Add onNavigate here
+        >
+          Iniciar Sesión
+        </Link>
 
+        {/* Register Link */}
+        <Link
+          href="/join"
+          className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+          onClick={onNavigate} // Add onNavigate here
+        >
+          Registrarse
+        </Link>
+
+        {/* Navigation Items */}
         {navItems.map((item, index) => (
           <div key={index}>
             {item.path ? (
               <Link
                 href={item.path}
-                className="block text-gray-800 hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
+                className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
                 onClick={onNavigate}
               >
                 <span>{item.name}</span>
               </Link>
             ) : (
-              <div className="text-gray-800 hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium">
+              <div className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
                 <button
                   onClick={() => onToggleCategory(item.name)}
                   className="flex items-center justify-between w-full"
@@ -81,7 +85,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                   <div className="pl-4">
                     {item.subItems?.map((subItem, subIndex) => (
                       <div key={subIndex} className="mt-2">
-                        <p className="text-gray-800  font-semibold">
+                        <p className="text-gray-800 font-semibold">
                           <span>{subItem.name}</span>
                         </p>
                         <div>
@@ -89,7 +93,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                             <Link
                               key={subSecIndex}
                               href={subSection.path}
-                              className="block text-gray-600  hover:text-gray-80 py-1"
+                              className="block text-gray-600 hover:text-gray-800 py-1"
                               onClick={onNavigate}
                             >
                               <span>{subSection.name}</span>
@@ -104,7 +108,11 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             )}
           </div>
         ))}
-        <SocialIcons />
+
+        {/* Social Icons */}
+        <div onClick={onNavigate}> {/* Wrap SocialIcons in a div and add onNavigate */}
+          <SocialIcons />
+        </div>
       </div>
     </div>
   );
