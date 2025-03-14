@@ -27,13 +27,13 @@ export const Logo = ({ onClick }: LogoProps) => {
       <Link href="/" className="text-xl font-bold text-gray-800" onClick={onClick}>
         <div className="relative">
           {/* Desktop logo */}
-          <div className="hidden md:block">
+          <div className="hidden md:block p-6">
             <Image
-              src={theme === 'dark' ? '/darklogo.png' : '/logo.png'}
+              src={theme === 'dark' ? '/darklogo.jpeg' : '/logo.jpeg'}
               alt="Company Logo"
               width={150}
               height={50}
-              className="w-[150px] h-auto"
+              className="w-[150px] h-auto my-6"
               priority
             />
           </div>
@@ -41,11 +41,11 @@ export const Logo = ({ onClick }: LogoProps) => {
           {/* Mobile logo (larger size) */}
           <div className="md:hidden">
             <Image
-              src={theme === 'dark' ? '/darklogo.png' : '/logo.png'}
+              src={theme === 'dark' ? '/darklogo.jpeg' : '/logo.jpeg'}
               alt="Company Logo"
               width={180} // Larger width for mobile
               height={60} // Proportionally larger height
-              className="w-[180px] h-auto" // Responsive width
+              className="w-[120px] h-auto" // Responsive width
               priority
             />
           </div>

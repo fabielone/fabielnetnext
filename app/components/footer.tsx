@@ -13,7 +13,8 @@ export default function Footer() {
             {/* Logo */}
             <div className="flex items-center">
               <Image
-                src="/darklogo.png" // Path to your logo in the public folder
+                src="/darklogo.png
+                " // Path to your logo in the public folder
                 alt="Fabiel.Net Logo"
                 width={250} // Adjust width as needed
                 height={40} // Adjust height as needed
