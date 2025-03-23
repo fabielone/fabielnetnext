@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { SubItem } from '../../types/navigation';
+import { IoMdArrowForward } from 'react-icons/io'; // Import the arrow icon
 
 interface MegaMenuProps {
   subItems?: SubItem[];
@@ -25,9 +26,12 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ subItems, onNavigate }) => (
               <Link
                 key={subSecIndex}
                 href={subSection.path}
-                className="block text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
+                className="group flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
                 onClick={onNavigate}
               >
+                <IoMdArrowForward 
+                  className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-500" 
+                />
                 <span>{subSection.name}</span>
               </Link>
             ))}

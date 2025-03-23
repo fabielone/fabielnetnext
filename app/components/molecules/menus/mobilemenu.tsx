@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { NavItem } from '../../types/navigation';
 import Link from 'next/link';
 import { SocialIcons } from '../socials/socialicons';
+import { IoMdArrowForward } from 'react-icons/io';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -32,7 +33,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         <Link
           href="/login"
           className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
-          onClick={onNavigate} // Add onNavigate here
+          onClick={onNavigate}
         >
           Iniciar Sesión
         </Link>
@@ -41,7 +42,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         <Link
           href="/join"
           className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
-          onClick={onNavigate} // Add onNavigate here
+          onClick={onNavigate}
         >
           Registrarse
         </Link>
@@ -93,9 +94,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                             <Link
                               key={subSecIndex}
                               href={subSection.path}
-                              className="block text-gray-600 hover:text-gray-800 py-1"
+                              className="flex items-center text-gray-600 hover:text-gray-800 py-1"
                               onClick={onNavigate}
                             >
+                              <IoMdArrowForward 
+                                className="mr-2 text-gray-500" 
+                              />
                               <span>{subSection.name}</span>
                             </Link>
                           ))}
@@ -110,7 +114,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         ))}
 
         {/* Social Icons */}
-        <div onClick={onNavigate}> {/* Wrap SocialIcons in a div and add onNavigate */}
+        <div onClick={onNavigate}>
           <SocialIcons />
         </div>
       </div>

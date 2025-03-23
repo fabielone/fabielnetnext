@@ -8,17 +8,28 @@ export const navItems: NavItem[] = [
       {
         name: 'Desarrollo de Software',
         subSections: [
-          { name: 'Desarrollo Web ', path: '/software-development/web' },
-          { name: 'Tienda En Línea', path: '/software-development/applications' },
-          { name: 'Automatización', path: '/software-development/solutions' },
+          { name: 'Desarrollo Web y Blog ', path: '/software-development/web-and-blog-development' },
+          { name: 'eCommerce: Creacion de Tiendas', path: '/software-development/ecommerce-development' },
+          { name: 'Otros: Servicios Personalizados', path: '/software-development/other-services-personalized' },
         ],
-      },
-      {
+      },{
         name: 'Marketing',
         subSections: [
-          { name: 'Redes Sociales', path: '/marketing/social-media' },
-          { name: 'Creación de Contenido', path: '/marketing/content-creation' },
-          { name: 'Blog Posts', path: '/marketing/blog-posts' },
+          { 
+            name: 'Marketing Digital y Contenido', 
+            path: '/marketing/online-marketing-and-content-creation' 
+          },
+          { 
+            name: 'Influencers y Colaboraciones', 
+            path: '/marketing/influencers-collaboration' 
+          },
+          { 
+            name: 'Campañas de Publicidad', 
+            path: '/marketing/campanas-de-publicidad' 
+          },
+          { name: "Otros: Servicios Personalizados",
+            path: '/marketing/other-services-personalized'
+          }
         ],
       },
       {
@@ -27,6 +38,9 @@ export const navItems: NavItem[] = [
           { name: 'Forma tu LLC', path: '/services/business-formations/form-your-llc' },
           { name: 'Agente Registrado', path: '/services/business-formations/registered-agent' },
           { name: 'Cumplimiento Anual', path: '/services/business-formations/compliance' },
+          { name: 'Otros: Servicios Personalizados', 
+            path: '/services/other-services-personalized'
+           }
         ],
       },
     ],
@@ -35,24 +49,7 @@ export const navItems: NavItem[] = [
     name: 'Clientes',
     path: '/allies',
   },
-  {
-    name: 'Servicio Black',
-    subItems: [
-      {
-        name: 'Servicio de Concierge',
-        subSections: [
-          { name: 'Paquete Todo Incluido', path: '/services/vip/concierge' },
-        ],
-      },
-      {
-        name: 'Asesoría Exclusiva',
-        subSections: [
-          { name: 'Consultoría Personalizada', path: '/services/vip/consulting' },
-          { name: 'Soporte Prioritario', path: '/services/vip/priority-support' },
-        ],
-      },
-    ],
-  },
+  
   {
     name: 'Nuestro Proceso',
     path: '/ourprocess',
