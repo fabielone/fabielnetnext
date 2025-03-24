@@ -1,0 +1,184 @@
+{
+  "components": {
+    "posts": {
+      "fileName": "posts.tsx",
+      "path": "app/components/posts.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "nav": {
+      "fileName": "nav.tsx",
+      "path": "app/components/nav.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "mdx": {
+      "fileName": "mdx.tsx",
+      "path": "app/components/mdx.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "footer": {
+      "fileName": "footer.tsx",
+      "path": "app/components/footer.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "language": {
+      "fileName": "language.ts",
+      "path": "app/components/utils/language.ts",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "chatwoot": {
+      "fileName": "chatwoot.js",
+      "path": "app/components/utils/chatwoot.js",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "types": {
+      "fileName": "types.ts",
+      "path": "app/components/types/types.ts",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "navigation": {
+      "fileName": "navigation.ts",
+      "path": "app/components/config/navigation.ts",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "services": {
+      "fileName": "services.tsx",
+      "path": "app/components/substances/sections/services.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "blogsection": {
+      "fileName": "blogsection.tsx",
+      "path": "app/components/substances/sections/blogsection.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "hero": {
+      "fileName": "hero.tsx",
+      "path": "app/components/substances/hero/hero.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "languageselector": {
+      "fileName": "languageselector.tsx",
+      "path": "app/components/molecules/languageselector.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "socialicons": {
+      "fileName": "socialicons.tsx",
+      "path": "app/components/molecules/socials/socialicons.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "reviews": {
+      "fileName": "reviews.ts",
+      "path": "app/components/config/reviews.ts",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "hero_right": {
+      "fileName": "hero_right.tsx",
+      "path": "app/components/molecules/sections/hero_right.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "hero_left": {
+      "fileName": "hero_left.tsx",
+      "path": "app/components/molecules/sections/hero_left.tsx",
+      "props": "heading: string;\n  pills: PillsProps[];",
+      "description": "No description"
+    },
+    "subscribe": {
+      "fileName": "subscribe.tsx",
+      "path": "app/components/molecules/newsletter/subscribe.tsx",
+      "props": "title?: string;\n  description?: string;\n  className?: string;\n  variant?: 'light' | 'dark';\n  compact?: boolean;",
+      "description": "No description"
+    },
+    "mobilemenu": {
+      "fileName": "mobilemenu.tsx",
+      "path": "app/components/molecules/menus/mobilemenu.tsx",
+      "props": "isOpen: boolean;\n  navItems: NavItem[];\n  openCategories: Record<string, boolean>;\n  onToggleCategory: (category: string) => void;\n  onNavigate: () => void;",
+      "description": "No description"
+    },
+    "megamenu": {
+      "fileName": "megamenu.tsx",
+      "path": "app/components/molecules/menus/megamenu.tsx",
+      "props": "subItems?: SubItem[];\n  onNavigate: () => void;",
+      "description": "No description"
+    },
+    "desktopmenu": {
+      "fileName": "desktopmenu.tsx",
+      "path": "app/components/molecules/menus/desktopmenu.tsx",
+      "props": "navItems: NavItem[];\n  onNavigate: () => void;",
+      "description": "No description"
+    },
+    "blogcarousel": {
+      "fileName": "blogcarousel.tsx",
+      "path": "app/components/molecules/carousels/blogcarousel.tsx",
+      "props": "title?: string;\n  description?: string;\n  blogs: Blog[];\n  tag?: string;\n  variant?: 'default' | 'featured' | 'minimal';\n  showHeader?: boolean;\n  showCTA?: boolean;\n  CTAText?: string;\n  CTALink?: string;\n  className?: string;",
+      "description": "No description"
+    },
+    "servicecard": {
+      "fileName": "servicecard.tsx",
+      "path": "app/components/molecules/cards/servicecard.tsx",
+      "props": "pill: string;\n  title: string;\n  subtitle: string;\n  description: string;\n  buttonText: string;\n  buttonLink: string;\n  learnMoreLink: string;\n  imageUrl: string;\n  items: { icon: string; text: string",
+      "description": "No description"
+    },
+    "blogcard": {
+      "fileName": "blogcard.tsx",
+      "path": "app/components/molecules/cards/blogcard.tsx",
+      "props": "title: string;\n  description: string;\n  image: string;\n  date: string;\n  author: {\n    name: string;\n    avatar: string;",
+      "description": "No description"
+    },
+    "searchandcategories": {
+      "fileName": "searchandcategories.tsx",
+      "path": "app/components/molecules/blog/searchandcategories.tsx",
+      "props": "searchQuery: string;\n    setSearchQuery: (query: string) => void;\n    selectedCategory: string;\n    setSelectedCategory: (category: string) => void;\n    categories: string[];",
+      "description": "No description"
+    },
+    "twocolumns": {
+      "fileName": "twocolumns.tsx",
+      "path": "app/components/layout/twocolumns.tsx",
+      "props": "leftContent: ReactNode;\n  rightContent: ReactNode;",
+      "description": "No description"
+    },
+    "blog-layout": {
+      "fileName": "blog-layout.tsx",
+      "path": "app/components/layout/blog-layout.tsx",
+      "props": "posts: BlogPost[];",
+      "description": "No description"
+    },
+    "pills": {
+      "fileName": "pills.tsx",
+      "path": "app/components/atoms/pills/pills.tsx",
+      "props": "text: string;\n    color: string;\n    bgColor: string;",
+      "description": "No description"
+    },
+    "logo": {
+      "fileName": "logo.tsx",
+      "path": "app/components/atoms/logos/logo.tsx",
+      "props": "onClick: () => void;",
+      "description": "No description"
+    },
+    "mobilemenuitem": {
+      "fileName": "mobilemenuitem.tsx",
+      "path": "app/components/atoms/items/mobilemenuitem.tsx",
+      "props": "No props defined",
+      "description": "No description"
+    },
+    "hamburger": {
+      "fileName": "hamburger.tsx",
+      "path": "app/components/atoms/buttons/hamburger.tsx",
+      "props": "onClick: (event: React.MouseEvent<HTMLElement>) => void;",
+      "description": "No description"
+    }
+  }
+}

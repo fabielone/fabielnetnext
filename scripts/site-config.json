@@ -1,0 +1,44 @@
+{
+  "pages": {
+    "/.": {
+      "path": "/.",
+      "type": "generic",
+      "file": "page.tsx"
+    },
+    "/privacy": {
+      "path": "/privacy",
+      "type": "generic",
+      "file": "privacy/page.tsx"
+    },
+    "/login": {
+      "path": "/login",
+      "type": "generic",
+      "file": "login/page.tsx"
+    },
+    "/join": {
+      "path": "/join",
+      "type": "generic",
+      "file": "join/page.tsx"
+    },
+    "/contact": {
+      "path": "/contact",
+      "type": "generic",
+      "file": "contact/page.tsx"
+    },
+    "/blog": {
+      "path": "/blog",
+      "type": "blog",
+      "file": "blog/page.tsx"
+    },
+    "/blog/[slug]": {
+      "path": "/blog/[slug]",
+      "type": "blog",
+      "file": "blog/[slug]/page.tsx"
+    },
+    "/allies": {
+      "path": "/allies",
+      "type": "generic",
+      "file": "allies/page.tsx"
+    }
+  }
+}
