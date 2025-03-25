@@ -1,7 +1,7 @@
 // components/blog/BlogCarousel.tsx
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, type JSX } from 'react';
 import BlogCard from '../cards/blogcard';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 

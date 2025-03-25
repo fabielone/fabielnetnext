@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
-import LanguageSelector from '../components/molecules/languageselector';
+import LanguageSelector from './molecules/languageselector';
 import { navItems } from './config/navigation';
 import { Logo } from './atoms/logos/logo';
 import { HamburgerButton } from './atoms/buttons/hamburger';

@@ -1,4 +1,4 @@
-import { BlogPosts } from 'app/components/posts'
+import { BlogPosts } from 'src/app/components/posts'
 import MyServices from './components/substances/sections/services'
 import Hero from './components/substances/hero/hero'
 import BlogList from './components/substances/sections/blogsection'

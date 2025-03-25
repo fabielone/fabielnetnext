@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, type JSX } from 'react';
 import BlogCard from '../../molecules/cards/blogcard';
 import { FaChevronLeft, FaChevronRight, FaBookReader } from 'react-icons/fa';
-import BlogCarousel from 'app/components/molecules/carousels/blogcarousel';
+import BlogCarousel from 'src/app/components/molecules/carousels/blogcarousel';
 
 interface Blog {
   title: string;
