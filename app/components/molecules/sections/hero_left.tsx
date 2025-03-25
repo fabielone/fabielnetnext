@@ -8,6 +8,7 @@ import { HiArrowRight } from "react-icons/hi";
 import Image from 'next/image';
 import Pills, { PillsProps } from '../../atoms/pills/pills';
 import { SocialIcons } from '../socials/socialicons';
+import Link from 'next/link'
 
 interface HeroLeftProps {
   heading: string;
@@ -108,7 +109,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             transition={{ delay: 0.5 }}
           >
             <motion.a
-              href="/contact"
+              href="/checkout/schedule"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className=" text-gray-600 px-8 md:px-2 py-4 md:py-1 flex items-center transition-all transform hover:-translate-y-1"
@@ -116,18 +117,24 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
               <IoIosCalendar className="mr-2 h-6 w-6 md:w-8" />
               Consulta Gratis
             </motion.a>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-green-600 text-white border-2 border-green-700 px-8 md:px-4 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
-            >
-              <span className="relative z-10">Empezar Ahora</span>
-              <HiArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
-              <motion.div
-                className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity"
-                initial={false}
-              />
-            </motion.button>
+           
+
+<motion.button
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="bg-green-600 text-white border-2 border-green-700 px-8 md:px-4 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+>
+  <Link href="/checkout/businessformation" className="flex items-center" passHref>
+   
+      <span className="relative z-10">Empezar Ahora</span>
+      <HiArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+    
+  </Link>
+  <motion.div
+    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+    initial={false}
+  />
+</motion.button>
           </motion.div>
           <div className='flex justify-center p-4'>
           <SocialIcons />
