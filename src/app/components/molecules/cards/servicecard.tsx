@@ -1,4 +1,4 @@
-import { useSpring, animated, config } from '@react-spring/web';
+import { useSpring, animated, config, SpringValue } from '@react-spring/web';
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { HiArrowRight } from 'react-icons/hi';
@@ -14,6 +14,17 @@ interface HeaderProps {
   imageUrl: string;
   items: { icon: string; text: string }[];
   imagePosition?: 'left' | 'right';
+}
+
+// Define proper types for animated div props
+interface AnimatedDivProps {
+  style?: {
+    transform?: SpringValue<string>;
+    opacity?: SpringValue<number>;
+    scale?: SpringValue<number>;
+  };
+  className?: string;
+  children?: React.ReactNode;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -59,11 +70,14 @@ const Header: React.FC<HeaderProps> = ({
     config: config.gentle,
   });
 
+  // Create typed animated components
+  const AnimatedDiv = animated.div as React.FC<AnimatedDivProps>;
+
   return (
     <div ref={contentRef} className="relative font-serif px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white">
       <div className={`max-w-7xl mx-auto lg:flex items-center gap-12 ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
         {/* Image Section */}
-        <animated.div 
+        <AnimatedDiv 
           style={imageSlideProps} 
           className="flex justify-center lg:w-1/2"
         >
@@ -72,15 +86,15 @@ const Header: React.FC<HeaderProps> = ({
             <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-xl">
               <img
                 src={imageUrl}
-                className="w-full h-full object-fit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition-transform duration-700 group-hover:scale-[1.01]"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.01]"
                 alt=""
               />
             </div>
           </div>
-        </animated.div>
+        </AnimatedDiv>
 
         {/* Content Section */}
-        <animated.div
+        <AnimatedDiv
           style={contentSlideProps} 
           className="lg:w-1/2 space-y-8"
         >
@@ -134,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({
               </li>
             ))}
           </ul>
-        </animated.div>
+        </AnimatedDiv>
       </div>
     </div>
   );

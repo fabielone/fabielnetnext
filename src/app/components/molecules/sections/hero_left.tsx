@@ -66,7 +66,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
       x: ["0%", "-100%"] // Moves from right to left
     }}
     transition={{
-      duration: 20, // Adjust speed (higher = slower)
+      duration: 40, // Adjust speed (higher = slower)
       ease: "linear", // Constant speed
       repeat: Infinity, // Loops forever
       repeatType: "loop" // Smooth continuous loop
