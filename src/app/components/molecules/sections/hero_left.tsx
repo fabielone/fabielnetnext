@@ -1,14 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion'; // Add animation
-import { FaGithub, FaLinkedin, FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 import { IoIosCalendar, IoIosCheckmarkCircle, IoIosRocket } from "react-icons/io";
 import { IoFlash } from 'react-icons/io5';
 import { HiArrowRight } from "react-icons/hi";
-import Image from 'next/image';
 import Pills, { PillsProps } from '../../atoms/pills/pills';
 import { SocialIcons } from '../socials/socialicons';
-import Link from 'next/link'
+import {useTranslations} from 'next-intl';
+import {Link} from 'src/i18n/navigation';
 
 interface HeroLeftProps {
   heading: string;
@@ -16,17 +15,18 @@ interface HeroLeftProps {
 }
 
 export default function HeroLeft({ heading, pills }: HeroLeftProps) {
+  const t = useTranslations('Hero');
   const benefits = [
     {
-      text: "Establece tu negocio con confianza.",
+      text: t('Bullet1'),
       icon: <IoIosCheckmarkCircle className="text-amber-500 w-6 h-6" />,
     },
     {
-      text: "Potencia tu presencia en línea, nosotros nos encargamos.",
+      text: t('Bullet2'),
       icon: <IoFlash className="text-amber-500 w-6 h-6" />,
     },
     {
-      text: "Impulsa el crecimiento de tu negocio, sin estrés.",
+      text: t('Bullet3'),
       icon: <IoIosRocket className="text-amber-500 w-6 h-6" />,
     },
   ];
@@ -51,7 +51,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold text-gray-900">
               
               <span className="text-gray-600">
-                Soluciones Personalizadas para tu Negocio
+                {t('Heading')}
               </span>
             </h1>
           </motion.div>
@@ -136,7 +136,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
               className=" text-gray-600 px-8 md:px-2 py-4 md:py-1 flex items-center transition-all transform hover:-translate-y-1"
             >
               <IoIosCalendar className="mr-2 h-6 w-6 md:w-8" />
-              Consulta Gratis
+              {t('Schedule')}
             </motion.a>
            
 
@@ -147,7 +147,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 >
   <Link href="/checkout/businessformation" className="flex items-center" passHref>
    
-      <span className="relative z-10">Empezar Ahora</span>
+      <span className="relative z-10">{t('CTA')}</span>
       <HiArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
     
   </Link>

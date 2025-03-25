@@ -9,7 +9,7 @@ import {
     RiQuestionLine,
     RiBookReadLine
   } from 'react-icons/ri';
-  import { SocialIcons } from '../components/molecules/socials/socialicons';
+  import { SocialIcons } from '../../components/molecules/socials/socialicons';
   
   export const metadata = {
     title: 'Contacto | Fabiel.net',

@@ -1,4 +1,4 @@
-import { getBlogPosts } from 'src/app/blog/utils'
+import { getBlogPosts } from 'src/app/[locale]/blog/utils'
 
 export const baseUrl = 'https://fabiel.net'
 

@@ -1,12 +1,16 @@
-import {useTranslations} from 'next-intl';
-import {Link} from 'src/i18n/navigation';
- 
-export default function HomePage() {
-  const t = useTranslations('HomePage');
+import { BlogPosts } from 'src/app/components/posts'
+import MyServices from '../components/substances/sections/services'
+import Hero from '../components/substances/hero/hero'
+import BlogList from '../components/substances/sections/blogsection'
+import ReviewsScroller from '../components/molecules/sections/reviews'
+
+export default function Page() {
   return (
-    <div>
-      <h1>{t('title')}</h1>
-      <Link href="/about">{t('about')}</Link>
-    </div>
-  );
+    <section>
+      <Hero/>
+      <ReviewsScroller />
+      <MyServices /> 
+      <BlogList />
+    </section>
+  )
 }

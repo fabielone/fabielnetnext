@@ -1,6 +1,23 @@
 {
     "HomePage": {
-      "title": "Hello world!",
-      "about": "Go to the about page"
+      "title": "Hello World!",
+      "about": "Go to About Us page"
+    },
+    "LanguageSelector": {
+      "changeLanguage": "Change language"
+    },
+    "Hero": {
+      "Heading": "Custom Solutions for Your Business",
+      "Pill1": "Business Formation",
+      "Pill2": "eCommerce",
+      "Pill3": "Web Development",
+      "Pill4": "Online Marketing",
+      "Pill5": "Content Creation",
+      "Pill6": "Registered Agent",
+      "Bullet1": "Establish your business with confidence.",
+      "Bullet2": "Boost your online presence - we'll handle it.",
+      "Bullet3": "Drive your business growth stress-free.",
+      "Schedule": "Free Consultation",
+      "CTA": "Get Started Now"
     }
   }

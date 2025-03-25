@@ -1,5 +1,5 @@
 // app/blog/page.tsx (Server Component)
-import BlogLayout from '../components/layout/blog-layout';
+import BlogLayout from '../../components/layout/blog-layout';
 
 export const metadata = {
   title: 'Blog',

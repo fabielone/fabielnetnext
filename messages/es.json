@@ -1,6 +1,23 @@
 {
     "HomePage": {
-      "title": "Hola Mundo!",
-      "about": "Ir a la pagina de nosotros"
+      "title": "¡Hola Mundo!",
+      "about": "Ir a la página de nosotros"
+    },
+    "LanguageSelector": {
+      "changeLanguage": "Cambiar idioma"
+    },
+    "Hero": {
+      "Heading": "Soluciones Personalizadas para tu Negocio",
+      "Pill1": "Formación de Negocios",
+      "Pill2": "eCommerce",
+      "Pill3": "Desarrollo Web",
+      "Pill4": "Marketing Digital",
+      "Pill5": "Creación de Contenido",
+      "Pill6": "Agente Registrado",
+      "Bullet1": "Establece tu negocio con confianza.",
+      "Bullet2": "Potencia tu presencia en línea, nosotros nos encargamos.",
+      "Bullet3": "Impulsa el crecimiento de tu negocio sin estrés.",
+      "Schedule": "Consulta Gratis",
+      "CTA": "Empezar Ahora"
     }
   }

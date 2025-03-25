@@ -1,5 +1,5 @@
 // app/business/register/page.tsx
-import BusinessRegistrationForm from '../../components/forms/BusinessRegistrationForm';
+import BusinessRegistrationForm from '../../../components/forms/BusinessRegistrationForm';
 
 export default function BusinessRegistrationPage() {
   return (
