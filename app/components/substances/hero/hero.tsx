@@ -9,9 +9,13 @@ import HeroRight from "../../molecules/sections/hero_right";
 export default function Hero() {  
 
   const pills : PillsProps[] = [
-    {text:"Web Development",color: "text-gray-500",bgColor: "bg-transparent"},
-    {text:"AI Solutions",color: "text-gray-500",bgColor: "bg-transparent"},
+    {text:"Formacion de Negocios",color: "text-gray-500",bgColor: "bg-transparent"},
+    {text:"Desarrollow Web",color: "text-gray-500",bgColor: "bg-transparent"},
     {text:"Online Marketing",color: "text-gray-500",bgColor: "bg-transparent"},
+    {text:"Agente Registrado",color: "text-gray-500",bgColor: "bg-transparent"},
+    {text:"eCommerce",color: "text-gray-500",bgColor: "bg-transparent"},
+    {text:"Content Creation",color: "text-gray-500",bgColor: "bg-transparent"},
+
   ]
 
 

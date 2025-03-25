@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-6">
             <a
               href={buttonLink}
-              className="inline-flex items-center px-8 py-3 text-lg font-semibold text-white bg-green-500 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-green-700"
+              className="inline-flex items-center px-8 py-3 text-lg font-semibold bg-green-50 text-green-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-green-700"
             >
               {buttonText}
               <HiArrowRight className="ml-2 w-5 h-5" />

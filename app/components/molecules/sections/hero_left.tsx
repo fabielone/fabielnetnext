@@ -57,23 +57,44 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
           </motion.div>
 
           {/* Animated Pills Band */}
-          <motion.div 
-            animate={{ x: [-20, 0, -20] }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="hidden md:flex overflow-hidden whitespace-nowrap mb-8"
-          >
-            <div className="flex justify-center space-x-4">
-              {pills.map((pill, index) => (
-                <motion.span
-                  key={index}
-                  whileHover={{ scale: 1.1 }}
-                  className="inline-block"
-                >
-                  <Pills text={pill.text} color={pill.color} bgColor={pill.bgColor} />
-                </motion.span>
-              ))}
-            </div>
-          </motion.div>
+          <motion.div
+  className="flex overflow-hidden whitespace-nowrap mb-8"
+>
+  <motion.div
+    className="flex space-x-4"
+    animate={{
+      x: ["0%", "-100%"] // Moves from right to left
+    }}
+    transition={{
+      duration: 20, // Adjust speed (higher = slower)
+      ease: "linear", // Constant speed
+      repeat: Infinity, // Loops forever
+      repeatType: "loop" // Smooth continuous loop
+    }}
+  >
+    {/* First set of pills */}
+    {pills.map((pill, index) => (
+      <motion.span
+        key={`first-${index}`}
+        whileHover={{ scale: 1.1 }}
+        className="inline-block"
+      >
+        <Pills text={pill.text} color={pill.color} bgColor={pill.bgColor} />
+      </motion.span>
+    ))}
+    
+    {/* Duplicate set for seamless looping */}
+    {pills.map((pill, index) => (
+      <motion.span
+        key={`second-${index}`}
+        whileHover={{ scale: 1.1 }}
+        className="inline-block"
+      >
+        <Pills text={pill.text} color={pill.color} bgColor={pill.bgColor} />
+      </motion.span>
+    ))}
+  </motion.div>
+</motion.div>
 
           {/* Benefits Section */}
           <motion.div 
@@ -122,7 +143,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 <motion.button
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
-  className="bg-green-600 text-white border-2 border-green-700 px-8 md:px-4 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+  className="bg-green-50 text-green-700 border-2 border-green-700 px-8 md:px-4 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden group"
 >
   <Link href="/checkout/businessformation" className="flex items-center" passHref>
    

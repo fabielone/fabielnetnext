@@ -53,11 +53,15 @@ export default function Navbar() {
     <nav className="bg-white shadow-md fixed w-full z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-         <Logo onClick={function (): void {
-            throw new Error('Function not implemented.');
-          } }/>
-          {/* Hamburger Menu (Mobile) */}
-          <HamburgerButton onClick={toggleMenu} />
+        <Logo 
+  onClick={() => {
+    throw new Error('Function not implemented.');
+    
+  }}
+  minWidth={"200px"}
+  
+/>
+<HamburgerButton onClick={toggleMenu} />
 
           {/* Desktop Menu */}
           <DesktopMenu 

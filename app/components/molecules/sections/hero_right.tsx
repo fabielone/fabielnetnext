@@ -81,9 +81,9 @@ export default function HeroRight() {
                   <Image
                     src="/logo.png"
                     alt="Fabiel.Net Logo"
-                    width={80}
-                    height={32}
-                    className="inline-block align-middle mr-1 opacity-90"
+                    width={50}
+                    height={20}
+                    className="inline-block relative justify-center top-1 align-middle mr-1 opacity-90"
                   />
                 </span>
                 ! Estamos aquí para ayudarte a establecer y crecer tu negocio en los Estados Unidos.
