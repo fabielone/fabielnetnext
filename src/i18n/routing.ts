@@ -16,7 +16,12 @@ export const routing = defineRouting({
     },
     '/checkout/businessformation': {
         es:"/checkout/formacion-de-negocio"
-    }
+    },
+
+    '/blog':{
+        es:'/blog',
+        en:'/blog'
+    },
 
   }
 });

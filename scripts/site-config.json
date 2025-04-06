@@ -1,44 +1,74 @@
 {
   "pages": {
-    "/.": {
-      "path": "/.",
+    "/[locale]": {
+      "path": "/[locale]",
       "type": "generic",
-      "file": "page.tsx"
+      "file": "[locale]/page.tsx"
     },
-    "/privacy": {
-      "path": "/privacy",
+    "/[locale]/privacy": {
+      "path": "/[locale]/privacy",
       "type": "generic",
-      "file": "privacy/page.tsx"
+      "file": "[locale]/privacy/page.tsx"
     },
-    "/login": {
-      "path": "/login",
+    "/[locale]/ourprocess": {
+      "path": "/[locale]/ourprocess",
       "type": "generic",
-      "file": "login/page.tsx"
+      "file": "[locale]/ourprocess/page.tsx"
     },
-    "/join": {
-      "path": "/join",
+    "/[locale]/login": {
+      "path": "/[locale]/login",
       "type": "generic",
-      "file": "join/page.tsx"
+      "file": "[locale]/login/page.tsx"
     },
-    "/contact": {
-      "path": "/contact",
+    "/[locale]/join": {
+      "path": "/[locale]/join",
       "type": "generic",
-      "file": "contact/page.tsx"
+      "file": "[locale]/join/page.tsx"
     },
-    "/blog": {
-      "path": "/blog",
+    "/[locale]/contact": {
+      "path": "/[locale]/contact",
+      "type": "generic",
+      "file": "[locale]/contact/page.tsx"
+    },
+    "/[locale]/checkout/schedule": {
+      "path": "/[locale]/checkout/schedule",
+      "type": "generic",
+      "file": "[locale]/checkout/schedule/page.tsx"
+    },
+    "/[locale]/checkout/businessformation": {
+      "path": "/[locale]/checkout/businessformation",
+      "type": "generic",
+      "file": "[locale]/checkout/businessformation/page.tsx"
+    },
+    "/[locale]/blogtest": {
+      "path": "/[locale]/blogtest",
       "type": "blog",
-      "file": "blog/page.tsx"
+      "file": "[locale]/blogtest/page.tsx"
     },
-    "/blog/[slug]": {
-      "path": "/blog/[slug]",
+    "/[locale]/blogtest/[slug]": {
+      "path": "/[locale]/blogtest/[slug]",
       "type": "blog",
-      "file": "blog/[slug]/page.tsx"
+      "file": "[locale]/blogtest/[slug]/page.tsx"
     },
-    "/allies": {
-      "path": "/allies",
+    "/[locale]/allies": {
+      "path": "/[locale]/allies",
       "type": "generic",
-      "file": "allies/page.tsx"
+      "file": "[locale]/allies/page.tsx"
+    },
+    "/[locale]/(blog)/en": {
+      "path": "/[locale]/(blog)/en",
+      "type": "blog",
+      "file": "[locale]/(blog)/en/page.tsx"
+    },
+    "/[locale]/(blog)/en/blog": {
+      "path": "/[locale]/(blog)/en/blog",
+      "type": "blog",
+      "file": "[locale]/(blog)/en/blog/page.tsx"
+    },
+    "/(store)/store": {
+      "path": "/(store)/store",
+      "type": "generic",
+      "file": "(store)/store/page.tsx"
     }
   }
 }

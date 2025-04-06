@@ -12,7 +12,7 @@ const PAGE_TYPES = {
 };
 
 function crawlPages() {
-  const pagesDir = path.join(process.cwd(), './app/');
+  const pagesDir = path.join(process.cwd(), './src/app/');
   const configPath = path.join(process.cwd(), './scripts/site-config.json');
 
   // Find all page.tsx files

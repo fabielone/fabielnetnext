@@ -14,19 +14,27 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'placehold.co',
-        port: '',
+        pathname: '/**', // This covers all paths under the domain
+      },
+      {
+        protocol: 'https',
+        hostname: 'blog.fabiel.net',
         pathname: '/**',
       },
-      // Add other image hosts as needed
+      
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+        pathname: '/**',
+      }
     ],
   },
 
-  images: {
-    domains: [
-      'blog.fabiel.net',
-      // Add other domains if needed
-    ],
-  },
   // .
   
   // Optionally, add any other Next.js config below
