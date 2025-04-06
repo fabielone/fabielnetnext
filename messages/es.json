@@ -19,5 +19,12 @@
       "Bullet3": "Impulsa el crecimiento de tu negocio sin estrés.",
       "Schedule": "Consulta Gratis",
       "CTA": "Empezar Ahora"
+    },
+    
+    "Blog": {
+      "title": "Blog",
+      "noPosts": "Aún no hay publicaciones",
+      "backToBlog": "Regreso al Blog"
     }
+    
   }

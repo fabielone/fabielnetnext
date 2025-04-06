@@ -19,5 +19,10 @@
       "Bullet3": "Drive your business growth stress-free.",
       "Schedule": "Free Consultation",
       "CTA": "Get Started Now"
+    },
+    "Blog": {
+      "title": "Blog",
+      "noPosts": "No posts yet",
+      "backToBlog": "Back to blog"
     }
   }
