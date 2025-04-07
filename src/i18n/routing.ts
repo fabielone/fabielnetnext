@@ -23,5 +23,10 @@ export const routing = defineRouting({
         en:'/blog'
     },
 
+    '/blog/businesstips':{
+        es:'/blog/10-consejos-para-potenciar-tu-negocio',
+        en:'/blog/10-tips-to-boost-your-business'
+    },  
+
   }
 });
