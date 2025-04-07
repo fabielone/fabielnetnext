@@ -1,27 +1,37 @@
 import { baseUrl } from 'src/app/sitemap';
-import { getBlogPosts } from 'src/app/[locale]/blog/utils';
+
+// Define your hardcoded RSS feed items
+const hardcodedFeedItems = [
+  {
+    title: "My Latest Project",
+    link: `${baseUrl}/projects/latest`,
+    description: "Check out my newest portfolio project",
+    pubDate: new Date('2023-11-15').toUTCString()
+  },
+  {
+    title: "Web Development Tips",
+    link: `${baseUrl}/blog/web-dev-tips`,
+    description: "My collection of useful web development tips",
+    pubDate: new Date('2023-10-20').toUTCString()
+  },
+  {
+    title: "About Me",
+    link: `${baseUrl}/about`,
+    description: "Learn more about my background and skills",
+    pubDate: new Date('2023-09-10').toUTCString()
+  }
+];
 
 export async function GET() {
   try {
-    // Get all blog posts across all locales
-    let allBlogs = (await getBlogPosts()).flat();
-
-    const itemsXml = allBlogs
-      .sort((a, b) => {
-        if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-          return -1;
-        }
-        return 1;
-      })
+    const itemsXml = hardcodedFeedItems
       .map(
-        (post) =>
+        (item) =>
           `<item>
-            <title>${post.metadata.title}</title>
-            <link>${baseUrl}/${post.locale}/blog/${post.slug}</link>
-            <description>${post.metadata.summary || ''}</description>
-            <pubDate>${new Date(
-              post.metadata.publishedAt
-            ).toUTCString()}</pubDate>
+            <title>${item.title}</title>
+            <link>${item.link}</link>
+            <description>${item.description}</description>
+            <pubDate>${item.pubDate}</pubDate>
           </item>`
       )
       .join('\n');

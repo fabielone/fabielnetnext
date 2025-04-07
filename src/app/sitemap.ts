@@ -1,17 +1,16 @@
-import { getBlogPosts } from 'src/app/[locale]/blog/utils'
-
 export const baseUrl = 'https://fabiel.net'
 
 export default async function sitemap() {
-  let blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }))
-
-  let routes = ['', '/blog'].map((route) => ({
+  const routes = [
+    '',           // Home page
+    '/blog',      // Blog index
+    '/about',     // About page
+    '/projects',  // Projects page
+    '/contact'    // Contact page
+  ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString().split('T')[0],
-  }))
+  }));
 
-  return [...routes, ...blogs]
+  return routes;
 }
