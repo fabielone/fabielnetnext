@@ -21,7 +21,11 @@ const nextConfig = {
         hostname: 'blog.fabiel.net',
         pathname: '/**',
       },
-      
+      {
+        protocol: 'https',
+        hostname: 'fakeimg.pl',
+        pathname: '/**',
+      },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',

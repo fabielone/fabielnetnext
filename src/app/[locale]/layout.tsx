@@ -16,19 +16,22 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  if (!locales.includes(params.locale)) {
+  
+  const { locale } = await params;
+
+  if (!locales.includes(locale)) {
     notFound();
   }
 
   let messages;
   try {
-    messages = (await import(`../../../messages/${params.locale}.json`)).default;
+    messages = (await import(`../../../messages/${locale}.json`)).default;
   } catch (error) {
     notFound();
   }
 
   return (
-    <NextIntlClientProvider locale={params.locale} messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <Navbar />
       <main className="flex-auto min-w-0 pt-16 flex flex-col md:px-0">
         {children}

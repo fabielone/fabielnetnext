@@ -18,15 +18,11 @@ export const routing = defineRouting({
         es:"/checkout/formacion-de-negocio"
     },
 
-    '/blog':{
-        es:'/blog',
-        en:'/blog'
+    '/blog/10-consejos':{
+        es:'/blog/10-consejos',
+        en:'/blog/10-tips'
     },
-
-    '/blog/businesstips':{
-        es:'/blog/10-consejos-para-potenciar-tu-negocio',
-        en:'/blog/10-tips-to-boost-your-business'
-    },  
+ 
 
   }
 });
