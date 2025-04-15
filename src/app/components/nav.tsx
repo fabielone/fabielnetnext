@@ -11,6 +11,7 @@ import { Logo } from './atoms/logos/logo';
 import { HamburgerButton } from './atoms/buttons/hamburger';
 import { MobileMenu } from './molecules/menus/mobilemenu';
 import { DesktopMenu } from './molecules/menus/desktopmenu';
+import ThemeToggle from './molecules/themeselector';
 
 
 export default function Navbar() {
@@ -70,7 +71,9 @@ export default function Navbar() {
 
           {/* Language Selector and Login */}
           <div className="flex items-center space-x-4">
+          
             <LanguageSelector />
+            <ThemeToggle />
             <Link
               href="/login"
               className="hidden md:flex text-gray-800  hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"

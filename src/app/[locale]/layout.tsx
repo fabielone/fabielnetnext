@@ -6,6 +6,7 @@ import Footer from 'src/app/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ChatwootScript from 'src/app/components/utils/chatwoot';
+import { ThemeProvider } from '../components/theme-provider';
 
 const locales = ['en', 'es'];
 
@@ -32,6 +33,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      
       <Navbar />
       <main className="flex-auto min-w-0 pt-16 flex flex-col md:px-0">
         {children}
@@ -39,7 +41,8 @@ export default async function LocaleLayout({
       <Footer />
       <Analytics />
       <SpeedInsights />
-      <ChatwootScript />
+      <ChatwootScript />  
+      
     </NextIntlClientProvider>
   );
 }

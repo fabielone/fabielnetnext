@@ -56,7 +56,7 @@ export const navItems: NavItem[] = [
   },
   {
     name: 'Blog',
-    path: '/blog',
+    path: 'https://blog.fabiel.net',
   },
   {
     name: 'Contacto',

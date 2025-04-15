@@ -70,7 +70,7 @@ importers:
         specifier: ^4.0.2
         version: 4.0.2(next@15.2.4(@babel/core@7.26.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(typescript@5.3.3)
       next-themes:
-        specifier: ^0.4.4
+        specifier: ^0.4.6
         version: 0.4.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       outline:
         specifier: link:@heroicons/react/24/outline

@@ -9,6 +9,7 @@ import { SocialIcons } from '../socials/socialicons';
 import { useTranslations } from 'next-intl';
 import { Link } from 'src/i18n/navigation';
 
+
 interface HeroLeftProps {
   heading: string;
   pills: PillsProps[];
@@ -165,6 +166,8 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
               <IoIosCalendar className="mr-2 h-6 w-6 md:w-8" />
               {t('Schedule')}
             </motion.a>
+
+        
 
             <motion.button
               variants={itemVariants}
