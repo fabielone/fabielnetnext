@@ -23,6 +23,7 @@ import {
   isSameDay
 } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { useEffect } from 'react';
 
 // Configuration
 const services = [
@@ -80,7 +81,8 @@ function useCalendar({
 
   const renderCalendar = () => {
     const monthDays = generateMonthDays(currentMonth);
-    const weekdays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    const weekdays = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
+ // Add this scroll effect
 
     return (
       <div className="calendar">
@@ -161,7 +163,22 @@ export default function ConsultationForm() {
     urgency: 'scheduled',
   });
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
+ // Add this scroll effect
+ useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}, [step]); // Triggered when step changes
+ // Scroll to top when submission occurs
+ useEffect(() => {
+  if (isSubmitted) {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+}, [isSubmitted]); // Triggered when submission status changes
   // Callback for date selection
   const selectDate = useCallback((date: Date) => {
     setSelectedDate(date);

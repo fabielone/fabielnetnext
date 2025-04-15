@@ -22,6 +22,6 @@
     ],
     "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(blog)/en/blog/10-tips-to-boost-your-business", "src/app/(blog)/es/blog/10-consejos-para-potenciar-tu-negocio", "src/app/[locale]/blog/[slug]", "src/app/[locale]/blog/10-tips"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(blog)/en/blog/10-tips-to-boost-your-business", "src/app/(blog)/es/blog/10-consejos-para-potenciar-tu-negocio", "src/app/[locale]/blog/[slug]", "src/app/[locale]/blog/10-tips", "tailwind.config.js"],
   "exclude": ["node_modules"]
 }

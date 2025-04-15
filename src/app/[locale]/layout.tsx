@@ -6,7 +6,6 @@ import Footer from 'src/app/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ChatwootScript from 'src/app/components/utils/chatwoot';
-import { ThemeProvider } from '../components/theme-provider';
 
 const locales = ['en', 'es'];
 
