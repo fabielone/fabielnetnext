@@ -3,8 +3,16 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-bg-primary: oklch(0.72 0.11 178);
-  --color-dark-bg-primary: oklch(0.90 0.60 200  );
+  --color-background-primary: oklch(1 0 0);
+  --color-dark-background-primary: oklch(0.51 0.0436 230.47);
+
+  --color-tx-primary: oklch(0.16 0.0263 71.65);
+  --color-dark-tx-primary: oklch(1 0 0);
+  --color-tx-primary-accent: oklch(0.76 0.1422 71.65);
+  --color-dark-primary-accent: oklch(0.76 0.1422 71.65);
+
+  --color-primary: oklch(0.5 0.25 210);
+  --color-dark-primary: oklch(0.5 0.25 210);
 
 }
 
