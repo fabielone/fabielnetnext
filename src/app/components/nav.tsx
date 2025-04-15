@@ -59,7 +59,7 @@ export default function Navbar() {
     throw new Error('Function not implemented.');
     
   }}
-  minWidth={"200px"}
+ // minWidth={"200px"}
   
 />
 <HamburgerButton onClick={toggleMenu} />
