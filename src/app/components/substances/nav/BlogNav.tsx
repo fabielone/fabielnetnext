@@ -61,7 +61,7 @@ export default function Navbar() {
   minWidth={"200px"}
   
 />
-<HamburgerButton onClick={toggleMenu} />
+<HamburgerButton onClick={toggleMenu} buttonTextColor={'text-hamburger dark:text-dark-hamburger'} />
 
           {/* Desktop Menu */}
           <DesktopMenu 

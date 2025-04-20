@@ -8,34 +8,44 @@
 
   --color-tx-primary: oklch(0.16 0.0263 71.65);
   --color-dark-tx-primary: oklch(1 0 0);
+
+  --color-hamburger :  oklch(0.16 0.0263 71.65);
+  --color-dark-hamburger : oklch(0.76 0.1422 71.65);
+
+  --color-tx-scondary: oklch(0.16 0.0263 71.65);
+  --color-dark-tx-secondary: oklch(1 0 0);
+
   --color-tx-primary-accent: oklch(0.76 0.1422 71.65);
-  --color-dark-primary-accent: oklch(0.76 0.1422 71.65);
+  --color-dark-tx-primary-accent: oklch(0.76 0.1422 71.65);
 
   --color-primary: oklch(0.5 0.25 210);
   --color-dark-primary: oklch(0.5 0.25 210);
+
+  --color-secondary: oklch(0.5 0.25 210);
+  --color-dark-secondary: oklch(0.5 0.25 210);
 
 }
 
 
 :root {
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;  
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+  --sh-class: oklch(0.48 0.11 255.81 / 1);
+  --sh-identifier: oklch(0.37 0.03 254.20 / 1);
+  --sh-sign: oklch(0.67 0.02 248.19 / 1);
+  --sh-string: oklch(0.54 0.09 189.94 / 1);
+  --sh-keyword: oklch(0.58 0.22 29.59 / 1);  
+  --sh-comment: oklch(0.68 0.01 17.51 / 1);
+  --sh-jsxliterals: oklch(0.56 0.16 278.23 / 1);
+  --sh-property: oklch(0.64 0.18 41.09 / 1);
+  --sh-entity: oklch(0.64 0.18 41.09 / 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
+    --sh-class: oklch(0.67 0.16 255.93 / 1);
+    --sh-identifier: oklch(1 0 0 / 1);
+    --sh-keyword: oklch(0.70 0.16 26.07 / 1);
+    --sh-string: oklch(0.64 0.11 184.74 / 1);
   }
   html {
     color-scheme: dark;

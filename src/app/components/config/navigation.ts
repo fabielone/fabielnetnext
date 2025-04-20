@@ -51,7 +51,7 @@ export const navItems: NavItem[] = [
   },
   
   {
-    name: 'Nuestro Proceso',
+    name: 'Proceso',
     path: '/ourprocess',
   },
   {

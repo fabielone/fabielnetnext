@@ -5,17 +5,18 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import { MobileMenuItemProps } from '../../types/navigation';
 
-export const MobileMenuItem: React.FC<MobileMenuItemProps> = ({ 
-  item, 
-  isOpen, 
-  onToggle, 
-  onNavigate 
-}) => {
+interface Props extends MobileMenuItemProps {
+  color : string;
+}
+
+
+
+ export default function MobileMenuItem ({item, onNavigate, onToggle, isOpen, ...rest }: Props) {
   if (item.path) {
     return (
       <Link
         href={item.path}
-        className="block text-gray-800  hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
+        className={`block  ${rest.color}  px-3 py-2 rounded-md text-sm font-medium`}
         onClick={onNavigate}
       >
         {item.name}
@@ -24,7 +25,7 @@ export const MobileMenuItem: React.FC<MobileMenuItemProps> = ({
   }
 
   return (
-    <div className="text-gray-800  hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
+    <div className="text-tx-primary dark:text-dark-tx-primary hover:text-tx-primary-accent dark:hover:text-dark-tx-primary-accent px-3 py-2 rounded-md text-sm font-medium">
       <button
         onClick={onToggle}
         className="flex items-center justify-between w-full"
@@ -59,7 +60,7 @@ export const MobileMenuItem: React.FC<MobileMenuItemProps> = ({
                   <Link
                     key={subSecIndex}
                     href={subSection.path}
-                    className="block text-gray-600  hover:text-gray-800  py-1"
+                    className={`block text-gray-600  hover:text-gray-800  py-1`}
                     onClick={onNavigate}
                   >
                     {subSection.name}

@@ -3,13 +3,15 @@
 
 interface HamburgerButtonProps {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  buttonTextColor: string;
+  
 }
 
-export const HamburgerButton: React.FC<HamburgerButtonProps> = ({ onClick }) => (
+export const HamburgerButton: React.FC<HamburgerButtonProps> = ({ onClick,buttonTextColor }) => (
   <div className="flex md:hidden">
     <button
       onClick={onClick}
-      className="text-gray-800  focus:outline-none menu-icon"
+      className={` ${buttonTextColor} focus:outline-none menu-icon`}
       aria-label="Toggle menu"
     >
       <svg
