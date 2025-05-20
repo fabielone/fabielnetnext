@@ -11,23 +11,31 @@ interface DesktopMenuProps {
   onNavigate: () => void;
 }
 
+const NavLink = ({ item, onNavigate }: { item: NavItem, onNavigate: () => void }) => (
+  <Link
+    href={item.path!}
+    className="text-gray-800 dark:text-white text-center hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+    onClick={onNavigate}
+  >
+    <span>{item.name}</span>
+  </Link>
+);
+
+const NavItemWithMegaMenu = ({ item, onNavigate }: { item: NavItem, onNavigate: () => void }) => (
+  <div className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
+    <span>{item.name}</span>
+    <MegaMenu subItems={item.subItems} onNavigate={onNavigate} />
+  </div>
+);
+
 export const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems, onNavigate }) => (
   <div className="hidden md:flex md:items-center md:space-x-1 justify-center">
     {navItems.map((item, index) => (
       <div key={index} className="relative group">
         {item.path ? (
-          <Link
-            href={item.path}
-            className="text-gray-800 dark:text-white text-center
-             hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-          >
-            <span>{item.name}</span>
-          </Link>
+          <NavLink item={item} onNavigate={onNavigate} />
         ) : (
-          <div className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-            <span>{item.name}</span>
-            <MegaMenu subItems={item.subItems} onNavigate={onNavigate} />
-          </div>
+          <NavItemWithMegaMenu item={item} onNavigate={onNavigate} />
         )}
       </div>
     ))}
