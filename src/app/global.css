@@ -4,7 +4,7 @@
 
 @theme {
   --color-background-primary: oklch(1 0 0);
-  --color-dark-background-primary: oklch(0.51 0.0436 230.47);
+  --color-dark-background-primary: oklch(0.2 0.0436 230.47);
 
   --color-tx-primary: oklch(0.16 0.0263 71.65);
   --color-dark-tx-primary: oklch(1 0 0);

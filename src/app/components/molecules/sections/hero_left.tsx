@@ -1,36 +1,51 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { IoIosCalendar, IoIosCheckmarkCircle, IoIosRocket } from "react-icons/io";
-import { IoFlash } from 'react-icons/io5';
-import { HiArrowRight } from "react-icons/hi";
+import { IoIosCalendar } from "react-icons/io";
+import { HiArrowRight, HiDocumentText, HiGlobe, HiIdentification } from "react-icons/hi";
 import Pills, { PillsProps } from '../../atoms/pills/pills';
 import { SocialIcons } from '../socials/socialicons';
 import { useTranslations } from 'next-intl';
 import { Link } from 'src/i18n/navigation';
+import { FiFileText } from 'react-icons/fi';
+import { FaLinkedin } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
+
 
 
 interface HeroLeftProps {
   heading: string;
-  pills: PillsProps[];
 }
 
-export default function HeroLeft({ heading, pills }: HeroLeftProps) {
+export default function HeroLeft({ heading}: HeroLeftProps) {
   const t = useTranslations('Hero');
   
   const benefits = [
     {
       text: t('Bullet1'),
-      icon: <IoIosCheckmarkCircle className="text-amber-500 w-6 h-6" />,
+      icon: <HiDocumentText className="text-amber-500 w-6 h-6" />,
     },
     {
       text: t('Bullet2'),
-      icon: <IoFlash className="text-amber-500 w-6 h-6" />,
+      icon: <FiFileText className="text-amber-500 w-6 h-6" />,
     },
     {
       text: t('Bullet3'),
-      icon: <IoIosRocket className="text-amber-500 w-6 h-6" />,
+      icon: <HiIdentification className="text-amber-500 w-6 h-6" />,
     },
+    {
+      text: t('Bullet4'),
+      icon: <HiGlobe className="text-amber-500 w-6 h-6" />,
+    },
+  ];
+
+  const pills = [
+    { text: t('Pill1'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
+    { text: t('Pill2'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
+    { text: t('Pill3'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
+    { text: t('Pill4'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
+    { text: t('Pill5'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
+    { text: t('Pill6'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
   ];
 
   // Animation variants
@@ -77,7 +92,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="relative font-serif px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden"
+      className="relative font-serif px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden bg-white dark:bg-gray-900"
     >
       <div className="max-w-2xl mx-auto">
         <div className="mb-16">
@@ -87,16 +102,47 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             className="text-center sm:mt-2 mb-2 md:mb-12"
           >
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-5xl font-bold text-gray-900"
+              className="text-4xl sm:text-5xl md:text-5xl font-bold text-gray-900 dark:text-white"
               whileHover={{ scale: 1.02 }}
             >
-              <motion.span className="text-gray-600">
+              <motion.span className="text-gray-600 dark:text-gray-300">
                 {t('Heading')}
               </motion.span>
             </motion.h1>
+            <motion.p className="text-xl sm:text-2xl text-gray-500 dark:text-gray-400 mt-4 font-medium">
+              {t('Subheading')}
+            </motion.p>
+            <motion.div className="mt-4 text-lg text-amber-600 dark:text-amber-400 font-semibold">
+              {t('PriceTimeline')}
+            </motion.div>
           </motion.div>
-
-          {/* Infinite Scrolling Pills */}
+          <motion.div 
+  className="flex justify-center items-center space-x-3 mt-4 mb-6"
+  initial={{ opacity: 0, scale: 0.8 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ delay: 0.9, type: "spring", stiffness: 200 }}
+>
+  <motion.div 
+    className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full px-4 py-2 flex items-center space-x-2 shadow-lg border border-amber-100 dark:border-amber-800/30"
+    whileHover={{ scale: 1.05 }}
+  >
+    <div className="flex">
+      {[...Array(5)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, rotate: -180 }}
+          animate={{ opacity: 1, rotate: 0 }}
+          transition={{ delay: 1 + i * 0.1, type: "spring" }}
+        >
+          <FaStar className="w-4 h-4 text-yellow-400" />
+        </motion.div>
+      ))}
+    </div>
+    <span className="text-sm font-bold text-gray-800 dark:text-gray-200">5.0</span>
+    {/* <span className="text-xs text-gray-600 dark:text-gray-400">({t('ReviewCount')})</span> */}
+  </motion.div>
+</motion.div>
+          {/* Infinite Scrolling Pills - Temporarily Hidden
           <motion.div
             className="flex overflow-hidden whitespace-nowrap mb-8"
           >
@@ -117,32 +163,46 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
               ))}
             </motion.div>
           </motion.div>
+          */}
 
           {/* Benefits Section */}
           <motion.div 
-            className="text-gray-800 my-8 p-4 mx-6 sm:p-8 md:p-8 sm:mx-8 md:mx-8 bg-white rounded-3xl shadow-xl md:shadow-2xl border-2 border-gray-100"
+            className="text-gray-800 dark:text-gray-200 my-12 p-2 md:p-8 mx-6 sm:mx-8 md:mx-8 bg-gradient-to-br from-white via-amber-50/30 to-white dark:from-gray-800 dark:via-amber-900/10 dark:to-gray-800 rounded-3xl shadow-2xl border border-amber-100 dark:border-amber-800/30"
             variants={itemVariants}
             whileHover={{ 
-              scale: 1.02,
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+              scale: 1.01,
+              boxShadow: "0 20px 40px -10px rgba(245, 158, 11, 0.1)"
             }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <motion.ul className="space-y-2 md:space-y-6">
+            <motion.h3 className="text-xl md:text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+              {t('BenefitsTitle')}
+            </motion.h3>
+            <motion.ul className="space-y-4 sm:space-y-6">
               {benefits.map((benefit, index) => (
                 <motion.li
                   key={index}
                   variants={itemVariants}
-                  className="flex items-center bg-white md:bg-amber-50 p-1 md:p-4 rounded-xl"
-                  whileHover={{ x: 5 }}
+                  className="flex items-start bg-white dark:bg-gray-700/50 p-2 rounded-lg sm:rounded-xl"
+                  whileHover={{ x: 4, scale: 1.01 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  <motion.span 
-                    className="mr-4"
-                    whileHover={{ scale: 1.1 }}
+                  <motion.div 
+                    className="mr-4 sm:mr-6 p-2 sm:p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg sm:rounded-xl"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
                   >
                     {benefit.icon}
-                  </motion.span>
-                  <span className="font-xs md:font-medium">{benefit.text}</span>
+                  </motion.div>
+                  <div className="relative">
+                    <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white block">
+                      {benefit.text}
+                    </span>
+                    <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 block">
+                      {t(`BulletDescription${index + 1}`)}
+                    </span>
+                  </div>
                 </motion.li>
               ))}
             </motion.ul>
@@ -153,6 +213,7 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
             className="text-lg mb-4 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
             variants={containerVariants}
           >
+            {/* Temporarily commented out - will implement later
             <motion.a
               href="/checkout/schedule"
               variants={itemVariants}
@@ -161,32 +222,28 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
                 color: "#4b5563" // darker gray
               }}
               whileTap={{ scale: 0.95 }}
-              className="text-gray-600 px-8 md:px-2 py-4 md:py-1 flex items-center"
+              className="text-gray-600 dark:text-gray-300 px-8 md:px-2 py-4 md:py-1 flex items-center"
             >
               <IoIosCalendar className="mr-2 h-6 w-6 md:w-8" />
               {t('Schedule')}
             </motion.a>
-
-        
+            */}
 
             <motion.button
               variants={itemVariants}
               whileHover={{ 
                 scale: 1.05,
-                boxShadow: "0 5px 15px rgba(21, 128, 61, 0.3)"
+                boxShadow: "0 10px 30px rgba(59, 130, 246, 0.3)"
               }}
               whileTap={{ scale: 0.95 }}
-              className="bg-green-50 text-green-700 border-2 border-green-700 px-8 md:px-4 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl relative overflow-hidden"
+              className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-12 py-6 rounded-2xl flex items-center shadow-xl hover:shadow-2xl relative overflow-hidden text-xl"
             >
               <Link href="/checkout/businessformation" className="flex items-center" passHref>
-                <motion.span 
-                  className="relative z-10"
-                  whileHover={{ x: 2 }}
-                >
+                <motion.span className="relative z-10">
                   {t('CTA')}
                 </motion.span>
                 <motion.span
-                  className="ml-2"
+                  className="ml-3"
                   animate={{
                     x: [0, 5, 0],
                   }}
@@ -204,10 +261,20 @@ export default function HeroLeft({ heading, pills }: HeroLeftProps) {
 
           {/* Social Icons */}
           <motion.div 
-            className="flex justify-center p-4"
+            className="flex justify-center p-4 space-x-4"
             variants={itemVariants}
           >
             <SocialIcons />
+            <motion.a
+              href="https://www.linkedin.com/your-linkedin-page"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
+            >
+              <FaLinkedin className="w-6 h-6" />
+            </motion.a>
           </motion.div>
         </div>
       </div>

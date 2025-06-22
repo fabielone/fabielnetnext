@@ -18,7 +18,7 @@ export const SocialIcons: React.FC = () => (
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-gray-800 hover:text-gray-600"
+        className="text-gray-800 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white"
       >
         <Icon className="w-5 h-5" />
       </a>
