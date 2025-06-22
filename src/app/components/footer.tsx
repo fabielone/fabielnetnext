@@ -143,7 +143,7 @@ export default function Footer() {
 
            {/* Newsletter Subscription Form */}
                         <Newsletter
-                        variant='dark'
+                        
                         title='Newsletter'
                         /> 
         </div>
