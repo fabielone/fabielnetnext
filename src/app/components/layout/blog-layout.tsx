@@ -222,7 +222,7 @@ export default function BlogLayout({ posts }: BlogLayoutProps) {
 
           {/* Newsletter Subscription Form */}
                        <Newsletter
-                       variant='light'
+                       
                        title='Noticias, Consejos y mas '
                        /> 
         </div>
