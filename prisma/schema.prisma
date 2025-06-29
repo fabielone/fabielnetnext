@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -12,4 +9,759 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// ==============================================
+// USER MANAGEMENT
+// ==============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  firstName     String    @map("first_name")
+  lastName      String    @map("last_name")
+  phone         String?
+  address       String?
+  emailVerified Boolean   @default(false) @map("email_verified")
+  isActive      Boolean   @default(true) @map("is_active")
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  
+  // Relationships
+  orders        Order[]
+  userSessions  UserSession[]
+  
+  @@map("users")
+}
+
+model UserSession {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  sessionToken String  @unique @map("session_token")
+  expiresAt   DateTime @map("expires_at")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_sessions")
+}
+
+enum UserRole {
+  CUSTOMER    @map("customer")
+  ADMIN       @map("admin")
+  SUPER_ADMIN @map("super_admin")
+}
+
+// ==============================================
+// LLC FORMATION ORDERS ($49.99 FLAT RATE)
+// ==============================================
+
+model Order {
+  id       String @id @default(cuid())
+  orderId  String @unique @map("order_id") // ORD-timestamp-random format
+  userId   String? @map("user_id")
+  
+  // Basic Company Information
+  companyName     String @map("company_name")
+  businessAddress String @map("business_address")
+  businessCity    String @map("business_city")
+  businessState   String @map("business_state") @default("CA")
+  businessZip     String @map("business_zip")
+  businessPurpose String @map("business_purpose")
+  
+  // Contact Information
+  contactFirstName String @map("contact_first_name")
+  contactLastName  String @map("contact_last_name")
+  contactEmail     String @map("contact_email")
+  contactPhone     String? @map("contact_phone")
+  contactAddress   String? @map("contact_address")
+  
+  // Service Selections (all included in $49.99)
+  needEIN              Boolean @default(true) @map("need_ein")
+  needOperatingAgreement Boolean @default(true) @map("need_operating_agreement")
+  needBankLetter       Boolean @default(true) @map("need_bank_letter")
+  registeredAgent      Boolean @default(false) @map("registered_agent") // Optional add-on
+  compliance           Boolean @default(false) // Optional add-on
+  websiteService       WebsiteServiceTier? @map("website_service") // Optional tiered website service
+  
+  // Pricing (Flat Rate + Optional Add-ons)
+  basePrice            Decimal @default(49.99) @map("base_price") @db.Decimal(10, 2)
+  registeredAgentPrice Decimal @default(149.00) @map("registered_agent_price") @db.Decimal(10, 2)
+  compliancePrice      Decimal @default(99.00) @map("compliance_price") @db.Decimal(10, 2)
+  websiteSetupFee      Decimal @default(0.00) @map("website_setup_fee") @db.Decimal(10, 2) // One-time setup fee
+  totalAmount          Decimal @map("total_amount") @db.Decimal(10, 2)
+  
+  // Order Status & Processing
+  status          OrderStatus @default(PENDING_PROCESSING)
+  priority        OrderPriority @default(NORMAL)
+  
+  // Payment Information
+  paymentMethod        PaymentMethod @default(STRIPE) @map("payment_method")
+  paymentStatus        PaymentStatus @default(PENDING) @map("payment_status")
+  paymentTransactionId String? @map("payment_transaction_id")
+  paymentDate          DateTime? @map("payment_date")
+  
+  // State Filing Information
+  stateFilingDate   DateTime? @map("state_filing_date")
+  stateFilingNumber String? @map("state_filing_number")
+  ein               String? // Federal EIN when obtained
+  einIssuedDate     DateTime? @map("ein_issued_date")
+  
+  // Processing Information
+  articlesGenerated   Boolean @default(false) @map("articles_generated")
+  operatingAgreementGenerated Boolean @default(false) @map("operating_agreement_generated")
+  bankLetterGenerated Boolean @default(false) @map("bank_letter_generated")
+  einObtained        Boolean @default(false) @map("ein_obtained")
+  
+  // Timestamps
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  completedAt DateTime? @map("completed_at")
+  
+  // Internal Management
+  assignedTo    String? @map("assigned_to") // Admin user ID
+  internalNotes String? @map("internal_notes")
+  customerNotes String? @map("customer_notes")
+  
+  // Relationships
+  user               User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  operatingAgreement OperatingAgreement?
+  statusHistory      OrderStatusHistory[]
+  communications     Communication[]
+  documents          Document[]
+  websiteSubscription WebsiteSubscription?
+  
+  @@map("orders")
+}
+
+// ==============================================
+// WEBSITE SERVICES & SUBSCRIPTIONS
+// ==============================================
+
+model WebsiteSubscription {
+  id          String @id @default(cuid())
+  orderId     String @unique @map("order_id")
+  order       Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  // Subscription Details
+  tier               WebsiteServiceTier @map("service_tier")
+  monthlyPrice       Decimal @map("monthly_price") @db.Decimal(10, 2)
+  setupFee           Decimal @default(0.00) @map("setup_fee") @db.Decimal(10, 2)
+  
+  // Subscription Status
+  status             SubscriptionStatus @default(PENDING)
+  
+  // Billing & Payment
+  stripeSubscriptionId String? @map("stripe_subscription_id")
+  stripePriceId        String? @map("stripe_price_id")
+  billingCycle         BillingCycle @default(MONTHLY) @map("billing_cycle")
+  
+  // Dates
+  startDate          DateTime @map("start_date")
+  endDate            DateTime? @map("end_date") // null for active subscriptions
+  nextBillingDate    DateTime? @map("next_billing_date")
+  cancelledAt        DateTime? @map("cancelled_at")
+  pausedAt           DateTime? @map("paused_at")
+  
+  // Trial (if applicable)
+  trialEndsAt        DateTime? @map("trial_ends_at")
+  isTrialActive      Boolean @default(false) @map("is_trial_active")
+  
+  // Website Details
+  domainName         String? @map("domain_name")
+  websiteUrl         String? @map("website_url")
+  websiteStatus      WebsiteStatus @default(PENDING) @map("website_status")
+  
+  // Analytics & Marketing (for Growth tier)
+  googleAnalyticsId  String? @map("google_analytics_id")
+  facebookPixelId    String? @map("facebook_pixel_id")
+  googleAdsAccountId String? @map("google_ads_account_id")
+  
+  // Support & Features
+  chatWidgetEnabled  Boolean @default(false) @map("chat_widget_enabled")
+  schedulingEnabled  Boolean @default(false) @map("scheduling_enabled")
+  marketingEnabled   Boolean @default(false) @map("marketing_enabled")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relationships
+  billingHistory WebsiteBilling[]
+  marketingCampaigns MarketingCampaign[]
+  websiteAnalytics WebsiteAnalytics[]
+  
+  @@map("website_subscriptions")
+}
+
+model WebsiteBilling {
+  id                   String @id @default(cuid())
+  websiteSubscriptionId String @map("website_subscription_id")
+  websiteSubscription  WebsiteSubscription @relation(fields: [websiteSubscriptionId], references: [id], onDelete: Cascade)
+  
+  // Billing Details
+  amount               Decimal @db.Decimal(10, 2)
+  currency             String @default("USD")
+  billingPeriodStart   DateTime @map("billing_period_start")
+  billingPeriodEnd     DateTime @map("billing_period_end")
+  
+  // Payment Processing
+  stripeInvoiceId      String? @map("stripe_invoice_id")
+  paymentStatus        PaymentStatus @map("payment_status")
+  paidAt               DateTime? @map("paid_at")
+  failureReason        String? @map("failure_reason")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("website_billing")
+}
+
+model MarketingCampaign {
+  id                   String @id @default(cuid())
+  websiteSubscriptionId String @map("website_subscription_id")
+  websiteSubscription  WebsiteSubscription @relation(fields: [websiteSubscriptionId], references: [id], onDelete: Cascade)
+  
+  // Campaign Details
+  campaignName         String @map("campaign_name")
+  campaignType         MarketingCampaignType @map("campaign_type")
+  status               CampaignStatus @default(DRAFT)
+  
+  // Budget & Spend
+  monthlyBudget        Decimal? @map("monthly_budget") @db.Decimal(10, 2)
+  totalSpent           Decimal @default(0.00) @map("total_spent") @db.Decimal(10, 2)
+  
+  // Platform IDs
+  googleAdsId          String? @map("google_ads_id")
+  facebookCampaignId   String? @map("facebook_campaign_id")
+  
+  // Targeting
+  targetAudience       String? @map("target_audience")
+  keywords             String? // JSON array of keywords
+  demographics         String? // JSON object with targeting info
+  
+  // Performance
+  impressions          Int @default(0)
+  clicks               Int @default(0)
+  conversions          Int @default(0)
+  ctr                  Float @default(0.0) // Click-through rate
+  cpc                  Float @default(0.0) @map("cost_per_click") // Cost per click
+  
+  // Dates
+  startDate            DateTime @map("start_date")
+  endDate              DateTime? @map("end_date")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("marketing_campaigns")
+}
+
+model WebsiteAnalytics {
+  id                   String @id @default(cuid())
+  websiteSubscriptionId String @map("website_subscription_id")
+  websiteSubscription  WebsiteSubscription @relation(fields: [websiteSubscriptionId], references: [id], onDelete: Cascade)
+  
+  // Date for analytics (daily aggregation)
+  date                 DateTime @db.Date
+  
+  // Traffic Metrics
+  pageViews            Int @default(0) @map("page_views")
+  uniqueVisitors       Int @default(0) @map("unique_visitors")
+  sessions             Int @default(0)
+  bounceRate           Float @default(0.0) @map("bounce_rate")
+  avgSessionDuration   Int @default(0) @map("avg_session_duration") // in seconds
+  
+  // Conversion Metrics
+  contactFormSubmissions Int @default(0) @map("contact_form_submissions")
+  phoneCallClicks        Int @default(0) @map("phone_call_clicks")
+  appointmentsScheduled  Int @default(0) @map("appointments_scheduled")
+  chatConversations      Int @default(0) @map("chat_conversations")
+  
+  // Traffic Sources
+  organicTraffic       Int @default(0) @map("organic_traffic")
+  paidTraffic          Int @default(0) @map("paid_traffic")
+  socialTraffic        Int @default(0) @map("social_traffic")
+  directTraffic        Int @default(0) @map("direct_traffic")
+  referralTraffic      Int @default(0) @map("referral_traffic")
+  
+  // Performance
+  loadTime             Float @default(0.0) @map("avg_load_time") // in seconds
+  mobileTraffic        Int @default(0) @map("mobile_traffic")
+  desktopTraffic       Int @default(0) @map("desktop_traffic")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@unique([websiteSubscriptionId, date])
+  @@map("website_analytics")
+}
+
+enum WebsiteServiceTier {
+  BASIC  @map("basic")   // $9.99/month - Simple information website
+  PRO    @map("pro")     // $49.99/month - Web chat and scheduling
+  GROWTH @map("growth")  // $349.99/month - Marketing and optimization
+}
+
+enum SubscriptionStatus {
+  PENDING    @map("pending")     // Awaiting setup
+  ACTIVE     @map("active")      // Currently active
+  PAUSED     @map("paused")      // Temporarily paused
+  CANCELLED  @map("cancelled")   // Cancelled by customer
+  EXPIRED    @map("expired")     // Payment failed/expired
+  SUSPENDED  @map("suspended")   // Suspended by admin
+}
+
+enum BillingCycle {
+  MONTHLY @map("monthly")
+  YEARLY  @map("yearly")
+}
+
+enum WebsiteStatus {
+  PENDING     @map("pending")      // Not yet started
+  SETUP       @map("setup")        // In development
+  REVIEW      @map("review")       // Ready for customer review
+  LIVE        @map("live")         // Website is live
+  MAINTENANCE @map("maintenance")  // Under maintenance
+  SUSPENDED   @map("suspended")    // Suspended
+}
+
+enum MarketingCampaignType {
+  GOOGLE_ADS     @map("google_ads")
+  FACEBOOK_ADS   @map("facebook_ads")
+  SEO_ORGANIC    @map("seo_organic")
+  CONTENT_MARKETING @map("content_marketing")
+  EMAIL_MARKETING   @map("email_marketing")
+  SOCIAL_MEDIA     @map("social_media")
+}
+
+enum CampaignStatus {
+  DRAFT      @map("draft")
+  ACTIVE     @map("active")
+  PAUSED     @map("paused")
+  COMPLETED  @map("completed")
+  CANCELLED  @map("cancelled")
+}
+
+enum OrderStatus {
+  PENDING_PROCESSING   @map("pending_processing")
+  PROCESSING_ARTICLES  @map("processing_articles")
+  ARTICLES_FILED      @map("articles_filed")
+  OBTAINING_EIN       @map("obtaining_ein")
+  GENERATING_DOCUMENTS @map("generating_documents")
+  COMPLETED           @map("completed")
+  CANCELLED           @map("cancelled")
+  REFUNDED            @map("refunded")
+}
+
+enum OrderPriority {
+  NORMAL  @map("normal")
+  HIGH    @map("high")
+  URGENT  @map("urgent")
+}
+
+enum PaymentMethod {
+  STRIPE  @map("stripe")
+  PAYPAL  @map("paypal")
+}
+
+enum PaymentStatus {
+  PENDING   @map("pending")
+  COMPLETED @map("completed")
+  FAILED    @map("failed")
+  REFUNDED  @map("refunded")
+}
+
+// ==============================================
+// OPERATING AGREEMENT QUESTIONS & DATA
+// ==============================================
+
+model OperatingAgreement {
+  id        String @id @default(cuid())
+  orderId   String @unique @map("order_id")
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  // Basic LLC Information
+  formationDate     DateTime? @map("formation_date")
+  businessStartDate DateTime? @map("business_start_date")
+  principalActivity String? @map("principal_activity")
+  duration          CompanyDuration @default(PERPETUAL)
+  fixedEndDate      DateTime? @map("fixed_end_date")
+  fiscalYearEnd     FiscalYearEnd @default(DECEMBER)
+  
+  // Member Information
+  memberCount       Int @map("member_count") @default(1)
+  isSingleMember    Boolean @default(true) @map("is_single_member")
+  
+  // Management Structure
+  managementType    ManagementType @default(MEMBER_MANAGED) @map("management_type")
+  votingStructure   VotingStructure? @map("voting_structure") // null for single-member
+  majorDecisionRule DecisionRule? @map("major_decision_rule") // null for single-member
+  
+  // Financial Settings
+  profitDistMethod  DistributionMethod @default(PROPORTIONAL) @map("profit_dist_method")
+  distFrequency     DistributionFrequency @default(AS_DECIDED) @map("dist_frequency")
+  taxClassification TaxClassification @default(DISREGARDED_ENTITY) @map("tax_classification")
+  
+  // Transfer & Withdrawal Settings
+  allowMemberTransfer     Boolean @default(false) @map("allow_member_transfer")
+  transferToNonMembers    Boolean? @map("transfer_to_non_members") // null for single-member
+  rightOfFirstRefusal     Boolean? @map("right_of_first_refusal") // null for single-member
+  familyTransferAllowed   Boolean @default(true) @map("family_transfer_allowed")
+  valuationMethod         ValuationMethod @default(BOOK_VALUE) @map("valuation_method")
+  withdrawalRule          DecisionRule? @map("withdrawal_rule") // null for single-member
+  withdrawalPaymentMethod PaymentMethod? @map("withdrawal_payment_method") // null for single-member
+  
+  // Meetings & Governance
+  requireMeetings        Boolean @default(false) @map("require_meetings")
+  meetingFrequency       MeetingFrequency? @map("meeting_frequency") // null for single-member
+  virtualMeetingsAllowed Boolean? @map("virtual_meetings_allowed") // null for single-member
+  meetingNoticeDays      Int? @map("meeting_notice_days") // null for single-member
+  quorumRequirement      QuorumType? @map("quorum_requirement") // null for single-member
+  
+  // Reporting & Records
+  provideTaxReturns    Boolean @default(true) @map("provide_tax_returns")
+  provideProfitLoss    Boolean @default(true) @map("provide_profit_loss")
+  provideBalanceSheet  Boolean @default(false) @map("provide_balance_sheet")
+  financialPreparedBy  ReportPreparer @default(COMPANY_MEMBER) @map("financial_prepared_by")
+  recordsLocation      String? @map("records_location")
+  recordsMaintenedBy   String? @map("records_maintained_by")
+  
+  // Legal & Compliance
+  disputeResolution       DisputeResolution @default(CALIFORNIA_COURTS) @map("dispute_resolution")
+  witnessRequired         Boolean @default(false) @map("witness_required")
+  notarizationRequired    Boolean @default(false) @map("notarization_required")
+  
+  // Additional Terms
+  additionalTerms String? @map("additional_terms")
+  
+  // Status
+  isCompleted      Boolean @default(false) @map("is_completed")
+  documentGenerated Boolean @default(false) @map("document_generated")
+  documentUrl      String? @map("document_url")
+  
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relationships
+  members               LLCMember[]
+  managers              LLCManager[]
+  unanimousConsentItems UnanimousConsentItem[]
+  bankingAuthorizations BankingAuthorization[]
+  dissolutionTriggers   DissolutionTrigger[]
+  
+  @@map("operating_agreements")
+}
+
+model LLCMember {
+  id                    String @id @default(cuid())
+  operatingAgreementId  String @map("operating_agreement_id")
+  operatingAgreement    OperatingAgreement @relation(fields: [operatingAgreementId], references: [id], onDelete: Cascade)
+  
+  // Personal Information
+  fullName            String @map("full_name")
+  memberType          MemberType @map("member_type")
+  entityType          String? @map("entity_type") // if member is entity
+  streetAddress       String @map("street_address")
+  city                String
+  state               String
+  zipCode             String @map("zip_code")
+  phone               String?
+  email               String
+  ssn                 String? // For responsible party
+  
+  // Ownership Details
+  ownershipPercentage Float? @map("ownership_percentage")
+  ownershipUnits      Int? @map("ownership_units")
+  
+  // Role & Responsibilities
+  isResponsibleParty    Boolean @default(false) @map("is_responsible_party")
+  timeCommitmentRequired Boolean @default(false) @map("time_commitment_required")
+  hoursPerWeek          Int? @map("hours_per_week")
+  
+  // Financial
+  guaranteedPayments Boolean @default(false) @map("guaranteed_payments")
+  guaranteedAmount   Float? @map("guaranteed_amount")
+  
+  // Relationships
+  contributions MemberContribution[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("llc_members")
+}
+
+model LLCManager {
+  id                   String @id @default(cuid())
+  operatingAgreementId String @map("operating_agreement_id")
+  operatingAgreement   OperatingAgreement @relation(fields: [operatingAgreementId], references: [id], onDelete: Cascade)
+  
+  name         String
+  isAlsoMember Boolean @default(false) @map("is_also_member")
+  memberId     String? @map("member_id") // if manager is also a member
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("llc_managers")
+}
+
+model MemberContribution {
+  id         String @id @default(cuid())
+  memberId   String @map("member_id")
+  member     LLCMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  
+  contributionType ContributionType @map("contribution_type")
+  description      String
+  value            Float
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("member_contributions")
+}
+
+model UnanimousConsentItem {
+  id                   String @id @default(cuid())
+  operatingAgreementId String @map("operating_agreement_id")
+  operatingAgreement   OperatingAgreement @relation(fields: [operatingAgreementId], references: [id], onDelete: Cascade)
+  
+  itemType          UnanimousConsentType @map("item_type")
+  customDescription String? @map("custom_description")
+  dollarThreshold   Float? @map("dollar_threshold") // for debt/expense thresholds
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("unanimous_consent_items")
+}
+
+model BankingAuthorization {
+  id                   String @id @default(cuid())
+  operatingAgreementId String @map("operating_agreement_id")
+  operatingAgreement   OperatingAgreement @relation(fields: [operatingAgreementId], references: [id], onDelete: Cascade)
+  
+  authorizationType BankingAuthType @map("authorization_type")
+  specificMembers   String? @map("specific_members") // comma-separated member names if specific
+  dollarThreshold   Float? @map("dollar_threshold") // for multi-signature requirements
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("banking_authorizations")
+}
+
+model DissolutionTrigger {
+  id                   String @id @default(cuid())
+  operatingAgreementId String @map("operating_agreement_id")
+  operatingAgreement   OperatingAgreement @relation(fields: [operatingAgreementId], references: [id], onDelete: Cascade)
+  
+  triggerType       DissolutionTriggerType @map("trigger_type")
+  customDescription String? @map("custom_description")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("dissolution_triggers")
+}
+
+// ==============================================
+// ORDER TRACKING & COMMUNICATIONS
+// ==============================================
+
+model OrderStatusHistory {
+  id             String      @id @default(cuid())
+  orderId        String      @map("order_id")
+  previousStatus OrderStatus? @map("previous_status")
+  newStatus      OrderStatus @map("new_status")
+  changedBy      String      @map("changed_by") // user ID or 'system'
+  notes          String?
+  createdAt      DateTime    @default(now()) @map("created_at")
+  
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  @@map("order_status_history")
+}
+
+model Communication {
+  id             String            @id @default(cuid())
+  orderId        String            @map("order_id")
+  type           CommunicationType
+  subject        String?
+  content        String?
+  recipientEmail String?           @map("recipient_email")
+  sentAt         DateTime          @default(now()) @map("sent_at")
+  status         CommunicationStatus @default(SENT)
+  
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  @@map("communications")
+}
+
+enum CommunicationType {
+  EMAIL_CONFIRMATION  @map("email_confirmation")
+  EMAIL_STATUS_UPDATE @map("email_status_update")
+  EMAIL_COMPLETION    @map("email_completion")
+  SMS_NOTIFICATION    @map("sms_notification")
+  INTERNAL_NOTE       @map("internal_note")
+}
+
+enum CommunicationStatus {
+  PENDING   @map("pending")
+  SENT      @map("sent")
+  DELIVERED @map("delivered")
+  FAILED    @map("failed")
+  BOUNCED   @map("bounced")
+}
+
+// ==============================================
+// DOCUMENT MANAGEMENT
+// ==============================================
+
+model Document {
+  id           String       @id @default(cuid())
+  orderId      String       @map("order_id")
+  documentType DocumentType @map("document_type")
+  fileName     String       @map("file_name")
+  filePath     String       @map("file_path")
+  fileSize     Int?         @map("file_size")
+  isLatest     Boolean      @default(true) @map("is_latest")
+  isFinal      Boolean      @default(false) @map("is_final")
+  generatedAt  DateTime     @default(now()) @map("generated_at")
+  
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  @@map("documents")
+}
+
+enum DocumentType {
+  ARTICLES_OF_ORGANIZATION   @map("articles_of_organization")
+  OPERATING_AGREEMENT       @map("operating_agreement")
+  EIN_CONFIRMATION         @map("ein_confirmation")
+  BANK_RESOLUTION_LETTER   @map("bank_resolution_letter")
+  INVOICE                  @map("invoice")
+  RECEIPT                  @map("receipt")
+}
+
+// ==============================================
+// OPERATING AGREEMENT ENUMS
+// ==============================================
+
+enum CompanyDuration {
+  PERPETUAL     @map("perpetual")
+  FIXED_PERIOD  @map("fixed_period")
+}
+
+enum FiscalYearEnd {
+  DECEMBER @map("december")
+  CUSTOM   @map("custom")
+}
+
+enum ManagementType {
+  MEMBER_MANAGED  @map("member_managed")
+  MANAGER_MANAGED @map("manager_managed")
+}
+
+enum VotingStructure {
+  PROPORTIONAL @map("proportional")
+  EQUAL_VOTE   @map("equal_vote")
+  CUSTOM       @map("custom")
+}
+
+enum DecisionRule {
+  UNANIMOUS     @map("unanimous")
+  MAJORITY      @map("majority")
+  SUPERMAJORITY @map("supermajority")
+}
+
+enum DistributionMethod {
+  PROPORTIONAL  @map("proportional")
+  EQUAL_SHARES  @map("equal_shares")
+  CUSTOM        @map("custom")
+}
+
+enum DistributionFrequency {
+  AS_DECIDED @map("as_decided")
+  ANNUALLY   @map("annually")
+  QUARTERLY  @map("quarterly")
+  MONTHLY    @map("monthly")
+  NEVER      @map("never")
+}
+
+enum TaxClassification {
+  DISREGARDED_ENTITY @map("disregarded_entity") // Default for single-member
+  PARTNERSHIP        @map("partnership")         // Default for multi-member
+  S_CORPORATION      @map("s_corporation")
+  C_CORPORATION      @map("c_corporation")
+}
+
+enum ValuationMethod {
+  PROFESSIONAL_APPRAISAL @map("professional_appraisal")
+  BOOK_VALUE            @map("book_value")
+  FORMULA_BASED         @map("formula_based")
+  MEMBER_AGREEMENT      @map("member_agreement")
+}
+
+enum MeetingFrequency {
+  AS_REQUIRED @map("as_required")
+  ANNUALLY    @map("annually")
+  QUARTERLY   @map("quarterly")
+  MONTHLY     @map("monthly")
+  CUSTOM      @map("custom")
+}
+
+enum QuorumType {
+  ALL_MEMBERS          @map("all_members")
+  MAJORITY_MEMBERS     @map("majority_members")
+  PERCENTAGE_OWNERSHIP @map("percentage_ownership")
+}
+
+enum ReportPreparer {
+  COMPANY_MEMBER     @map("company_member")
+  OUTSIDE_ACCOUNTANT @map("outside_accountant")
+  TO_BE_DECIDED      @map("to_be_decided")
+}
+
+enum DisputeResolution {
+  MEDIATION_FIRST      @map("mediation_first")
+  BINDING_ARBITRATION  @map("binding_arbitration")
+  CALIFORNIA_COURTS    @map("california_courts")
+}
+
+enum MemberType {
+  INDIVIDUAL @map("individual")
+  ENTITY     @map("entity")
+}
+
+enum ContributionType {
+  CASH     @map("cash")
+  PROPERTY @map("property")
+  SERVICES @map("services")
+}
+
+enum UnanimousConsentType {
+  AMENDING_AGREEMENT  @map("amending_agreement")
+  ADDING_MEMBERS      @map("adding_members")
+  SELLING_ASSETS      @map("selling_assets")
+  MAJOR_DEBT          @map("major_debt")
+  MAJOR_EXPENSES      @map("major_expenses")
+  DISSOLVING_COMPANY  @map("dissolving_company")
+  CHANGING_PURPOSE    @map("changing_purpose")
+  CUSTOM              @map("custom")
+}
+
+enum BankingAuthType {
+  ANY_MEMBER           @map("any_member")
+  SPECIFIC_MEMBERS     @map("specific_members")
+  MANAGERS_ONLY        @map("managers_only")
+  MULTIPLE_SIGNATURES  @map("multiple_signatures")
+}
+
+enum DissolutionTriggerType {
+  UNANIMOUS_VOTE            @map("unanimous_vote")
+  MAJORITY_VOTE             @map("majority_vote")
+  MEMBER_DEATH              @map("member_death")
+  MEMBER_BANKRUPTCY         @map("member_bankruptcy")
+  BUSINESS_PURPOSE_ACHIEVED @map("business_purpose_achieved")
+  CUSTOM                    @map("custom")
 }
