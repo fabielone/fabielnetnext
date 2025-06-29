@@ -40,35 +40,25 @@
       "type": "generic",
       "file": "[locale]/checkout/businessformation/page.tsx"
     },
-    "/[locale]/blogtest": {
-      "path": "/[locale]/blogtest",
+    "/[locale]/blog": {
+      "path": "/[locale]/blog",
       "type": "blog",
-      "file": "[locale]/blogtest/page.tsx"
+      "file": "[locale]/blog/page.tsx"
     },
-    "/[locale]/blogtest/[slug]": {
-      "path": "/[locale]/blogtest/[slug]",
+    "/[locale]/blog/10-tips": {
+      "path": "/[locale]/blog/10-tips",
       "type": "blog",
-      "file": "[locale]/blogtest/[slug]/page.tsx"
+      "file": "[locale]/blog/10-tips/page.tsx"
+    },
+    "/[locale]/blog/10-consejos": {
+      "path": "/[locale]/blog/10-consejos",
+      "type": "blog",
+      "file": "[locale]/blog/10-consejos/page.tsx"
     },
     "/[locale]/allies": {
       "path": "/[locale]/allies",
       "type": "generic",
       "file": "[locale]/allies/page.tsx"
-    },
-    "/[locale]/(blog)/en": {
-      "path": "/[locale]/(blog)/en",
-      "type": "blog",
-      "file": "[locale]/(blog)/en/page.tsx"
-    },
-    "/[locale]/(blog)/en/blog": {
-      "path": "/[locale]/(blog)/en/blog",
-      "type": "blog",
-      "file": "[locale]/(blog)/en/blog/page.tsx"
-    },
-    "/(store)/store": {
-      "path": "/(store)/store",
-      "type": "generic",
-      "file": "(store)/store/page.tsx"
     }
   }
 }

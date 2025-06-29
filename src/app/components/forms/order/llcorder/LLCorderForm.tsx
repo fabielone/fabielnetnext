@@ -42,7 +42,7 @@ const generateOrderId = (): string => {
   return `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 };
 
-const handleOrderSubmit = async (formData: LLCFormData) => {
+const handleOrderSubmit = (formData: LLCFormData): void => {
   try {
     console.log('Order submitted:', formData);
   } catch (error) {
