@@ -162,9 +162,9 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
               {nameAvailability.status && !isCheckingName && (
                 <div className={`mt-3 p-3 rounded-lg text-sm ${
                   nameAvailability.status === 'available' ? 'bg-green-50 text-green-700 border border-green-200' :
-                  nameAvailability.status === 'taken' ? 'bg-red-50 text-red-700 border border-red-200' :
-                  nameAvailability.status === 'similar' ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' :
-                  'bg-gray-50 text-gray-700 border border-gray-200'
+                    nameAvailability.status === 'taken' ? 'bg-red-50 text-red-700 border border-red-200' :
+                      nameAvailability.status === 'similar' ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' :
+                        'bg-gray-50 text-gray-700 border border-gray-200'
                 }`}>
                   <div className="flex items-center mb-2">
                     {nameAvailability.status === 'available' && (

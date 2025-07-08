@@ -22,7 +22,7 @@ const ReviewCard = ({ review }) => (
       {/* Review text - with fixed height and scroll if needed */}
       <div className="flex-grow mb-4">
         <p className="text-gray-700 text-lg leading-relaxed whitespace-normal">
-          "{review.text}"
+          &apos;{review.text}&apos;
         </p>
       </div>
 

@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaShoppingCart, FaChartLine, FaHeadset, FaFileAlt, FaPlusCircle, FaCheckCircle, FaQuestionCircle, FaArrowRight, FaLaptop } from 'react-icons/fa';
-import { MdPayment, MdPayments } from "react-icons/md";
+import { MdPayment, MdPayments } from 'react-icons/md';
 export default function ProcesoPage() {
   const [mostrarFAQ, setMostrarFAQ] = useState<number | null>(null);
 
@@ -16,28 +16,28 @@ export default function ProcesoPage() {
   const pasosProceso = [
     {
       icono: <FaShoppingCart className="text-amber-500 w-8 h-8" />,
-      titulo: "Selección de Servicio",
-      descripcion: "Elige entre nuestros servicios principales o combínalos según tus necesidades."
+      titulo: 'Selección de Servicio',
+      descripcion: 'Elige entre nuestros servicios principales o combínalos según tus necesidades.'
     },
     {
       icono: <FaHeadset className="text-amber-500 w-8 h-8" />,
-      titulo: "Consulta con Agente",
-      descripcion: "Si lo necesitas, habla con un especialista para asesoría personalizada."
+      titulo: 'Consulta con Agente',
+      descripcion: 'Si lo necesitas, habla con un especialista para asesoría personalizada.'
     },
     {
       icono: <MdPayment className="text-amber-500 w-8 h-8" />,
-      titulo: "Procesar Pedido",
-      descripcion: "Confirmamos los detalles y comenzamos a trabajar en tu solicitud."
+      titulo: 'Procesar Pedido',
+      descripcion: 'Confirmamos los detalles y comenzamos a trabajar en tu solicitud.'
     },
     {
       icono: <FaPlusCircle className="text-amber-500 w-8 h-8" />,
-      titulo: "Requisitos Adicionales",
-      descripcion: "Si necesitamos más información, nos comunicaremos contigo rápidamente."
+      titulo: 'Requisitos Adicionales',
+      descripcion: 'Si necesitamos más información, nos comunicaremos contigo rápidamente.'
     },
     {
       icono: <FaCheckCircle className="text-green-500 w-8 h-8" />,
-      titulo: "Pedido Completado",
-      descripcion: "Finalizamos el proceso y te entregamos los resultados acordados."
+      titulo: 'Pedido Completado',
+      descripcion: 'Finalizamos el proceso y te entregamos los resultados acordados.'
     }
   ];
 
@@ -67,20 +67,20 @@ export default function ProcesoPage() {
 
   const preguntasFrecuentes = [
     { 
-      pregunta: "¿Cómo selecciono el servicio adecuado?", 
-      respuesta: "Nuestra página de servicios detalla cada opción. Si tienes dudas, puedes solicitar una consulta gratuita con un agente para recibir recomendaciones personalizadas." 
+      pregunta: '¿Cómo selecciono el servicio adecuado?', 
+      respuesta: 'Nuestra página de servicios detalla cada opción. Si tienes dudas, puedes solicitar una consulta gratuita con un agente para recibir recomendaciones personalizadas.' 
     },
     { 
-      pregunta: "¿Qué información necesitan para procesar mi pedido?", 
-      respuesta: "Depende del servicio. Para formación de empresas necesitaremos documentos de identificación y detalles comerciales. Para software y marketing, analizaremos tus requerimientos específicos." 
+      pregunta: '¿Qué información necesitan para procesar mi pedido?', 
+      respuesta: 'Depende del servicio. Para formación de empresas necesitaremos documentos de identificación y detalles comerciales. Para software y marketing, analizaremos tus requerimientos específicos.' 
     },
     { 
-      pregunta: "¿Puedo añadir servicios adicionales después?", 
-      respuesta: "Sí, nuestro sistema es flexible. Puedes complementar tu pedido inicial con otros servicios cuando lo necesites." 
+      pregunta: '¿Puedo añadir servicios adicionales después?', 
+      respuesta: 'Sí, nuestro sistema es flexible. Puedes complementar tu pedido inicial con otros servicios cuando lo necesites.' 
     },
     { 
-      pregunta: "¿Qué pasa si no respondo a solicitudes de información adicional?", 
-      respuesta: "Pausaremos temporalmente el procesamiento hasta recibir toda la información necesaria, pero siempre nos comunicaremos claramente sobre los plazos." 
+      pregunta: '¿Qué pasa si no respondo a solicitudes de información adicional?', 
+      respuesta: 'Pausaremos temporalmente el procesamiento hasta recibir toda la información necesaria, pero siempre nos comunicaremos claramente sobre los plazos.' 
     }
   ];
 

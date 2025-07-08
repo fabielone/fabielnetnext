@@ -70,45 +70,45 @@ const locationData = {
 const negociosData: Negocio[] = [
   {
     id: 1,
-    nombre: "TechFlow Solutions",
-    descripcion: "Soluciones tecnológicas para empresas latinoamericanas",
-    imagen: "/images/tech-flow.jpg",
-    categoria: "Tecnología",
-    industria: "SaaS",
-    pais: "México",
-    estado: "Ciudad de México",
-    ciudad: "CDMX",
-    modalidad: "Online",
-    tags: ["Startup", "Innovación", "Tech"],
-    sitioWeb: "https://techflow.com",
+    nombre: 'TechFlow Solutions',
+    descripcion: 'Soluciones tecnológicas para empresas latinoamericanas',
+    imagen: '/images/tech-flow.jpg',
+    categoria: 'Tecnología',
+    industria: 'SaaS',
+    pais: 'México',
+    estado: 'Ciudad de México',
+    ciudad: 'CDMX',
+    modalidad: 'Online',
+    tags: ['Startup', 'Innovación', 'Tech'],
+    sitioWeb: 'https://techflow.com',
   },
   {
     id: 2,
-    nombre: "Sabor Latino Catering",
-    descripcion: "Servicio de catering con auténticos sabores latinoamericanos",
-    imagen: "/images/catering.jpg",
-    categoria: "Alimentación",
-    industria: "Catering",
-    pais: "Colombia",
-    estado: "Antioquia",
-    ciudad: "Medellín",
-    modalidad: "Presencial",
-    tags: ["Gastronomía", "Eventos", "Catering"],
-    sitioWeb: "https://saborlatino.com",
+    nombre: 'Sabor Latino Catering',
+    descripcion: 'Servicio de catering con auténticos sabores latinoamericanos',
+    imagen: '/images/catering.jpg',
+    categoria: 'Alimentación',
+    industria: 'Catering',
+    pais: 'Colombia',
+    estado: 'Antioquia',
+    ciudad: 'Medellín',
+    modalidad: 'Presencial',
+    tags: ['Gastronomía', 'Eventos', 'Catering'],
+    sitioWeb: 'https://saborlatino.com',
   },
   {
     id: 3,
-    nombre: "Digital Marketing Pros",
-    descripcion: "Agencia de marketing digital especializada en mercados latinos",
-    imagen: "/images/marketing.jpg",
-    categoria: "Servicios",
-    industria: "Marketing",
-    pais: "Estados Unidos",
-    estado: "Florida",
-    ciudad: "Miami",
-    modalidad: "Híbrido",
-    tags: ["Marketing Digital", "Estrategia", "Redes Sociales"],
-    sitioWeb: "https://digitalmarketingpros.com",
+    nombre: 'Digital Marketing Pros',
+    descripcion: 'Agencia de marketing digital especializada en mercados latinos',
+    imagen: '/images/marketing.jpg',
+    categoria: 'Servicios',
+    industria: 'Marketing',
+    pais: 'Estados Unidos',
+    estado: 'Florida',
+    ciudad: 'Miami',
+    modalidad: 'Híbrido',
+    tags: ['Marketing Digital', 'Estrategia', 'Redes Sociales'],
+    sitioWeb: 'https://digitalmarketingpros.com',
   }
 ];
 
@@ -229,7 +229,7 @@ export default function DirectorioNegocios() {
             Nuestros Aliados
           </h1>
           <p className="text-xl text-gray-600">
-          Descubre negocios y organizaciones que apoyan y fortalecen nuestra comunidad
+            Descubre negocios y organizaciones que apoyan y fortalecen nuestra comunidad
           </p>
         </div>
 
@@ -302,8 +302,8 @@ export default function DirectorioNegocios() {
               <option value="">Todas las Industrias</option>
               {filtros.categoria 
                 ? categoriasIndustrias[filtros.categoria as keyof typeof categoriasIndustrias].map(industria => (
-                    <option key={industria} value={industria}>{industria}</option>
-                  ))
+                  <option key={industria} value={industria}>{industria}</option>
+                ))
                 : []
               }
             </select>

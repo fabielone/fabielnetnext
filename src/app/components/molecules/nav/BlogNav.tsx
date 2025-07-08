@@ -2,22 +2,19 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import LanguageSelector from './molecules/languageselector';
-import { navItems } from './config/navigation';
-import { Logo } from './atoms/logos/logo';
-import { HamburgerButton } from './atoms/buttons/hamburger';
-import { MobileMenu } from './molecules/menus/mobilemenu';
-import { DesktopMenu } from './molecules/menus/desktopmenu';
-import ThemeToggle from './molecules/themeselector';
-import AuthNavigation from './molecules/menus/authnav';
+import LanguageSelector from '../languageselector';
+import { navItems } from '../../config/navigation';
+import { Logo } from '../../atoms/logos/logo';
+import { HamburgerButton } from '../../atoms/buttons/hamburger';
+import { MobileMenu } from '../menus/mobilemenu';
+import { DesktopMenu } from '../menus/desktopmenu';
 
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
   const menuRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
+  
 
 
   useEffect(() => {
@@ -50,43 +47,50 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-background-primary dark:bg-dark-background-primary 
-     text-tx-primary  dark:text-dark-tx-primary
-    shadow-md fixed w-full z-50">
+    <nav className="bg-white shadow-md fixed w-full z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-        <Logo 
-  onClick={() => {
-    throw new Error('Function not implemented.');
+          <Logo 
+            onClick={() => {
+              throw new Error('Function not implemented.');
     
-  }}
- // minWidth={"200px"}
+            }}
+            minWidth={'200px'}
   
-/>
-<HamburgerButton onClick={toggleMenu} buttonTextColor={'text-hamburger dark:text-dark-hamburger'} />
+          />
+          <HamburgerButton onClick={toggleMenu} buttonTextColor={'text-hamburger dark:text-dark-hamburger'} />
 
           {/* Desktop Menu */}
           <DesktopMenu 
-        navItems={navItems} 
+            navItems={navItems} 
             onNavigate={handleNavigationClick} />
 
           {/* Language Selector and Login */}
           <div className="flex items-center space-x-4">
-          
             <LanguageSelector />
-            <ThemeToggle />
-            <AuthNavigation />
+            <Link
+              href="/login"
+              className="hidden md:flex text-gray-800  hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Iniciar Sesión /
+            </Link>
+            <Link
+              href="/join"
+              className="hidden md:flex text-gray-800 hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Registrarse
+            </Link>
           </div>
         </div>
 
-         {/* Mobile Menu */}
-       <MobileMenu  
-         isOpen={isMenuOpen}
+        {/* Mobile Menu */}
+        <MobileMenu  
+          isOpen={isMenuOpen}
           navItems={navItems}
-         openCategories={openCategories}
-           onToggleCategory={toggleCategory}
-            onNavigate={handleNavigationClick}
-       />
+          openCategories={openCategories}
+          onToggleCategory={toggleCategory}
+          onNavigate={handleNavigationClick}
+        />
       </div>
     </nav>
   );

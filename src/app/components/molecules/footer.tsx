@@ -1,6 +1,6 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa';
 import Image from 'next/image'; // Import the Image component
-import Newsletter from './molecules/newsletter/subscribe';
+import Newsletter from './newsletter/subscribe';
 
 export default function Footer() {
   return (
@@ -141,11 +141,11 @@ export default function Footer() {
             </ul>
           </div>
 
-           {/* Newsletter Subscription Form */}
-                        <Newsletter
+          {/* Newsletter Subscription Form */}
+          <Newsletter
                         
-                        title='Newsletter'
-                        /> 
+            title='Newsletter'
+          /> 
         </div>
 
         {/* Bottom Section */}

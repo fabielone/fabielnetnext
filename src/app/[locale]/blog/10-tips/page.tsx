@@ -23,73 +23,73 @@ export default function LLCTipsCalifornia() {
   const tips = [
     {
       id: 1,
-      title: "Choose a Unique Business Name",
-      content: "Your LLC name must be distinguishable from other entities registered with the California Secretary of State. It must include 'Limited Liability Company' or abbreviations like LLC or L.L.C. Check name availability on the state's website before filing.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Choose+Name&font=lora"
+      title: 'Choose a Unique Business Name',
+      content: 'Your LLC name must be distinguishable from other entities registered with the California Secretary of State. It must include \'Limited Liability Company\' or abbreviations like LLC or L.L.C. Check name availability on the state\'s website before filing.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Choose+Name&font=lora'
     },
     {
       id: 2,
-      title: "Appoint a Registered Agent",
-      content: "California requires every LLC to have a registered agent with a physical address in the state who can receive legal documents during business hours. You can act as your own agent or hire a professional service.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Registered+Agent&font=lora"
+      title: 'Appoint a Registered Agent',
+      content: 'California requires every LLC to have a registered agent with a physical address in the state who can receive legal documents during business hours. You can act as your own agent or hire a professional service.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Registered+Agent&font=lora'
     },
     {
       id: 3,
-      title: "File Articles of Organization",
-      content: "Submit Form LLC-1 to the California Secretary of State with a $70 filing fee (as of 2023). You can file online, by mail, or in person. This officially creates your LLC.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=File+Articles&font=lora"
+      title: 'File Articles of Organization',
+      content: 'Submit Form LLC-1 to the California Secretary of State with a $70 filing fee (as of 2023). You can file online, by mail, or in person. This officially creates your LLC.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=File+Articles&font=lora'
     },
     {
       id: 4,
-      title: "Create an Operating Agreement",
-      content: "While not legally required in California, an operating agreement outlines ownership structure, member roles, and operating procedures. It's crucial for multi-member LLCs and helps maintain liability protection.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Operating+Agreement&font=lora"
+      title: 'Create an Operating Agreement',
+      content: 'While not legally required in California, an operating agreement outlines ownership structure, member roles, and operating procedures. It\'s crucial for multi-member LLCs and helps maintain liability protection.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Operating+Agreement&font=lora'
     },
     {
       id: 5,
-      title: "Obtain an EIN from the IRS",
-      content: "Apply for an Employer Identification Number (EIN) for free on the IRS website. You'll need this for tax purposes, opening a business bank account, and hiring employees.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Get+EIN&font=lora"
+      title: 'Obtain an EIN from the IRS',
+      content: 'Apply for an Employer Identification Number (EIN) for free on the IRS website. You\'ll need this for tax purposes, opening a business bank account, and hiring employees.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Get+EIN&font=lora'
     },
     {
       id: 6,
-      title: "Pay the $800 Annual Franchise Tax",
-      content: "California imposes an $800 minimum franchise tax on LLCs, due within 4 months of formation and annually thereafter. Budget for this significant expense.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Franchise+Tax&font=lora"
+      title: 'Pay the $800 Annual Franchise Tax',
+      content: 'California imposes an $800 minimum franchise tax on LLCs, due within 4 months of formation and annually thereafter. Budget for this significant expense.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Franchise+Tax&font=lora'
     },
     {
       id: 7,
-      title: "Register for State Taxes",
-      content: "Depending on your business activities, you may need to register with the California Department of Tax and Fee Administration for sales tax, use tax, or other industry-specific taxes.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=State+Taxes&font=lora"
+      title: 'Register for State Taxes',
+      content: 'Depending on your business activities, you may need to register with the California Department of Tax and Fee Administration for sales tax, use tax, or other industry-specific taxes.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=State+Taxes&font=lora'
     },
     {
       id: 8,
-      title: "Obtain Necessary Business Licenses",
-      content: "Check with your city/county for local business license requirements. Some professions require state-level licenses. The CalGold website can help identify requirements.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Business+Licenses&font=lora"
+      title: 'Obtain Necessary Business Licenses',
+      content: 'Check with your city/county for local business license requirements. Some professions require state-level licenses. The CalGold website can help identify requirements.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Business+Licenses&font=lora'
     },
     {
       id: 9,
-      title: "Open a Business Bank Account",
-      content: "Keep your personal and business finances separate to maintain liability protection. Most banks require your EIN, Articles of Organization, and possibly your Operating Agreement.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Bank+Account&font=lora"
+      title: 'Open a Business Bank Account',
+      content: 'Keep your personal and business finances separate to maintain liability protection. Most banks require your EIN, Articles of Organization, and possibly your Operating Agreement.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Bank+Account&font=lora'
     },
     {
       id: 10,
-      title: "Maintain Compliance",
-      content: "File a Statement of Information (Form LLC-12) every 2 years with the CA Secretary of State ($20 fee). Keep proper records and hold required meetings to preserve your liability protection.",
-      image: "https://fakeimg.pl/600x400/4f46e5/ffffff?text=Maintain+Compliance&font=lora"
+      title: 'Maintain Compliance',
+      content: 'File a Statement of Information (Form LLC-12) every 2 years with the CA Secretary of State ($20 fee). Keep proper records and hold required meetings to preserve your liability protection.',
+      image: 'https://fakeimg.pl/600x400/4f46e5/ffffff?text=Maintain+Compliance&font=lora'
     }
   ];
 
   const relatedPosts = [
-    { id: 1, title: "California vs. Delaware LLC: Which is Better for Your Business?", url: "/california-vs-delaware-llc" },
-    { id: 2, title: "How to Save Money on California LLC Fees", url: "/save-money-california-llc-fees" },
-    { id: 3, title: "The Complete Guide to Small Business Taxes in California", url: "/california-small-business-taxes" }
+    { id: 1, title: 'California vs. Delaware LLC: Which is Better for Your Business?', url: '/california-vs-delaware-llc' },
+    { id: 2, title: 'How to Save Money on California LLC Fees', url: '/save-money-california-llc-fees' },
+    { id: 3, title: 'The Complete Guide to Small Business Taxes in California', url: '/california-small-business-taxes' }
   ];
 
-  const tags = ["LLC", "California Business", "Entrepreneurship", "Small Business", "Legal Tips", "Startup"];
+  const tags = ['LLC', 'California Business', 'Entrepreneurship', 'Small Business', 'Legal Tips', 'Startup'];
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -148,7 +148,7 @@ export default function LLCTipsCalifornia() {
               onClick={handleLike}
               className={`flex items-center space-x-1 ${liked ? 'text-purple-600' : 'text-gray-500 hover:text-purple-600'}`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill={liked ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill={liked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
               </svg>
               <span>{likes} Likes</span>
@@ -251,7 +251,7 @@ export default function LLCTipsCalifornia() {
                   {tip.id === 3 && (
                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
                       <p className="font-medium text-yellow-800">Pro Tip:</p>
-                      <p className="text-yellow-700">Consider using the California Secretary of State's online filing system for faster processing. Mail-in filings can take several weeks during busy periods.</p>
+                      <p className="text-yellow-700">{'Consider using the California Secretary of State\'s online filing system for faster processing. Mail-in filings can take several weeks during busy periods.'}</p>
                     </div>
                   )}
                   {tip.id === 6 && (

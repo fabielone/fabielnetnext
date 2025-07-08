@@ -9,18 +9,18 @@ export const routing = defineRouting({
 
   pathnames:{
     '/':{
-        es:'/'
+      es:'/'
     },
     '/about':{
-        es:'/sobre-nosotros'
+      es:'/sobre-nosotros'
     },
     '/checkout/businessformation': {
-        es:"/checkout/formacion-de-negocio"
+      es:'/checkout/formacion-de-negocio'
     },
 
     '/blog/10-consejos':{
-        es:'/blog/10-consejos',
-        en:'/blog/10-tips'
+      es:'/blog/10-consejos',
+      en:'/blog/10-tips'
     },
  
 

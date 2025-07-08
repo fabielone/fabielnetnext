@@ -1,8 +1,8 @@
 // app/[locale]/layout.tsx
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
-import Navbar from 'src/app/components/nav';
-import Footer from 'src/app/components/footer';
+import Navbar from 'src/app/components/molecules/nav';
+import Footer from 'src/app/components/molecules/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ChatwootScript from 'src/app/components/utils/chatwoot';

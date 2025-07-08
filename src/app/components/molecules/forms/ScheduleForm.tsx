@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback , useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaCalendarAlt, 
@@ -23,7 +23,6 @@ import {
   isSameDay
 } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useEffect } from 'react';
 
 // Configuration
 const services = [
@@ -82,7 +81,7 @@ function useCalendar({
   const renderCalendar = () => {
     const monthDays = generateMonthDays(currentMonth);
     const weekdays = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
- // Add this scroll effect
+    // Add this scroll effect
 
     return (
       <div className="calendar">
@@ -163,22 +162,22 @@ export default function ConsultationForm() {
     urgency: 'scheduled',
   });
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
- // Add this scroll effect
- useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-}, [step]); // Triggered when step changes
- // Scroll to top when submission occurs
- useEffect(() => {
-  if (isSubmitted) {
+  // Add this scroll effect
+  useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-  }
-}, [isSubmitted]); // Triggered when submission status changes
+  }, [step]); // Triggered when step changes
+  // Scroll to top when submission occurs
+  useEffect(() => {
+    if (isSubmitted) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [isSubmitted]); // Triggered when submission status changes
   // Callback for date selection
   const selectDate = useCallback((date: Date) => {
     setSelectedDate(date);
@@ -263,9 +262,9 @@ export default function ConsultationForm() {
             onClick={() => selectService(service.id)}
             className={`p-6 border rounded-xl text-left 
               ${formData.service === service.id 
-                ? 'border-amber-500 bg-amber-50' 
-                : 'border-gray-200 hover:border-amber-300'
-              }`}
+            ? 'border-amber-500 bg-amber-50' 
+            : 'border-gray-200 hover:border-amber-300'
+          }`}
           >
             <h3 className="font-semibold">{service.name}</h3>
             <p className="text-sm text-gray-600">{service.description}</p>

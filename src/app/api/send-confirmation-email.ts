@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       from: process.env.FROM_EMAIL,
       to: email,
       subject: `LLC Formation Order Confirmation - ${companyName}`,
-      html: `...` // (Use your HTML template from above)
+      html: '...' // (Use your HTML template from above)
     });
 
     return res.status(200).json({ success: true });

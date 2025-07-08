@@ -1,10 +1,10 @@
 // components/ui/popover.tsx
-import { useState, useRef, useEffect, CSSProperties } from 'react';
+import { useState, useRef, useEffect, CSSProperties, ReactNode } from 'react';
 import { FiX } from 'react-icons/fi';
 
 type PopoverProps = {
-  trigger: React.ReactNode;
-  children: React.ReactNode;
+  trigger: ReactNode;
+  children: ReactNode;
   align?: 'start' | 'center' | 'end';
   sideOffset?: number;
   className?: string;

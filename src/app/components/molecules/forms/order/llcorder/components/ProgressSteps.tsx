@@ -46,8 +46,8 @@ const ProgressSteps = ({ steps, currentStep, completedSteps, setCurrentStep }: P
                         status === 'completed'
                           ? 'bg-green-100 text-green-600 border-2 border-green-200 hover:bg-green-200'
                           : status === 'active'
-                          ? 'bg-amber-100 text-amber-600 border-2 border-amber-300 hover:bg-amber-200'
-                          : 'bg-gray-100 text-gray-400 border-2 border-gray-200'
+                            ? 'bg-amber-100 text-amber-600 border-2 border-amber-300 hover:bg-amber-200'
+                            : 'bg-gray-100 text-gray-400 border-2 border-gray-200'
                       }`}
                     >
                       {status === 'completed' ? (
@@ -61,7 +61,7 @@ const ProgressSteps = ({ steps, currentStep, completedSteps, setCurrentStep }: P
                     <span
                       className={`mt-2 text-sm font-medium text-center transition-colors ${
                         status === 'active' ? 'text-amber-600' : 
-                        status === 'completed' ? 'text-green-600' : 'text-gray-500'
+                          status === 'completed' ? 'text-green-600' : 'text-gray-500'
                       }`}
                     >
                       {step.name}
@@ -151,8 +151,8 @@ const ProgressSteps = ({ steps, currentStep, completedSteps, setCurrentStep }: P
                     step.id === currentStep
                       ? 'bg-amber-600 text-white'
                       : completedSteps.includes(step.id)
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-200 text-gray-400'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-gray-200 text-gray-400'
                   } ${isStepClickable(step.id) ? 'hover:scale-110' : 'cursor-not-allowed'}`}
                 >
                   {completedSteps.includes(step.id) && step.id !== currentStep ? (

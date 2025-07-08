@@ -1,23 +1,15 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { IoIosCalendar } from "react-icons/io";
-import { HiArrowRight, HiDocumentText, HiGlobe, HiIdentification } from "react-icons/hi";
-import Pills, { PillsProps } from '../../atoms/pills/pills';
+import { HiArrowRight, HiDocumentText, HiGlobe, HiIdentification } from 'react-icons/hi';
 import { SocialIcons } from '../socials/socialicons';
 import { useTranslations } from 'next-intl';
 import { Link } from 'src/i18n/navigation';
 import { FiFileText } from 'react-icons/fi';
-import { FaLinkedin } from "react-icons/fa";
-import { FaStar } from "react-icons/fa";
+import { FaLinkedin , FaStar } from 'react-icons/fa';
 
 
-
-interface HeroLeftProps {
-  heading: string;
-}
-
-export default function HeroLeft({ heading}: HeroLeftProps) {
+export default function HeroLeft() {
   const t = useTranslations('Hero');
   
   const benefits = [
@@ -39,14 +31,7 @@ export default function HeroLeft({ heading}: HeroLeftProps) {
     },
   ];
 
-  const pills = [
-    { text: t('Pill1'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
-    { text: t('Pill2'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
-    { text: t('Pill3'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
-    { text: t('Pill4'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
-    { text: t('Pill5'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
-    { text: t('Pill6'), color: 'text-gray-800', bgColor: 'bg-amber-100' },
-  ];
+ 
 
   // Animation variants
   const containerVariants: Variants = {
@@ -66,26 +51,14 @@ export default function HeroLeft({ heading}: HeroLeftProps) {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 100,
         damping: 10
       }
     }
   };
 
-  const pillContainerVariants = {
-    animate: {
-      x: ["0%", "-100%"],
-      transition: {
-        x: {
-          repeat: Infinity,
-          repeatType: "loop",
-          duration: 40,
-          ease: "linear"
-        }
-      }
-    }
-  };
+ 
 
   return (
     <motion.div 
@@ -117,31 +90,31 @@ export default function HeroLeft({ heading}: HeroLeftProps) {
             </motion.div>
           </motion.div>
           <motion.div 
-  className="flex justify-center items-center space-x-3 mt-4 mb-6"
-  initial={{ opacity: 0, scale: 0.8 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ delay: 0.9, type: "spring", stiffness: 200 }}
->
-  <motion.div 
-    className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full px-4 py-2 flex items-center space-x-2 shadow-lg border border-amber-100 dark:border-amber-800/30"
-    whileHover={{ scale: 1.05 }}
-  >
-    <div className="flex">
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, rotate: -180 }}
-          animate={{ opacity: 1, rotate: 0 }}
-          transition={{ delay: 1 + i * 0.1, type: "spring" }}
-        >
-          <FaStar className="w-4 h-4 text-yellow-400" />
-        </motion.div>
-      ))}
-    </div>
-    <span className="text-sm font-bold text-gray-800 dark:text-gray-200">5.0</span>
-    {/* <span className="text-xs text-gray-600 dark:text-gray-400">({t('ReviewCount')})</span> */}
-  </motion.div>
-</motion.div>
+            className="flex justify-center items-center space-x-3 mt-4 mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.9, type: 'spring', stiffness: 200 }}
+          >
+            <motion.div 
+              className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full px-4 py-2 flex items-center space-x-2 shadow-lg border border-amber-100 dark:border-amber-800/30"
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, rotate: -180 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    transition={{ delay: 1 + i * 0.1, type: 'spring' }}
+                  >
+                    <FaStar className="w-4 h-4 text-yellow-400" />
+                  </motion.div>
+                ))}
+              </div>
+              <span className="text-sm font-bold text-gray-800 dark:text-gray-200">5.0</span>
+              {/* <span className="text-xs text-gray-600 dark:text-gray-400">({t('ReviewCount')})</span> */}
+            </motion.div>
+          </motion.div>
           {/* Infinite Scrolling Pills - Temporarily Hidden
           <motion.div
             className="flex overflow-hidden whitespace-nowrap mb-8"
@@ -171,9 +144,9 @@ export default function HeroLeft({ heading}: HeroLeftProps) {
             variants={itemVariants}
             whileHover={{ 
               scale: 1.01,
-              boxShadow: "0 20px 40px -10px rgba(245, 158, 11, 0.1)"
+              boxShadow: '0 20px 40px -10px rgba(245, 158, 11, 0.1)'
             }}
-            transition={{ type: "spring", stiffness: 300 }}
+            transition={{ type: 'spring', stiffness: 300 }}
           >
             <motion.h3 className="text-xl md:text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
               {t('BenefitsTitle')}
@@ -233,7 +206,7 @@ export default function HeroLeft({ heading}: HeroLeftProps) {
               variants={itemVariants}
               whileHover={{ 
                 scale: 1.05,
-                boxShadow: "0 10px 30px rgba(59, 130, 246, 0.3)"
+                boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3)'
               }}
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-12 py-6 rounded-2xl flex items-center shadow-xl hover:shadow-2xl relative overflow-hidden text-xl"
@@ -249,7 +222,7 @@ export default function HeroLeft({ heading}: HeroLeftProps) {
                   }}
                   transition={{
                     repeat: Infinity,
-                    repeatType: "reverse",
+                    repeatType: 'reverse',
                     duration: 1.5
                   }}
                 >

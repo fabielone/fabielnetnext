@@ -27,7 +27,7 @@ export const navItems: NavItem[] = [
             name: 'Campañas de Publicidad', 
             path: '/marketing/campanas-de-publicidad' 
           },
-          { name: "Otros: Servicios Personalizados",
+          { name: 'Otros: Servicios Personalizados',
             path: '/marketing/other-services-personalized'
           }
         ],
@@ -40,7 +40,7 @@ export const navItems: NavItem[] = [
           { name: 'Cumplimiento Anual', path: '/services/business-formations/compliance' },
           { name: 'Otros: Servicios Personalizados', 
             path: '/services/other-services-personalized'
-           }
+          }
         ],
       },
     ],

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { NavItem } from '../../types/navigation';
 import { MegaMenu } from './megamenu';
 import { SocialIcons } from '../socials/socialicons';
+import { FC } from 'react';
 
 interface DesktopMenuProps {
   navItems: NavItem[];
@@ -28,7 +29,7 @@ const NavItemWithMegaMenu = ({ item, onNavigate }: { item: NavItem, onNavigate: 
   </div>
 );
 
-export const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems, onNavigate }) => (
+export const DesktopMenu: FC<DesktopMenuProps> = ({ navItems, onNavigate }) => (
   <div className="hidden md:flex md:items-center md:space-x-1 justify-center">
     {navItems.map((item, index) => (
       <div key={index} className="relative group">

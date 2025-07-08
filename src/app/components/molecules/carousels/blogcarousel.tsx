@@ -35,15 +35,15 @@ interface BlogCarouselProps {
 }
 
 export default function BlogCarousel({
-  title = "Explora Nuestro Blog",
-  description = "",
+  title = 'Explora Nuestro Blog',
+  description = '',
   blogs = [],
   variant = 'default',
   showHeader = true,
   showCTA = true,
-  CTAText = "Ver Biblioteca Completa",
-  CTALink = "/blog",
-  className = "",
+  CTAText = 'Ver Biblioteca Completa',
+  CTALink = '/blog',
+  className = '',
 }: BlogCarouselProps): JSX.Element {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState<boolean>(false);
@@ -76,22 +76,22 @@ export default function BlogCarousel({
 
   const variantStyles = {
     default: {
-      container: "py-12 bg-gradient-to-t from-amber-100 to-white",
-      wrapper: "px-4 sm:px-8",
-      cardWidth: "w-[300px] sm:w-[350px]",
-      gap: "gap-4 sm:gap-6"
+      container: 'py-12 bg-gradient-to-t from-amber-100 to-white',
+      wrapper: 'px-4 sm:px-8',
+      cardWidth: 'w-[300px] sm:w-[350px]',
+      gap: 'gap-4 sm:gap-6'
     },
     featured: {
-      container: "py-8 bg-white",
-      wrapper: "px-4 sm:px-6 ",
-      cardWidth: "w-full sm:w-[400px] lg:w-[500px]",
-      gap: "gap-6 sm:gap-8"
+      container: 'py-8 bg-white',
+      wrapper: 'px-4 sm:px-6 ',
+      cardWidth: 'w-full sm:w-[400px] lg:w-[500px]',
+      gap: 'gap-6 sm:gap-8'
     },
     minimal: {
-      container: "py-6",
-      wrapper: "px-2 sm:px-4",
-      cardWidth: "w-[250px] sm:w-[300px]",
-      gap: "gap-3 sm:gap-4"
+      container: 'py-6',
+      wrapper: 'px-2 sm:px-4',
+      cardWidth: 'w-[250px] sm:w-[300px]',
+      gap: 'gap-3 sm:gap-4'
     }
   };
 

@@ -4,13 +4,14 @@
 import Link from 'next/link';
 import { SubItem } from '../../types/navigation';
 import { IoMdArrowForward } from 'react-icons/io'; // Import the arrow icon
+import { FC } from 'react';
 
 interface MegaMenuProps {
   subItems?: SubItem[];
   onNavigate: () => void;
 }
 
-export const MegaMenu: React.FC<MegaMenuProps> = ({ subItems, onNavigate }) => (
+export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate }) => (
   <div className="fixed left-1/2 transform -translate-x-1/2 mt-2 w-3xl bg-amber-100 dark:bg-gray-800 shadow-lg rounded-lg py-4 hidden group-hover:block z-50">
     <div className="grid grid-cols-3 gap-8 px-8">
       {subItems?.map((subItem, subIndex) => (

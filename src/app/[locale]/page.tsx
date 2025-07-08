@@ -1,7 +1,6 @@
-
-import MyServices from '../components/substances/sections/services'
-import Hero from '../components/substances/hero/hero'
-import BlogList from '../components/substances/sections/blogsection'
+import MyServices from '../components/molecules/services'
+import Hero from '../components/molecules/hero/hero'
+import BlogList from '../components/molecules/blogsection'
 import ReviewsScroller from '../components/molecules/sections/reviews'
 
 export default function Page() {

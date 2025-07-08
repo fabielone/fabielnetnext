@@ -11,7 +11,7 @@ interface Props extends MobileMenuItemProps {
 const SubItemLink = ({ subSection, onNavigate }: { subSection: any, onNavigate: () => void }) => (
   <Link
     href={subSection.path}
-    className={`block text-gray-600 hover:text-gray-800 py-1`}
+    className={'block text-gray-600 hover:text-gray-800 py-1'}
     onClick={onNavigate}
   >
     {subSection.name}

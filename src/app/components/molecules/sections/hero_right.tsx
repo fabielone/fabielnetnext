@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaCheckCircle, FaEnvelope, FaPlay, FaStar, FaLinkedin } from "react-icons/fa";
-import { IoIosPlay } from "react-icons/io";
-import { HiShieldCheck, HiClock, HiUsers } from "react-icons/hi";
+import { motion} from 'framer-motion';
+import { FaPlay } from 'react-icons/fa';
+import { HiShieldCheck, HiClock, HiUsers } from 'react-icons/hi';
 import Image from 'next/image';
 import Newsletter from '../newsletter/subscribe';
 import { useTranslations } from 'next-intl';
@@ -18,20 +17,20 @@ export default function HeroRight() {
     {
       icon: <HiUsers className="w-4 h-4 sm:w-5 sm:h-5" />,
       text: t('Trust1'),
-      color: "text-emerald-600 dark:text-emerald-400",
-      bgColor: "bg-emerald-50 dark:bg-emerald-900/30"
+      color: 'text-emerald-600 dark:text-emerald-400',
+      bgColor: 'bg-emerald-50 dark:bg-emerald-900/30'
     },
     {
       icon: <HiShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />,
       text: t('Trust2'),
-      color: "text-blue-600 dark:text-blue-400",
-      bgColor: "bg-blue-50 dark:bg-blue-900/30"
+      color: 'text-blue-600 dark:text-blue-400',
+      bgColor: 'bg-blue-50 dark:bg-blue-900/30'
     },
     {
       icon: <HiClock className="w-4 h-4 sm:w-5 sm:h-5" />,
       text: t('Trust3'),
-      color: "text-purple-600 dark:text-purple-400",
-      bgColor: "bg-purple-50 dark:bg-purple-900/30"
+      color: 'text-purple-600 dark:text-purple-400',
+      bgColor: 'bg-purple-50 dark:bg-purple-900/30'
     }
   ];
 
@@ -47,10 +46,10 @@ export default function HeroRight() {
           <motion.div 
             className="bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-gray-800/90 dark:to-gray-900 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden flex flex-col h-full w-full max-w-sm sm:max-w-xl border border-white/20 dark:border-gray-700/50"
             whileHover={{ 
-              boxShadow: "0 20px 40px -12px rgba(245, 158, 11, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.15)",
+              boxShadow: '0 20px 40px -12px rgba(245, 158, 11, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.15)',
               scale: 1.01 
             }}
-            transition={{ type: "spring", stiffness: 300 }}
+            transition={{ type: 'spring', stiffness: 300 }}
           >
             {/* Video Section */}
             <motion.div 
@@ -63,7 +62,7 @@ export default function HeroRight() {
                 <motion.div
                   animate={{ 
                     scale: isVideoHovered ? 1.15 : 1,
-                    boxShadow: isVideoHovered ? "0 0 25px rgba(34, 197, 94, 0.6)" : "0 0 0px rgba(34, 197, 94, 0)"
+                    boxShadow: isVideoHovered ? '0 0 25px rgba(34, 197, 94, 0.6)' : '0 0 0px rgba(34, 197, 94, 0)'
                   }}
                   className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-white/95 dark:bg-gray-100/95 rounded-full flex items-center justify-center cursor-pointer shadow-2xl"
                   whileTap={{ scale: 0.9 }}

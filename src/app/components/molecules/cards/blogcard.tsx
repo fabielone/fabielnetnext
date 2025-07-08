@@ -26,7 +26,7 @@ export default function BlogCard({
   author,
   category,
   slug,
-  readTime = "5 min"
+  readTime = '5 min'
 }: BlogCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 

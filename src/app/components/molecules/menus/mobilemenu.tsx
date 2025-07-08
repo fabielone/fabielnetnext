@@ -1,7 +1,7 @@
 // components/organisms/MobileMenu.tsx
 'use client';
 
-import { useRef } from 'react';
+import { FC, useRef } from 'react';
 import { NavItem } from '../../types/navigation';
 import Link from 'next/link';
 import { SocialIcons } from '../socials/socialicons';
@@ -15,7 +15,7 @@ interface MobileMenuProps {
   onNavigate: () => void;
 }
 
-export const MobileMenu: React.FC<MobileMenuProps> = ({
+export const MobileMenu: FC<MobileMenuProps> = ({
   isOpen,
   navItems,
   openCategories,

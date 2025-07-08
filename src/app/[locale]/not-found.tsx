@@ -18,7 +18,7 @@ export default function ComingSoon() {
           {/* Icon */}
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             className="mx-auto mb-6"
           >
             <FaTools className="text-6xl text-amber-500 dark:text-amber-400" />

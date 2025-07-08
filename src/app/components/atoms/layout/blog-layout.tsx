@@ -4,18 +4,18 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import SearchAndCategories from '../molecules/blog/searchandcategories';
-import Newsletter from '../molecules/newsletter/subscribe';
-import BlogCarousel from '../molecules/carousels/blogcarousel';
+import SearchAndCategories from '../../molecules/blog/searchandcategories';
+import Newsletter from '../../molecules/newsletter/subscribe';
+import BlogCarousel from '../../molecules/carousels/blogcarousel';
 
 const categories = [
-  "All",
-  "Technology",
-  "Design",
-  "Business",
-  "Development",
-  "AI",
-  "Culture"
+  'All',
+  'Technology',
+  'Design',
+  'Business',
+  'Development',
+  'AI',
+  'Culture'
 ];
 
 interface Author {
@@ -54,14 +54,14 @@ interface BlogLayoutProps {
 }
 
 export default function BlogLayout({ posts }: BlogLayoutProps) {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const featuredPost = posts[0];
   const latestPosts = posts.slice(1);
 
   const filteredPosts = latestPosts.filter(post => {
-    const matchesCategory = selectedCategory === "All" || post.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
@@ -69,48 +69,48 @@ export default function BlogLayout({ posts }: BlogLayoutProps) {
 
   const blogs: Blog[] = [
     {
-      title: "Cómo Formar tu LLC en Estados Unidos",
-      description: "Una guía completa para emprendedores latinos que desean establecer su negocio en EE.UU. Aprende los pasos necesarios, requisitos y beneficios de formar una LLC.",
-      image: "https://placehold.co/600x400/png",
-      date: "2024-01-15",
-      author: {name:"Fabiel Ramirez",
+      title: 'Cómo Formar tu LLC en Estados Unidos',
+      description: 'Una guía completa para emprendedores latinos que desean establecer su negocio en EE.UU. Aprende los pasos necesarios, requisitos y beneficios de formar una LLC.',
+      image: 'https://placehold.co/600x400/png',
+      date: '2024-01-15',
+      author: {name:'Fabiel Ramirez',
         avatar:'/'},
-      category: "Negocios",
-      slug: "formar-llc-eeuu",
-      readTime: "7 min"
+      category: 'Negocios',
+      slug: 'formar-llc-eeuu',
+      readTime: '7 min'
     },
     {
-      title: "Estrategias de Marketing Digital para Empresas Latinas",
-      description: "Descubre las mejores prácticas de marketing digital para alcanzar a tu audiencia hispana en Estados Unidos. Incluye SEO, redes sociales y email marketing.",
-      image: "https://placehold.co/600x400/png",
-      date: "2024-01-20",
-      author: {name:"Fabiel Ramirez",
+      title: 'Estrategias de Marketing Digital para Empresas Latinas',
+      description: 'Descubre las mejores prácticas de marketing digital para alcanzar a tu audiencia hispana en Estados Unidos. Incluye SEO, redes sociales y email marketing.',
+      image: 'https://placehold.co/600x400/png',
+      date: '2024-01-20',
+      author: {name:'Fabiel Ramirez',
         avatar:'/'},
-      category: "Marketing",
-      slug: "marketing-digital-latinos",
-      readTime: "5 min"
+      category: 'Marketing',
+      slug: 'marketing-digital-latinos',
+      readTime: '5 min'
     },
     {
-      title: "Cumplimiento Fiscal para Negocios Hispanos",
-      description: "Todo lo que necesitas saber sobre impuestos, reportes financieros y cumplimiento legal para tu negocio en EE.UU. Mantén tu empresa al día con las regulaciones.",
-      image: "https://placehold.co/600x400/png",
-      date: "2024-01-25",
-      author: {name:"Fabiel Ramirez",
+      title: 'Cumplimiento Fiscal para Negocios Hispanos',
+      description: 'Todo lo que necesitas saber sobre impuestos, reportes financieros y cumplimiento legal para tu negocio en EE.UU. Mantén tu empresa al día con las regulaciones.',
+      image: 'https://placehold.co/600x400/png',
+      date: '2024-01-25',
+      author: {name:'Fabiel Ramirez',
         avatar:'/'},
-      category: "Legal",
-      slug: "cumplimiento-fiscal",
-      readTime: "6 min"
+      category: 'Legal',
+      slug: 'cumplimiento-fiscal',
+      readTime: '6 min'
     },
     {
-      title: "Expansión de Negocios: De Local a Nacional",
-      description: "Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.",
-      image: "https://placehold.co/600x400/png",
-      date: "2024-01-30",
-      author: {name:"Fabiel Ramirez",
+      title: 'Expansión de Negocios: De Local a Nacional',
+      description: 'Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.',
+      image: 'https://placehold.co/600x400/png',
+      date: '2024-01-30',
+      author: {name:'Fabiel Ramirez',
         avatar:'/'},
-      category: "Crecimiento",
-      slug: "expansion-nacional",
-      readTime: "8 min"
+      category: 'Crecimiento',
+      slug: 'expansion-nacional',
+      readTime: '8 min'
     }
   ];
 
@@ -127,14 +127,14 @@ export default function BlogLayout({ posts }: BlogLayoutProps) {
       </header>
 
      
-        {/* Search and Categories */}
-        <SearchAndCategories
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          categories={categories}
-        />
+      {/* Search and Categories */}
+      <SearchAndCategories
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
+      />
 
       {/* Featured Article */}
       <div className="mb-8 sm:mb-12 lg:mb-16">
@@ -182,13 +182,13 @@ export default function BlogLayout({ posts }: BlogLayoutProps) {
 
       {/* Latest Articles Grid */}
       {/* Featured Posts */}
-            <BlogCarousel
-              description=''
-              blogs={blogs}
-              title="Featured Posts"
-              variant="featured"
-              showCTA={false}
-            />
+      <BlogCarousel
+        description=''
+        blogs={blogs}
+        title="Featured Posts"
+        variant="featured"
+        showCTA={false}
+      />
 
       {/* Sidebar */}
       <aside className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
@@ -197,12 +197,12 @@ export default function BlogLayout({ posts }: BlogLayoutProps) {
           {/* Add popular articles here */}
 
           <BlogCarousel
-              description=''
-              blogs={blogs}
-              title="Popular Articles"
-              variant="featured"
-              showCTA={false}
-            />
+            description=''
+            blogs={blogs}
+            title="Popular Articles"
+            variant="featured"
+            showCTA={false}
+          />
         </div>
         
         <div className="space-y-4 sm:space-y-6 lg:space-y-8">
@@ -221,10 +221,10 @@ export default function BlogLayout({ posts }: BlogLayoutProps) {
           </div>
 
           {/* Newsletter Subscription Form */}
-                       <Newsletter
+          <Newsletter
                        
-                       title='Noticias, Consejos y mas '
-                       /> 
+            title='Noticias, Consejos y mas '
+          /> 
         </div>
       </aside>
     </div>

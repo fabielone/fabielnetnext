@@ -18,7 +18,7 @@ export default function ComingSoon() {
           {/* Icon */}
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             className="mx-auto mb-6"
           >
             <FaTools className="text-6xl text-amber-500 dark:text-amber-400" />
@@ -31,7 +31,7 @@ export default function ComingSoon() {
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
-            We're working on something amazing!
+            We&apos;re working on something amazing!
           </p>
 
           {/* Features Grid */}
@@ -59,7 +59,7 @@ export default function ComingSoon() {
 
           {/* Additional Info */}
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            We're crafting something special for you. Stay tuned for updates!
+            We&apos;re crafting something special for you. Stay tuned for updates!
           </p>
 
           {/* Back Button */}

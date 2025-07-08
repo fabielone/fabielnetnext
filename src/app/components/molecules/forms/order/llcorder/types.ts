@@ -1,3 +1,5 @@
+import { ComponentType } from 'react';
+
 export interface LLCFormData {
   // Basic Info
   companyName: string;
@@ -35,7 +37,7 @@ export interface LLCFormData {
 export type Step = {
   id: number;
   name: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon: ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 
 export type UpdateFormData = <K extends keyof LLCFormData>(field: K, value: LLCFormData[K]) => void;

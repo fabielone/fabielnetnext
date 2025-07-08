@@ -1,5 +1,5 @@
 // app/consultation/page.tsx
-import ConsultationForm from '../../../components/forms/ScheduleForm';
+import ConsultationForm from '../../../components/molecules/forms/ScheduleForm';
 
 export default function ConsultationPage() {
   return (

@@ -1,6 +1,6 @@
 'use client'; 
 
-import Header from '../../molecules/cards/servicecard'
+import Header from './cards/servicecard'
 
 const services = [
   {

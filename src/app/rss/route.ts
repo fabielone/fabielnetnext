@@ -3,21 +3,21 @@ import { baseUrl } from 'src/app/sitemap';
 // Define your hardcoded RSS feed items
 const hardcodedFeedItems = [
   {
-    title: "My Latest Project",
+    title: 'My Latest Project',
     link: `${baseUrl}/projects/latest`,
-    description: "Check out my newest portfolio project",
+    description: 'Check out my newest portfolio project',
     pubDate: new Date('2023-11-15').toUTCString()
   },
   {
-    title: "Web Development Tips",
+    title: 'Web Development Tips',
     link: `${baseUrl}/blog/web-dev-tips`,
-    description: "My collection of useful web development tips",
+    description: 'My collection of useful web development tips',
     pubDate: new Date('2023-10-20').toUTCString()
   },
   {
-    title: "About Me",
+    title: 'About Me',
     link: `${baseUrl}/about`,
-    description: "Learn more about my background and skills",
+    description: 'Learn more about my background and skills',
     pubDate: new Date('2023-09-10').toUTCString()
   }
 ];

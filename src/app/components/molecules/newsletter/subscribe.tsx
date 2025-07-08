@@ -1,9 +1,9 @@
 // components/common/Newsletter.tsx
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCheckCircle, FaEnvelope } from "react-icons/fa";
+import { FaCheckCircle, FaEnvelope } from 'react-icons/fa';
 
 interface NewsletterProps {
   title?: string;
@@ -13,15 +13,15 @@ interface NewsletterProps {
 }
 
 export default function Newsletter({
-  title = "Recibe consejos y actualizaciones empresariales",
-  description = "Suscríbete a nuestro newsletter para recibir las últimas noticias y actualizaciones.",
-  className = "",
+  title = 'Recibe consejos y actualizaciones empresariales',
+  description = 'Suscríbete a nuestro newsletter para recibir las últimas noticias y actualizaciones.',
+  className = '',
   compact = false
 }: NewsletterProps) {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
     setTimeout(() => {

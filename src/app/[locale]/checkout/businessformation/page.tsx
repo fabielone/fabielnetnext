@@ -1,5 +1,5 @@
 // app/business/register/page.tsx
-import LLCorderForm from 'src/app/components/forms/order/llcorder/LLCorderForm';
+import LLCorderForm from 'src/app/components/molecules/forms/order/llcorder/LLCorderForm';
 
 
 export default function BusinessRegistrationPage() {

@@ -1,6 +1,7 @@
 // components/molecules/socials/SocialIcons.tsx
 'use client';
 
+import { FC } from 'react';
 import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 const socialLinks = [
@@ -10,7 +11,7 @@ const socialLinks = [
   { icon: FaYoutube, url: 'https://youtube.com' },
 ];
 
-export const SocialIcons: React.FC = () => (
+export const SocialIcons: FC = () => (
   <div className="flex space-x-4 ml-4">
     {socialLinks.map(({ icon: Icon, url }) => (
       <a
