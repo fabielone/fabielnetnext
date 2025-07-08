@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback , useEffect } from 'react';
+import { useState, useCallback , useEffect, ChangeEvent, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaCalendarAlt, 
@@ -195,7 +195,7 @@ export default function ConsultationForm() {
   });
 
   // Form Handlers
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -226,7 +226,7 @@ export default function ConsultationForm() {
     setSelectedTime(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log('Consultation scheduled:', {
       ...formData,

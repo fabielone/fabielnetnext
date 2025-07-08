@@ -1,5 +1,6 @@
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { LLCFormData } from '../types';
+import { FormEvent } from 'react';
 
 interface StripePaymentFormProps {
   amount: number;
@@ -13,7 +14,7 @@ const StripePaymentForm = ({ amount, onSuccess }: StripePaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!stripe || !elements) return;
 

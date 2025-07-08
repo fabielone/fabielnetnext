@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import LanguageSelector from './languageselector';
 import { navItems } from '../config/navigation';
 import { Logo } from '../atoms/logos/logo';
@@ -9,7 +9,6 @@ import { MobileMenu } from './menus/mobilemenu';
 import { DesktopMenu } from './menus/desktopmenu';
 import ThemeToggle from './themeselector';
 import AuthNavigation from './menus/authnav';
-
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

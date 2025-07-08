@@ -1,5 +1,6 @@
 // components/atoms/HamburgerButton.tsx
 'use client';
+import React from 'react'
 
 type HamburgerButtonProps = {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;

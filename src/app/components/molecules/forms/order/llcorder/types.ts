@@ -1,4 +1,4 @@
-import { ComponentType } from 'react';
+import { ComponentType, SVGProps } from 'react';
 
 export interface LLCFormData {
   // Basic Info
@@ -37,7 +37,7 @@ export interface LLCFormData {
 export type Step = {
   id: number;
   name: string;
-  icon: ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
 export type UpdateFormData = <K extends keyof LLCFormData>(field: K, value: LLCFormData[K]) => void;

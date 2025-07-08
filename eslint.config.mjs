@@ -46,7 +46,13 @@ export default [
       ...pluginReact.configs.recommended.rules,
       "react/react-in-jsx-scope": "off", // Not needed in Next.js
       "react/prop-types": "off", // Using TypeScript
-      "react/no-unescaped-entities": "warn", // Downgrade to warning
+      "react/no-unescaped-entities": ["warn", {
+        "forbid": [
+          { "char": ">", "alternatives": ["&gt;"] },
+          { "char": "<", "alternatives": ["&lt;"] },
+          { "char": "}", "alternatives": ["&#125;"] }
+        ]
+      }], // Only forbid dangerous entities, allow quotes
       "react/no-unknown-property": ["error", { ignore: ["tw"] }], // Allow 'tw' for Tailwind
       
       // React Hooks rules
@@ -70,7 +76,14 @@ export default [
       // Import rules (enhanced)
       "import/no-anonymous-default-export": "warn",
       "import/no-unresolved": ["error", { 
-        "ignore": ["^@/", "^~/"] // Ignore custom path aliases
+        "ignore": [
+          "^@/", 
+          "^~/", 
+          "geist/font/sans",
+          "geist/font/mono",
+          "^next/font/",
+          "^@next/font/"
+        ]
       }],
       "import/no-absolute-path": "error",
       "import/no-self-import": "error",

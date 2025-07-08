@@ -7,7 +7,7 @@ export default function Hero() {
   return(
     <div className="px-2 md:px-20 bg-white dark:bg-gray-900 transition-colors duration-300">
       <TwoColumn 
-        leftContent={<HeroLeft heading={'Fabiel Ramirez'} />} 
+        leftContent={<HeroLeft  />} 
         rightContent={<HeroRight />}
       />
     </div>

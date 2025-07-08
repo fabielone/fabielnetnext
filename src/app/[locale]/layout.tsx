@@ -6,6 +6,7 @@ import Footer from 'src/app/components/molecules/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ChatwootScript from 'src/app/components/utils/chatwoot';
+import { ReactNode } from 'react';
 
 const locales = ['en', 'es'];
 
@@ -13,7 +14,7 @@ export default async function LocaleLayout({
   children,
   params
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: { locale: string };
 }) {
   
