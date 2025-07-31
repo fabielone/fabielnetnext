@@ -1,3 +1,5 @@
+
+// components/PaymentStep.tsx (PayPal section only)
 'use client'
 import { LLCFormData, UpdateFormData } from '../types';
 import { useState, useEffect } from 'react';
@@ -16,44 +18,114 @@ interface PaymentStepProps {
   onPrev: () => void;
 }
 
-const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: PaymentStepProps) => {
+const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepProps) => {
   const [processing, setProcessing] = useState(false);
+  const [paypalVaultSetup, setPaypalVaultSetup] = useState<{
+    vaultSetupOrderId: string;
+    approvalUrl: string;
+  } | null>(null);
+  const [paypalVaultCompleted, setPaypalVaultCompleted] = useState(false);
 
-  // Calculate order breakdown
+  // Calculate order breakdown - ONLY main service charged today
   const getOrderBreakdown = () => {
-    const items = [
+    const todayItems = [
       { name: 'LLC Formation Package', price: 124.99 }
     ];
 
-    if (formData.registeredAgent) {
-      items.push({ name: 'Registered Agent Service', price: 149.00 });
-    }
-
-    if (formData.compliance) {
-      items.push({ name: 'Compliance Service', price: 99.00 });
-    }
-
-    const oneTimeTotal = items.reduce((sum, item) => sum + item.price, 0);
+    const todayTotal = todayItems.reduce((sum, item) => sum + item.price, 0);
     
-    const monthlyServices: Array<{ name: string; price: number; note?: string }> = [];
+    // Future billing items
+    const futureItems: Array<{
+      name: string;
+      price: number;
+      frequency: string;
+      note: string;
+    }> = [];
+    if (formData.registeredAgent) {
+      futureItems.push({ 
+        name: 'Registered Agent Service', 
+        price: 149.00,
+        frequency: 'yearly',
+        note: 'Billed after LLC approval'
+      });
+    }
+    if (formData.compliance) {
+      futureItems.push({ 
+        name: 'Compliance Service', 
+        price: 99.00,
+        frequency: 'yearly',
+        note: 'Billed after LLC approval'
+      });
+    }
     if (formData.website === 'basic') {
-      monthlyServices.push({ name: 'Basic Website', price: 9.99 });
+      futureItems.push({ 
+        name: 'Basic Website', 
+        price: 9.99,
+        frequency: 'monthly',
+        note: 'Billed after LLC approval'
+      });
     } else if (formData.website === 'pro') {
-      monthlyServices.push({ name: 'Pro Website', price: 49.99 });
+      futureItems.push({ 
+        name: 'Pro Website', 
+        price: 49.99,
+        frequency: 'monthly',
+        note: 'Billed after LLC approval'
+      });
     } else if (formData.website === 'ecommerce') {
-      monthlyServices.push({ name: 'E-commerce Website', price: 49.99, note: '+ transaction fees' });
+      futureItems.push({ 
+        name: 'E-commerce Website', 
+        price: 49.99,
+        frequency: 'monthly',
+        note: 'Billed after LLC approval'
+      });
     }
 
-    return { items, oneTimeTotal, monthlyServices };
+    return { todayItems, todayTotal, futureItems };
   };
 
-  const { items, oneTimeTotal, monthlyServices } = getOrderBreakdown();
+  const { todayItems, todayTotal, futureItems } = getOrderBreakdown();
 
-  const handlePaymentSuccess = async (paymentId: string) => {
+  // Setup PayPal vault when PayPal is selected and there are future items
+  useEffect(() => {
+    if (formData.paymentMethod === 'paypal' && futureItems.length > 0 && !paypalVaultSetup) {
+      setupPayPalVault();
+    }
+  }, [formData.paymentMethod, futureItems.length]);
+
+  const setupPayPalVault = async () => {
+    try {
+      setProcessing(true);
+      const response = await fetch('/api/create-paypal-vault-setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: formData.email,
+          companyName: formData.companyName
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to setup PayPal vault');
+      }
+
+      const data = await response.json();
+      setPaypalVaultSetup(data);
+    } catch (error) {
+      console.error('PayPal vault setup failed:', error);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (paymentId: string, provider: 'stripe' | 'paypal') => {
     setProcessing(true);
     try {
-      // Here you would save the order to your database
-      console.log('Payment successful:', paymentId);
+      console.log(`${provider} payment successful:`, paymentId);
+      
+      // Update form data with payment info
+      updateFormData('paymentTransactionId', paymentId);
+      updateFormData('paymentProvider', provider);
+      
       onNext();
     } catch (error) {
       console.error('Order processing failed:', error);
@@ -70,91 +142,68 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
           Step 5 of 6: Payment
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Complete Your Order</h2>
-        <p className="text-gray-600">Review your order and select payment method</p>
+        <p className="text-gray-600">Hybrid billing: Pay LLC formation today, subscriptions charged later</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Order Summary */}
+        {/* Order Summary - Same as before */}
         <div className="bg-amber-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Hybrid Billing Summary</h3>
           
-          {/* One-time charges */}
+          {/* Today's charges */}
           <div className="space-y-3 mb-6">
             <h4 className="text-sm font-medium text-gray-700 border-b border-amber-200 pb-2">
-              One-time Charges
+              💳 Charged Today
             </h4>
-            {items.map((item, index) => (
+            {todayItems.map((item, index) => (
               <div key={index} className="flex justify-between text-sm">
                 <span className="text-gray-600">{item.name}</span>
                 <span className="font-medium">${item.price.toFixed(2)}</span>
               </div>
             ))}
-            <div className="flex justify-between text-sm font-medium border-t border-amber-200 pt-2">
-              <span>Subtotal (One-time)</span>
-              <span>${oneTimeTotal.toFixed(2)}</span>
+            <div className="flex justify-between text-lg font-bold border-t border-amber-200 pt-2">
+              <span>Total Due Today</span>
+              <span className="text-amber-900">${todayTotal.toFixed(2)}</span>
             </div>
           </div>
 
-          {/* Monthly services */}
-          {monthlyServices.length > 0 && (
+          {/* Future billing */}
+          {futureItems.length > 0 && (
             <div className="space-y-3 mb-6">
               <h4 className="text-sm font-medium text-gray-700 border-b border-amber-200 pb-2">
-                Monthly Services
+                📅 Future Billing (After LLC Approval)
               </h4>
-              {monthlyServices.map((service, index) => (
-                <div key={index} className="flex justify-between text-sm">
-                  <div>
-                    <span className="text-gray-600">{service.name}</span>
-                    {service.note && (
-                      <div className="text-xs text-amber-600">{service.note}</div>
-                    )}
+              {futureItems.map((item, index) => (
+                <div key={index} className="text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">{item.name}</span>
+                    <span className="font-medium">${item.price.toFixed(2)}/{item.frequency.slice(0, -2)}</span>
                   </div>
-                  <span className="font-medium">${service.price}/mo</span>
+                  <div className="text-xs text-amber-600 mt-1">{item.note}</div>
                 </div>
               ))}
-              <div className="text-xs text-gray-500 bg-amber-100 rounded p-2">
-                Monthly services will be billed separately after LLC formation
-              </div>
             </div>
           )}
 
-          {/* Total */}
-          <div className="border-t border-amber-300 pt-4">
-            <div className="flex justify-between text-lg font-bold text-amber-900">
-              <span>Total Due Today</span>
-              <span>${oneTimeTotal.toFixed(2)}</span>
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Includes all one-time formation and setup fees
-            </div>
-          </div>
-
-          {/* Guarantees */}
-          <div className="mt-6 space-y-2">
-            <div className="flex items-center text-sm text-green-700">
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          {/* Hybrid billing notice */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start">
+              <svg className="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
-              <span>100% Money Back Guarantee</span>
-            </div>
-            <div className="flex items-center text-sm text-green-700">
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span>Secure SSL Encryption</span>
-            </div>
-            <div className="flex items-center text-sm text-green-700">
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span>Documents within 7-10 business days</span>
+              <div className="text-sm text-blue-800">
+                <strong>How Hybrid Billing Works:</strong> Pay only for LLC formation today. 
+                Your payment method will be securely saved and additional services will be 
+                charged separately after your LLC is approved. You'll receive individual 
+                confirmations for each service.
+              </div>
             </div>
           </div>
         </div>
 
         {/* Payment Methods */}
         <div className="bg-amber-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Payment Method</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Choose Payment Method</h3>
           
           {/* Payment Method Selection */}
           <div className="space-y-4 mb-6">
@@ -193,23 +242,25 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
               >
                 <div className="flex flex-col items-center space-y-2">
                   <svg className="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.186a.925.925 0 0 0-.918.797l-1.513 9.589a.641.641 0 0 0 .633.74h4.25c.524 0 .967-.382 1.05-.9l.048-.314 1.026-6.506.066-.430c.082-.518.526-.9 1.05-.9h.661c3.743 0 6.67-1.518 7.52-5.91.355-1.834.174-3.370-.777-4.54z"/>
+                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.186a.925.925 0 0 0-.918.797l-1.513 9.589a.641.641 0 0 0 .633.74h4.25c.524 0 .967-.382 1.05-.9l.048-.314 1.026-6.506.066-.43c.082-.518.526-.9 1.05-.9h.661c3.743 0 6.67-1.518 7.52-5.91.355-1.834.174-3.370-.777-4.54z"/>
                   </svg>
                   <span className="font-medium">PayPal</span>
-                  <span className="text-xs text-gray-500">Pay with PayPal account</span>
+                  <span className="text-xs text-gray-500">
+                    {futureItems.length > 0 ? 'Future billing supported' : 'One-time payment'}
+                  </span>
                 </div>
               </button>
             </div>
           </div>
 
           {/* Payment Forms */}
-          <div className="min-h-[300px]">
+          <div className="min-h-[400px]">
             {formData.paymentMethod === 'stripe' && (
               <Elements 
                 stripe={stripePromise}
                 options={{
                   mode: 'payment',
-                  amount: Math.round(oneTimeTotal * 100),
+                  amount: Math.round(todayTotal * 100),
                   currency: 'usd',
                   appearance: {
                     theme: 'stripe',
@@ -224,9 +275,9 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
                 }}
               >
                 <StripePaymentForm
-                  amount={oneTimeTotal}
+                  amount={todayTotal}
                   formData={formData}
-                  onSuccess={handlePaymentSuccess}
+                  onSuccess={(paymentId) => handlePaymentSuccess(paymentId, 'stripe')}
                   processing={processing}
                   setProcessing={setProcessing}
                 />
@@ -235,58 +286,115 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
 
             {formData.paymentMethod === 'paypal' && (
               <div className="space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-center">
-                    <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-sm text-blue-800">
-                      You'll be redirected to PayPal to complete your payment securely
-                    </span>
+                {/* PayPal Setup Status */}
+                {futureItems.length > 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-sm text-blue-800">
+                        {paypalVaultCompleted 
+                          ? 'PayPal future billing is set up! You can now complete your payment.'
+                          : 'PayPal is setting up future billing for your subscription services...'
+                        }
+                      </span>
+                    </div>
                   </div>
-                </div>
+                )}
                 
                 <PayPalScriptProvider 
                   options={{
                     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
                     currency: 'USD',
-                    intent: 'capture'
+                    intent: 'capture',
+                    vault: futureItems.length > 0, // Enable vault only if future billing needed
                   }}
                 >
-                  <PayPalButtons
-                    createOrder={(data, actions) => {
-                      return actions.order.create({
-                        intent: 'CAPTURE',
-                        purchase_units: [{
-                          amount: {
-                            value: oneTimeTotal.toFixed(2),
-                            currency_code: 'USD'
-                          },
-                          description: 'California LLC Formation Package'
-                        }]
-                      });
-                    }}
-                    onApprove={async (data, actions) => {
-                      try {
-                        setProcessing(true);
-                        const details = await actions.order!.capture();
-                        await handlePaymentSuccess(details.id!);
-                      } catch (error) {
-                        console.error('PayPal payment failed:', error);
-                      }
-                    }}
-                    onError={(err) => {
-                      console.error('PayPal error:', err);
-                    }}
-                    style={{
-                      layout: 'vertical',
-                      color: 'gold',
-                      shape: 'rect',
-                      label: 'paypal',
-                      height: 45
-                    }}
-                    disabled={processing}
-                  />
+                  {/* Step 1: Vault Setup (if needed) */}
+                  {futureItems.length > 0 && !paypalVaultCompleted && paypalVaultSetup && (
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-medium text-gray-700">Step 1: Set up future billing</h4>
+                      <PayPalButtons
+                        createOrder={() => Promise.resolve(paypalVaultSetup.vaultSetupOrderId)}
+                        onApprove={async (data, actions) => {
+                          try {
+                            await actions.order!.authorize(); // Authorize the $0 setup
+                            setPaypalVaultCompleted(true);
+                            
+                            // Store vault information
+                            await fetch('/api/store-paypal-vault', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                orderID: data.orderID,
+                                payerID: data.payerID,
+                                formData,
+                                futureItems
+                              })
+                            });
+                          } catch (error) {
+                            console.error('PayPal vault setup failed:', error);
+                          }
+                        }}
+                        style={{
+                          layout: 'vertical',
+                          color: 'blue',
+                          shape: 'rect',
+                          label: 'paypal',
+                          height: 40
+                        }}
+                      />
+                      <p className="text-xs text-gray-500 text-center">
+                        This authorizes future billing for subscription services (no charge today)
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Step 2: Main Payment */}
+                  {(futureItems.length === 0 || paypalVaultCompleted) && (
+                    <div className="space-y-3">
+                      {futureItems.length > 0 && (
+                        <h4 className="text-sm font-medium text-gray-700">Step 2: Pay for LLC formation</h4>
+                      )}
+                      <PayPalButtons
+                        createOrder={(data, actions) => {
+                          return actions.order.create({
+                            intent: 'CAPTURE',
+                            purchase_units: [{
+                              amount: {
+                                value: todayTotal.toFixed(2),
+                                currency_code: 'USD'
+                              },
+                              description: `LLC Formation - ${formData.companyName}`
+                            }]
+                          });
+                        }}
+                        onApprove={async (data, actions) => {
+                          try {
+                            setProcessing(true);
+                            const details = await actions.order!.capture();
+                            await handlePaymentSuccess(details.id!, 'paypal');
+                          } catch (error) {
+                            console.error('PayPal payment failed:', error);
+                            setProcessing(false);
+                          }
+                        }}
+                        onError={(err) => {
+                          console.error('PayPal error:', err);
+                          setProcessing(false);
+                        }}
+                        style={{
+                          layout: 'vertical',
+                          color: 'gold',
+                          shape: 'rect',
+                          label: 'paypal',
+                          height: 45
+                        }}
+                        disabled={processing}
+                      />
+                    </div>
+                  )}
                 </PayPalScriptProvider>
               </div>
             )}
@@ -303,9 +411,6 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
         >
           Back
         </button>
-        <div className="order-1 sm:order-2">
-          {/* Payment buttons are in the payment forms above */}
-        </div>
       </div>
 
       {/* Trust Indicators */}

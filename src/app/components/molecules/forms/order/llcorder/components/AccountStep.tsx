@@ -192,7 +192,7 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
               value={formData.email}
               onChange={(e) => handleChange('email', e.target.value)}
               disabled={!isLogin}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm ${
+              className={`w-full px-3 text-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm ${
                 !isLogin ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200'
               } ${errors.email ? 'border-red-500' : ''}`}
               placeholder="your@email.com"
@@ -214,7 +214,7 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
               type="password"
               value={formData.password}
               onChange={(e) => handleChange('password', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+              className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                 errors.password ? 'border-red-500' : 'border-gray-200'
               }`}
               placeholder={isLogin ? 'Enter your password' : 'Minimum 8 characters'}
@@ -234,7 +234,7 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
                 type="password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                   errors.confirmPassword ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="Re-enter your password"

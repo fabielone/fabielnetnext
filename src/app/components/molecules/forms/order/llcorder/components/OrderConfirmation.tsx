@@ -1,6 +1,6 @@
 import { LLCFormData } from '../types';
 import { useEffect, useState } from 'react';
-import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 
 interface OrderConfirmationProps {
   formData: LLCFormData;
@@ -12,30 +12,76 @@ interface OrderConfirmationProps {
   onPrev: () => void;
 }
 
+interface ServiceBreakdown {
+  oneTimeServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }>;
+  yearlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }>;
+  monthlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }>;
+}
+
 const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scrollToError }: OrderConfirmationProps) => {
   const [isProcessing, setIsProcessing] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
   const [savedToDatabase, setSavedToDatabase] = useState(false);
+  const [questionnaireEmailSent, setQuestionnaireEmailSent] = useState(false);
+  const [subscriptionsProcessed, setSubscriptionsProcessed] = useState(false);
+
+  // Calculate service breakdown
+  const getServiceBreakdown = (): ServiceBreakdown => {
+    const oneTimeServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [
+      { name: 'LLC Formation Package', price: 124.99, status: 'paid' }
+    ];
+
+    const yearlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [];
+    if (formData.registeredAgent) {
+      yearlyServices.push({ name: 'Registered Agent Service', price: 149.00, status: 'pending' });
+    }
+    if (formData.compliance) {
+      yearlyServices.push({ name: 'Compliance Service', price: 99.00, status: 'pending' });
+    }
+
+    const monthlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [];
+    if (formData.website === 'basic') {
+      monthlyServices.push({ name: 'Basic Website', price: 9.99, status: 'pending' });
+    } else if (formData.website === 'pro') {
+      monthlyServices.push({ name: 'Pro Website', price: 49.99, status: 'pending' });
+    } else if (formData.website === 'ecommerce') {
+      monthlyServices.push({ name: 'E-commerce Website', price: 49.99, status: 'pending' });
+    }
+
+    return { oneTimeServices, yearlyServices, monthlyServices };
+  };
+
+  const serviceBreakdown = getServiceBreakdown();
 
   useEffect(() => {
-    // Simulate processing order and saving to database
+    // Process order and handle payment flow
     const processOrder = async () => {
       try {
-        // Save order to database
+        // Step 1: Save main order to database
         await saveOrderToDatabase();
         setSavedToDatabase(true);
 
-        // Send confirmation email
+        // Step 2: Send initial confirmation email
         await sendConfirmationEmail();
         setEmailSent(true);
 
+        // Step 3: Send questionnaire link
+        await sendQuestionnaireEmail();
+        setQuestionnaireEmailSent(true);
+
+        // Step 4: Process subscription services
+        if (serviceBreakdown.yearlyServices.length > 0 || serviceBreakdown.monthlyServices.length > 0) {
+          await processSubscriptions();
+          setSubscriptionsProcessed(true);
+        }
+
         setIsProcessing(false);
 
-        // Redirect to dashboard after 5 seconds if user created account
+        // Redirect to dashboard after completion
         if (formData.email && formData.password) {
           setTimeout(() => {
             redirectToDashboard();
-          }, 5000);
+          }, 8000);
         }
       } catch (error) {
         console.error('Error processing order:', error);
@@ -47,21 +93,18 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
   }, []);
 
   const saveOrderToDatabase = async () => {
-    // This will save the order data to your database
     const orderData = {
       orderId,
       ...formData,
       orderTotal,
-      status: 'pending_name_approval',
-      createdAt: new Date().toISOString(),
-      paymentStatus: 'completed'
+      status: 'processing',
+      paymentStatus: 'main_service_paid',
+      services: serviceBreakdown,
+      createdAt: new Date().toISOString()
     };
 
-    // TODO: Replace with actual API call
     console.log('Saving order to database:', orderData);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
   };
 
   const sendConfirmationEmail = async () => {
@@ -69,23 +112,49 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
       to: formData.email,
       orderId,
       companyName: formData.companyName,
-      orderTotal,
-      services: {
-        registeredAgent: formData.registeredAgent,
-        compliance: formData.compliance,
-        website: formData.website
-      }
+      mainServiceTotal: serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0),
+      template: 'main_service_confirmation'
     };
 
-    // TODO: Replace with actual email service call
-    console.log('Sending confirmation email:', emailData);
-    
-    // Simulate email sending delay
+    console.log('Sending main service confirmation:', emailData);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  };
+
+  const sendQuestionnaireEmail = async () => {
+    const questionnaires: string[] = [];
+    if (formData.needEIN) questionnaires.push('EIN Application');
+    if (formData.needOperatingAgreement) questionnaires.push('Operating Agreement');
+    if (formData.needBankLetter) questionnaires.push('Bank Resolution Letter');
+
+    const emailData = {
+      to: formData.email,
+      orderId,
+      questionnaires,
+      dashboardLink: formData.password ? '/dashboard' : `/questionnaire/${orderId}`,
+      template: 'questionnaire_link'
+    };
+
+    console.log('Sending questionnaire email:', emailData);
     await new Promise(resolve => setTimeout(resolve, 800));
   };
 
+  const processSubscriptions = async () => {
+    // Process yearly subscriptions
+    for (const service of serviceBreakdown.yearlyServices) {
+      console.log(`Processing yearly subscription: ${service.name}`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Send individual confirmation emails for each subscription
+    }
+
+    // Process monthly subscriptions
+    for (const service of serviceBreakdown.monthlyServices) {
+      console.log(`Processing monthly subscription: ${service.name}`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Send individual confirmation emails for each subscription
+    }
+  };
+
   const redirectToDashboard = () => {
-    // TODO: Replace with actual navigation
     console.log('Redirecting to dashboard...');
     // window.location.href = '/dashboard';
   };
@@ -96,7 +165,48 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-amber-600 mx-auto"></div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Processing Your Order</h2>
-          <p className="text-gray-600">Please wait while we finalize your LLC formation...</p>
+          <p className="text-gray-600">Setting up your LLC formation and additional services...</p>
+        </div>
+        
+        {/* Processing Steps */}
+        <div className="max-w-md mx-auto space-y-3">
+          <div className={`flex items-center text-sm p-3 rounded-lg ${
+            savedToDatabase ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'
+          }`}>
+            <div className={`w-4 h-4 rounded-full mr-3 ${
+              savedToDatabase ? 'bg-green-500' : 'bg-gray-300'
+            }`}></div>
+            Order recorded
+          </div>
+          
+          <div className={`flex items-center text-sm p-3 rounded-lg ${
+            emailSent ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'
+          }`}>
+            <div className={`w-4 h-4 rounded-full mr-3 ${
+              emailSent ? 'bg-green-500' : 'bg-gray-300'
+            }`}></div>
+            Confirmation email sent
+          </div>
+          
+          <div className={`flex items-center text-sm p-3 rounded-lg ${
+            questionnaireEmailSent ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'
+          }`}>
+            <div className={`w-4 h-4 rounded-full mr-3 ${
+              questionnaireEmailSent ? 'bg-green-500' : 'bg-gray-300'
+            }`}></div>
+            Questionnaire link sent
+          </div>
+          
+          {(serviceBreakdown.yearlyServices.length > 0 || serviceBreakdown.monthlyServices.length > 0) && (
+            <div className={`flex items-center text-sm p-3 rounded-lg ${
+              subscriptionsProcessed ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'
+            }`}>
+              <div className={`w-4 h-4 rounded-full mr-3 ${
+                subscriptionsProcessed ? 'bg-green-500' : 'bg-gray-300'
+              }`}></div>
+              Subscription services activated
+            </div>
+          )}
         </div>
       </div>
     );
@@ -109,149 +219,173 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
         <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
           <CheckCircleIcon className="h-8 w-8 text-green-600" />
         </div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h2>
-        <p className="text-lg text-gray-600">Your LLC formation is now in progress</p>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Order Complete!</h2>
+        <p className="text-lg text-gray-600">Your LLC formation and services are now being processed</p>
         <div className="mt-4 inline-block bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
           <span className="text-sm font-medium text-amber-800">Order ID: </span>
           <span className="text-sm font-mono font-bold text-amber-900">{orderId}</span>
         </div>
       </div>
 
-      {/* Order Summary */}
+      {/* LLC Formation Services Breakdown */}
       <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
           <DocumentTextIcon className="h-5 w-5 mr-2" />
-          Order Summary
+          LLC Formation Services Breakdown
         </h3>
         
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-              <span className="text-sm font-medium text-gray-500">Company Name</span>
-              <p className="text-lg font-semibold text-gray-900">{formData.companyName} LLC</p>
-            </div>
-            
-            <div>
-              <span className="text-sm font-medium text-gray-500">Business Address</span>
-              <p className="text-gray-900">
-                {formData.businessAddress}<br />
-                {formData.businessCity}, CA {formData.businessZip}
-              </p>
-            </div>
-
-            <div>
-              <span className="text-sm font-medium text-gray-500">Business Purpose</span>
-              <p className="text-gray-900">{formData.businessPurpose}</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <span className="text-sm font-medium text-gray-500">Services Selected</span>
-              <div className="mt-2 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>LLC Formation (Base)</span>
-                  <span className="font-medium">$124.99</span>
+        <div className="space-y-6">
+          {/* One-time Services */}
+          <div>
+            <h4 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
+              <CreditCardIcon className="h-4 w-4 mr-2 text-green-600" />
+              One-time Services (Paid Today)
+            </h4>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              {serviceBreakdown.oneTimeServices.map((service, index) => (
+                <div key={index} className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <CheckCircleIcon className="h-4 w-4 text-green-600 mr-2" />
+                    <span className="text-gray-900">{service.name}</span>
+                  </div>
+                  <span className="font-semibold text-green-700">${service.price.toFixed(2)}</span>
                 </div>
-                {formData.registeredAgent && (
-                  <div className="flex justify-between text-sm">
-                    <span>Registered Agent Service</span>
-                    <span className="font-medium">$149.00</span>
-                  </div>
-                )}
-                {formData.compliance && (
-                  <div className="flex justify-between text-sm">
-                    <span>Compliance Package</span>
-                    <span className="font-medium">$99.00</span>
-                  </div>
-                )}
-                {formData.website && (
-                  <div className="flex justify-between text-sm">
-                    <span>Business Website</span>
-                    <span className="font-medium">$299.00</span>
-                  </div>
-                )}
-                <div className="border-t border-gray-200 pt-2 mt-3">
-                  <div className="flex justify-between font-bold text-lg">
-                    <span>Total Paid</span>
-                    <span className="text-green-600">${orderTotal.toFixed(2)}</span>
-                  </div>
+              ))}
+              <div className="border-t border-green-200 mt-3 pt-3">
+                <div className="flex justify-between items-center font-bold text-green-800">
+                  <span>Total Paid Today</span>
+                  <span>${serviceBreakdown.oneTimeServices.reduce((sum, s) => sum + s.price, 0).toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Yearly Services */}
+          {serviceBreakdown.yearlyServices.length > 0 && (
+            <div>
+              <h4 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
+                <CreditCardIcon className="h-4 w-4 mr-2 text-amber-600" />
+                Yearly Subscriptions (Billed Annually)
+              </h4>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                {serviceBreakdown.yearlyServices.map((service, index) => (
+                  <div key={index} className="flex justify-between items-center mb-2 last:mb-0">
+                    <div className="flex items-center">
+                      <CheckCircleIcon className="h-4 w-4 text-amber-600 mr-2" />
+                      <span className="text-gray-900">{service.name}</span>
+                    </div>
+                    <span className="font-semibold text-amber-700">${service.price}/year</span>
+                  </div>
+                ))}
+                <div className="text-xs text-amber-700 mt-3 p-2 bg-amber-100 rounded">
+                  <strong>Billing Note:</strong> These services are billed annually. First payment will be charged separately and you'll receive individual confirmation emails.
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Monthly Services */}
+          {serviceBreakdown.monthlyServices.length > 0 && (
+            <div>
+              <h4 className="text-lg font-medium text-gray-800 mb-3 flex items-center">
+                <CreditCardIcon className="h-4 w-4 mr-2 text-blue-600" />
+                Monthly Subscriptions (Billed Monthly)
+              </h4>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                {serviceBreakdown.monthlyServices.map((service, index) => (
+                  <div key={index} className="flex justify-between items-center mb-2 last:mb-0">
+                    <div className="flex items-center">
+                      <CheckCircleIcon className="h-4 w-4 text-blue-600 mr-2" />
+                      <span className="text-gray-900">{service.name}</span>
+                    </div>
+                    <span className="font-semibold text-blue-700">${service.price}/month</span>
+                  </div>
+                ))}
+                <div className="text-xs text-blue-700 mt-3 p-2 bg-blue-100 rounded">
+                  <strong>Billing Note:</strong> These services are billed monthly. First payment will be charged separately and you'll receive individual confirmation emails.
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Status Updates */}
       <div className="grid md:grid-cols-2 gap-4">
-        <div className={`border rounded-lg p-4 ${emailSent ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-          <div className="flex items-center">
-            <EnvelopeIcon className={`h-5 w-5 mr-2 ${emailSent ? 'text-green-600' : 'text-gray-400'}`} />
-            <span className={`font-medium ${emailSent ? 'text-green-800' : 'text-gray-600'}`}>
-              {emailSent ? 'Confirmation Email Sent' : 'Sending Confirmation Email...'}
-            </span>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-center mb-2">
+            <EnvelopeIcon className="h-5 w-5 mr-2 text-green-600" />
+            <span className="font-medium text-green-800">Confirmation Email Sent</span>
           </div>
+          <p className="text-sm text-green-700">
+            Check your inbox for order confirmation and receipt.
+          </p>
         </div>
         
-        <div className={`border rounded-lg p-4 ${savedToDatabase ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-          <div className="flex items-center">
-            <DocumentTextIcon className={`h-5 w-5 mr-2 ${savedToDatabase ? 'text-green-600' : 'text-gray-400'}`} />
-            <span className={`font-medium ${savedToDatabase ? 'text-green-800' : 'text-gray-600'}`}>
-              {savedToDatabase ? 'Order Recorded' : 'Recording Order...'}
-            </span>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center mb-2">
+            <DocumentTextIcon className="h-5 w-5 mr-2 text-blue-600" />
+            <span className="font-medium text-blue-800">Questionnaire Link Sent</span>
+          </div>
+          <p className="text-sm text-blue-700">
+            Complete additional forms for EIN, Operating Agreement, and other services.
+          </p>
+        </div>
+      </div>
+
+      {/* Important Information */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
+        <h4 className="font-semibold text-amber-800 mb-3 text-lg">Next Steps & Important Information</h4>
+        <div className="text-amber-700 space-y-3">
+          <div className="flex items-start">
+            <span className="font-semibold mr-2">1.</span>
+            <div>
+              <strong>Complete Questionnaires:</strong> Check your email for a link to complete additional questionnaires for your selected services. This helps us customize your documents properly.
+            </div>
+          </div>
+          <div className="flex items-start">
+            <span className="font-semibold mr-2">2.</span>
+            <div>
+              <strong>LLC Formation Processing:</strong> We'll verify your name availability and file your Articles of Organization within 2-3 business days.
+            </div>
+          </div>
+          <div className="flex items-start">
+            <span className="font-semibold mr-2">3.</span>
+            <div>
+              <strong>Subscription Services:</strong> Recurring services will be processed after LLC approval and you'll receive separate confirmation emails for each.
+            </div>
+          </div>
+          <div className="flex items-start">
+            <span className="font-semibold mr-2">4.</span>
+            <div>
+              <strong>Document Delivery:</strong> All completed documents will be available in your client dashboard within 7-10 business days.
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Important Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h4 className="font-semibold text-blue-800 mb-3 text-lg">Important Notice</h4>
-        <div className="text-blue-700 space-y-2">
-          <p>
-            <strong>Name Approval:</strong> The State of California will have the final word on your LLC name approval. 
-            If your chosen name is unavailable, we'll contact you with alternative options.
-          </p>
-          <p>
-            <strong>Processing Time:</strong> Your LLC formation will be processed within 5-7 business days after name approval.
-          </p>
-        </div>
-      </div>
-
-      {/* Next Steps */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
-        <h4 className="font-semibold text-amber-800 mb-3 text-lg">What Happens Next?</h4>
-        <ol className="list-decimal list-inside text-amber-700 space-y-2">
-          <li>We'll verify your LLC name availability with the California Secretary of State (1-2 business days)</li>
-          <li>Articles of Organization will be filed with the state</li>
-          <li>We'll obtain your Federal EIN (Tax ID Number)</li>
-          <li>You'll receive your completed documents and certificates via email</li>
-          {formData.registeredAgent && <li>Your registered agent service will be activated</li>}
-          {formData.compliance && <li>Your compliance package will be set up</li>}
-          {formData.website && <li>Your business website development will begin</li>}
-        </ol>
-      </div>
-
-      {/* Dashboard or Email Notice */}
+      {/* Dashboard Access */}
       {formData.email && formData.password ? (
         <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-          <h4 className="font-semibold text-green-800 mb-2">Account Created Successfully!</h4>
+          <h4 className="font-semibold text-green-800 mb-2">Client Dashboard Access</h4>
           <p className="text-green-700 mb-4">
-            You'll be redirected to your dashboard in a few seconds where you can track your order progress.
+            Your account has been created! Access your dashboard to track progress and complete questionnaires.
           </p>
           <button 
             onClick={redirectToDashboard}
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
-            Go to Dashboard Now
+            Access Your Dashboard
           </button>
         </div>
       ) : (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-          <h4 className="font-semibold text-gray-800 mb-2">Stay Updated</h4>
-          <p className="text-gray-700">
-            We'll send you email updates throughout the formation process. 
-            Please keep an eye on your inbox at <strong>{formData.email}</strong>
+          <h4 className="font-semibold text-gray-800 mb-2">Track Your Order</h4>
+          <p className="text-gray-700 mb-3">
+            We'll send you a special link to track your order progress and complete questionnaires without creating an account.
+          </p>
+          <p className="text-sm text-gray-600">
+            Check your email at <strong>{formData.email}</strong> for the tracking link.
           </p>
         </div>
       )}

@@ -5,7 +5,6 @@ export interface LLCFormData {
   companyName: string;
   firstName: string;
   lastName: string;
-  // ... all other fields
   email: string;
   password: string;
   confirmPassword: string;
@@ -29,6 +28,11 @@ export interface LLCFormData {
   votingRights?: string;
   allowMemberTransfer?: boolean;
   requireMeetings?: boolean;
+  paymentTransactionId?: string;
+  paymentProvider?: 'stripe' | 'paypal';
+  
+  // Service Selection Fields (just types, not initial values)
+  needLLCFormation?: boolean;  // Required service
   needEIN?: boolean;
   needOperatingAgreement?: boolean;
   needBankLetter?: boolean;

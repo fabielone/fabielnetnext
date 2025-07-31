@@ -26,11 +26,6 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
     if (!formData.businessCity) newErrors.businessCity = 'City is required';
     if (!formData.businessZip) newErrors.businessZip = 'ZIP code is required';
     if (!formData.businessPurpose) newErrors.businessPurpose = 'Business purpose is required';
-    if (!formData.managementStructure) newErrors.managementStructure = 'Management structure is required';
-    if (!formData.numberOfMembers) newErrors.numberOfMembers = 'Number of members is required';
-    if (!formData.principalActivity) newErrors.principalActivity = 'Principal business activity is required';
-    if (!formData.businessStartDate) newErrors.businessStartDate = 'Business start date is required';
-    if (!formData.responsiblePartySSN) newErrors.responsiblePartySSN = 'Responsible party SSN is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -57,12 +52,6 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
     setNameAvailability({ status: 'checking' });
 
     try {
-      // Using California Secretary of State business search
-      // You can also use services like:
-      // - Namechk API: https://namechk.com/
-      // - ClearBit Company API
-      // - Custom web scraping solution
-      
       const response = await fetch('/api/check-business-name', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -146,7 +135,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                   id="companyName"
                   value={formData.companyName}
                   onChange={(e) => handleChange('companyName', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                  className={`w-full text-gray-900 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                     errors.companyName ? 'border-red-500' : 'border-gray-200'
                   }`}
                   placeholder="Your Business Name"
@@ -220,7 +209,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                   id="businessAddress"
                   value={formData.businessAddress}
                   onChange={(e) => handleChange('businessAddress', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                  className={`w-full text-gray-900 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                     errors.businessAddress ? 'border-red-500' : 'border-gray-200'
                   }`}
                   placeholder="123 Business Street"
@@ -238,7 +227,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                     id="businessCity"
                     value={formData.businessCity}
                     onChange={(e) => handleChange('businessCity', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                    className={`w-full text-gray-900 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                       errors.businessCity ? 'border-red-500' : 'border-gray-200'
                     }`}
                     placeholder="City"
@@ -252,7 +241,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                   <input
                     value="California"
                     disabled
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm text-gray-600"
+                    className="w-full text-gray-900 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm"
                   />
                 </div>
                 <div>
@@ -264,7 +253,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                     id="businessZip"
                     value={formData.businessZip}
                     onChange={(e) => handleChange('businessZip', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                    className={`w-full text-gray-900 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                       errors.businessZip ? 'border-red-500' : 'border-gray-200'
                     }`}
                     placeholder="12345"
@@ -288,7 +277,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                   id="businessPurpose"
                   value={formData.businessPurpose}
                   onChange={(e) => handleChange('businessPurpose', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                  className={`w-full text-gray-900 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                     errors.businessPurpose ? 'border-red-500' : 'border-gray-200'
                   }`}
                   rows={3}
@@ -297,237 +286,16 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                 {errors.businessPurpose && <p className="text-red-500 text-sm mt-1">{errors.businessPurpose}</p>}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Management Structure *
-                  </label>
-                  <select
-                    name="managementStructure"
-                    id="managementStructure"
-                    value={formData.managementStructure || ''}
-                    onChange={(e) => handleChange('managementStructure', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
-                      errors.managementStructure ? 'border-red-500' : 'border-gray-200'
-                    }`}
-                  >
-                    <option value="">Select management type</option>
-                    <option value="member-managed">Member-managed</option>
-                    <option value="manager-managed">Manager-managed</option>
-                  </select>
-                  {errors.managementStructure && <p className="text-red-500 text-sm mt-1">{errors.managementStructure}</p>}
+              {/* Notice about additional details */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start">
+                  <svg className="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <div className="text-sm text-blue-800">
+                    <strong>Additional Details:</strong> After your LLC is formed, we'll send you a link to complete additional questionnaires for services like EIN application and Operating Agreement customization through your client dashboard.
+                  </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Number of Members *
-                  </label>
-                  <select
-                    name="numberOfMembers"
-                    id="numberOfMembers"
-                    value={formData.numberOfMembers || ''}
-                    onChange={(e) => handleChange('numberOfMembers', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
-                      errors.numberOfMembers ? 'border-red-500' : 'border-gray-200'
-                    }`}
-                  >
-                    <option value="">Select number</option>
-                    <option value="1">Single Member</option>
-                    <option value="2">Two Members</option>
-                    <option value="3">Three Members</option>
-                    <option value="4+">Four or More Members</option>
-                  </select>
-                  {errors.numberOfMembers && <p className="text-red-500 text-sm mt-1">{errors.numberOfMembers}</p>}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* EIN Information */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">EIN (Federal Tax ID) Information</h3>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Principal Business Activity *
-                  </label>
-                  <input
-                    name="principalActivity"
-                    id="principalActivity"
-                    value={formData.principalActivity || ''}
-                    onChange={(e) => handleChange('principalActivity', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
-                      errors.principalActivity ? 'border-red-500' : 'border-gray-200'
-                    }`}
-                    placeholder="e.g., Consulting, Retail, Manufacturing"
-                  />
-                  {errors.principalActivity && <p className="text-red-500 text-sm mt-1">{errors.principalActivity}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Expected Business Start Date *
-                  </label>
-                  <input
-                    name="businessStartDate"
-                    id="businessStartDate"
-                    type="date"
-                    value={formData.businessStartDate || ''}
-                    onChange={(e) => handleChange('businessStartDate', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
-                      errors.businessStartDate ? 'border-red-500' : 'border-gray-200'
-                    }`}
-                  />
-                  {errors.businessStartDate && <p className="text-red-500 text-sm mt-1">{errors.businessStartDate}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Responsible Party SSN *
-                  </label>
-                  <input
-                    name="responsiblePartySSN"
-                    id="responsiblePartySSN"
-                    type="password"
-                    value={formData.responsiblePartySSN || ''}
-                    onChange={(e) => handleChange('responsiblePartySSN', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
-                      errors.responsiblePartySSN ? 'border-red-500' : 'border-gray-200'
-                    }`}
-                    placeholder="XXX-XX-XXXX"
-                    maxLength={11}
-                  />
-                  <p className="text-xs text-gray-500 mt-1">Required for EIN application. Kept secure and confidential.</p>
-                  {errors.responsiblePartySSN && <p className="text-red-500 text-sm mt-1">{errors.responsiblePartySSN}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Expected Number of Employees
-                  </label>
-                  <select
-                    name="expectedEmployees"
-                    id="expectedEmployees"
-                    value={formData.expectedEmployees || '0'}
-                    onChange={(e) => handleChange('expectedEmployees', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm"
-                  >
-                    <option value="0">0 (Just owners)</option>
-                    <option value="1-5">1-5 employees</option>
-                    <option value="6-10">6-10 employees</option>
-                    <option value="11-25">11-25 employees</option>
-                    <option value="25+">25+ employees</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Operating Agreement Preferences */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Operating Agreement Preferences</h3>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Profit Distribution Method
-                  </label>
-                  <select
-                    value={formData.profitDistribution || 'equal'}
-                    onChange={(e) => handleChange('profitDistribution', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm"
-                  >
-                    <option value="equal">Equal among all members</option>
-                    <option value="percentage">Based on ownership percentage</option>
-                    <option value="contribution">Based on capital contribution</option>
-                    <option value="custom">Custom arrangement</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Voting Rights
-                  </label>
-                  <select
-                    value={formData.votingRights || 'equal'}
-                    onChange={(e) => handleChange('votingRights', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm"
-                  >
-                    <option value="equal">Equal voting rights</option>
-                    <option value="percentage">Voting by ownership percentage</option>
-                    <option value="majority">Majority rules</option>
-                    <option value="unanimous">Unanimous decisions required</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.allowMemberTransfer || false}
-                    onChange={(e) => handleChange('allowMemberTransfer', e.target.checked)}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">Allow members to transfer ownership interests</span>
-                </label>
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.requireMeetings || false}
-                    onChange={(e) => handleChange('requireMeetings', e.target.checked)}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">Require annual member meetings</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {/* Additional Services */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Assistance</h3>
-            <div className="space-y-3">
-              <div>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.needEIN || true}
-                    onChange={(e) => handleChange('needEIN', e.target.checked)}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">I need assistance obtaining an EIN (Federal Tax ID)</span>
-                </label>
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.needOperatingAgreement || true}
-                    onChange={(e) => handleChange('needOperatingAgreement', e.target.checked)}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">I want a customized Operating Agreement based on my preferences</span>
-                </label>
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.needBankLetter || true}
-                    onChange={(e) => handleChange('needBankLetter', e.target.checked)}
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">I need a bank resolution letter for opening business accounts</span>
-                </label>
               </div>
             </div>
           </div>

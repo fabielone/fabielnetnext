@@ -1,6 +1,7 @@
 'use client'
 import { LLCFormData, UpdateFormData } from '../types'; 
 import { useState } from 'react';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   formData: LLCFormData;
@@ -10,8 +11,40 @@ interface Props {
   scrollToError?: (field: string) => void;
 }
 
+interface ServiceInfo {
+  key: keyof LLCFormData;
+  label: string;
+  description: string;
+  required?: boolean;
+}
+
+const includedServices: ServiceInfo[] = [
+  {
+    key: 'needLLCFormation',
+    label: 'LLC Formation',
+    description: 'Articles of Organization filing with California Secretary of State',
+    required: true
+  },
+  {
+    key: 'needEIN',
+    label: 'EIN (Federal Tax ID)',
+    description: 'Employer Identification Number application with the IRS'
+  },
+  {
+    key: 'needOperatingAgreement',
+    label: 'Operating Agreement Template',
+    description: 'Customizable legal document for ownership structure and procedures'
+  },
+  {
+    key: 'needBankLetter',
+    label: 'Bank Resolution Letter',
+    description: 'Official document required by banks to open business accounts'
+  }
+];
+
 const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [hoveredService, setHoveredService] = useState<string | null>(null);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -47,6 +80,14 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
     }
   };
 
+  const handleServiceToggle = (serviceKey: keyof LLCFormData) => {
+    // Don't allow toggling required services
+    if (serviceKey === 'needLLCFormation') return;
+    
+    const currentValue = formData[serviceKey] as boolean;
+    updateFormData(serviceKey, !currentValue);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -62,50 +103,97 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
         <div className="bg-amber-50 rounded-lg p-4 mb-4 max-w-md mx-auto">
           <div className="text-2xl font-bold text-amber-900 mb-1">$124.99 Total</div>
           <div className="text-amber-700 text-sm">$49.99 service fee + $75.00 state filing fee</div>
+          <div className="text-xs text-amber-600 mt-1">Price includes all selected services below</div>
         </div>
+      </div>
+
+      {/* Service Selection */}
+      <div className="bg-amber-50 rounded-lg p-4 text-left max-w-lg mx-auto">
+        <h3 className="font-semibold text-amber-900 mb-2 text-center">Select Your Services</h3>
+        <p className="text-xs text-amber-700 mb-4 text-center">
+          Keep all or remove services you don't need - all for the same price, whether it's one or all services.
+        </p>
         
-        {/* What's Included */}
-        <div className="bg-amber-50 rounded-lg p-4 text-left max-w-lg mx-auto">
-          <h3 className="font-semibold text-amber-900 mb-3 text-center">What's Included in Your LLC Package:</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-amber-800">
-            <div className="flex items-center">
-              <span className="text-green-600 mr-2">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </span>
-              Filing with California Secretary of State
+        <div className="space-y-3">
+          {includedServices.map((service) => (
+            <div 
+              key={service.key} 
+              className={`bg-white rounded-lg p-3 border transition-all duration-200 ${
+                formData[service.key] === true
+                  ? 'border-amber-300 bg-amber-50 shadow-sm' 
+                  : 'border-amber-200 hover:border-amber-300 hover:bg-amber-25'
+              } ${service.required ? 'opacity-75 cursor-default' : 'cursor-pointer'}`}
+              onClick={() => !service.required && handleServiceToggle(service.key)}
+            >
+              <div className="flex items-start space-x-3">
+                <div className="flex items-center mt-1">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      id={service.key}
+                      checked={formData[service.key] === true}
+                      onChange={() => handleServiceToggle(service.key)}
+                      disabled={service.required}
+                      className="sr-only"
+                    />
+                    <div className={`w-4 h-4 border-2 rounded flex items-center justify-center ${
+                      formData[service.key] === true
+                        ? 'bg-green-500 border-green-500' 
+                        : 'border-gray-300 bg-white'
+                    }`}>
+                      {formData[service.key] === true && (
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center space-x-2">
+                    <label 
+                      htmlFor={service.key} 
+                      className={`text-sm font-medium ${service.required ? 'text-gray-500' : 'text-gray-900 cursor-pointer'}`}
+                    >
+                      {service.label}
+                      {service.required && <span className="text-amber-600 ml-1">(Required)</span>}
+                    </label>
+                    
+                    <div className="relative">
+                      <InformationCircleIcon 
+                        className="h-4 w-4 text-amber-500 cursor-help"
+                        onMouseEnter={() => setHoveredService(service.key)}
+                        onMouseLeave={() => setHoveredService(null)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      
+                      {/* Tooltip */}
+                      {hoveredService === service.key && (
+                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg z-10">
+                          <div className="text-center">{service.description}</div>
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                    {service.description}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center">
-              <span className="text-green-600 mr-2">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </span>
-              EIN (Federal Tax ID)
-            </div>
-            <div className="flex items-center">
-              <span className="text-green-600 mr-2">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </span>
-              Operating Agreement template
-            </div>
-            <div className="flex items-center">
-              <span className="text-green-600 mr-2">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </span>
-              Bank resolution letter
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Main Form Card */}
       <div className="bg-amber-50 rounded-lg p-6 md:p-8">
+        <h3 className="text-lg font-semibold text-amber-900 mb-6 text-center">
+          Contact Information
+        </h3>
+        
         <div className="max-w-lg mx-auto space-y-4">
           {/* Company Name - Full Width */}
           <div>
@@ -117,7 +205,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
               id="companyName"
               value={formData.companyName}
               onChange={(e) => handleChange('companyName', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-gray-900 text-sm ${
                 errors.companyName ? 'border-red-500' : 'border-gray-200'
               }`}
               placeholder="Enter your desired LLC name"
@@ -139,7 +227,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
                 id="firstName"
                 value={formData.firstName}
                 onChange={(e) => handleChange('firstName', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                   errors.firstName ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="First Name"
@@ -156,7 +244,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
                 id="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                   errors.lastName ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="Last Name"
@@ -176,7 +264,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
                 id="email"
                 value={formData.email}
                 onChange={(e) => handleChange('email', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                   errors.email ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="your@email.com"
@@ -194,7 +282,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
                 id="phone"
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                className={`w-full  text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                   errors.phone ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="(555) 123-4567"
@@ -210,7 +298,8 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
       <div className="flex flex-col sm:flex-row justify-between gap-4 pt-6 border-t">
         <button
           onClick={onPrev}
-          className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors order-2 sm:order-1"
+          disabled={true} // Disabled for first step
+          className="px-6 py-3 border border-gray-300 rounded-lg text-gray-400 bg-gray-100 cursor-not-allowed transition-colors order-2 sm:order-1"
         >
           Back
         </button>

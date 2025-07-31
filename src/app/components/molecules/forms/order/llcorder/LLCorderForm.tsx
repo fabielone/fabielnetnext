@@ -11,6 +11,7 @@ import LLCDetailStep from './components/LLCDetailStep';
 import PaymentStep from './components/PaymentStep';
 import OrderConfirmation from './components/OrderConfirmation';
 
+// With this updated version:
 const initialFormState: LLCFormData = {
   companyName: '',
   firstName: '',
@@ -28,6 +29,12 @@ const initialFormState: LLCFormData = {
   website: null,
   phone: '',
   address: '',
+  
+  // Service selections - all selected by default
+  needLLCFormation: true,  // Required service, always true
+  needEIN: true,
+  needOperatingAgreement: true,
+  needBankLetter: true,
 };
 
 const calculateOrderTotal = (formData: LLCFormData): number => {

@@ -1,5 +1,6 @@
 // components/auth-navigation.tsx
 import Link from 'next/link';
+import Image from 'next/image';
 import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut } from 'react-icons/fi';
 import { Popover } from '../popover/popover';
 
@@ -24,9 +25,11 @@ export default function AuthNavigation({ user }: AuthNavigationProps) {
             <div className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
               <div className="relative h-8 w-8">
                 {user.image ? (
-                  <img
+                  <Image
                     src={user.image}
                     alt={user.name || 'User avatar'}
+                    width={32}
+                    height={32}
                     className="h-full w-full rounded-full object-cover"
                   />
                 ) : (

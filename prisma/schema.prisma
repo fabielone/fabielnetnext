@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  
 }
 
 datasource db {
@@ -134,6 +134,7 @@ model Order {
   communications     Communication[]
   documents          Document[]
   websiteSubscription WebsiteSubscription?
+  subscriptionIntents SubscriptionIntent[]
   
   @@map("orders")
 }
@@ -764,4 +765,87 @@ enum DissolutionTriggerType {
   MEMBER_BANKRUPTCY         @map("member_bankruptcy")
   BUSINESS_PURPOSE_ACHIEVED @map("business_purpose_achieved")
   CUSTOM                    @map("custom")
+}
+
+// ======================================
+// Hybrid Payments                    ==
+// ======================================
+
+model SubscriptionIntent {
+  id                String   @id @default(cuid())
+  orderId           String   @map("order_id")
+  customerId        String   @map("customer_id")
+  paymentMethodId   String   @map("payment_method_id")
+  service           String
+  amount            Decimal  @db.Decimal(10, 2)
+  frequency         SubscriptionFrequency
+  delayDays         Int      @map("delay_days")
+  scheduledDate     DateTime @map("scheduled_date")
+  status            SubscriptionIntentStatus @default(PENDING)
+  provider          PaymentProvider @default(STRIPE)
+  
+  // Customer info for processing
+  customerEmail     String   @map("customer_email")
+  customerName      String   @map("customer_name")
+  companyName       String   @map("company_name")
+  
+  // Stripe details
+  stripeSubscriptionId String? @map("stripe_subscription_id")
+  stripePriceId        String? @map("stripe_price_id")
+  
+  // PayPal details
+  paypalBillingAgreementId String? @map("paypal_billing_agreement_id")
+  
+  // Processing info
+  retryCount        Int      @default(0) @map("retry_count")
+  maxRetries        Int      @default(3) @map("max_retries")
+  lastRetryAt       DateTime? @map("last_retry_at")
+  processedAt       DateTime? @map("processed_at")
+  failureReason     String?  @map("failure_reason")
+  
+  // Timestamps
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  // Relationships
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  @@map("subscription_intents")
+}
+
+enum SubscriptionFrequency {
+  MONTHLY @map("monthly")
+  YEARLY  @map("yearly")
+}
+
+enum SubscriptionIntentStatus {
+  PENDING    @map("pending")
+  SCHEDULED  @map("scheduled")
+  ACTIVE     @map("active")
+  FAILED     @map("failed")
+  CANCELLED  @map("cancelled")
+  EXPIRED    @map("expired")
+}
+
+enum PaymentProvider {
+  STRIPE  @map("stripe")
+  PAYPAL  @map("paypal")
+}
+
+model PaymentMethodVault {
+  id            String   @id @default(cuid())
+  provider      PaymentProvider
+  customerId    String   @map("customer_id")
+  vaultId       String   @map("vault_id") // Stripe payment_method_id or PayPal billing_token
+  customerEmail String   @map("customer_email")
+  customerName  String   @map("customer_name")
+  companyName   String   @map("company_name")
+  isActive      Boolean  @default(true) @map("is_active")
+  metadata      Json?    // Store additional provider-specific data
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  @@unique([provider, customerId])
+  @@map("payment_method_vaults")
 }
