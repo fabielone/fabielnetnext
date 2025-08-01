@@ -11,48 +11,61 @@ export default async function handler(
   try {
     const { amount, customer, subscriptions } = req.body;
 
-    // PayPal SDK implementation
-    const paypal = require('@paypal/checkout-server-sdk');
-    
-    const environment = process.env.NODE_ENV === 'production' 
-      ? new paypal.core.LiveEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!)
-      : new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!);
-    
-    const client = new paypal.core.PayPalHttpClient(environment);
+    const baseURL = process.env.NODE_ENV === 'production' 
+      ? 'https://api-m.paypal.com' 
+      : 'https://api-m.sandbox.paypal.com';
 
-    // Create order with billing agreement setup
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.prefer('return=representation');
-    request.requestBody({
-      intent: 'CAPTURE',
-      purchase_units: [{
-        amount: {
-          currency_code: 'USD',
-          value: (amount / 100).toFixed(2)
-        },
-        description: `LLC Formation - ${customer.metadata.companyName}`
-      }],
-      payment_source: {
-        paypal: {
-          experience_context: {
-            return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
-            cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/cancel`,
-            vault_id: customer.email // For future billing
-          }
-        }
-      }
+    // Get access token
+    const authString = Buffer.from(
+      `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+    ).toString('base64');
+
+    const tokenResponse = await fetch(`${baseURL}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${authString}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'grant_type=client_credentials'
     });
 
-    const order = await client.execute(request);
+    const { access_token } = await tokenResponse.json();
+
+    // Create order
+    const orderResponse = await fetch(`${baseURL}/v2/checkout/orders`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        intent: 'CAPTURE',
+        purchase_units: [{
+          amount: {
+            currency_code: 'USD',
+            value: (amount / 100).toFixed(2)
+          },
+          description: `LLC Formation - ${customer.metadata.companyName}`
+        }],
+        application_context: {
+          brand_name: 'Fabiel LLC Formation',
+          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
+          cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/cancel`
+        }
+      })
+    });
+
+    const order = await orderResponse.json();
+    const approvalUrl = order.links?.find((link: any) => link.rel === 'approve')?.href;
 
     res.status(200).json({
-      orderId: order.result.id,
-      approvalUrl: order.result.links.find((link: any) => link.rel === 'approve')?.href
+      orderId: order.id,
+      approvalUrl
     });
 
   } catch (error) {
     console.error('PayPal error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'PayPal setup failed',
       message: error instanceof Error ? error.message : 'Unknown error'
     });

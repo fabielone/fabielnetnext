@@ -1,6 +1,7 @@
 // lib/email-service.ts
 import { Resend } from 'resend';
-import { render } from '@react-email/render';
+import { render as _render } from '@react-email/render';
+import React from 'react';
 import {
   LLCConfirmationEmail,
   SubscriptionConfirmationEmail,

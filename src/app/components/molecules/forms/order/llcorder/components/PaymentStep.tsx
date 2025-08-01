@@ -286,116 +286,121 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
 
             {formData.paymentMethod === 'paypal' && (
               <div className="space-y-4">
-                {/* PayPal Setup Status */}
-                {futureItems.length > 0 && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-sm text-blue-800">
-                        {paypalVaultCompleted 
-                          ? 'PayPal future billing is set up! You can now complete your payment.'
-                          : 'PayPal is setting up future billing for your subscription services...'
-                        }
-                      </span>
+                {/* Show what customer is agreeing to */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start">
+                    <svg className="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <div className="text-sm text-blue-800">
+                      <strong>Hybrid PayPal Billing:</strong> Pay ${todayTotal.toFixed(2)} today for LLC formation.
+                      {futureItems.length > 0 && (
+                        <span> You'll also authorize PayPal to bill your account for subscription services after LLC approval.</span>
+                      )}
                     </div>
                   </div>
-                )}
+                </div>
                 
                 <PayPalScriptProvider 
                   options={{
                     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
                     currency: 'USD',
                     intent: 'capture',
-                    vault: futureItems.length > 0, // Enable vault only if future billing needed
+                    vault: futureItems.length > 0, // Enable vault only if subscriptions exist
                   }}
                 >
-                  {/* Step 1: Vault Setup (if needed) */}
-                  {futureItems.length > 0 && !paypalVaultCompleted && paypalVaultSetup && (
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-gray-700">Step 1: Set up future billing</h4>
-                      <PayPalButtons
-                        createOrder={() => Promise.resolve(paypalVaultSetup.vaultSetupOrderId)}
-                        onApprove={async (data, actions) => {
-                          try {
-                            await actions.order!.authorize(); // Authorize the $0 setup
-                            setPaypalVaultCompleted(true);
-                            
-                            // Store vault information
-                            await fetch('/api/store-paypal-vault', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                orderID: data.orderID,
-                                payerID: data.payerID,
-                                formData,
-                                futureItems
-                              })
-                            });
-                          } catch (error) {
-                            console.error('PayPal vault setup failed:', error);
-                          }
-                        }}
-                        style={{
-                          layout: 'vertical',
-                          color: 'blue',
-                          shape: 'rect',
-                          label: 'paypal',
-                          height: 40
-                        }}
-                      />
-                      <p className="text-xs text-gray-500 text-center">
-                        This authorizes future billing for subscription services (no charge today)
-                      </p>
-                    </div>
-                  )}
+                  <PayPalButtons
+                    createOrder={async (data, actions) => {
+                      // Call your API to create order with vault setup
+                      const response = await fetch('/api/create-paypal-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          amount: Math.round(todayTotal * 100), // Only today's amount
+                          customer: {
+                            email: formData.email,
+                            metadata: {
+                              companyName: formData.companyName,
+                              orderId: `LLC-${Date.now()}-${Math.floor(Math.random() * 1000)}`
+                            }
+                          },
+                          subscriptions: futureItems.map(item => ({
+                            service: item.name,
+                            amount: item.price,
+                            frequency: item.frequency,
+                            delayDays: 7 // Bill after LLC approval
+                          }))
+                        })
+                      });
 
-                  {/* Step 2: Main Payment */}
-                  {(futureItems.length === 0 || paypalVaultCompleted) && (
-                    <div className="space-y-3">
-                      {futureItems.length > 0 && (
-                        <h4 className="text-sm font-medium text-gray-700">Step 2: Pay for LLC formation</h4>
-                      )}
-                      <PayPalButtons
-                        createOrder={(data, actions) => {
-                          return actions.order.create({
-                            intent: 'CAPTURE',
-                            purchase_units: [{
-                              amount: {
-                                value: todayTotal.toFixed(2),
-                                currency_code: 'USD'
-                              },
-                              description: `LLC Formation - ${formData.companyName}`
-                            }]
-                          });
-                        }}
-                        onApprove={async (data, actions) => {
-                          try {
-                            setProcessing(true);
-                            const details = await actions.order!.capture();
-                            await handlePaymentSuccess(details.id!, 'paypal');
-                          } catch (error) {
-                            console.error('PayPal payment failed:', error);
-                            setProcessing(false);
-                          }
-                        }}
-                        onError={(err) => {
-                          console.error('PayPal error:', err);
-                          setProcessing(false);
-                        }}
-                        style={{
-                          layout: 'vertical',
-                          color: 'gold',
-                          shape: 'rect',
-                          label: 'paypal',
-                          height: 45
-                        }}
-                        disabled={processing}
-                      />
-                    </div>
-                  )}
+                      const { orderId } = await response.json();
+                      return orderId;
+                    }}
+                    onApprove={async (data, actions) => {
+                      try {
+                        setProcessing(true);
+                        
+                        // Capture the payment + store vault info
+                        const captureResponse = await fetch('/api/capture-paypal-order', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            orderID: data.orderID,
+                            formData,
+                            subscriptions: futureItems.map(item => ({
+                              service: item.name,
+                              amount: item.price,
+                              frequency: item.frequency,
+                              delayDays: 7
+                            }))
+                          })
+                        });
+
+                        const captureData = await captureResponse.json();
+                        
+                        if (captureData.success) {
+                          console.log('PayPal payment captured:', captureData);
+                          await handlePaymentSuccess(captureData.captureID, 'paypal');
+                        } else {
+                          throw new Error('PayPal capture failed');
+                        }
+                      } catch (error) {
+                        console.error('PayPal approval error:', error);
+                        setProcessing(false);
+                      }
+                    }}
+                    onError={(err) => {
+                      console.error('PayPal error:', err);
+                      setProcessing(false);
+                    }}
+                    style={{
+                      layout: 'vertical',
+                      color: 'gold',
+                      shape: 'rect',
+                      label: 'paypal',
+                      height: 45
+                    }}
+                    disabled={processing}
+                  />
                 </PayPalScriptProvider>
+                
+                {/* Show what will be billed later */}
+                {futureItems.length > 0 && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <h4 className="text-sm font-medium text-amber-800 mb-2">
+                      After LLC Approval - You've Authorized:
+                    </h4>
+                    {futureItems.map((item, index) => (
+                      <div key={index} className="text-xs text-amber-700 flex justify-between">
+                        <span>{item.name}</span>
+                        <span>${item.price.toFixed(2)}/{item.frequency.slice(0, -2)}</span>
+                      </div>
+                    ))}
+                    <p className="text-xs text-amber-600 mt-2">
+                      You'll receive individual confirmations when each service is activated.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>

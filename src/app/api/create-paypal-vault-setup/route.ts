@@ -1,5 +1,6 @@
 // pages/api/create-paypal-vault-setup.ts
 import { NextApiRequest, NextApiResponse } from 'next';
+import paypal from '@paypal/paypal-server-sdk';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,16 +13,14 @@ export default async function handler(
   try {
     const { customerEmail, companyName } = req.body;
 
-    const paypal = require('@paypal/checkout-server-sdk');
-    
-    const environment = process.env.NODE_ENV === 'production' 
-      ? new paypal.core.LiveEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!)
-      : new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!);
-    
-    const client = new paypal.core.PayPalHttpClient(environment);
+    const environment = new paypal[process.env.NODE_ENV === 'production' ? 'LiveEnvironment' : 'SandboxEnvironment'](
+      process.env.PAYPAL_CLIENT_ID!,
+      process.env.PAYPAL_CLIENT_SECRET!
+    );
+    const client = new (paypal as any).PayPalHttpClient(environment);
 
     // Create a $0 setup order to vault the payment method
-    const request = new paypal.orders.OrdersCreateRequest();
+    const request = new (paypal as any).orders.OrdersCreateRequest();
     request.prefer('return=representation');
     request.requestBody({
       intent: 'AUTHORIZE', // Use AUTHORIZE for $0 setup

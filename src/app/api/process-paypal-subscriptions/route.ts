@@ -1,10 +1,14 @@
-// pages/api/process-paypal-subscriptions.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
-import { sendSubscriptionConfirmation } from '../../../lib/email-service';
+import { prisma } from '../../../lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
-const prisma = new PrismaClient();
+type ProcessingResult = {
+  service: string;
+  status: 'success' | 'failed';
+  transactionId?: string;
+  amount?: Decimal;
+  error?: string;
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,7 +27,7 @@ export default async function handler(
   try {
     const { orderId } = req.body;
 
-    // Get PayPal subscription intents for this order
+    // Get PayPal subscription intents that are due
     const paypalSubscriptions = await prisma.subscriptionIntent.findMany({
       where: {
         orderId,
@@ -41,21 +45,27 @@ export default async function handler(
       });
     }
 
-    const paypal = require('@paypal/checkout-server-sdk');
-    
-    const environment = process.env.NODE_ENV === 'production' 
-      ? new paypal.core.LiveEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!)
-      : new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!);
-    
-    const client = new paypal.core.PayPalHttpClient(environment);
+    const baseURL = process.env.NODE_ENV === 'production' 
+      ? 'https://api-m.paypal.com' 
+      : 'https://api-m.sandbox.paypal.com';
 
-    const results: Array<{
-      service: string;
-      status: 'success' | 'failed';
-      transactionId?: string;
-      amount?: Decimal;
-      error?: string;
-    }> = [];
+    // Get access token
+    const authString = Buffer.from(
+      `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+    ).toString('base64');
+
+    const tokenResponse = await fetch(`${baseURL}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${authString}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'grant_type=client_credentials'
+    });
+
+    const { access_token } = await tokenResponse.json();
+
+    const results: ProcessingResult[] = [];
 
     for (const subscription of paypalSubscriptions) {
       try {
@@ -72,51 +82,76 @@ export default async function handler(
           throw new Error('PayPal vault information not found');
         }
 
-        // Create a billing agreement charge
-        const billingRequest = {
-          amount: {
-            total: subscription.amount.toString(),
-            currency: 'USD'
+        // Create a reference transaction using the vault
+        const chargeResponse = await fetch(`${baseURL}/v2/checkout/orders`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${access_token}`,
+            'Content-Type': 'application/json'
           },
-          description: `${subscription.service} - ${subscription.companyName}`,
-          invoice_number: `SUB-${subscription.id}-${Date.now()}`,
-          note_to_payer: `Recurring charge for ${subscription.service}`
-        };
+          body: JSON.stringify({
+            intent: 'CAPTURE',
+            purchase_units: [{
+              amount: {
+                currency_code: 'USD',
+                value: subscription.amount.toString()
+              },
+              description: `${subscription.service} - ${subscription.companyName}`,
+              custom_id: `SUB-${subscription.id}`,
+              invoice_id: `SUB-INV-${subscription.id}-${Date.now()}`
+            }],
+            payment_source: {
+              paypal: {
+                vault_id: vaultInfo.vaultId,
+                experience_context: {
+                  payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED'
+                }
+              }
+            }
+          })
+        });
 
-        // Execute billing agreement charge
-        const chargeRequest = new paypal.billingAgreements.BillBalanceRequest(vaultInfo.vaultId);
-        chargeRequest.requestBody(billingRequest);
+        const orderData = await chargeResponse.json();
 
-        const chargeResult = await client.execute(chargeRequest);
+        if (chargeResponse.ok) {
+          // Auto-capture the order
+          const captureResponse = await fetch(`${baseURL}/v2/checkout/orders/${orderData.id}/capture`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${access_token}`,
+              'Content-Type': 'application/json'
+            }
+          });
 
-        // Update subscription status
-        await prisma.subscriptionIntent.update({
-          where: { id: subscription.id },
-          data: {
-            status: 'ACTIVE',
-            paypalBillingAgreementId: vaultInfo.vaultId,
-            processedAt: new Date(),
-            updatedAt: new Date()
+          const captureData = await captureResponse.json();
+
+          if (captureResponse.ok) {
+            // Update subscription status
+            await prisma.subscriptionIntent.update({
+              where: { id: subscription.id },
+              data: {
+                status: 'ACTIVE',
+                paypalBillingAgreementId: vaultInfo.vaultId,
+                processedAt: new Date(),
+                updatedAt: new Date()
+              }
+            });
+
+            // Send confirmation email
+            // await sendSubscriptionConfirmation({...});
+
+            results.push({
+              service: subscription.service,
+              status: 'success',
+              transactionId: captureData.id,
+              amount: subscription.amount
+            });
+          } else {
+            throw new Error(`Capture failed: ${captureData.message}`);
           }
-        });
-
-        // Send confirmation email
-        await sendSubscriptionConfirmation({
-          email: subscription.customerEmail,
-          customerName: subscription.customerName,
-          serviceName: subscription.service,
-          amount: parseFloat(subscription.amount.toString()),
-          frequency: subscription.frequency.toLowerCase(),
-          subscriptionId: chargeResult.result.id,
-          companyName: subscription.companyName
-        });
-
-        results.push({
-          service: subscription.service,
-          status: 'success',
-          transactionId: chargeResult.result.id,
-          amount: subscription.amount
-        });
+        } else {
+          throw new Error(`Order creation failed: ${orderData.message}`);
+        }
 
       } catch (error) {
         console.error(`PayPal subscription processing failed for ${subscription.service}:`, error);

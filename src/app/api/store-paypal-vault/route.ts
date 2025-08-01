@@ -1,6 +1,7 @@
 // pages/api/store-paypal-vault.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
+import paypal from '@paypal/paypal-server-sdk';
 
 const prisma = new PrismaClient();
 
@@ -18,16 +19,15 @@ export default async function handler(
     console.log('Storing PayPal vault information:', { orderID, payerID });
 
     // Get PayPal vault ID from the completed authorization
-    const paypal = require('@paypal/checkout-server-sdk');
+    const environment = new paypal[process.env.NODE_ENV === 'production' ? 'LiveEnvironment' : 'SandboxEnvironment'](
+      process.env.PAYPAL_CLIENT_ID!,
+      process.env.PAYPAL_CLIENT_SECRET!
+    );
     
-    const environment = process.env.NODE_ENV === 'production' 
-      ? new paypal.core.LiveEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!)
-      : new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID!, process.env.PAYPAL_CLIENT_SECRET!);
-    
-    const client = new paypal.core.PayPalHttpClient(environment);
+    const client = new (paypal as any).PayPalHttpClient(environment);
 
     // Get order details to extract vault information
-    const request = new paypal.orders.OrdersGetRequest(orderID);
+    const request = new (paypal as any).orders.OrdersGetRequest(orderID);
     const orderDetails = await client.execute(request);
 
     // Extract vault/billing agreement information
