@@ -5,7 +5,7 @@ import { LLCFormData } from '../types';
 export const useOrderForm = (initialState: LLCFormData) => {
   const [formData, setFormData] = useState<LLCFormData>(initialState);
   
-  const updateFormData = (field: keyof LLCFormData, value: any) => {
+  const updateFormData = <K extends keyof LLCFormData>(field: K, value: LLCFormData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

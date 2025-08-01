@@ -10,7 +10,6 @@ import { useTranslations } from 'next-intl';
 
 export default function HeroRight() {
   const [isVideoHovered, setIsVideoHovered] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
   const t = useTranslations('HeroRight');
 
   const trustItems = [
@@ -56,7 +55,6 @@ export default function HeroRight() {
               className="relative w-full aspect-video rounded-t-2xl sm:rounded-t-3xl overflow-hidden bg-gradient-to-br from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700"
               onHoverStart={() => setIsVideoHovered(true)}
               onHoverEnd={() => setIsVideoHovered(false)}
-              onClick={() => setShowVideo(true)}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 z-10 flex items-center justify-center">
                 <motion.div

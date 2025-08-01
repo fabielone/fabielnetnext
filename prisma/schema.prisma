@@ -28,6 +28,8 @@ model User {
   role          UserRole  @default(CUSTOMER)
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
+  stripeCustomerId String? @map("stripe_customer_id")
+  metadata         Json?
   
   // Relationships
   orders        Order[]

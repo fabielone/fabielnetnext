@@ -1,7 +1,6 @@
-// components/StripePaymentForm.tsx
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { FormEvent, useState } from 'react';
 import { LLCFormData } from '../types';
+import { FormEvent, useState } from 'react';
 
 interface StripePaymentFormProps {
   amount: number;
@@ -36,8 +35,8 @@ const StripePaymentForm = ({
     setError('');
 
     try {
-      // 1. Create Payment Intent with setup_future_usage
-      const response = await fetch('/api/create-hybrid-payment', {
+      // 1. Create Payment Intent
+      const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -51,7 +50,7 @@ const StripePaymentForm = ({
             }
           },
           subscriptions: futureItems,
-          setup_future_usage: 'off_session' // Critical for subscriptions
+          setup_future_usage: futureItems.length > 0 ? 'off_session' : undefined
         })
       });
 
@@ -59,20 +58,14 @@ const StripePaymentForm = ({
       
       const { clientSecret } = await response.json();
 
-      // 2. Confirm payment (works for both cards & PayPal)
+      // 2. Confirm payment
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/success`,
-          payment_method_data: {
-            billing_details: {
-              name: `${formData.firstName} ${formData.lastName}`,
-              email: formData.email
-            }
-          }
         },
-        redirect: 'if_required' // Don't auto-redirect for PayPal
+        redirect: 'if_required'
       });
 
       if (error) throw error;
@@ -88,41 +81,12 @@ const StripePaymentForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Payment Element (automatically shows PayPal if enabled) */}
-      <div className="border border-gray-300 rounded-lg p-4 bg-white">
-        <PaymentElement 
-          options={{
-            layout: 'tabs', // Shows payment method tabs
-            wallets: {
-              applePay: 'never',
-              googlePay: 'never'
-            }
-          }}
-        />
-      </div>
-
-      {error && <div className="text-red-500 text-sm">{error}</div>}
-
-      {/* Billing Notice */}
-      {futureItems.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-start">
-            <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <div className="text-sm text-blue-800">
-              <strong>Future Billing Authorization:</strong> You're authorizing future charges for:
-              <ul className="list-disc pl-5 mt-1">
-                {futureItems.map((item, i) => (
-                  <li key={i}>
-                    {item.name} (${item.price}/{item.frequency.slice(0, -2)})
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
+      <PaymentElement options={{
+        layout: 'tabs',
+        wallets: { applePay: 'never', googlePay: 'never' }
+      }} />
+      
+      {error && <div className="text-red-500">{error}</div>}
 
       <button
         type="submit"
@@ -137,4 +101,4 @@ const StripePaymentForm = ({
   );
 };
 
-export default StripePaymentForm
+export { StripePaymentForm };

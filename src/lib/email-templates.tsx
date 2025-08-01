@@ -7,11 +7,8 @@ import {
   Body,
   Container,
   Section,
-  Row,
-  Column,
   Heading,
   Text,
-  Link,
   Button,
   Hr,
   Img
@@ -19,19 +16,7 @@ import {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://fabiel.net';
 
-export const LLCConfirmationEmail = ({
-  email,
-  companyName,
-  customerName,
-  orderId,
-  totalAmount
-}: {
-  email: string;
-  companyName: string;
-  customerName: string;
-  orderId: string;
-  totalAmount: number;
-}) => (
+export const LLCConfirmationEmail = ({ _email, companyName, customerName, orderId, totalAmount }: { _email: string; companyName: string; customerName: string; orderId: string; totalAmount: number }) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -102,23 +87,7 @@ export const LLCConfirmationEmail = ({
   </Html>
 );
 
-export const SubscriptionConfirmationEmail = ({
-  email,
-  customerName,
-  serviceName,
-  amount,
-  frequency,
-  subscriptionId,
-  companyName
-}: {
-  email: string;
-  customerName: string;
-  serviceName: string;
-  amount: number;
-  frequency: string;
-  subscriptionId: string;
-  companyName: string;
-}) => (
+export const SubscriptionConfirmationEmail = ({ _email, customerName, serviceName, amount, frequency, subscriptionId, companyName }: { _email: string; customerName: string; serviceName: string; amount: number; frequency: string; subscriptionId: string; companyName: string }) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -171,19 +140,7 @@ export const SubscriptionConfirmationEmail = ({
   </Html>
 );
 
-export const SubscriptionFailureEmail = ({
-  email,
-  customerName,
-  serviceName,
-  companyName,
-  error
-}: {
-  email: string;
-  customerName: string;
-  serviceName: string;
-  companyName: string;
-  error: string;
-}) => (
+export const SubscriptionFailureEmail = ({ _email, customerName, serviceName, companyName, error }: { _email: string; customerName: string; serviceName: string; companyName: string; error: string }) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -236,19 +193,7 @@ export const SubscriptionFailureEmail = ({
   </Html>
 );
 
-export const QuestionnaireEmail = ({
-  email,
-  customerName,
-  companyName,
-  orderId,
-  questionnaires
-}: {
-  email: string;
-  customerName: string;
-  companyName: string;
-  orderId: string;
-  questionnaires: string[];
-}) => (
+export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId, questionnaires }: { _email: string; customerName: string; companyName: string; orderId: string; questionnaires: string[] }) => (
   <Html>
     <Head />
     <Body style={main}>

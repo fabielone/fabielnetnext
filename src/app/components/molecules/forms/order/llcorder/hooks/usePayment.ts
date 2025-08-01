@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import { LLCFormData } from '../types';
 
 export const usePayment = () => {
@@ -10,8 +10,8 @@ export const usePayment = () => {
   const processStripePayment = async (
     formData: LLCFormData,
     amount: number,
-    elements: any,
-    stripe: any
+    elements: StripeElements,
+    stripe: Stripe | null
   ) => {
     setLoading(true);
     setError(null);
@@ -24,13 +24,13 @@ export const usePayment = () => {
       });
 
       const { clientSecret } = await response.json();
-      const cardElement = elements.getElement('card');
+      if (!stripe) throw new Error('Stripe not initialized');
 
       const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
           payment_method: {
-            card: cardElement,
+            card: elements.getElement('card')!,
             billing_details: {
               name: `${formData.firstName} ${formData.lastName}`,
               email: formData.email,
@@ -40,6 +40,7 @@ export const usePayment = () => {
       );
 
       if (stripeError) throw stripeError;
+      if (!paymentIntent) throw new Error('Payment failed');
       return paymentIntent.id;
     } catch (err) {
       setError(err.message || 'Payment failed');

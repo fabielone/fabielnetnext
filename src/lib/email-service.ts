@@ -12,6 +12,8 @@ import {
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 interface EmailOptions {
+  email: string;  // Remove underscore
+  companyName: string;
   to: string;
   subject: string;
   react: React.ReactElement;
@@ -48,9 +50,11 @@ export const sendLLCConfirmation = async (data: {
   totalAmount: number;
 }) => {
   return sendEmail({
+    email: data.email,       // Add this
+    companyName: data.companyName,  // Add this
     to: data.email,
     subject: `LLC Formation Confirmation - ${data.companyName}`,
-    react: LLCConfirmationEmail(data)
+    react: LLCConfirmationEmail({ ...data, _email: data.email }) // Fix for _email
   });
 };
 
@@ -64,9 +68,11 @@ export const sendSubscriptionConfirmation = async (data: {
   companyName: string;
 }) => {
   return sendEmail({
+    email: data.email,
+    companyName: data.companyName,
     to: data.email,
     subject: `${data.serviceName} Activated - ${data.companyName}`,
-    react: SubscriptionConfirmationEmail(data)
+    react: SubscriptionConfirmationEmail({ ...data, _email: data.email })
   });
 };
 
@@ -78,9 +84,11 @@ export const sendSubscriptionFailure = async (data: {
   error: string;
 }) => {
   return sendEmail({
+    email: data.email,
+    companyName: data.companyName,
     to: data.email,
     subject: `Action Required - ${data.serviceName} Setup Failed`,
-    react: SubscriptionFailureEmail(data)
+    react: SubscriptionFailureEmail({ ...data, _email: data.email })
   });
 };
 
@@ -92,8 +100,10 @@ export const sendQuestionnaireLink = async (data: {
   questionnaires: string[];
 }) => {
   return sendEmail({
+    email: data.email,
+    companyName: data.companyName,
     to: data.email,
     subject: `Complete Your LLC Setup - ${data.companyName}`,
-    react: QuestionnaireEmail(data)
+    react: QuestionnaireEmail({ ...data, _email: data.email })
   });
 };
