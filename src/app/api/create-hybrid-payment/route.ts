@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { PrismaClient } from '@prisma/client';
 
@@ -8,28 +8,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const prisma = new PrismaClient();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+export async function POST(request: Request) {
+  const { amount, customer, subscriptions, formData } = await request.json();
+
+  if (!amount || amount < 50) {
+    return NextResponse.json(
+      { error: 'Invalid amount' },
+      { status: 400 }
+    );
   }
 
+  console.log('Creating hybrid payment for:', {
+    customerEmail: customer.email,
+    amount,
+    subscriptionCount: subscriptions.length
+  });
+
   try {
-    const { amount, currency = 'usd', customer, subscriptions, formData } = req.body;
-
-    if (!amount || amount < 50) {
-      return res.status(400).json({ error: 'Invalid amount' });
-    }
-
-    console.log('Creating hybrid payment for:', {
-      customerEmail: customer.email,
-      amount,
-      subscriptionCount: subscriptions.length
-    });
-
-    // Create Stripe customer
+    // 1. Create Customer
     const stripeCustomer = await stripe.customers.create({
       email: customer.email,
       name: customer.name,
@@ -42,27 +38,28 @@ export default async function handler(
 
     console.log('Created Stripe customer:', stripeCustomer.id);
 
-    // Create payment intent with future usage setup
+    // 2. Create Payment Intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency,
+      currency: 'usd',
       customer: stripeCustomer.id,
       metadata: {
         integration_check: 'hybrid_payment',
         orderId: customer.metadata.orderId,
         companyName: customer.metadata.companyName,
-        subscriptionCount: subscriptions.length.toString()
+        subscriptionCount: subscriptions.length.toString(),
+        subscriptions: JSON.stringify(subscriptions)
       },
       automatic_payment_methods: {
         enabled: true,
       },
-      setup_future_usage: 'off_session', // Key for saving payment method
+      setup_future_usage: 'off_session',
       receipt_email: customer.email,
     });
 
     console.log('Created payment intent:', paymentIntent.id);
 
-    res.status(200).json({
+    return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
       customerId: stripeCustomer.id,
       paymentIntentId: paymentIntent.id,
@@ -70,9 +67,12 @@ export default async function handler(
 
   } catch (error) {
     console.error('Error creating hybrid payment:', error);
-    res.status(500).json({
-      error: 'Failed to create payment intent',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+    return NextResponse.json(
+      { 
+        error: 'Failed to create payment intent',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }

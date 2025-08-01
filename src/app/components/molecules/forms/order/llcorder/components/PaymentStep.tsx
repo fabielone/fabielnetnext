@@ -256,20 +256,18 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
           {/* Payment Forms */}
           <div className="min-h-[400px]">
             {formData.paymentMethod === 'stripe' && (
-              <Elements 
+              <Elements
                 stripe={stripePromise}
                 options={{
                   mode: 'payment',
                   amount: Math.round(todayTotal * 100),
                   currency: 'usd',
+                  paymentMethodTypes: ['card', 'paypal'], // Enable PayPal
                   appearance: {
                     theme: 'stripe',
                     variables: {
                       colorPrimary: '#f59e0b',
-                      colorBackground: '#fffbeb',
-                      colorText: '#374151',
-                      colorDanger: '#ef4444',
-                      borderRadius: '8px',
+                      colorBackground: '#fffbeb'
                     }
                   }
                 }}
@@ -280,6 +278,7 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
                   onSuccess={(paymentId) => handlePaymentSuccess(paymentId, 'stripe')}
                   processing={processing}
                   setProcessing={setProcessing}
+                  futureItems={futureItems as Array<{name: string, price: number, frequency: 'yearly'|'monthly'}>}
                 />
               </Elements>
             )}
