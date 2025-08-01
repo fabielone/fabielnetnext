@@ -1,15 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+// src/app/api/create-paypal-order/route.ts
+import { NextResponse } from 'next/server';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(request: Request) {
   try {
-    const { amount, customer, subscriptions } = req.body;
+    const { amount, customer, subscriptions } = await request.json();
 
     const baseURL = process.env.NODE_ENV === 'production' 
       ? 'https://api-m.paypal.com' 
@@ -58,16 +52,19 @@ export default async function handler(
     const order = await orderResponse.json();
     const approvalUrl = order.links?.find((link: any) => link.rel === 'approve')?.href;
 
-    res.status(200).json({
+    return NextResponse.json({
       orderId: order.id,
       approvalUrl
     });
 
   } catch (error) {
     console.error('PayPal error:', error);
-    res.status(500).json({
-      error: 'PayPal setup failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+    return NextResponse.json(
+      {
+        error: 'PayPal setup failed',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }

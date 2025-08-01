@@ -1,15 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+// src/app/api/create-paypal-order/route.ts
+import { NextResponse } from 'next/server';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(request: Request) {
   try {
-    const { amount, customer, subscriptions } = req.body;
+    const { amount, customer, subscriptions } = await request.json();
 
     const baseURL = process.env.NODE_ENV === 'production' 
       ? 'https://api-m.paypal.com' 
@@ -32,14 +26,32 @@ export default async function handler(
     const { access_token } = await tokenResponse.json();
 
     // Create order payload - charge today + authorize future billing
-    const orderPayload: {
+    const orderPayload = {
+      intent: 'CAPTURE',
+      purchase_units: [{
+        reference_id: customer.metadata?.orderId || `LLC-${Date.now()}`,
+        amount: {
+          currency_code: 'USD',
+          value: (amount / 100).toFixed(2)
+        },
+        description: `LLC Formation - ${customer.metadata?.companyName}`,
+        custom_id: customer.metadata?.orderId || `LLC-${Date.now()}`,
+        invoice_id: `INV-${customer.metadata?.orderId || Date.now()}`
+      }],
+      application_context: {
+        brand_name: 'Fabiel LLC Formation',
+        locale: 'en-US',
+        landing_page: 'LOGIN',
+        shipping_preference: 'NO_SHIPPING',
+        user_action: 'PAY_NOW',
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?provider=paypal`,
+        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/cancel?provider=paypal`
+      }
+    } as {
       intent: string;
       purchase_units: Array<{
         reference_id: string;
-        amount: {
-          currency_code: string;
-          value: string;
-        };
+        amount: { currency_code: string; value: string };
         description: string;
         custom_id: string;
         invoice_id: string;
@@ -75,30 +87,9 @@ export default async function handler(
           };
         };
       };
-    } = {
-      intent: 'CAPTURE',
-      purchase_units: [{
-        reference_id: customer.metadata?.orderId || `LLC-${Date.now()}`,
-        amount: {
-          currency_code: 'USD',
-          value: (amount / 100).toFixed(2)
-        },
-        description: `LLC Formation - ${customer.metadata?.companyName}`,
-        custom_id: customer.metadata?.orderId || `LLC-${Date.now()}`,
-        invoice_id: `INV-${customer.metadata?.orderId || Date.now()}`
-      }],
-      application_context: {
-        brand_name: 'Fabiel LLC Formation',
-        locale: 'en-US',
-        landing_page: 'LOGIN',
-        shipping_preference: 'NO_SHIPPING',
-        user_action: 'PAY_NOW',
-        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?provider=paypal`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/cancel?provider=paypal`
-      }
     };
 
-    // KEY: Add vaulting if customer has future subscriptions
+    // Add vaulting if customer has future subscriptions
     if (subscriptions && subscriptions.length > 0) {
       orderPayload.payment_source = {
         paypal: {
@@ -142,8 +133,6 @@ export default async function handler(
     }
 
     const orderData = await orderResponse.json();
-
-    // Find approval URL
     const approvalUrl = orderData.links?.find(
       (link: any) => link.rel === 'approve'
     )?.href;
@@ -159,7 +148,7 @@ export default async function handler(
       customer: customer.email || customer.metadata?.companyName
     });
 
-    res.status(200).json({
+    return NextResponse.json({
       success: true,
       orderId: orderData.id,
       approvalUrl,
@@ -169,9 +158,12 @@ export default async function handler(
 
   } catch (error) {
     console.error('PayPal order creation error:', error);
-    res.status(500).json({
-      error: 'PayPal order creation failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+    return NextResponse.json(
+      {
+        error: 'PayPal order creation failed',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }

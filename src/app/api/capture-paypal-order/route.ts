@@ -1,19 +1,16 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '../../../lib/prisma'; // Your Prisma instance
+// src/app/api/capture-paypal-order/route.ts
+import { NextResponse } from 'next/server';
+import { prisma } from '../../../lib/prisma'; // Adjust import path as needed
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(request: Request) {
   try {
-    const { orderID, formData, subscriptions } = req.body;
+    const { orderID, formData, subscriptions } = await request.json();
 
     if (!orderID) {
-      return res.status(400).json({ error: 'Order ID is required' });
+      return NextResponse.json(
+        { error: 'Order ID is required' },
+        { status: 400 }
+      );
     }
 
     const baseURL = process.env.NODE_ENV === 'production' 
@@ -121,7 +118,7 @@ export default async function handler(
       }
     }
 
-    res.status(200).json({
+    return NextResponse.json({
       success: true,
       orderID: captureData.id,
       status: captureData.status,
@@ -133,9 +130,12 @@ export default async function handler(
 
   } catch (error) {
     console.error('PayPal capture error:', error);
-    res.status(500).json({
-      error: 'PayPal capture failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+    return NextResponse.json(
+      {
+        error: 'PayPal capture failed',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }
