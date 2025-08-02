@@ -4,7 +4,7 @@ import LLCorderForm from 'src/app/components/molecules/forms/order/llcorder/LLCo
 
 export default function BusinessRegistrationPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white py-5">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
       
       <LLCorderForm/> 
     </div>
