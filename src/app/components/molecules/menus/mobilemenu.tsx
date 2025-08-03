@@ -1,4 +1,4 @@
-// components/organisms/MobileMenu.tsx
+// components/molecules/menus/MobileMenu.tsx
 'use client';
 
 import { FC, useRef } from 'react';
@@ -6,6 +6,7 @@ import { NavItem } from '../../types/navigation';
 import Link from 'next/link';
 import { SocialIcons } from '../socials/socialicons';
 import { IoMdArrowForward } from 'react-icons/io';
+import { useTranslations } from 'next-intl';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
   onToggleCategory,
   onNavigate,
 }) => {
+  const t = useTranslations('nav');
   const menuRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
@@ -35,7 +37,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
           className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
           onClick={onNavigate}
         >
-          Iniciar Sesión
+          {t('mobile.login')}
         </Link>
 
         {/* Register Link */}
@@ -44,7 +46,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
           className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
           onClick={onNavigate}
         >
-          Registrarse
+          {t('mobile.register')}
         </Link>
 
         {/* Navigation Items */}
@@ -56,7 +58,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                 className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
                 onClick={onNavigate}
               >
-                <span>{item.name}</span>
+                <span>{t(item.name)}</span>
               </Link>
             ) : (
               <div className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
@@ -64,7 +66,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                   onClick={() => onToggleCategory(item.name)}
                   className="flex items-center justify-between w-full"
                 >
-                  <span>{item.name}</span>
+                  <span>{t(item.name)}</span>
                   <svg
                     className={`w-4 h-4 transition-transform ${
                       openCategories[item.name] ? 'transform rotate-90' : ''
@@ -87,7 +89,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                     {item.subItems?.map((subItem, subIndex) => (
                       <div key={subIndex} className="mt-2">
                         <p className="text-gray-800 font-semibold">
-                          <span>{subItem.name}</span>
+                          <span>{t(subItem.name)}</span>
                         </p>
                         <div>
                           {subItem.subSections?.map((subSection, subSecIndex) => (
@@ -100,7 +102,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                               <IoMdArrowForward 
                                 className="mr-2 text-gray-500" 
                               />
-                              <span>{subSection.name}</span>
+                              <span>{t(subSection.name)}</span>
                             </Link>
                           ))}
                         </div>

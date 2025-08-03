@@ -1,8 +1,11 @@
 // components/auth-navigation.tsx
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut } from 'react-icons/fi';
 import { Popover } from '../popover/popover';
+import { useTranslations } from 'next-intl';
 
 interface User {
   name?: string;
@@ -15,6 +18,8 @@ interface AuthNavigationProps {
 }
 
 export default function AuthNavigation({ user }: AuthNavigationProps) {
+  const t = useTranslations('auth');
+
   return (
     <div className="flex items-center">
       {user ? (
@@ -27,7 +32,7 @@ export default function AuthNavigation({ user }: AuthNavigationProps) {
                 {user.image ? (
                   <Image
                     src={user.image}
-                    alt={user.name || 'User avatar'}
+                    alt={user.name || t('account')}
                     width={32}
                     height={32}
                     className="h-full w-full rounded-full object-cover"
@@ -35,14 +40,14 @@ export default function AuthNavigation({ user }: AuthNavigationProps) {
                 ) : (
                   <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white">
                     <span className="text-sm font-medium">
-                      {user.name?.charAt(0).toUpperCase() || 'U'}
+                      {user.name?.charAt(0).toUpperCase() || t('account').charAt(0)}
                     </span>
                   </div>
                 )}
                 <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-green-500 ring-2 ring-white dark:ring-gray-900"></span>
               </div>
               <span className="hidden text-sm font-medium md:inline">
-                {user.name || 'Account'}
+                {user.name || t('account')}
               </span>
             </div>
           }
@@ -58,21 +63,21 @@ export default function AuthNavigation({ user }: AuthNavigationProps) {
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <FiUser className="h-4 w-4" />
-                Profile
+                {t('profile')}
               </Link>
               <Link
                 href="/settings"
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <FiSettings className="h-4 w-4" />
-                Settings
+                {t('settings')}
               </Link>
               <Link
                 href="/logout"
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <FiLogOut className="h-4 w-4" />
-                Sign out
+                {t('signOut')}
               </Link>
             </div>
           </div>
@@ -83,7 +88,7 @@ export default function AuthNavigation({ user }: AuthNavigationProps) {
           trigger={
             <div className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-primary dark:hover:bg-gray-800">
               <FiUser className="h-4 w-4" />
-              <span className="hidden md:inline">Account</span>
+              <span className="hidden md:inline">{t('account')}</span>
             </div>
           }
         >
@@ -94,14 +99,14 @@ export default function AuthNavigation({ user }: AuthNavigationProps) {
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <FiLogIn className="h-4 w-4" />
-                Sign In
+                {t('signIn')}
               </Link>
               <Link
                 href="/join"
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <FiUserPlus className="h-4 w-4" />
-                Register
+                {t('register')}
               </Link>
             </div>
           </div>

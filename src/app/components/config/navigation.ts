@@ -3,63 +3,50 @@ import { NavItem } from '../types/navigation';
 
 export const navItems: NavItem[] = [
   {
-    name: 'Servicios',
+    name: 'services.title',
     subItems: [
       {
-        name: 'Desarrollo de Software',
+        name: 'services.software.title',
         subSections: [
-          { name: 'Desarrollo Web y Blog ', path: '/software-development/web-and-blog-development' },
-          { name: 'eCommerce: Creacion de Tiendas', path: '/software-development/ecommerce-development' },
-          { name: 'Otros: Servicios Personalizados', path: '/software-development/other-services-personalized' },
-        ],
-      },{
-        name: 'Marketing',
-        subSections: [
-          { 
-            name: 'Marketing Digital y Contenido', 
-            path: '/marketing/online-marketing-and-content-creation' 
-          },
-          { 
-            name: 'Influencers y Colaboraciones', 
-            path: '/marketing/influencers-collaboration' 
-          },
-          { 
-            name: 'Campañas de Publicidad', 
-            path: '/marketing/campanas-de-publicidad' 
-          },
-          { name: 'Otros: Servicios Personalizados',
-            path: '/marketing/other-services-personalized'
-          }
+          { name: 'services.software.web', path: '/software-development/web-and-blog-development' },
+          { name: 'services.software.ecommerce', path: '/software-development/ecommerce-development' },
+          { name: 'services.software.other', path: '/software-development/other-services-personalized' },
         ],
       },
       {
-        name: 'Formación de Empresas',
+        name: 'services.marketing.title',
         subSections: [
-          { name: 'Forma tu LLC', path: '/services/business-formations/form-your-llc' },
-          { name: 'Agente Registrado', path: '/services/business-formations/registered-agent' },
-          { name: 'Cumplimiento Anual', path: '/services/business-formations/compliance' },
-          { name: 'Otros: Servicios Personalizados', 
-            path: '/services/other-services-personalized'
-          }
-        ],
+          { name: 'services.marketing.digital', path: '/marketing/online-marketing-and-content-creation' },
+          { name: 'services.marketing.influencers', path: '/marketing/influencers-collaboration' },
+          { name: 'services.marketing.campaigns', path: '/marketing/campanas-de-publicidad' },
+          { name: 'services.marketing.other', path: '/marketing/other-services-personalized' }
+        ]
       },
-    ],
+      {
+        name: 'services.business.title',
+        subSections: [
+          { name: 'services.business.llc', path: '/services/business-formations/form-your-llc' },
+          { name: 'services.business.agent', path: '/services/business-formations/registered-agent' },
+          { name: 'services.business.compliance', path: '/services/business-formations/compliance' },
+          { name: 'services.business.other', path: '/services/other-services-personalized' }
+        ]
+      }
+    ]
   },
   {
-    name: 'Clientes',
-    path: '/allies',
-  },
-  
-  {
-    name: 'Proceso',
-    path: '/ourprocess',
+    name: 'clients',
+    path: '/allies'
   },
   {
-    name: 'Blog',
-    path: 'https://blog.fabiel.net',
+    name: 'process',
+    path: '/ourprocess'
   },
   {
-    name: 'Contacto',
-    path: '/contact',
+    name: 'blog',
+    path: 'https://blog.fabiel.net'
   },
+  {
+    name: 'contact',
+    path: '/contact'
+  }
 ];

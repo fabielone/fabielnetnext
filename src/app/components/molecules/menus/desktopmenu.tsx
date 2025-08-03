@@ -6,40 +6,65 @@ import { NavItem } from '../../types/navigation';
 import { MegaMenu } from './megamenu';
 import { SocialIcons } from '../socials/socialicons';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface DesktopMenuProps {
   navItems: NavItem[];
   onNavigate: () => void;
 }
 
-const NavLink = ({ item, onNavigate }: { item: NavItem, onNavigate: () => void }) => (
+const NavLink = ({ item, onNavigate, t }: { 
+  item: NavItem, 
+  onNavigate: () => void,
+  t: (key: string) => string 
+}) => (
   <Link
     href={item.path!}
     className="text-gray-800 dark:text-white text-center hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
     onClick={onNavigate}
   >
-    <span>{item.name}</span>
+    <span>{t(item.name)}</span>
   </Link>
 );
 
-const NavItemWithMegaMenu = ({ item, onNavigate }: { item: NavItem, onNavigate: () => void }) => (
+const NavItemWithMegaMenu = ({ item, onNavigate, t }: { 
+  item: NavItem, 
+  onNavigate: () => void,
+  t: (key: string) => string 
+}) => (
   <div className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-    <span>{item.name}</span>
-    <MegaMenu subItems={item.subItems} onNavigate={onNavigate} />
+    <span>{t(item.name)}</span>
+    <MegaMenu 
+      subItems={item.subItems} 
+      onNavigate={onNavigate}
+      
+    />
   </div>
 );
 
-export const DesktopMenu: FC<DesktopMenuProps> = ({ navItems, onNavigate }) => (
-  <div className="hidden md:flex md:items-center md:space-x-1 justify-center">
-    {navItems.map((item, index) => (
-      <div key={index} className="relative group">
-        {item.path ? (
-          <NavLink item={item} onNavigate={onNavigate} />
-        ) : (
-          <NavItemWithMegaMenu item={item} onNavigate={onNavigate} />
-        )}
-      </div>
-    ))}
-    <SocialIcons />
-  </div>
-);
+export const DesktopMenu: FC<DesktopMenuProps> = ({ navItems, onNavigate }) => {
+  const t = useTranslations('nav');
+
+  return (
+    <div className="hidden md:flex md:items-center md:space-x-1 justify-center">
+      {navItems.map((item, index) => (
+        <div key={index} className="relative group">
+          {item.path ? (
+            <NavLink 
+              item={item} 
+              onNavigate={onNavigate}
+              t={t}
+            />
+          ) : (
+            <NavItemWithMegaMenu 
+              item={item} 
+              onNavigate={onNavigate}
+              t={t}
+            />
+          )}
+        </div>
+      ))}
+      <SocialIcons />
+    </div>
+  );
+};

@@ -46,6 +46,47 @@
       "title": "Blog",
       "noPosts": "Aún no hay publicaciones",
       "backToBlog": "Regreso al Blog"
+    },
+    "nav": {
+      "services": {
+        "title": "Nuestros Servicios",
+        "software": {
+          "title": "Desarrollo de Software",
+          "web": "Desarrollo Web y de Blogs",
+          "ecommerce": "Creación de Tiendas eCommerce",
+          "other": "Otros Servicios Personalizados"
+        },
+        "marketing": {
+          "title": "Servicios de Marketing",
+          "digital": "Marketing Digital y Contenido",
+          "influencers": "Influencers y Colaboraciones",
+          "campaigns": "Campañas de Publicidad",
+          "other": "Otros Servicios Personalizados"
+        },
+        "business": {
+          "title": "Formación de Empresas",
+          "llc": "Forma tu LLC",
+          "agent": "Agente Registrado",
+          "compliance": "Cumplimiento Anual",
+          "other": "Otros Servicios Personalizados"
+        }
+      },
+      "clients": "Nuestros Clientes",
+      "process": "Nuestro Proceso",
+      "blog": "Blog",
+      "contact": "Contacto",
+      "mobile": {
+        "login": "Iniciar Sesión",
+        "register": "Registrarse"
+        } 
+    },
+    "auth": {
+      "account": "Cuenta",
+      "profile": "Perfil",
+      "settings": "Configuración",
+      "signOut": "Cerrar sesión",
+      "signIn": "Iniciar sesión",
+      "register": "Registrarse"
     }
     
   }

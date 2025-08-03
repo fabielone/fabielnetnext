@@ -46,5 +46,46 @@
       "title": "Blog",
       "noPosts": "No posts yet",
       "backToBlog": "Back to blog"
+    },
+    "nav": {
+      "services": {
+        "title": "Our Services",
+        "software": {
+          "title": "Software Development",
+          "web": "Web & Blog Development",
+          "ecommerce": "eCommerce Store Creation",
+          "other": "Other Custom Services"
+        },
+        "marketing": {
+          "title": "Marketing Services",
+          "digital": "Digital Marketing & Content",
+          "influencers": "Influencers & Collaborations",
+          "campaigns": "Advertising Campaigns",
+          "other": "Other Custom Services"
+        },
+        "business": {
+          "title": "Business Formation",
+          "llc": "Form Your LLC",
+          "agent": "Registered Agent",
+          "compliance": "Annual Compliance",
+          "other": "Other Custom Services"
+        }
+      },
+      "clients": "Our Clients",
+      "process": "Our Process",
+      "blog": "Blog",
+      "contact": "Contact Us",
+      "mobile": {
+        "login": "Sign In",
+        "register": "Register"
+      }
+    },
+    "auth": {
+      "account": "Account",
+      "profile": "Profile",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "signIn": "Sign in",
+      "register": "Register"
     }
   }
