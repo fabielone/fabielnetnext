@@ -87,5 +87,26 @@
       "signOut": "Sign out",
       "signIn": "Sign in",
       "register": "Register"
+    },
+    "footer": {
+      "description": "We help you form your business and build powerful software solutions to grow your brand.",
+      "quickLinks": "Quick Links",
+      "services": "Our Services",
+      "newsletter": "Newsletter",
+      "copyright": "© {year} Fabiel. All rights reserved.",
+      "links": {
+        "services": "Services",
+        "portfolio": "Portfolio",
+        "blog": "Blog",
+        "contact": "Contact",
+        "terms": "Terms of Service",
+        "privacy": "Privacy Notice",
+        "businessFormations": "Business Formations",
+        "softwareDevelopment": "Software Development",
+        "marketing": "Marketing",
+        "registeredAgent": "Registered Agent",
+        "compliance": "Annual Compliance",
+        "concierge": "Concierge Service"
+      }
     }
   }

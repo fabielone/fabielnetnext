@@ -87,6 +87,27 @@
       "signOut": "Cerrar sesión",
       "signIn": "Iniciar sesión",
       "register": "Registrarse"
+    },
+    "footer": {
+      "description": "Te ayudamos a formar tu negocio y construir soluciones de software poderosas para hacer crecer tu marca.",
+      "quickLinks": "Enlaces Rápidos",
+      "services": "Nuestros Servicios",
+      "newsletter": "Boletín Informativo",
+      "copyright": "© {year} Fabiel. Todos los derechos reservados.",
+      "links": {
+        "services": "Servicios",
+        "portfolio": "Portafolio",
+        "blog": "Blog",
+        "contact": "Contacto",
+        "terms": "Términos de Servicio",
+        "privacy": "Aviso de Privacidad",
+        "businessFormations": "Formación de Empresas",
+        "softwareDevelopment": "Desarrollo de Software",
+        "marketing": "Marketing",
+        "registeredAgent": "Agente Registrado",
+        "compliance": "Cumplimiento Anual",
+        "concierge": "Servicio de Concierge"
+      }
     }
     
   }

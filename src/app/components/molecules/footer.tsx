@@ -1,8 +1,13 @@
+'use client';
+
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa';
-import Image from 'next/image'; // Import the Image component
+import Image from 'next/image';
 import Newsletter from './newsletter/subscribe';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('footer');
+
   return (
     <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +26,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-sm text-gray-300">
-              We help you form your business and build powerful software solutions to grow your brand.
+              {t('description')}
             </p>
             <div className="flex space-x-4">
               <a
@@ -69,36 +74,36 @@ export default function Footer() {
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-gray-100">Quick Links</h3>
+            <h3 className="text-lg font-bold text-gray-100">{t('quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="/services" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Services
+                  {t('links.services')}
                 </a>
               </li>
               <li>
                 <a href="/portfolio" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Portfolio
+                  {t('links.portfolio')}
                 </a>
               </li>
               <li>
                 <a href="/blog" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Blog
+                  {t('links.blog')}
                 </a>
               </li>
               <li>
                 <a href="/contact" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Contact
+                  {t('links.contact')}
                 </a>
               </li>
               <li>
                 <a href="/terms" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Terms of Service
+                  {t('links.terms')}
                 </a>
               </li>
               <li>
                 <a href="/privacy" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Privacy Notice
+                  {t('links.privacy')}
                 </a>
               </li>
             </ul>
@@ -106,36 +111,36 @@ export default function Footer() {
 
           {/* Column 3: Services */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-gray-100">Our Services</h3>
+            <h3 className="text-lg font-bold text-gray-100">{t('services')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="/services/business-formations" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Business Formations
+                  {t('links.businessFormations')}
                 </a>
               </li>
               <li>
                 <a href="/services/software-development" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Software Development
+                  {t('links.softwareDevelopment')}
                 </a>
               </li>
               <li>
                 <a href="/services/marketing" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Marketing
+                  {t('links.marketing')}
                 </a>
               </li>
               <li>
                 <a href="/services/registered-agent" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Registered Agent
+                  {t('links.registeredAgent')}
                 </a>
               </li>
               <li>
                 <a href="/services/compliance" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Compliance
+                  {t('links.compliance')}
                 </a>
               </li>
               <li>
                 <a href="/services/concierge-service" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Concierge Service
+                  {t('links.concierge')}
                 </a>
               </li>
             </ul>
@@ -144,22 +149,22 @@ export default function Footer() {
           {/* Newsletter Subscription Form */}
           <Newsletter
                         
-            title='Newsletter'
+            title={t('newsletter')}
           /> 
         </div>
 
         {/* Bottom Section */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-sm text-gray-300">
-            © {new Date().getFullYear()} Fabiel. All rights reserved.
+            {t('copyright', { year: new Date().getFullYear() })}
           </p>
           <p className="text-sm text-gray-300 mt-2">
             <a href="/terms" className="hover:text-white transition-colors">
-              Terms of Service
+              {t('links.terms')}
             </a>{' '}
             |{' '}
             <a href="/privacy" className="hover:text-white transition-colors">
-              Privacy Notice
+              {t('links.privacy')}
             </a>
           </p>
         </div>
