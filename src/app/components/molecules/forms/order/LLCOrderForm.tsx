@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
 import { createClient } from '@supabase/supabase-js'
 import { 
   CreditCardIcon, 
@@ -53,9 +52,6 @@ const LLCOrderForm = () => {
     numberOfMembers: '',
     einNeeded: true,
     operatingAgreement: true,
-    
-    // Payment
-    paymentMethod: 'stripe'
   })
   
   const [orderTotal, setOrderTotal] = useState(124.99)
@@ -189,34 +185,9 @@ const LLCOrderForm = () => {
           disabled={!stripe || loading}
           className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
         >
-          {loading ? 'Processing...' : `Pay $${orderTotal.toFixed(2)} with Card`}
+          {loading ? 'Processing...' : `Pay $${orderTotal.toFixed(2)}`}
         </button>
       </div>
-    )
-  }
-
-  // PayPal Payment Component
-  const PayPalPaymentForm = () => {
-    const createOrder = (data, actions) => {
-      return actions.order.create({
-        purchase_units: [{
-          amount: { value: orderTotal.toFixed(2) },
-          description: 'California LLC Formation'
-        }]
-      })
-    }
-
-    const onApprove = async (data, actions) => {
-      const details = await actions.order.capture()
-      await handleOrderSubmission(details.id)
-    }
-
-    return (
-      <PayPalButtons
-        createOrder={createOrder}
-        onApprove={onApprove}
-        style={{ layout: 'vertical' }}
-      />
     )
   }
 
@@ -503,45 +474,9 @@ const LLCOrderForm = () => {
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex space-x-4 mb-6">
-                  <button
-                    className={`flex-1 py-3 px-4 rounded-lg font-medium ${
-                      formData.paymentMethod === 'stripe'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                    onClick={() => updateFormData('paymentMethod', 'stripe')}
-                  >
-                    <CreditCardIcon className="w-5 h-5 inline mr-2" />
-                    Credit Card
-                  </button>
-                  <button
-                    className={`flex-1 py-3 px-4 rounded-lg font-medium ${
-                      formData.paymentMethod === 'paypal'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                    onClick={() => updateFormData('paymentMethod', 'paypal')}
-                  >
-                    PayPal
-                  </button>
-                </div>
-
-                {formData.paymentMethod === 'stripe' && (
-                  <Elements stripe={stripePromise}>
-                    <StripePaymentForm />
-                  </Elements>
-                )}
-
-                {formData.paymentMethod === 'paypal' && (
-                  <PayPalScriptProvider options={{ 
-                    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || ''
-                  }}>
-                    <PayPalPaymentForm />
-                  </PayPalScriptProvider>
-                )}
-              </div>
+              <Elements stripe={stripePromise}>
+                <StripePaymentForm />
+              </Elements>
             </div>
           )}
 
