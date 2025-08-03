@@ -84,7 +84,10 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div ref={contentRef} className="relative font-serif px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white">
+    <div 
+      ref={contentRef} 
+      className="relative font-serif px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white dark:from-gray-800/50 dark:to-gray-900"
+    >
       <div className={`max-w-7xl mx-auto lg:flex items-center gap-12 ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
         {/* Image Section */}
         <motion.div
@@ -94,8 +97,8 @@ const Header: React.FC<HeaderProps> = ({
           className="flex justify-center lg:w-1/2"
         >
           <div className="relative group w-full">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-200 to-amber-100 rounded-2xl blur opacity-30 group-hover:opacity-40 transition duration-1000"></div>
-            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-amber-200 to-amber-100 dark:from-amber-800 dark:to-amber-700 rounded-2xl blur opacity-30 group-hover:opacity-40 transition duration-1000"></div>
+            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-800/50">
               <motion.img
                 src={imageUrl}
                 className="w-full h-full object-cover"
@@ -118,20 +121,29 @@ const Header: React.FC<HeaderProps> = ({
           <motion.div className="space-y-6">
             <motion.span 
               variants={itemVariants}
-              className="inline-block px-4 py-2 text-sm font-semibold text-amber-800 bg-amber-100 rounded-full shadow-sm"
+              className="inline-block px-4 py-2 text-sm font-semibold text-amber-800 dark:text-amber-200 bg-amber-100 dark:bg-amber-900/50 rounded-full shadow-sm"
             >
               {pill}
             </motion.span>
             
-            <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            <motion.h2 
+              variants={itemVariants} 
+              className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
+            >
               {title}
             </motion.h2>
             
-            <motion.h3 variants={itemVariants} className="text-2xl lg:text-3xl font-medium text-gray-700">
+            <motion.h3 
+              variants={itemVariants} 
+              className="text-2xl lg:text-3xl font-medium text-gray-700 dark:text-gray-300"
+            >
               {subtitle}
             </motion.h3>
             
-            <motion.p variants={itemVariants} className="text-lg text-gray-600 leading-relaxed">
+            <motion.p 
+              variants={itemVariants} 
+              className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
+            >
               {description}
             </motion.p>
           </motion.div>
@@ -140,7 +152,7 @@ const Header: React.FC<HeaderProps> = ({
           <motion.div variants={itemVariants} className="flex items-center gap-6">
             <motion.a
               href={buttonLink}
-              className="inline-flex items-center px-8 py-3 text-lg font-semibold bg-green-50 text-green-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-green-700"
+              className="inline-flex items-center px-8 py-3 text-lg font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-green-700 dark:border-green-500"
               whileHover={{ y: -2, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
             >
               {buttonText}
@@ -149,7 +161,7 @@ const Header: React.FC<HeaderProps> = ({
             
             <motion.a
               href={learnMoreLink}
-              className="text-lg font-medium text-amber-700 hover:text-amber-800 transition-colors duration-200 flex items-center gap-2"
+              className="text-lg font-medium text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-200 flex items-center gap-2"
               whileHover={{ x: 2 }}
             >
               Conoce más
@@ -163,10 +175,10 @@ const Header: React.FC<HeaderProps> = ({
               <motion.li 
                 key={index}
                 variants={itemVariants}
-                className="flex items-center gap-3 text-gray-700 bg-amber-50 px-4 py-3 rounded-lg shadow-sm"
+                className="flex items-center gap-3 text-gray-700 dark:text-gray-300 bg-amber-50 dark:bg-gray-800 px-4 py-3 rounded-lg shadow-sm dark:shadow-gray-800/50"
                 whileHover={{ y: -2 }}
               >
-                <span className="text-amber-500 text-xl">{item.icon}</span>
+                <span className="text-amber-500 dark:text-amber-400 text-xl">{item.icon}</span>
                 <span className="text-lg">{item.text}</span>
               </motion.li>
             ))}

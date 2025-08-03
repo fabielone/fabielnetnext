@@ -108,6 +108,78 @@
         "compliance": "Cumplimiento Anual",
         "concierge": "Servicio de Concierge"
       }
+    },
+    "services": {
+      "title": "Nuestros Servicios",
+      "subtitle": "Soluciones para tu Negocio",
+      "items": {
+        "businessFormation": {
+          "pill": "Formación de Empresas",
+          "title": "Establece tu Negocio con Confianza",
+          "subtitle": "Formación de empresas en EE.UU. de manera rápida y segura",
+          "description": "Nuestros expertos te ayudan a establecer tu negocio en los Estados Unidos de manera eficiente y cumpliendo con todos los requisitos legales.",
+          "features": [
+            "Registro de Empresa",
+            "Cumplimiento Anual",
+            "Documentación Legal"
+          ]
+        },
+        "webDevelopment": {
+          "pill": "Desarrollo Web",
+          "title": "Crea una Presencia en Línea Fuerte",
+          "subtitle": "Desarrollo de sitios web personalizados y responsivos",
+          "description": "Nuestros desarrolladores web crean sitios web atractivos y fáciles de navegar que reflejan tu marca y atraen a tus clientes.",
+          "features": [
+            "Diseño Profesional",
+            "Desarrollo Personalizado",
+            "Optimización de Rendimiento"
+          ]
+        },
+        "digitalMarketing": {
+          "pill": "Marketing Digital",
+          "title": "Aumenta tu Visibilidad en Línea",
+          "subtitle": "Estrategias de marketing digital efectivas para tu negocio",
+          "description": "Nuestros expertos en marketing digital te ayudan a crear campañas que atraen a tus clientes y aumentan tus ventas.",
+          "features": [
+            "SEO y Posicionamiento",
+            "Gestión de Redes Sociales",
+            "Análisis y Reportes"
+          ]
+        }
+      },
+      "buttonText": "Empezar Ahora",
+      "learnMore": "Saber Más"
+    },
+    "blogSection": {
+      "title": "Explora Nuestro Blog",
+      "subtitle": "Recursos y guías para emprendedores latinos",
+      "cta": "Ver Biblioteca Completa",
+      "posts": [
+        {
+          "title": "Cómo Formar tu LLC en Estados Unidos",
+          "description": "Una guía completa para emprendedores latinos que desean establecer su negocio en EE.UU. Aprende los pasos necesarios, requisitos y beneficios de formar una LLC.",
+          "category": "Negocios"
+        },
+        {
+          "title": "Estrategias de Marketing Digital para Empresas Latinas",
+          "description": "Descubre las mejores prácticas de marketing digital para alcanzar a tu audiencia hispana en Estados Unidos. Incluye SEO, redes sociales y email marketing.",
+          "category": "Marketing"
+        },
+        {
+          "title": "Cumplimiento Fiscal para Negocios Hispanos",
+          "description": "Todo lo que necesitas saber sobre impuestos, reportes financieros y cumplimiento legal para tu negocio en EE.UU. Mantén tu empresa al día con las regulaciones.",
+          "category": "Legal"
+        },
+        {
+          "title": "Expansión de Negocios: De Local a Nacional",
+          "description": "Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.",
+          "category": "Crecimiento"
+        }
+      ]
+    },
+    "blogCard": {
+      "readMore": "Leer más",
+      "authorLabel": "Autor"
     }
     
   }

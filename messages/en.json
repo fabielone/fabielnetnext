@@ -108,5 +108,77 @@
         "compliance": "Annual Compliance",
         "concierge": "Concierge Service"
       }
+    },
+    "services": {
+      "title": "Our Services",
+      "subtitle": "Business Solutions",
+      "items": {
+        "businessFormation": {
+          "pill": "Business Formation",
+          "title": "Establish Your Business with Confidence",
+          "subtitle": "Quick and secure business formation in the US",
+          "description": "Our experts help you establish your business in the United States efficiently while meeting all legal requirements.",
+          "features": [
+            "Business Registration",
+            "Annual Compliance",
+            "Legal Documentation"
+          ]
+        },
+        "webDevelopment": {
+          "pill": "Web Development",
+          "title": "Build a Strong Online Presence",
+          "subtitle": "Custom responsive website development",
+          "description": "Our web developers create attractive, easy-to-navigate websites that reflect your brand and attract customers.",
+          "features": [
+            "Professional Design",
+            "Custom Development",
+            "Performance Optimization"
+          ]
+        },
+        "digitalMarketing": {
+          "pill": "Digital Marketing",
+          "title": "Increase Your Online Visibility",
+          "subtitle": "Effective digital marketing strategies for your business",
+          "description": "Our digital marketing experts help create campaigns that attract customers and increase sales.",
+          "features": [
+            "SEO & Positioning",
+            "Social Media Management",
+            "Analytics & Reports"
+          ]
+        }
+      },
+      "buttonText": "Get Started Now",
+      "learnMore": "Learn More"
+    },
+    "blogSection": {
+      "title": "Explore Our Blog",
+      "subtitle": "Resources and guides for Latino entrepreneurs",
+      "cta": "View Full Library",
+      "posts": [
+        {
+          "title": "How to Form Your LLC in the United States",
+          "description": "A complete guide for Latino entrepreneurs who want to establish their business in the US. Learn the necessary steps, requirements and benefits of forming an LLC.",
+          "category": "Business"
+        },
+        {
+          "title": "Digital Marketing Strategies for Latino Businesses",
+          "description": "Discover best practices in digital marketing to reach your Hispanic audience in the United States. Includes SEO, social media and email marketing.",
+          "category": "Marketing"
+        },
+        {
+          "title": "Tax Compliance for Hispanic Businesses",
+          "description": "Everything you need to know about taxes, financial reports and legal compliance for your business in the US. Keep your company up to date with regulations.",
+          "category": "Legal"
+        },
+        {
+          "title": "Business Expansion: From Local to National",
+          "description": "Step-by-step guide to scaling your local business nationally. Growth strategies, logistics and multi-state operations management.",
+          "category": "Growth"
+        }
+      ]
+    },
+    "blogCard": {
+      "readMore": "Read more",
+      "authorLabel": "Author"
     }
   }
