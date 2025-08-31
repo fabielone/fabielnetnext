@@ -1,4 +1,3 @@
-// app/api/create-payment-intent/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import prisma from '../../../lib/prisma';
@@ -9,11 +8,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
   try {
-    const { amount, userId, subscriptions, setup_future_usage } = await request.json();
+    const { amount, customer, subscriptions, setup_future_usage } = await request.json();
 
-    // 1. Get user from database
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
+    // Validate required fields
+    if (!customer?.email) {
+      return NextResponse.json(
+        { error: 'Customer email is required' },
+        { status: 400 }
+      );
+    }
+
+    // 1. Find or create user in database
+    let user = await prisma.user.findUnique({
+      where: { email: customer.email },
       select: {
         id: true,
         email: true,
@@ -24,8 +31,33 @@ export async function POST(request: Request) {
       }
     });
 
+    // Create user if doesn't exist
     if (!user) {
-      throw new Error('User not found');
+      const nameParts = customer.name?.split(' ') || [];
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      user = await prisma.user.create({
+        data: {
+          email: customer.email,
+          firstName,
+          lastName,
+          metadata: customer.metadata || {},
+          // Add any other required user fields with default values
+          passwordHash: '', // You might want to handle this differently
+          emailVerified: false,
+          isActive: true,
+          role: 'CUSTOMER'
+        },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          stripeCustomerId: true,
+          metadata: true
+        }
+      });
     }
 
     // 2. Find or create Stripe customer
@@ -35,8 +67,11 @@ export async function POST(request: Request) {
     } else {
       stripeCustomer = await stripe.customers.create({
         email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
-        metadata: user.metadata ? (user.metadata as Record<string, string>) : {}
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        metadata: {
+          ...(user.metadata as Record<string, string>),
+          userId: user.id
+        }
       });
 
       // Update user with Stripe ID
@@ -53,9 +88,10 @@ export async function POST(request: Request) {
       customer: stripeCustomer.id,
       setup_future_usage,
       metadata: {
+        userId: user.id,
         subscriptions: JSON.stringify(subscriptions)
       },
-      payment_method_types: ['card', 'paypal']
+      payment_method_types: ['card']
     });
 
     return NextResponse.json({
@@ -65,7 +101,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Payment setup error:', error);
     return NextResponse.json(
-      { error: 'Payment setup failed' },
+      { error: error instanceof Error ? error.message : 'Payment setup failed' },
       { status: 500 }
     );
   }

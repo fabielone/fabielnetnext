@@ -5,9 +5,9 @@ import { FC } from 'react';
 import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 const socialLinks = [
-  { icon: FaFacebook, url: 'https://facebook.com' },
-  { icon: FaInstagram, url: 'https://instagram.com' },
-  { icon: FaTiktok, url: 'https://tiktok.com' },
+  { icon: FaFacebook, url: 'https://facebook.com/fabielnet' },
+  { icon: FaInstagram, url: 'https://instagram.com/fabielnet' },
+  { icon: FaTiktok, url: 'https://tiktok.com/@fabielnet' },
   { icon: FaYoutube, url: 'https://youtube.com' },
 ];
 

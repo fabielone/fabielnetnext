@@ -30,10 +30,10 @@ const StripePaymentForm = ({
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!stripe || !elements || processing) return;
-
+  
     setProcessing(true);
     setError('');
-
+  
     try {
       // 1. Create Payment Intent
       const response = await fetch('/api/create-payment-intent', {
@@ -53,24 +53,27 @@ const StripePaymentForm = ({
           setup_future_usage: futureItems.length > 0 ? 'off_session' : undefined
         })
       });
-
-      if (!response.ok) throw new Error('Payment setup failed');
+  
+      const data = await response.json();
       
-      const { clientSecret } = await response.json();
-
+      if (!response.ok) {
+        throw new Error(data.error || 'Payment setup failed');
+      }
+  
       // 2. Confirm payment
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
-        clientSecret,
+        clientSecret: data.clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/success`,
+          receipt_email: formData.email,
         },
         redirect: 'if_required'
       });
-
+  
       if (error) throw error;
       if (!paymentIntent) throw new Error('Payment failed');
-
+  
       // 3. Handle success
       onSuccess(paymentIntent.id);
     } catch (err) {

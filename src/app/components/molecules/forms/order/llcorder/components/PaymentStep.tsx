@@ -173,7 +173,7 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
               mode: 'payment',
               amount: Math.round(todayTotal * 100),
               currency: 'usd',
-              paymentMethodTypes: ['card', 'paypal'], // Enable PayPal
+              paymentMethodTypes: ['card'], // Enable PayPal
               appearance: {
                 theme: 'stripe',
                 variables: {
