@@ -9,11 +9,11 @@ function b64url(input: Buffer | string) {
     .replace(/\//g, '_')
 }
 
-function b64urlJson(obj: any) {
+function b64urlJson(obj: Record<string, unknown>) {
   return b64url(Buffer.from(JSON.stringify(obj)))
 }
 
-export function signToken(payload: Record<string, any>) {
+export function signToken(payload: Record<string, unknown>) {
   if (!secret) throw new Error('EMAIL_LINK_SECRET not set')
   const header = { alg: 'HS256', typ: 'JWT' }
   const h = b64urlJson(header)
@@ -37,20 +37,20 @@ export async function verifyToken(token: string) {
 async function hmacSha256Base64Url(key: string, data: string): Promise<string> {
   // Use Web Crypto if available
   try {
-    if (typeof globalThis !== 'undefined' && (globalThis as any).crypto?.subtle) {
+    if (typeof globalThis !== 'undefined' && globalThis.crypto?.subtle) {
       const enc = new TextEncoder()
-      const cryptoKey = await (globalThis as any).crypto.subtle.importKey(
+      const cryptoKey = await globalThis.crypto.subtle.importKey(
         'raw',
         enc.encode(key),
         { name: 'HMAC', hash: 'SHA-256' },
         false,
         ['sign']
       )
-      const sig = await (globalThis as any).crypto.subtle.sign('HMAC', cryptoKey, enc.encode(data))
-      const buf = Buffer.from(sig as ArrayBuffer)
+      const sig = await globalThis.crypto.subtle.sign('HMAC', cryptoKey, enc.encode(data))
+      const buf = Buffer.from(sig)
       return b64url(buf)
     }
-  } catch (_) {
+  } catch {
     // Fall through to Node
   }
 
