@@ -16,7 +16,7 @@ import {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://fabiel.net';
 
-export const LLCConfirmationEmail = ({ _email, companyName, customerName, orderId, totalAmount }: { _email: string; companyName: string; customerName: string; orderId: string; totalAmount: number }) => (
+export const LLCConfirmationEmail = ({ _email, companyName, customerName, orderId, totalAmount, token }: { _email: string; companyName: string; customerName: string; orderId: string; totalAmount: number; token?: string }) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -71,7 +71,7 @@ export const LLCConfirmationEmail = ({ _email, companyName, customerName, orderI
           
           {/* Dashboard Link */}
           <Section style={buttonContainer}>
-            <Button style={button} href={`${baseUrl}/dashboard`}>
+            <Button style={button} href={`${baseUrl}/en/dashboard${token ? `?t=${encodeURIComponent(token)}` : ''}`}>
               Track Your Order
             </Button>
           </Section>
@@ -193,7 +193,7 @@ export const SubscriptionFailureEmail = ({ _email, customerName, serviceName, co
   </Html>
 );
 
-export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId, questionnaires }: { _email: string; customerName: string; companyName: string; orderId: string; questionnaires: string[] }) => (
+export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId, questionnaires, token }: { _email: string; customerName: string; companyName: string; orderId: string; questionnaires: string[]; token?: string }) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -232,7 +232,7 @@ export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId,
           </Text>
           
           <Section style={buttonContainer}>
-            <Button style={button} href={`${baseUrl}/questionnaire/${orderId}`}>
+            <Button style={button} href={`${baseUrl}/en/questionnaire/${orderId}${token ? `?t=${encodeURIComponent(token)}` : ''}`}>
               Complete Questionnaires
             </Button>
           </Section>

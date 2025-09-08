@@ -4,6 +4,7 @@
 import { FormEvent, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheckCircle, FaEnvelope } from 'react-icons/fa';
+import { useInView } from 'react-intersection-observer';
 
 interface NewsletterProps {
   title?: string;
@@ -20,6 +21,10 @@ export default function Newsletter({
 }: NewsletterProps) {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -31,16 +36,21 @@ export default function Newsletter({
   };
 
   return (
-    <div className={`rounded-xl p-6 sm:p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-800 ${className}`}>
-      {!compact && (
-        <div className="mb-6">
+    <div ref={ref} className={`rounded-xl p-6 sm:p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-800 ${className}`}>
+      {!compact && inView && (
+        <motion.div 
+          className="mb-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-700 dark:text-gray-200">
             {title}
           </h3>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {description}
           </p>
-        </div>
+        </motion.div>
       )}
 
       <form onSubmit={handleSubmit} className="relative">

@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import prisma from '../../../lib/prisma';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil'
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   try {
@@ -82,17 +80,23 @@ export async function POST(request: Request) {
     }
 
     // 3. Create Payment Intent
-    const paymentIntent = await stripe.paymentIntents.create({
+    const intentParams: Stripe.PaymentIntentCreateParams = {
       amount,
       currency: 'usd',
       customer: stripeCustomer.id,
-      setup_future_usage,
       metadata: {
         userId: user.id,
         subscriptions: JSON.stringify(subscriptions)
       },
-      payment_method_types: ['card']
-    });
+      // Let Stripe determine payment methods available for the mode/amount/currency
+      automatic_payment_methods: { enabled: true },
+    };
+
+    if (setup_future_usage) {
+      intentParams.setup_future_usage = setup_future_usage as any;
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create(intentParams);
 
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,

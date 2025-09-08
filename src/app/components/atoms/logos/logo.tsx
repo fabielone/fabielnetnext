@@ -21,16 +21,23 @@ export const Logo = ({
   inline = false,
   centerVertically = false
 }: LogoProps) => {
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Show placeholder during hydration to prevent mismatch
   if (!mounted) {
-    return null;
+    return (
+      <div className="flex-shrink-0">
+        <div className="bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-[150px] h-[50px] md:w-[150px] md:h-[50px]" />
+      </div>
+    );
   }
+
+  const isDark = resolvedTheme === 'dark';
 
   // Convert numeric width to px string if needed
   const formatWidth = (width: number | string | undefined) => {
@@ -58,7 +65,7 @@ export const Logo = ({
           {/* Desktop logo */}
           <div className="hidden md:block p-6">
             <Image
-              src={theme === 'dark' ? '/darklogo.png' : '/logo.png'}
+              src={isDark ? '/darklogo.png' : '/logo.png'}
               alt="Company Logo"
               width={150}
               height={50}
@@ -70,7 +77,7 @@ export const Logo = ({
           {/* Mobile logo */}
           <div className="md:hidden">
             <Image
-              src={theme === 'dark' ? '/darklogo.png' : '/logo.png'}
+              src={isDark ? '/darklogo.png' : '/logo.png'}
               alt="Company Logo"
               width={180}
               height={60}

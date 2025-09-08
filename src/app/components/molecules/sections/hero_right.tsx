@@ -4,13 +4,18 @@ import { useState } from 'react';
 import { motion} from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
 import { HiShieldCheck, HiClock, HiUsers } from 'react-icons/hi';
-import Image from 'next/image';
 import Newsletter from '../newsletter/subscribe';
 import { useTranslations } from 'next-intl';
+import { useInView } from 'react-intersection-observer';
+import ThemeAwareLogo from '../../atoms/theme-aware-logo';
 
 export default function HeroRight() {
   const [isVideoHovered, setIsVideoHovered] = useState(false);
   const t = useTranslations('HeroRight');
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
 
   const trustItems = [
     {
@@ -35,9 +40,10 @@ export default function HeroRight() {
 
   return (
     <motion.section 
+      ref={ref}
       initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
+      animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+      transition={{ duration: 0.6, delay: 0.1 }} // Faster transition
       className="pt-2 sm:pt-4 flex w-full"
     >
       <div className="container mx-auto px-2 sm:px-4">
@@ -46,9 +52,9 @@ export default function HeroRight() {
             className="bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-gray-800/90 dark:to-gray-900 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden flex flex-col h-full w-full max-w-sm sm:max-w-xl border border-white/20 dark:border-gray-700/50"
             whileHover={{ 
               boxShadow: '0 20px 40px -12px rgba(245, 158, 11, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.15)',
-              scale: 1.01 
+              scale: 1.005 // Reduced scale for better performance
             }}
-            transition={{ type: 'spring', stiffness: 300 }}
+            transition={{ type: 'spring', stiffness: 400 }} // Faster spring
           >
             {/* Video Section */}
             <motion.div 
@@ -59,11 +65,11 @@ export default function HeroRight() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 z-10 flex items-center justify-center">
                 <motion.div
                   animate={{ 
-                    scale: isVideoHovered ? 1.15 : 1,
-                    boxShadow: isVideoHovered ? '0 0 25px rgba(34, 197, 94, 0.6)' : '0 0 0px rgba(34, 197, 94, 0)'
+                    scale: isVideoHovered ? 1.1 : 1, // Reduced scale
+                    boxShadow: isVideoHovered ? '0 0 20px rgba(34, 197, 94, 0.5)' : '0 0 0px rgba(34, 197, 94, 0)' // Reduced shadow
                   }}
                   className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-white/95 dark:bg-gray-100/95 rounded-full flex items-center justify-center cursor-pointer shadow-2xl"
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ scale: 0.95 }} // Reduced tap scale
                 >
                   <FaPlay className="text-amber-600 dark:text-amber-700 w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 ml-0.5 sm:ml-1" />
                 </motion.div>
@@ -75,7 +81,7 @@ export default function HeroRight() {
                   className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg px-2 py-1 sm:px-3 sm:py-1"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
+                  transition={{ delay: 0.4 }} // Faster delay
                 >
                   <span className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200">{t('VideoLabel')}</span>
                 </motion.div>
@@ -84,6 +90,9 @@ export default function HeroRight() {
               <video
                 className="w-full h-full object-cover"
                 poster="https://img.youtube.com/vi/SABZN5JfGAQ/maxresdefault.jpg"
+                preload="none" // Don't preload video content
+                playsInline
+                muted
               >
                 <source
                   src="https://www.youtube.com/watch?v=SABZN5JfGAQ"
@@ -98,26 +107,16 @@ export default function HeroRight() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.2 }} // Faster delay
                 className="text-center mb-4 sm:mb-6"
               >
                 
                 <div className="flex items-center justify-center space-x-2 mb-3 sm:mb-4">
-                  <Image
-                    src="/logo.png"
-                    alt="Fabiel.Net Logo"
+                  <ThemeAwareLogo
                     width={48}
                     height={30}
-                    className="opacity-90 dark:hidden sm:w-18 sm:h-6"
+                    className="opacity-90 sm:w-18 sm:h-6"
                   />
-                  <Image
-                    src="/darklogo.png"
-                    alt="Fabiel.Net Logo"
-                    width={48}
-                    height={30}
-                    className="opacity-90 hidden dark:block sm:w-18 sm:h-6"
-                  />
-                 
                 </div>
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-400 dark:to-green-400 bg-clip-text text-transparent mb-2">
                   {t('Title')}
@@ -144,10 +143,10 @@ export default function HeroRight() {
                   <motion.div
                     key={index}
                     className="flex items-center space-x-2 sm:space-x-3 bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 border border-white/60 dark:border-gray-600/60 shadow-sm hover:shadow-md transition-shadow"
-                    whileHover={{ scale: 1.02, x: 3 }}
-                    initial={{ opacity: 0, x: -20 }}
+                    whileHover={{ scale: 1.01, x: 2 }} // Reduced scale and movement
+                    initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
+                    transition={{ delay: 0.4 + index * 0.05 }} // Faster stagger
                   >
                     <div className={`${item.color} ${item.bgColor} p-1.5 sm:p-2 rounded-lg shadow-sm`}>
                       {item.icon}
@@ -161,7 +160,7 @@ export default function HeroRight() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
+                transition={{ delay: 0.5 }} // Faster delay
                 className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-white"
               >
                 <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2 text-center">{t('NewsletterTitle')}</h3>

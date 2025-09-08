@@ -40,7 +40,7 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
         name: 'Registered Agent Service', 
         price: 149.00,
         frequency: 'yearly',
-        note: 'Billed after LLC approval'
+        note: 'Billed in 10 days'
       });
     }
     
@@ -49,7 +49,7 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
         name: 'Compliance Service', 
         price: 99.00,
         frequency: 'yearly',
-        note: 'Billed after LLC approval'
+        note: 'Billed in 10 days'
       });
     }
     
@@ -58,21 +58,21 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
         name: 'Basic Website', 
         price: 9.99,
         frequency: 'monthly',
-        note: 'Billed after LLC approval'
+        note: 'Billed in 10 days'
       });
     } else if (formData.website === 'pro') {
       futureItems.push({ 
         name: 'Pro Website', 
         price: 49.99,
         frequency: 'monthly',
-        note: 'Billed after LLC approval'
+        note: 'Billed in 10 days'
       });
     } else if (formData.website === 'ecommerce') {
       futureItems.push({ 
         name: 'E-commerce Website', 
         price: 49.99,
         frequency: 'monthly',
-        note: 'Billed after LLC approval'
+        note: 'Billed in 10 days'
       });
     }
 
@@ -173,7 +173,7 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
               mode: 'payment',
               amount: Math.round(todayTotal * 100),
               currency: 'usd',
-              paymentMethodTypes: ['card'], // Enable PayPal
+              setupFutureUsage: futureItems.length > 0 ? 'off_session' : undefined,
               appearance: {
                 theme: 'stripe',
                 variables: {

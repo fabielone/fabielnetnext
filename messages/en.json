@@ -180,5 +180,18 @@
     "blogCard": {
       "readMore": "Read more",
       "authorLabel": "Author"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Your orders and subscriptions will appear here."
+    },
+    "questionnaire": {
+      "title": "LLC Questionnaire",
+      "orderId": "Order ID",
+      "thanks": "Thanks! We received your answers. We’ll follow up shortly.",
+      "home": "Home",
+      "goToDashboard": "Go to Dashboard",
+      "contactHelp": "Need help?",
+      "contactSupport": "Contact support"
     }
   }

@@ -9,7 +9,14 @@ import {
   QuestionnaireEmail
 } from './email-templates';
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+let resend: Resend | null = null;
+function getResend() {
+  if (!RESEND_API_KEY) return null;
+  if (!resend) resend = new Resend(RESEND_API_KEY);
+  return resend;
+}
 
 interface EmailOptions {
   email: string;  // Remove underscore
@@ -22,7 +29,13 @@ interface EmailOptions {
 
 async function sendEmail({ to, subject, react, from }: EmailOptions) {
   try {
-    const { data, error } = await resend.emails.send({
+    const client = getResend();
+    if (!client) {
+      console.warn('[email-service] RESEND_API_KEY not set; performing dry-run send', { to, subject });
+      return { id: 'dry-run', to: [to], subject } as any;
+    }
+
+    const { data, error } = await client.emails.send({
       from: from || process.env.FROM_EMAIL || 'LLC Formation <noreply@fabiel.net>',
       to: [to],
       subject,
@@ -31,7 +44,14 @@ async function sendEmail({ to, subject, react, from }: EmailOptions) {
 
     if (error) {
       console.error('Resend error:', error);
-      throw new Error(`Email failed: ${error.message}`);
+      const err = error as any;
+      const code = err?.statusCode || err?.code;
+      const name = err?.name || 'resend_error';
+      const message = err?.message || 'Unknown error';
+      const e = new Error(message) as any;
+      e.statusCode = code;
+      e.name = name;
+      throw e;
     }
 
     console.log('Email sent successfully:', data);
@@ -48,13 +68,14 @@ export const sendLLCConfirmation = async (data: {
   customerName: string;
   orderId: string;
   totalAmount: number;
+  token?: string;
 }) => {
   return sendEmail({
     email: data.email,       // Add this
     companyName: data.companyName,  // Add this
     to: data.email,
     subject: `LLC Formation Confirmation - ${data.companyName}`,
-    react: LLCConfirmationEmail({ ...data, _email: data.email }) // Fix for _email
+    react: LLCConfirmationEmail({ ...data, _email: data.email }) // Include token if present
   });
 };
 
@@ -98,6 +119,7 @@ export const sendQuestionnaireLink = async (data: {
   companyName: string;
   orderId: string;
   questionnaires: string[];
+  token?: string;
 }) => {
   return sendEmail({
     email: data.email,

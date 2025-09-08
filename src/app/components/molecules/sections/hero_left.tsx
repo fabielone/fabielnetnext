@@ -7,10 +7,14 @@ import { useTranslations } from 'next-intl';
 import { Link } from 'src/i18n/navigation';
 import { FiFileText } from 'react-icons/fi';
 import { FaLinkedin , FaStar } from 'react-icons/fa';
-
+import { useInView } from 'react-intersection-observer';
 
 export default function HeroLeft() {
   const t = useTranslations('Hero');
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
   
   const benefits = [
     {
@@ -31,29 +35,27 @@ export default function HeroLeft() {
     },
   ];
 
- 
-
-  // Animation variants
+  // Simplified animation variants for better performance
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+        staggerChildren: 0.05, // Reduced stagger for faster loading
+        delayChildren: 0.1 // Reduced delay
       }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 10, opacity: 0 }, // Reduced movement
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: 'spring',
-        stiffness: 100,
-        damping: 10
+        stiffness: 200, // Increased stiffness for snappier animation
+        damping: 20
       }
     }
   };
@@ -62,8 +64,9 @@ export default function HeroLeft() {
 
   return (
     <motion.div 
+      ref={ref}
       initial="hidden"
-      animate="visible"
+      animate={inView ? 'visible' : 'hidden'}
       variants={containerVariants}
       className="relative font-serif px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden bg-white dark:bg-gray-900"
     >
@@ -76,7 +79,7 @@ export default function HeroLeft() {
           >
             <motion.h1 
               className="text-4xl sm:text-5xl md:text-5xl font-bold text-gray-900 dark:text-white"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }} // Reduced hover scale
             >
               <motion.span className="text-gray-600 dark:text-gray-300">
                 {t('Heading')}
@@ -91,21 +94,21 @@ export default function HeroLeft() {
           </motion.div>
           <motion.div 
             className="flex justify-center items-center space-x-3 mt-4 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.9, type: 'spring', stiffness: 200 }}
+            transition={{ delay: 0.3, type: 'spring', stiffness: 300 }} // Faster animation
           >
             <motion.div 
               className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full px-4 py-2 flex items-center space-x-2 shadow-lg border border-amber-100 dark:border-amber-800/30"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }} // Reduced hover scale
             >
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, rotate: -180 }}
+                    initial={{ opacity: 0, rotate: -90 }} // Reduced rotation
                     animate={{ opacity: 1, rotate: 0 }}
-                    transition={{ delay: 1 + i * 0.1, type: 'spring' }}
+                    transition={{ delay: 0.4 + i * 0.05, type: 'spring' }} // Faster stagger
                   >
                     <FaStar className="w-4 h-4 text-yellow-400" />
                   </motion.div>
@@ -143,10 +146,10 @@ export default function HeroLeft() {
             className="text-gray-800 dark:text-gray-200 my-12 p-2 md:p-8 mx-6 sm:mx-8 md:mx-8 bg-gradient-to-br from-white via-amber-50/30 to-white dark:from-gray-800 dark:via-amber-900/10 dark:to-gray-800 rounded-3xl shadow-2xl border border-amber-100 dark:border-amber-800/30"
             variants={itemVariants}
             whileHover={{ 
-              scale: 1.01,
+              scale: 1.005, // Reduced scale for better performance
               boxShadow: '0 20px 40px -10px rgba(245, 158, 11, 0.1)'
             }}
-            transition={{ type: 'spring', stiffness: 300 }}
+            transition={{ type: 'spring', stiffness: 400 }} // Faster spring
           >
             <motion.h3 className="text-xl md:text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
               {t('BenefitsTitle')}
@@ -157,14 +160,14 @@ export default function HeroLeft() {
                   key={index}
                   variants={itemVariants}
                   className="flex items-start bg-white dark:bg-gray-700/50 p-2 rounded-lg sm:rounded-xl"
-                  whileHover={{ x: 4, scale: 1.01 }}
-                  initial={{ opacity: 0, x: -20 }}
+                  whileHover={{ x: 2, scale: 1.005 }} // Reduced movement and scale
+                  initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.05 }} // Faster stagger
                 >
                   <motion.div 
                     className="mr-4 sm:mr-6 p-2 sm:p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg sm:rounded-xl"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileHover={{ scale: 1.05, rotate: 2 }} // Reduced rotation
                   >
                     {benefit.icon}
                   </motion.div>
@@ -205,10 +208,10 @@ export default function HeroLeft() {
             <motion.button
               variants={itemVariants}
               whileHover={{ 
-                scale: 1.05,
+                scale: 1.02, // Reduced scale
                 boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3)'
               }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.98 }}
               className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-12 py-6 rounded-2xl flex items-center shadow-xl hover:shadow-2xl relative overflow-hidden text-xl"
             >
               <Link href="/checkout/businessformation" className="flex items-center" passHref>
@@ -218,12 +221,12 @@ export default function HeroLeft() {
                 <motion.span
                   className="ml-3"
                   animate={{
-                    x: [0, 5, 0],
+                    x: [0, 3, 0], // Reduced movement
                   }}
                   transition={{
                     repeat: Infinity,
                     repeatType: 'reverse',
-                    duration: 1.5
+                    duration: 2 // Slower animation
                   }}
                 >
                   <HiArrowRight className="h-6 w-6" />

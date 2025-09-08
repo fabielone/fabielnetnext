@@ -26,6 +26,7 @@ const StripePaymentForm = ({
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string>('');
+  const [customerId, setCustomerId] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -35,7 +36,13 @@ const StripePaymentForm = ({
     setError('');
   
     try {
-      // 1. Create Payment Intent
+      // 1. Submit elements FIRST (validates and collects wallet details)
+      const { error: submitError } = await elements.submit();
+      if (submitError) {
+        throw submitError;
+      }
+
+      // 2. Create Payment Intent AFTER elements.submit()
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,12 +62,13 @@ const StripePaymentForm = ({
       });
   
       const data = await response.json();
+      if (data.customerId) setCustomerId(data.customerId);
       
       if (!response.ok) {
         throw new Error(data.error || 'Payment setup failed');
       }
   
-      // 2. Confirm payment
+      // 3. Confirm payment
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret: data.clientSecret,
@@ -74,7 +82,28 @@ const StripePaymentForm = ({
       if (error) throw error;
       if (!paymentIntent) throw new Error('Payment failed');
   
-      // 3. Handle success
+      // 4. Handle success: schedule subscriptions for 10 days later
+      if (futureItems.length > 0 && customerId) {
+        try {
+          await fetch('/api/setup-subscriptions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              customerId,
+              paymentMethodId: paymentIntent.payment_method as string,
+              subscriptions: futureItems.map((f) => ({
+                service: f.name,
+                amount: f.price,
+                frequency: f.frequency,
+                delayDays: 10,
+              })),
+            }),
+          });
+        } catch (e) {
+          console.warn('Subscription setup scheduling failed:', e);
+        }
+      }
+
       onSuccess(paymentIntent.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Payment failed');

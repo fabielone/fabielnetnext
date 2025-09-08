@@ -17,33 +17,42 @@ export const usePayment = () => {
     setError(null);
 
     try {
+      // Submit elements FIRST
+      const { error: submitError } = await elements.submit();
+      if (submitError) throw submitError;
+
+      // Create intent AFTER submit
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, formData }),
+        body: JSON.stringify({
+          amount: Math.round(amount * 100),
+          customer: {
+            email: formData.email,
+            name: `${formData.firstName} ${formData.lastName}`,
+          },
+          setup_future_usage: 'off_session'
+        }),
       });
 
       const { clientSecret } = await response.json();
       if (!stripe) throw new Error('Stripe not initialized');
 
-      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
+      const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
+        elements,
         clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement('card')!,
-            billing_details: {
-              name: `${formData.firstName} ${formData.lastName}`,
-              email: formData.email,
-            },
-          },
-        }
-      );
+        confirmParams: {
+          return_url: `${window.location.origin}/success`,
+          receipt_email: formData.email,
+        },
+        redirect: 'if_required'
+      });
 
       if (stripeError) throw stripeError;
       if (!paymentIntent) throw new Error('Payment failed');
       return paymentIntent.id;
     } catch (err) {
-      setError(err.message || 'Payment failed');
+      setError((err as any).message || 'Payment failed');
       throw err;
     } finally {
       setLoading(false);

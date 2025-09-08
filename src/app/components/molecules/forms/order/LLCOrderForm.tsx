@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { loadStripe } from '@stripe/stripe-js'
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { createClient } from '@supabase/supabase-js'
 import { 
   CreditCardIcon, 
@@ -117,77 +118,97 @@ const LLCOrderForm = () => {
     updateFormData('website', formData.website === websiteType ? null : websiteType)
   }
 
-  // Stripe Payment Component
+  // Stripe Payment Component with Payment Element
   const StripePaymentForm = () => {
     const stripe = useStripe()
     const elements = useElements()
+    const [payError, setPayError] = useState<string | null>(null)
 
-    const handleStripePayment = async () => {
+    const handleStripePayment = async (event) => {
+      event.preventDefault()
+      
       if (!stripe || !elements) return
 
       setLoading(true)
       
       try {
-        // Create payment intent on your backend
+        // 1. Submit elements first - this validates the form and collects payment details
+        const { error: submitError } = await elements.submit()
+        if (submitError) {
+          console.error('Elements submit error:', submitError)
+          setPayError(submitError.message || 'Payment details incomplete')
+          setLoading(false)
+          return
+        }
+
+        // 2. Create PaymentIntent AFTER elements.submit()
         const response = await fetch('/api/create-payment-intent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             amount: Math.round(orderTotal * 100),
-            formData 
+            customer: {
+              email: formData.email,
+              name: `${formData.firstName} ${formData.lastName}`,
+              metadata: {
+                companyName: formData.companyName,
+                phone: formData.phone
+              }
+            },
+            setup_future_usage: 'off_session'
           })
         })
         
         const { clientSecret } = await response.json()
-        
-        const cardElement = elements.getElement(CardElement);
-        if (!cardElement) return;
 
-        const result = await stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: cardElement,
-            billing_details: {
-              name: `${formData.firstName} ${formData.lastName}`,
-              email: formData.email
-            }
-          }
+        // 3. Confirm payment with the client secret
+        const result = await stripe.confirmPayment({
+          elements,
+          clientSecret,
+          confirmParams: {
+            return_url: `${window.location.origin}/order-success`
+          },
+          redirect: 'if_required'
         })
 
         if (result.error) {
-          console.error(result.error)
+          console.error('Payment failed:', result.error)
+          setPayError(result.error.message || 'Payment failed')
         } else {
+          // Payment succeeded
           await handleOrderSubmission(result.paymentIntent.id)
+          setPayError(null)
         }
       } catch (error) {
         console.error('Payment failed:', error)
+        setPayError((error as any)?.message || 'Payment failed')
       } finally {
         setLoading(false)
       }
     }
 
     return (
-      <div className="space-y-4">
+      <form onSubmit={handleStripePayment} className="space-y-4">
         <div className="p-4 border border-gray-200 rounded-lg">
-          <CardElement
+          <PaymentElement 
             options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#424770',
-                  '::placeholder': { color: '#aab7c4' }
-                }
-              }
+              layout: 'tabs'
             }}
           />
         </div>
+        {payError && (
+          <div className="text-red-600 text-sm" role="alert">
+            {payError}
+          </div>
+        )}
         <button
-          onClick={handleStripePayment}
+          type="submit"
           disabled={!stripe || loading}
           className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
         >
           {loading ? 'Processing...' : `Pay $${orderTotal.toFixed(2)}`}
         </button>
-      </div>
+      </form>
     )
   }
 
@@ -239,11 +260,17 @@ const LLCOrderForm = () => {
       setOrderId(order[0].id)
       setOrderSubmitted(true)
       
-      // Send confirmation email
+      // Send confirmation email (Resend)
       await fetch('/api/send-confirmation-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: order[0].id, email: formData.email })
+        body: JSON.stringify({
+          orderId: order[0].id,
+          email: formData.email,
+          companyName: formData.companyName,
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          totalAmount: orderTotal,
+        })
       })
 
     } catch (error) {
@@ -263,9 +290,12 @@ const LLCOrderForm = () => {
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <p className="text-sm text-gray-600">Order ID: <span className="font-mono">{orderId}</span></p>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mb-4">
             You'll receive a confirmation email shortly with next steps.
           </p>
+          <Link href={`/questionnaire/${orderId}`} className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
+            Complete Questionnaire Now
+          </Link>
         </div>
       </div>
     )
@@ -474,7 +504,19 @@ const LLCOrderForm = () => {
                 </div>
               </div>
 
-              <Elements stripe={stripePromise}>
+              <Elements 
+                stripe={stripePromise}
+                options={{
+                  mode: 'payment',
+                  amount: Math.round(orderTotal * 100),
+                  currency: 'usd',
+                  // Must match server PaymentIntent setup_future_usage
+                  setupFutureUsage: 'off_session',
+                  appearance: {
+                    theme: 'stripe',
+                  },
+                }}
+              >
                 <StripePaymentForm />
               </Elements>
             </div>

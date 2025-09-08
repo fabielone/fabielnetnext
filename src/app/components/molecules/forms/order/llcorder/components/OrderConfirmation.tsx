@@ -1,5 +1,7 @@
 import { LLCFormData } from '../types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 
 interface OrderConfirmationProps {
@@ -24,6 +26,8 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
   const [savedToDatabase, setSavedToDatabase] = useState(false);
   const [questionnaireEmailSent, setQuestionnaireEmailSent] = useState(false);
   const [subscriptionsProcessed, setSubscriptionsProcessed] = useState(false);
+  const [questionnaireToken, setQuestionnaireToken] = useState<string | null>(null);
+  const { locale } = useParams<{ locale: string }>();
 
   // Calculate service breakdown
   const getServiceBreakdown = (): ServiceBreakdown => {
@@ -53,7 +57,10 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
 
   const serviceBreakdown = getServiceBreakdown();
 
+  const ranRef = useRef(false);
   useEffect(() => {
+    if (ranRef.current) return; // prevent double-run in React Strict Mode (dev)
+    ranRef.current = true;
     // Process order and handle payment flow
     const processOrder = async () => {
       try {
@@ -61,12 +68,9 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
         await saveOrderToDatabase();
         setSavedToDatabase(true);
 
-        // Step 2: Send initial confirmation email
+        // Step 2: Send initial confirmation email (also sends questionnaire link)
         await sendConfirmationEmail();
         setEmailSent(true);
-
-        // Step 3: Send questionnaire link
-        await sendQuestionnaireEmail();
         setQuestionnaireEmailSent(true);
 
         // Step 4: Process subscription services
@@ -93,49 +97,76 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
   }, []);
 
   const saveOrderToDatabase = async () => {
-    const orderData = {
+    const totalAmount = serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0);
+    const websiteService = formData.website === 'basic' ? 'BASIC' : formData.website === 'pro' || formData.website === 'ecommerce' ? 'PRO' : null;
+    const payload = {
       orderId,
-      ...formData,
-      orderTotal,
-      status: 'processing',
-      paymentStatus: 'main_service_paid',
-      services: serviceBreakdown,
-      createdAt: new Date().toISOString()
+      companyName: formData.companyName,
+      businessAddress: formData.businessAddress,
+      businessCity: formData.businessCity,
+      businessState: 'CA',
+      businessZip: formData.businessZip,
+      businessPurpose: formData.businessPurpose,
+      contactFirstName: formData.firstName,
+      contactLastName: formData.lastName,
+      contactEmail: formData.email,
+      contactPhone: formData.phone,
+      needEIN: true,
+      needOperatingAgreement: true,
+      needBankLetter: true,
+      registeredAgent: !!formData.registeredAgent,
+      compliance: !!formData.compliance,
+      websiteService,
+      totalAmount,
     };
 
-    console.log('Saving order to database:', orderData);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const res = await fetch('/api/orders/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Failed to save order');
+      }
+      console.log('Order saved');
+    } catch (e) {
+      console.error('Order save failed (continuing):', e);
+    }
   };
 
   const sendConfirmationEmail = async () => {
-    const emailData = {
-      to: formData.email,
+    const totalAmount = serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0);
+    const payload = {
       orderId,
+      email: formData.email,
       companyName: formData.companyName,
-      mainServiceTotal: serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0),
-      template: 'main_service_confirmation'
+      customerName: `${formData.firstName} ${formData.lastName}`,
+      totalAmount,
     };
 
-    console.log('Sending main service confirmation:', emailData);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const res = await fetch('/api/send-confirmation-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Email send failed');
+      }
+      const data = await res.json().catch(() => ({} as any));
+      if (data?.token) setQuestionnaireToken(data.token);
+      console.log('Confirmation + questionnaire emails requested.');
+    } catch (e) {
+      console.error('Failed to send emails:', e);
+    }
   };
 
   const sendQuestionnaireEmail = async () => {
-    const questionnaires: string[] = [];
-    if (formData.needEIN) questionnaires.push('EIN Application');
-    if (formData.needOperatingAgreement) questionnaires.push('Operating Agreement');
-    if (formData.needBankLetter) questionnaires.push('Bank Resolution Letter');
-
-    const emailData = {
-      to: formData.email,
-      orderId,
-      questionnaires,
-      dashboardLink: formData.password ? '/dashboard' : `/questionnaire/${orderId}`,
-      template: 'questionnaire_link'
-    };
-
-    console.log('Sending questionnaire email:', emailData);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    // No-op; questionnaire link is included in the confirmation API
+    return;
   };
 
   const processSubscriptions = async () => {
@@ -330,6 +361,16 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
           <p className="text-sm text-blue-700">
             Complete additional forms for EIN, Operating Agreement, and other services.
           </p>
+          {questionnaireToken && (
+            <div className="mt-3">
+              <Link
+                className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                href={`/${locale || 'en'}/questionnaire/${orderId}?t=${encodeURIComponent(questionnaireToken)}`}
+              >
+                Start Questionnaire
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
