@@ -1,15 +1,18 @@
 'use client'
 import { useOrderForm } from './hooks/useOrderForm';
 import ProgressSteps from './components/ProgressSteps';
-import BasicInfoStep from './components/BasicInfoStep';
 import { LLCFormData, Step } from './types';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { UserIcon, BuildingOfficeIcon, ShieldCheckIcon, GlobeAltIcon, CreditCardIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
-import ServicesStep from './components/ServicesStep';
-import AccountStep from './components/AccountStep';
-import LLCDetailStep from './components/LLCDetailStep';
-import PaymentStep from './components/PaymentStep';
-import OrderConfirmation from './components/OrderConfirmation';
+import LoadingSpinner from '../../../../atoms/LoadingSpinner';
+
+// Dynamic imports for step components
+const BasicInfoStep = lazy(() => import('./components/BasicInfoStep'));
+const ServicesStep = lazy(() => import('./components/ServicesStep'));
+const AccountStep = lazy(() => import('./components/AccountStep'));
+const LLCDetailStep = lazy(() => import('./components/LLCDetailStep'));
+const PaymentStep = lazy(() => import('./components/PaymentStep'));
+const OrderConfirmation = lazy(() => import('./components/OrderConfirmation'));
 
 // With this updated version:
 const initialFormState: LLCFormData = {
@@ -72,6 +75,38 @@ const LLCOrderForm = () => {
     { id: 6, name: 'Confirmation', icon: CheckCircleIcon }
   ];
 
+  // Preload next step component for smooth navigation
+  useEffect(() => {
+    const preloadNextStep = () => {
+      switch(currentStep) {
+        case 1:
+          // Preload ServicesStep
+          import('./components/ServicesStep');
+          break;
+        case 2:
+          // Preload AccountStep
+          import('./components/AccountStep');
+          break;
+        case 3:
+          // Preload LLCDetailStep
+          import('./components/LLCDetailStep');
+          break;
+        case 4:
+          // Preload PaymentStep
+          import('./components/PaymentStep');
+          break;
+        case 5:
+          // Preload OrderConfirmation
+          import('./components/OrderConfirmation');
+          break;
+      }
+    };
+
+    // Preload with a small delay to not block current step rendering
+    const timeoutId = setTimeout(preloadNextStep, 500);
+    return () => clearTimeout(timeoutId);
+  }, [currentStep]);
+
   // Scroll to top when step changes
   useEffect(() => {
     if (formRef.current) {
@@ -122,47 +157,81 @@ const LLCOrderForm = () => {
       scrollToError
     };
 
+    const StepLoadingFallback = () => (
+      <div className="py-8">
+        <LoadingSpinner 
+          size="medium" 
+          color="text-blue-600" 
+          message="Loading step..." 
+        />
+      </div>
+    );
+
     switch(currentStep) {
       case 1: 
-        return <BasicInfoStep 
-          {...commonProps}
-          onNext={() => handleNextStep(1)}
-          onPrev={() => handlePrevStep(1)}
-        />;
+        return (
+          <Suspense fallback={<StepLoadingFallback />}>
+            <BasicInfoStep 
+              {...commonProps}
+              onNext={() => handleNextStep(1)}
+              onPrev={() => handlePrevStep(1)}
+            />
+          </Suspense>
+        );
       case 2: 
-        return <ServicesStep 
-          {...commonProps}
-          onNext={() => handleNextStep(2)}
-          onPrev={() => handlePrevStep(2)}
-        />;
+        return (
+          <Suspense fallback={<StepLoadingFallback />}>
+            <ServicesStep 
+              {...commonProps}
+              onNext={() => handleNextStep(2)}
+              onPrev={() => handlePrevStep(2)}
+            />
+          </Suspense>
+        );
       case 3: 
-        return <AccountStep 
-          {...commonProps}
-          scrollToError={scrollToError}
-          onNext={() => handleNextStep(3)}
-          onPrev={() => handlePrevStep(3)}
-        />;
+        return (
+          <Suspense fallback={<StepLoadingFallback />}>
+            <AccountStep 
+              {...commonProps}
+              scrollToError={scrollToError}
+              onNext={() => handleNextStep(3)}
+              onPrev={() => handlePrevStep(3)}
+            />
+          </Suspense>
+        );
       case 4: 
-        return <LLCDetailStep 
-          {...commonProps}
-          onNext={() => handleNextStep(4)}
-          onPrev={() => handlePrevStep(4)}
-        />;
+        return (
+          <Suspense fallback={<StepLoadingFallback />}>
+            <LLCDetailStep 
+              {...commonProps}
+              onNext={() => handleNextStep(4)}
+              onPrev={() => handlePrevStep(4)}
+            />
+          </Suspense>
+        );
       case 5: 
-        return <PaymentStep 
-          {...commonProps}
-          orderTotal={calculateOrderTotal(formData)}
-          onNext={() => handleNextStep(5)}
-          onPrev={() => handlePrevStep(5)}
-        />;
+        return (
+          <Suspense fallback={<StepLoadingFallback />}>
+            <PaymentStep 
+              {...commonProps}
+              orderTotal={calculateOrderTotal(formData)}
+              onNext={() => handleNextStep(5)}
+              onPrev={() => handlePrevStep(5)}
+            />
+          </Suspense>
+        );
       case 6: 
-        return <OrderConfirmation 
-          {...commonProps}
-          orderTotal={calculateOrderTotal(formData)}
-          orderId={generateOrderId()}
-          onSubmit={() => handleOrderSubmit(formData)}
-          onPrev={() => handlePrevStep(6)}
-        />;
+        return (
+          <Suspense fallback={<StepLoadingFallback />}>
+            <OrderConfirmation 
+              {...commonProps}
+              orderTotal={calculateOrderTotal(formData)}
+              orderId={generateOrderId()}
+              onSubmit={() => handleOrderSubmit(formData)}
+              onPrev={() => handlePrevStep(6)}
+            />
+          </Suspense>
+        );
       default: 
         return null;
     }

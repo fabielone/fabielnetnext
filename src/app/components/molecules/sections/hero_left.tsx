@@ -4,10 +4,11 @@ import { motion, Variants } from 'framer-motion';
 import { HiArrowRight, HiDocumentText, HiGlobe, HiIdentification } from 'react-icons/hi';
 import { SocialIcons } from '../socials/socialicons';
 import { useTranslations } from 'next-intl';
-import { Link } from 'src/i18n/navigation';
 import { FiFileText } from 'react-icons/fi';
 import { FaLinkedin , FaStar } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
+import { useNavigationLoading } from '../../hooks/useNavigationLoading';
+import LoadingSpinner from '../../atoms/LoadingSpinner';
 
 export default function HeroLeft() {
   const t = useTranslations('Hero');
@@ -15,6 +16,8 @@ export default function HeroLeft() {
     threshold: 0.1,
     triggerOnce: true
   });
+  
+  const { isNavigating, navigateWithLoading } = useNavigationLoading();
   
   const benefits = [
     {
@@ -212,26 +215,37 @@ export default function HeroLeft() {
                 boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3)'
               }}
               whileTap={{ scale: 0.98 }}
-              className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-12 py-6 rounded-2xl flex items-center shadow-xl hover:shadow-2xl relative overflow-hidden text-xl"
+              onClick={() => navigateWithLoading('/checkout/businessformation')}
+              disabled={isNavigating}
+              className={`bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-12 py-6 rounded-2xl flex items-center shadow-xl hover:shadow-2xl relative overflow-hidden text-xl transition-all duration-300 ${
+                isNavigating ? 'opacity-75 cursor-not-allowed' : ''
+              }`}
             >
-              <Link href="/checkout/businessformation" className="flex items-center" passHref>
-                <motion.span className="relative z-10">
-                  {t('CTA')}
-                </motion.span>
-                <motion.span
-                  className="ml-3"
-                  animate={{
-                    x: [0, 3, 0], // Reduced movement
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    repeatType: 'reverse',
-                    duration: 2 // Slower animation
-                  }}
-                >
-                  <HiArrowRight className="h-6 w-6" />
-                </motion.span>
-              </Link>
+              {isNavigating ? (
+                <div className="flex items-center">
+                  <LoadingSpinner size="small" color="text-white" message="" />
+                  <span className="ml-3">Loading...</span>
+                </div>
+              ) : (
+                <>
+                  <motion.span className="relative z-10">
+                    {t('CTA')}
+                  </motion.span>
+                  <motion.span
+                    className="ml-3"
+                    animate={{
+                      x: [0, 3, 0], // Reduced movement
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      repeatType: 'reverse',
+                      duration: 2 // Slower animation
+                    }}
+                  >
+                    <HiArrowRight className="h-6 w-6" />
+                  </motion.span>
+                </>
+              )}
             </motion.button>
           </motion.div>
 

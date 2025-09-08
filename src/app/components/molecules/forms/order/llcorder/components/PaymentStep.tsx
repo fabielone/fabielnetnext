@@ -1,12 +1,17 @@
 // components/PaymentStep.tsx
 'use client'
-import { useState } from 'react';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { StripePaymentForm } from './StripePaymentForm';
+import { useState, Suspense, lazy } from 'react';
 import { LLCFormData , UpdateFormData } from '../types';
+import LoadingSpinner from '../../../../../atoms/LoadingSpinner';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+// Dynamic imports for Stripe components
+const Elements = lazy(() => import('@stripe/react-stripe-js').then(mod => ({ default: mod.Elements })));
+const StripePaymentForm = lazy(() => import('./StripePaymentForm').then(mod => ({ default: mod.StripePaymentForm })));
+
+// Lazy load Stripe
+const stripePromise = import('@stripe/stripe-js').then(({ loadStripe }) => 
+  loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+);
 
 interface PaymentStepProps {
   formData: LLCFormData;
@@ -167,38 +172,58 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
         <div className="bg-amber-50 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Payment Method</h3>
           
-          <Elements
-            stripe={stripePromise}
-            options={{
-              mode: 'payment',
-              amount: Math.round(todayTotal * 100),
-              currency: 'usd',
-              setupFutureUsage: futureItems.length > 0 ? 'off_session' : undefined,
-              appearance: {
-                theme: 'stripe',
-                variables: {
-                  colorPrimary: '#f59e0b',
-                  colorBackground: '#fffbeb',
-                  colorText: '#374151',
-                  colorDanger: '#ef4444',
-                  borderRadius: '8px',
+          <Suspense fallback={
+            <div className="py-8">
+              <LoadingSpinner 
+                size="medium" 
+                color="text-amber-600" 
+                message="Loading secure payment form..." 
+              />
+            </div>
+          }>
+            <Elements
+              stripe={stripePromise}
+              options={{
+                mode: 'payment',
+                amount: Math.round(todayTotal * 100),
+                currency: 'usd',
+                setupFutureUsage: futureItems.length > 0 ? 'off_session' : undefined,
+                appearance: {
+                  theme: 'stripe',
+                  variables: {
+                    colorPrimary: '#f59e0b',
+                    colorBackground: '#fffbeb',
+                    colorText: '#374151',
+                    colorDanger: '#ef4444',
+                    borderRadius: '8px',
+                  }
                 }
-              }
-            }}
-          >
-            <StripePaymentForm
-              amount={todayTotal}
-              formData={formData}
-              onSuccess={handlePaymentSuccess}
-              processing={processing}
-              setProcessing={setProcessing}
-              futureItems={futureItems.map(item => ({
-                name: item.name,
-                price: item.price,
-                frequency: item.frequency
-              }))}
-            />
-          </Elements>
+              }}
+            >
+              <Suspense fallback={
+                <div className="py-4">
+                  <LoadingSpinner 
+                    size="small" 
+                    color="text-amber-600" 
+                    message="Initializing payment..." 
+                  />
+                </div>
+              }>
+                <StripePaymentForm
+                  amount={todayTotal}
+                  formData={formData}
+                  onSuccess={handlePaymentSuccess}
+                  processing={processing}
+                  setProcessing={setProcessing}
+                  futureItems={futureItems.map(item => ({
+                    name: item.name,
+                    price: item.price,
+                    frequency: item.frequency
+                  }))}
+                />
+              </Suspense>
+            </Elements>
+          </Suspense>
         </div>
       </div>
 
