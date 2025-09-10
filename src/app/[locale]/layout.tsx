@@ -6,6 +6,8 @@ import Footer from 'src/app/components/molecules/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ChatwootScript from 'src/app/components/utils/chatwoot';
+import { NavigationProvider } from 'src/app/components/providers/NavigationProvider';
+import { NavigationPrefetcher } from 'src/app/components/utils/NavigationPrefetcher';
 import { ReactNode } from 'react';
 
 const locales = ['en', 'es'];
@@ -33,16 +35,17 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      
-      <Navbar />
-      <main className="flex-auto min-w-0 pt-16 flex flex-col md:px-0">
-        {children}
-      </main>
-      <Footer />
-      <Analytics />
-      <SpeedInsights />
-      <ChatwootScript />  
-      
+      <NavigationProvider>
+        <NavigationPrefetcher />
+        <Navbar />
+        <main className="flex-auto min-w-0 pt-16 flex flex-col md:px-0">
+          {children}
+        </main>
+        <Footer />
+        <Analytics />
+        <SpeedInsights />
+        <ChatwootScript />  
+      </NavigationProvider>
     </NextIntlClientProvider>
   );
 }

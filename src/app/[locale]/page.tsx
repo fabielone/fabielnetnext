@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import Hero from '../components/molecules/hero/hero'
 import PerformanceMonitor from '../components/utils/performance-monitor'
+import { LinkOptimizer } from '../components/hooks/useLinkOptimizer'
 
 // Dynamically import components that are below the fold
 const MyServices = dynamic(() => import('../components/molecules/services'), {
@@ -23,6 +24,7 @@ const ReviewsScroller = dynamic(() => import('../components/molecules/sections/r
 export default function Page() {
   return (
     <section>
+      <LinkOptimizer />
       <PerformanceMonitor />
       <Hero/>
       <ReviewsScroller />

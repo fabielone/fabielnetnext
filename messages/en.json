@@ -29,15 +29,56 @@
       "Pill4": "Website Design",
       "Pill5": "Digital Marketing",
       "Pill6": "Business Banking Setup",
-      "ReviewCount": "500+ reviews"
+      "ReviewCount": "500+ reviews",
+      "subtitle": "Professional LLC formation services designed to get your business started quickly and legally.",
+      "pricing": "Starting at $49.99 + State Fees",
+      "packageTitle": "Complete Business Formation Package",
+      "cta": "Start My LLC Formation",
+      "services": {
+        "llcFormation": {
+          "title": "LLC Formation",
+          "description": "Complete business registration with state filing"
+        },
+        "operatingAgreement": {
+          "title": "Operating Agreement",
+          "description": "Custom legal documents for your business structure"
+        },
+        "einFormation": {
+          "title": "EIN Tax ID",
+          "description": "Federal tax identification number setup"
+        },
+        "bankResolution": {
+          "title": "Bank Resolution",
+          "description": "Banking authorization documents for business accounts"
+        }
+      },
+      "valueProposition": {
+        "price": "$49.99 + State Fees",
+        "stateFees": "State fees vary by location",
+        "benefits": {
+          "fastProcessing": "7-10 Days",
+          "clientCount": "500+ Clients",
+          "expertSupport": "Expert Support",
+          "moneyBack": "Money Back"
+        },
+        "footnote": "* Processing time may vary by state requirements"
+      }
     },
     "HeroRight": {
-      "Title": "Your Business Partner",
-      "Description": "Welcome to fabiel! We're here to help you establish and grow your business in the United States with confidence and success.",
-      "VideoLabel": "Watch Success Story",
+      "title": "Your Business Partner",
+      "description": "Welcome to fabiel! We're here to help you establish and grow your business in the United States with confidence and success.",
+      "videoLabel": "Watch Success Story",
       "Trust1": "500+ Happy Entrepreneurs",
       "Trust2": "Licensed Registered Agent",
       "Trust3": "Fast 7-10 Day Process",
+      "newsletter": {
+        "title": "Stay Informed",
+        "subtitle": "Get business tips, legal updates, and exclusive offers",
+        "cta": "Join Our Community"
+      },
+      "Title": "Your Business Partner",
+      "Description": "Welcome to fabiel! We're here to help you establish and grow your business in the United States with confidence and success.",
+      "VideoLabel": "Watch Success Story",
       "NewsletterTitle": "Stay Informed",
       "NewsletterSubtitle": "Get business tips, legal updates, and exclusive offers",
       "NewsletterCTA": "Join Our Community"
@@ -193,5 +234,129 @@
       "goToDashboard": "Go to Dashboard",
       "contactHelp": "Need help?",
       "contactSupport": "Contact support"
+    },
+    "software": {
+      "hero": {
+        "heading": "Software Development Services",
+        "subtitle": "Transform Your Ideas Into Powerful Digital Solutions",
+        "description": "We create custom software, websites, and digital platforms that drive business growth and deliver exceptional user experiences.",
+        "cta": "Start Your Project",
+        "consultationCta": "Free Consultation",
+        "features": [
+          "Custom Development",
+          "Modern Technologies", 
+          "Scalable Solutions",
+          "Expert Support"
+        ]
+      },
+      "services": {
+        "title": "Our Software Services",
+        "subtitle": "Comprehensive development solutions for your business",
+        "web": {
+          "title": "Web & Blog Development",
+          "description": "Professional websites and blogs built with modern technologies",
+          "features": ["Responsive Design", "SEO Optimized", "Content Management", "Performance Focused"]
+        },
+        "ecommerce": {
+          "title": "eCommerce Solutions",
+          "description": "Complete online stores with payment integration and inventory management",
+          "features": ["Payment Integration", "Inventory Management", "Mobile Optimized", "Analytics Dashboard"]
+        },
+        "custom": {
+          "title": "Custom Software",
+          "description": "Tailored software solutions for your specific business needs", 
+          "features": ["Custom Development", "API Integration", "Database Design", "Cloud Deployment"]
+        }
+      },
+      "cta": {
+        "title": "Ready to Start Your Software Project?",
+        "subtitle": "Let's build something amazing together",
+        "button": "Get Started Today",
+        "consultation": "Schedule Consultation"
+      }
+    },
+    "webBlog": {
+      "hero": {
+        "heading": "Web & Blog Development",
+        "subtitle": "Professional Websites That Drive Results",
+        "description": "Create stunning, responsive websites and engaging blogs that capture your audience and grow your business online.",
+        "features": ["Responsive Design", "SEO Optimized", "Content Management", "Performance Focused", "Blog Integration", "Social Media Ready"],
+        "cta": "Start Your Website",
+        "consultationCta": "Free Quote"
+      },
+      "features": {
+        "title": "Website Features",
+        "subtitle": "Everything you need for online success",
+        "items": [
+          {
+            "title": "Responsive Design",
+            "description": "Perfect display on all devices - desktop, tablet, and mobile"
+          },
+          {
+            "title": "SEO Optimized", 
+            "description": "Built for search engines to help customers find you online"
+          },
+          {
+            "title": "Fast Loading",
+            "description": "Optimized performance for better user experience and rankings"
+          },
+          {
+            "title": "Content Management",
+            "description": "Easy-to-use system for updating your content and blog posts"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Build Your Website?",
+        "subtitle": "Let's create a website that drives results for your business",
+        "button": "Start Your Website",
+        "consultation": "Free Quote"
+      }
+    },
+    "ecommerce": {
+      "hero": {
+        "heading": "eCommerce Store Development",
+        "subtitle": "Sell Online With Confidence", 
+        "description": "Build a powerful online store that converts visitors into customers with secure payments, inventory management, and mobile optimization.",
+        "features": ["Payment Integration", "Inventory Management", "Mobile Optimized", "Analytics Dashboard", "Product Catalog", "Customer Management"],
+        "cta": "Build My Store",
+        "consultationCta": "Free Consultation"
+      },
+      "features": {
+        "title": "eCommerce Features",
+        "subtitle": "Everything you need to sell online",
+        "items": [
+          {
+            "title": "Secure Payments",
+            "description": "Accept credit cards, PayPal, and other payment methods securely"
+          },
+          {
+            "title": "Inventory Management",
+            "description": "Track products, stock levels, and automate low inventory alerts"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Launch Your Online Store?",
+        "subtitle": "Start selling online with a professional eCommerce solution",
+        "button": "Build My Store",
+        "consultation": "Free Consultation"
+      }
+    },
+    "customSoftware": {
+      "hero": {
+        "heading": "Custom Software Development",
+        "subtitle": "Tailored Solutions For Your Business",
+        "description": "Build custom applications, APIs, and software solutions designed specifically for your unique business requirements and workflows.",
+        "features": ["Custom Development", "API Integration", "Database Design", "Cloud Deployment", "Scalable Architecture", "Enterprise Security"],
+        "cta": "Start Custom Project",
+        "consultationCta": "Discuss Your Needs"
+      },
+      "cta": {
+        "title": "Ready to Build Your Custom Solution?",
+        "subtitle": "Let's discuss your unique requirements and create the perfect software solution",
+        "button": "Start Custom Project",
+        "consultation": "Discuss Your Needs"
+      }
     }
   }

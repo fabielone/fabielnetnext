@@ -17,7 +17,18 @@ export const routing = defineRouting({
     '/checkout/businessformation': {
       es:'/checkout/formacion-de-negocio'
     },
-
+    '/software': {
+      es:'/software'
+    },
+    '/software/web-blog': {
+      es:'/software/desarrollo-web'
+    },
+    '/software/ecommerce': {
+      es:'/software/tienda-online'
+    },
+    '/software/custom': {
+      es:'/software/personalizado'
+    },
     '/blog/10-consejos':{
       es:'/blog/10-consejos',
       en:'/blog/10-tips'

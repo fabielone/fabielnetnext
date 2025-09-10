@@ -8,8 +8,41 @@
     },
     "Hero": {
       "Heading": "Tu Empresa Construida Mejor",
-      "Subheading": "Servicios Completos de Formación de LLC para Emprendedores en California",
-      "PriceTimeline": "Desde $49 + Gastos de Gobierno • Listo en 7-10 Días Hábiles",
+      "Subheading": "Servicios Completos de Formación LLC para Empresarios en California",
+      "PriceTimeline": "Desde $49.99 + Tasas Gubernamentales • Listo en 7-10 Días Hábiles",
+      "subtitle": "Paquete Completo de Formación LLC - Todo lo que Necesitas",
+      "pricing": "Los 4 Servicios por Solo $49.99 + Tasas Estatales • Listo en 7-10 Días Hábiles",
+      "packageTitle": "Paquete Completo de Formación LLC",
+      "services": {
+        "llcFormation": {
+          "title": "Formación LLC",
+          "description": "Presentación completa del estado y documentación"
+        },
+        "operatingAgreement": {
+          "title": "Acuerdo Operativo",
+          "description": "Marco legal personalizado para tu LLC"
+        },
+        "einFormation": {
+          "title": "Formación EIN",
+          "description": "Configuración de número de identificación fiscal federal"
+        },
+        "bankResolution": {
+          "title": "Carta de Resolución Bancaria",
+          "description": "Documentación de autorización bancaria"
+        }
+      },
+      "valueProposition": {
+        "price": "Los 4 Servicios: $49.99",
+        "stateFees": "+ Tasas de Presentación Estatal",
+        "benefits": {
+          "fastProcessing": "Procesamiento Rápido",
+          "clientCount": "500+ LLCs Formadas",
+          "expertSupport": "Soporte Experto",
+          "moneyBack": "Garantía de Devolución"
+        },
+        "footnote": "* Garantía de devolución disponible hasta que presentemos con el estado"
+      },
+      "cta": "Iniciar Mi Formación LLC",
       "BenefitsTitle": "Todo lo que Necesitas para Iniciar tu LLC",
       "Bullet1": "Formación Completa de LLC",
       "Bullet2": "Acuerdo Operativo Personalizado",
@@ -19,7 +52,6 @@
       "BulletDescription2": "Adaptado a las necesidades específicas de tu negocio",
       "BulletDescription3": "Configuración de identificación fiscal federal",
       "BulletDescription4": "Sitio web moderno con optimización SEO",
-      "CTA": "Iniciar Mi Formación LLC",
       "Schedule": "Consulta Gratuita",
       "TrustBadge1": "500+ LLCs Formadas",
       "TrustBadge2": "Agente Licenciado",
@@ -32,6 +64,14 @@
       "ReviewCount": "500+ reseñas"
     },
     "HeroRight": {
+      "title": "Tu Socio en Formación LLC",
+      "description": "Paquete completo de formación LLC con todos los documentos que necesitas para iniciar tu negocio legal y profesionalmente.",
+      "videoLabel": "Ver Historia de Éxito",
+      "newsletter": {
+        "title": "Mantente Informado",
+        "subtitle": "Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas",
+        "cta": "Únete a Nuestra Comunidad"
+      },
       "Title": "Tu Aliado Empresarial",
       "Description": "¡Bienvenido a fabiel! Estamos aquí para ayudarte a establecer y hacer crecer tu negocio en los Estados Unidos con confianza y éxito.",
       "VideoLabel": "Ver Historia de Éxito",
@@ -193,6 +233,130 @@
       "goToDashboard": "Ir al Panel",
       "contactHelp": "¿Necesitas ayuda?",
       "contactSupport": "Contactar soporte"
+    },
+    "software": {
+      "hero": {
+        "heading": "Servicios de Desarrollo de Software",
+        "subtitle": "Transformamos Tus Ideas en Soluciones Digitales Poderosas",
+        "description": "Creamos software personalizado, sitios web y plataformas digitales que impulsan el crecimiento empresarial y brindan experiencias excepcionales al usuario.",
+        "cta": "Iniciar Tu Proyecto",
+        "consultationCta": "Consulta Gratuita",
+        "features": [
+          "Desarrollo Personalizado",
+          "Tecnologías Modernas",
+          "Soluciones Escalables", 
+          "Soporte Experto"
+        ]
+      },
+      "services": {
+        "title": "Nuestros Servicios de Software",
+        "subtitle": "Soluciones de desarrollo integrales para tu negocio",
+        "web": {
+          "title": "Desarrollo Web y Blog",
+          "description": "Sitios web profesionales y blogs construidos con tecnologías modernas",
+          "features": ["Diseño Responsivo", "Optimizado para SEO", "Gestión de Contenido", "Enfoque en Rendimiento"]
+        },
+        "ecommerce": {
+          "title": "Soluciones eCommerce",
+          "description": "Tiendas en línea completas con integración de pagos y gestión de inventario",
+          "features": ["Integración de Pagos", "Gestión de Inventario", "Optimizado para Móvil", "Panel de Análisis"]
+        },
+        "custom": {
+          "title": "Software Personalizado",
+          "description": "Soluciones de software adaptadas a las necesidades específicas de tu negocio",
+          "features": ["Desarrollo Personalizado", "Integración de API", "Diseño de Base de Datos", "Despliegue en la Nube"]
+        }
+      },
+      "cta": {
+        "title": "¿Listo para Iniciar Tu Proyecto de Software?",
+        "subtitle": "Construyamos algo increíble juntos",
+        "button": "Comenzar Hoy",
+        "consultation": "Agendar Consulta"
+      }
+    },
+    "webBlog": {
+      "hero": {
+        "heading": "Desarrollo Web y Blog",
+        "subtitle": "Sitios Web Profesionales Que Generan Resultados",
+        "description": "Crea sitios web impresionantes y responsivos y blogs atractivos que capten a tu audiencia y hagan crecer tu negocio en línea.",
+        "features": ["Diseño Responsivo", "SEO Optimizado", "Gestión de Contenido", "Enfoque en Rendimiento", "Integración de Blog", "Listo para Redes Sociales"],
+        "cta": "Iniciar Tu Sitio Web",
+        "consultationCta": "Cotización Gratuita"
+      },
+      "features": {
+        "title": "Características del Sitio Web",
+        "subtitle": "Todo lo que necesitas para el éxito en línea",
+        "items": [
+          {
+            "title": "Diseño Responsivo",
+            "description": "Visualización perfecta en todos los dispositivos - escritorio, tablet y móvil"
+          },
+          {
+            "title": "Optimizado para SEO",
+            "description": "Construido para motores de búsqueda para ayudar a que los clientes te encuentren en línea"
+          },
+          {
+            "title": "Carga Rápida",
+            "description": "Rendimiento optimizado para mejor experiencia de usuario y clasificaciones"
+          },
+          {
+            "title": "Gestión de Contenido",
+            "description": "Sistema fácil de usar para actualizar tu contenido y entradas del blog"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Construir Tu Sitio Web?",
+        "subtitle": "Creemos un sitio web que genere resultados para tu negocio",
+        "button": "Iniciar Tu Sitio Web",
+        "consultation": "Cotización Gratuita"
+      }
+    },
+    "ecommerce": {
+      "hero": {
+        "heading": "Desarrollo de Tienda eCommerce",
+        "subtitle": "Vende en Línea con Confianza",
+        "description": "Construye una tienda en línea poderosa que convierta visitantes en clientes con pagos seguros, gestión de inventario y optimización móvil.",
+        "features": ["Integración de Pagos", "Gestión de Inventario", "Optimizado para Móvil", "Panel de Analíticas", "Catálogo de Productos", "Gestión de Clientes"],
+        "cta": "Construir Mi Tienda",
+        "consultationCta": "Consulta Gratuita"
+      },
+      "features": {
+        "title": "Características eCommerce",
+        "subtitle": "Todo lo que necesitas para vender en línea",
+        "items": [
+          {
+            "title": "Pagos Seguros",
+            "description": "Acepta tarjetas de crédito, PayPal y otros métodos de pago de forma segura"
+          },
+          {
+            "title": "Gestión de Inventario",
+            "description": "Rastrea productos, niveles de stock y automatiza alertas de inventario bajo"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Lanzar Tu Tienda en Línea?",
+        "subtitle": "Comienza a vender en línea con una solución eCommerce profesional",
+        "button": "Construir Mi Tienda",
+        "consultation": "Consulta Gratuita"
+      }
+    },
+    "customSoftware": {
+      "hero": {
+        "heading": "Desarrollo de Software Personalizado",
+        "subtitle": "Soluciones Adaptadas Para Tu Negocio",
+        "description": "Construye aplicaciones personalizadas, APIs y soluciones de software diseñadas específicamente para los requisitos únicos y flujos de trabajo de tu negocio.",
+        "features": ["Desarrollo Personalizado", "Integración API", "Diseño de Base de Datos", "Despliegue en la Nube", "Arquitectura Escalable", "Seguridad Empresarial"],
+        "cta": "Iniciar Proyecto Personalizado",
+        "consultationCta": "Discutir Tus Necesidades"
+      },
+      "cta": {
+        "title": "¿Listo para Construir Tu Solución Personalizada?",
+        "subtitle": "Discutamos tus requisitos únicos y creemos la solución de software perfecta",
+        "button": "Iniciar Proyecto Personalizado",
+        "consultation": "Discutir Tus Necesidades"
+      }
     }
     
   }

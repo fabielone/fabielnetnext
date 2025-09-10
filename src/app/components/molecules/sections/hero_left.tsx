@@ -1,11 +1,11 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { HiArrowRight, HiDocumentText, HiGlobe, HiIdentification } from 'react-icons/hi';
+import { HiArrowRight } from 'react-icons/hi';
 import { SocialIcons } from '../socials/socialicons';
 import { useTranslations } from 'next-intl';
-import { FiFileText } from 'react-icons/fi';
-import { FaLinkedin , FaStar } from 'react-icons/fa';
+import { FaLinkedin, FaStar, FaBuilding, FaFileContract, FaIdCard, FaUniversity } from 'react-icons/fa';
+import { MdBusiness, MdAccountBalance } from 'react-icons/md';
 import { useInView } from 'react-intersection-observer';
 import { useNavigationLoading } from '../../hooks/useNavigationLoading';
 import LoadingSpinner from '../../atoms/LoadingSpinner';
@@ -19,22 +19,30 @@ export default function HeroLeft() {
   
   const { isNavigating, navigateWithLoading } = useNavigationLoading();
   
-  const benefits = [
+  const services = [
     {
-      text: t('Bullet1'),
-      icon: <HiDocumentText className="text-amber-500 w-6 h-6" />,
+      title: t('services.llcFormation.title'),
+      description: t('services.llcFormation.description'),
+      icon: <MdAccountBalance className="w-7 h-7" />,
+      gradient: 'from-blue-500 to-blue-600'
     },
     {
-      text: t('Bullet2'),
-      icon: <FiFileText className="text-amber-500 w-6 h-6" />,
+      title: t('services.operatingAgreement.title'),
+      description: t('services.operatingAgreement.description'),
+      icon: <FaFileContract className="w-7 h-7" />,
+      gradient: 'from-emerald-500 to-emerald-600'
     },
     {
-      text: t('Bullet3'),
-      icon: <HiIdentification className="text-amber-500 w-6 h-6" />,
+      title: t('services.einFormation.title'),
+      description: t('services.einFormation.description'),
+      icon: <FaIdCard className="w-7 h-7" />,
+      gradient: 'from-purple-500 to-purple-600'
     },
     {
-      text: t('Bullet4'),
-      icon: <HiGlobe className="text-amber-500 w-6 h-6" />,
+      title: t('services.bankResolution.title'),
+      description: t('services.bankResolution.description'),
+      icon: <FaUniversity className="w-7 h-7" />,
+      gradient: 'from-orange-500 to-orange-600'
     },
   ];
 
@@ -71,54 +79,51 @@ export default function HeroLeft() {
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
       variants={containerVariants}
-      className="relative font-serif px-0 md:px-4 pt-1 md:pt-6 mx-auto overflow-hidden bg-white dark:bg-gray-900"
+      className="relative font-serif px-0 md:px-4 pt-2 md:pt-4 mx-auto overflow-hidden bg-white dark:bg-gray-900"
     >
       <div className="max-w-2xl mx-auto">
-        <div className="mb-16">
+        <div className="mb-8">
           {/* Heading Section */}
           <motion.div 
             variants={itemVariants}
-            className="text-center sm:mt-2 mb-2 md:mb-12"
+            className="text-center mb-6"
           >
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-5xl font-bold text-gray-900 dark:text-white"
-              whileHover={{ scale: 1.01 }} // Reduced hover scale
+              className="text-3xl sm:text-4xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight"
             >
               <motion.span className="text-gray-600 dark:text-gray-300">
                 {t('Heading')}
               </motion.span>
             </motion.h1>
-            <motion.p className="text-xl sm:text-2xl text-gray-500 dark:text-gray-400 mt-4 font-medium">
-              {t('Subheading')}
+            <motion.p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 mt-3 font-medium">
+              {t('subtitle')}
             </motion.p>
-            <motion.div className="mt-4 text-lg text-amber-600 dark:text-amber-400 font-semibold">
-              {t('PriceTimeline')}
+            <motion.div className="mt-3 text-base text-emerald-600 dark:text-emerald-400 font-semibold">
+              {t('pricing')}
             </motion.div>
           </motion.div>
           <motion.div 
-            className="flex justify-center items-center space-x-3 mt-4 mb-6"
+            className="flex justify-center items-center space-x-3 mt-3 mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, type: 'spring', stiffness: 300 }} // Faster animation
+            transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
           >
             <motion.div 
-              className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full px-4 py-2 flex items-center space-x-2 shadow-lg border border-amber-100 dark:border-amber-800/30"
-              whileHover={{ scale: 1.02 }} // Reduced hover scale
+              className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center space-x-2 shadow-lg border border-amber-100 dark:border-amber-800/30"
             >
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, rotate: -90 }} // Reduced rotation
-                    animate={{ opacity: 1, rotate: 0 }}
-                    transition={{ delay: 0.4 + i * 0.05, type: 'spring' }} // Faster stagger
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 + i * 0.05 }}
                   >
-                    <FaStar className="w-4 h-4 text-yellow-400" />
+                    <FaStar className="w-3 h-3 text-yellow-400" />
                   </motion.div>
                 ))}
               </div>
               <span className="text-sm font-bold text-gray-800 dark:text-gray-200">5.0</span>
-              {/* <span className="text-xs text-gray-600 dark:text-gray-400">({t('ReviewCount')})</span> */}
             </motion.div>
           </motion.div>
           {/* Infinite Scrolling Pills - Temporarily Hidden
@@ -144,128 +149,115 @@ export default function HeroLeft() {
           </motion.div>
           */}
 
-          {/* Benefits Section */}
+          {/* LLC Formation Services */}
           <motion.div 
-            className="text-gray-800 dark:text-gray-200 my-12 p-2 md:p-8 mx-6 sm:mx-8 md:mx-8 bg-gradient-to-br from-white via-amber-50/30 to-white dark:from-gray-800 dark:via-amber-900/10 dark:to-gray-800 rounded-3xl shadow-2xl border border-amber-100 dark:border-amber-800/30"
+            className="text-gray-800 dark:text-gray-200 my-6 p-6 mx-4 sm:mx-6 md:mx-8 bg-gradient-to-br from-white via-blue-50/30 to-white dark:from-gray-800 dark:via-blue-900/10 dark:to-gray-800 rounded-2xl shadow-lg border border-blue-100 dark:border-blue-800/30"
             variants={itemVariants}
-            whileHover={{ 
-              scale: 1.005, // Reduced scale for better performance
-              boxShadow: '0 20px 40px -10px rgba(245, 158, 11, 0.1)'
-            }}
-            transition={{ type: 'spring', stiffness: 400 }} // Faster spring
           >
-            <motion.h3 className="text-xl md:text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-              {t('BenefitsTitle')}
+            <motion.h3 className="text-xl md:text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">
+              {t('packageTitle')}
             </motion.h3>
-            <motion.ul className="space-y-4 sm:space-y-6">
-              {benefits.map((benefit, index) => (
-                <motion.li
+            
+            {/* Services Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              {services.map((service, index) => (
+                <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="flex items-start bg-white dark:bg-gray-700/50 p-2 rounded-lg sm:rounded-xl"
-                  whileHover={{ x: 2, scale: 1.005 }} // Reduced movement and scale
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }} // Faster stagger
+                  className="group bg-white dark:bg-gray-700/50 p-5 rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-600/30"
+                  whileHover={{ y: -3, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
                   <motion.div 
-                    className="mr-4 sm:mr-6 p-2 sm:p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg sm:rounded-xl"
-                    whileHover={{ scale: 1.05, rotate: 2 }} // Reduced rotation
+                    className={`mx-auto mb-4 p-4 bg-gradient-to-r ${service.gradient} rounded-2xl w-fit shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                    whileHover={{ scale: 1.1, rotateY: 10 }}
                   >
-                    {benefit.icon}
+                    <div className="text-white">
+                      {service.icon}
+                    </div>
                   </motion.div>
-                  <div className="relative">
-                    <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white block">
-                      {benefit.text}
-                    </span>
-                    <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 block">
-                      {t(`BulletDescription${index + 1}`)}
-                    </span>
-                  </div>
-                </motion.li>
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-2 text-center text-lg">{service.title}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 text-center leading-relaxed">{service.description}</p>
+                </motion.div>
               ))}
-            </motion.ul>
+            </div>
+
+            {/* Value Proposition */}
+            <div className="bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-emerald-200 dark:border-emerald-800/30">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">
+                  {t('valueProposition.price')}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                  {t('valueProposition.stateFees')}
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                  <div className="flex items-center justify-center">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                    <span>{t('valueProposition.benefits.fastProcessing')}</span>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                    <span>{t('valueProposition.benefits.clientCount')}</span>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                    <span>{t('valueProposition.benefits.expertSupport')}</span>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                    <span>{t('valueProposition.benefits.moneyBack')}</span>
+                  </div>
+                </div>
+                <div className="mt-3 pt-2 border-t border-emerald-200 dark:border-emerald-800/30">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                    {t('valueProposition.footnote')}
+                  </p>
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           {/* Call-to-Action Buttons */}
           <motion.div 
-            className="text-lg mb-4 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
+            className="text-lg mb-4 flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 justify-center"
             variants={containerVariants}
           >
-            {/* Temporarily commented out - will implement later
-            <motion.a
-              href="/checkout/schedule"
-              variants={itemVariants}
-              whileHover={{ 
-                scale: 1.05,
-                color: "#4b5563" // darker gray
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="text-gray-600 dark:text-gray-300 px-8 md:px-2 py-4 md:py-1 flex items-center"
-            >
-              <IoIosCalendar className="mr-2 h-6 w-6 md:w-8" />
-              {t('Schedule')}
-            </motion.a>
-            */}
-
             <motion.button
               variants={itemVariants}
               whileHover={{ 
-                scale: 1.02, // Reduced scale
-                boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3)'
+                scale: 1.02,
+                boxShadow: '0 8px 25px rgba(59, 130, 246, 0.3)'
               }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigateWithLoading('/checkout/businessformation')}
               disabled={isNavigating}
-              className={`bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-12 py-6 rounded-2xl flex items-center shadow-xl hover:shadow-2xl relative overflow-hidden text-xl transition-all duration-300 ${
-                isNavigating ? 'opacity-75 cursor-not-allowed' : ''
+              className={`bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl relative overflow-hidden text-lg transition-all duration-300 ${
+                isNavigating ? 'opacity-90' : ''
               }`}
             >
+              <motion.span className="relative z-10">
+                {t('cta')}
+              </motion.span>
               {isNavigating ? (
-                <div className="flex items-center">
+                <div className="ml-3">
                   <LoadingSpinner size="small" color="text-white" message="" />
-                  <span className="ml-3">Loading...</span>
                 </div>
               ) : (
-                <>
-                  <motion.span className="relative z-10">
-                    {t('CTA')}
-                  </motion.span>
-                  <motion.span
-                    className="ml-3"
-                    animate={{
-                      x: [0, 3, 0], // Reduced movement
-                    }}
-                    transition={{
-                      repeat: Infinity,
-                      repeatType: 'reverse',
-                      duration: 2 // Slower animation
-                    }}
-                  >
-                    <HiArrowRight className="h-6 w-6" />
-                  </motion.span>
-                </>
+                <motion.span
+                  className="ml-3"
+                  animate={{ x: [0, 3, 0] }}
+                  transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
+                >
+                  <HiArrowRight className="h-5 w-5" />
+                </motion.span>
               )}
             </motion.button>
           </motion.div>
 
-          {/* Social Icons */}
-          <motion.div 
-            className="flex justify-center p-4 space-x-4"
-            variants={itemVariants}
-          >
-            <SocialIcons />
-            <motion.a
-              href="https://www.linkedin.com/your-linkedin-page"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
-            >
-              <FaLinkedin className="w-6 h-6" />
-            </motion.a>
-          </motion.div>
+          {/* Remove Social Icons from here - moving to right side */}
         </div>
       </div>
     </motion.div>
