@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm approve-builds --include @prisma/client prisma sharp && pnpm build",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "ignoreCommand": "echo 'Using default ignore behavior'"
+}
