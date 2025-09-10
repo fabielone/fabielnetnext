@@ -12,6 +12,8 @@ interface MegaMenuProps {
   onNavigate: () => void;
 }
 
+const normalizeKey = (key: string) => key.startsWith('nav.') ? key.slice(4) : key;
+
 export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate }) => {
   const t = useTranslations('nav'); // Use the 'nav' namespace
 
@@ -24,7 +26,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate }) => {
             className="border-r border-gray-200 dark:border-gray-700 pr-8 last:border-r-0"
           >
             <p className="text-gray-800 dark:text-white font-semibold mb-2">
-              <span>{t(subItem.name)}</span> {/* Translate subItem name */}
+              <span>{t(normalizeKey(subItem.name))}</span> {/* Translate subItem name */}
             </p>
             <div>
               {subItem.subSections?.map((subSection, subSecIndex) => (
@@ -37,7 +39,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate }) => {
                   <IoMdArrowForward 
                     className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-500" 
                   />
-                  <span>{t(subSection.name)}</span> {/* Translate subSection name */}
+                  <span>{t(normalizeKey(subSection.name))}</span> {/* Translate subSection name */}
                 </Link>
               ))}
             </div>

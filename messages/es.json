@@ -109,6 +109,11 @@
           "agent": "Agente Registrado",
           "compliance": "Cumplimiento Anual",
           "other": "Otros Servicios Personalizados"
+        },
+        "bpo": {
+          "title": "Servicios BPO",
+          "outbound": "Llamadas Outbound",
+          "backoffice": "Operaciones Back Office"
         }
       },
       "clients": "Nuestros Clientes",
@@ -185,10 +190,111 @@
             "Gestión de Redes Sociales",
             "Análisis y Reportes"
           ]
+        },
+        "bpo": {
+          "pill": "Servicios BPO",
+          "title": "Escala con Operaciones Externalizadas",
+          "subtitle": "Llamadas outbound y ejecución operativa",
+          "description": "Aprovecha talento bilingüe entrenado para llamadas outbound, agendamiento de citas y tareas back office.",
+          "features": [
+            "Llamadas Outbound",
+            "Agendamiento",
+            "Tareas Back Office"
+          ]
         }
       },
       "buttonText": "Empezar Ahora",
       "learnMore": "Saber Más"
+    },
+    "bpo": {
+      "hero": {
+        "heading": "Business Process Outsourcing (BPO)",
+        "subtitle": "Extiende Tu Equipo con Capacidad Operativa Confiable",
+        "description": "Proveemos llamadas outbound estructuradas y ejecución back office con métricas transparentes, QA e integración CRM.",
+        "features": ["Llamadas Outbound", "Agendamiento", "Tareas Back Office", "Métricas Diarias"],
+        "cta": "Iniciar BPO",
+        "consultationCta": "Evaluación Gratis"
+      },
+      "services": {
+        "outbound": {
+          "title": "Llamadas Outbound y Agendamiento",
+          "description": "Generación de pipeline constante con agentes bilingües entrenados y reportes diarios.",
+          "features": ["Outreach Frío y Tibio", "Agendamiento en Vivo", "Actualizaciones CRM", "Resumen Diario KPIs"]
+        },
+        "backoffice": {
+          "title": "Operaciones Back Office",
+          "description": "Ejecución basada en procesos para datos, documentación, reportes y soporte de flujos.",
+          "features": ["Ingreso de Datos", "Procesamiento Documental", "Seguimiento de Tareas", "Soporte de Reportes"]
+        }
+      },
+      "features": {
+        "title": "Capacidades BPO",
+        "subtitle": "Apalancamiento operativo sin contratar",
+        "items": [
+          {"title": "Eficiencia Outbound", "description": "Bloques de llamadas estructurados con guiones y objeciones."},
+          {"title": "Ejecución Back Office", "description": "Datos, documentación, investigación ligera y flujos."},
+          {"title": "Métricas y QA", "description": "Conectados %, citas, show rate, tareas y QA diario."},
+          {"title": "Integración CRM", "description": "Trabajamos directo en tu CRM o exportaciones estandarizadas."}
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Agregar BPO?",
+        "subtitle": "Nosotros ejecutamos mientras tú escalas",
+        "button": "Lanzar BPO",
+        "consultation": "Evaluación Gratis"
+      }
+    },
+    "outboundBpo": {
+      "hero": {
+        "heading": "Llamadas Outbound y Agendamiento",
+        "subtitle": "Pipeline Consistente con Outreach Estructurado",
+        "description": "Agentes bilingües ejecutan bloques diarios, agendan citas y registran todo en tu CRM.",
+        "features": ["Bloques 4–8 Horas", "Agentes Bilingües", "Métricas Diarias", "Agenda en Vivo"],
+        "cta": "Iniciar Outbound",
+        "consultationCta": "Solicitar Agenda"
+      },
+      "features": {
+        "title": "Componentes Outbound",
+        "subtitle": "Todo para outreach predecible",
+        "items": [
+          {"title": "Bloques de Llamadas", "description": "Ventanas de enfoque para volumen y calidad."},
+          {"title": "Guiones y Objeciones", "description": "Framework refinado de conversación y objeciones."},
+          {"title": "Agendamiento", "description": "Reserva con notas y calificación."},
+          {"title": "Métricas", "description": "% conexión, citas, show rate y QA."}
+        ]
+      },
+      "cta": {
+        "title": "¿Necesitas Más Citas?",
+        "subtitle": "Ejecutamos el outreach mientras cierras",
+        "button": "Empezar",
+        "consultation": "Evaluación"
+      }
+    },
+    "backofficeBpo": {
+      "hero": {
+        "heading": "Operaciones Back Office",
+        "subtitle": "Ejecución Confiable de Tareas",
+        "description": "Soporte estructurado para datos, documentación, reportes y flujos.",
+        "features": ["Tareas", "Datos", "Reportes", "Procesos"],
+        "cta": "Agregar Soporte",
+        "consultationCta": "Revisión"
+      },
+      "features": {
+        "title": "Soporte Operativo",
+        "subtitle": "Desbloquea tiempo de tu equipo",
+        "items": [
+          {"title": "Datos", "description": "Actualizaciones e higiene CRM / planillas."},
+          {"title": "Documentación", "description": "Organización y estandarización."},
+          {"title": "Flujos", "description": "Seguimiento de tableros y pipelines."},
+          {"title": "Reportes", "description": "Actualizaciones programadas KPIs."}
+        ]
+      },
+      "cta": {
+        "title": "¿Necesitas Capacidad?",
+        "subtitle": "Deleguemos ejecución repetitiva",
+        "button": "Obtener Soporte",
+        "consultation": "Auditoría"
+      }
     },
     "blogSection": {
       "title": "Explora Nuestro Blog",
@@ -272,6 +378,344 @@
         "subtitle": "Construyamos algo increíble juntos",
         "button": "Comenzar Hoy",
         "consultation": "Agendar Consulta"
+      }
+    },
+    "marketing": {
+      "hero": {
+        "heading": "Servicios de Marketing",
+        "subtitle": "Haz Crecer Tu Negocio Con Marketing Estratégico",
+        "description": "Soluciones integrales de marketing para aumentar tu visibilidad, atraer clientes e impulsar el crecimiento sostenible de tu negocio.",
+        "features": ["Marketing Digital", "Estrategia de Contenido", "Redes Sociales", "Analytics y Reportes", "Gestión de Campañas", "Desarrollo de Marca"],
+        "cta": "Empezar Marketing",
+        "consultationCta": "Sesión de Estrategia Gratis"
+      },
+      "services": {
+        "digital": {
+          "title": "Marketing Digital y Contenido",
+          "description": "Estrategias integrales de marketing digital que generan tráfico y crean leads",
+          "features": ["Optimización SEO", "Publicidad PPC", "Marketing de Contenido", "Campañas de Email"]
+        },
+        "social": {
+          "title": "Marketing en Redes Sociales",
+          "description": "Construye la presencia de tu marca y conecta con clientes en todas las plataformas sociales",
+          "features": ["Creación de Contenido", "Gestión de Comunidad", "Publicidad Social", "Seguimiento de Analytics"]
+        },
+        "influencer": {
+          "title": "Marketing de Influencers",
+          "description": "Conecta con influencers relevantes para expandir tu alcance y credibilidad",
+          "features": ["Matching de Influencers", "Gestión de Campañas", "Colaboración de Contenido", "Seguimiento de Rendimiento"]
+        }
+      },
+      "features": {
+        "title": "Soluciones de Marketing",
+        "subtitle": "Ecosistema completo de marketing para tu negocio",
+        "items": [
+          {
+            "title": "Estrategia de Marketing Digital",
+            "description": "Estrategias personalizadas para alcanzar tu audiencia objetivo y maximizar el ROI"
+          },
+          {
+            "title": "Creación de Contenido",
+            "description": "Contenido atractivo que conecta con tu audiencia e impulsa las conversiones"
+          },
+          {
+            "title": "Gestión de Redes Sociales",
+            "description": "Construye y gestiona la presencia de tu marca en todas las plataformas sociales"
+          },
+          {
+            "title": "Analytics de Rendimiento",
+            "description": "Rastrea y optimiza tus campañas de marketing con insights detallados"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Impulsar Tu Marketing?",
+        "subtitle": "Creemos una estrategia de marketing que entregue resultados reales",
+        "button": "Empezar Marketing",
+        "consultation": "Sesión de Estrategia"
+      }
+    },
+    "digitalMarketing": {
+      "hero": {
+        "heading": "Servicios de Marketing Digital",
+        "subtitle": "Aumenta Tu Visibilidad Online y Ventas",
+        "description": "Estrategias integrales de marketing digital que generan tráfico, crean leads y aumentan las conversiones para tu negocio.",
+        "features": ["Optimización SEO", "Publicidad PPC", "Marketing en Redes Sociales", "Campañas de Email", "Marketing de Contenido", "Analytics y Reportes"],
+        "cta": "Impulsar Mi Negocio",
+        "consultationCta": "Auditoría de Marketing Gratis"
+      },
+      "features": {
+        "title": "Características del Marketing Digital",
+        "subtitle": "Todo lo que necesitas para dominar online",
+        "items": [
+          {
+            "title": "Optimización para Motores de Búsqueda",
+            "description": "Mejora tu posicionamiento en buscadores y tráfico orgánico con estrategias SEO probadas"
+          },
+          {
+            "title": "Marketing en Redes Sociales",
+            "description": "Construye la presencia de tu marca y conecta con clientes en todas las plataformas sociales"
+          },
+          {
+            "title": "Campañas de Email Marketing",
+            "description": "Crea campañas de email dirigidas que nutren leads y impulsan conversiones"
+          },
+          {
+            "title": "Analytics y Reportes",
+            "description": "Rastrea el rendimiento de tu marketing con analytics detallados e insights accionables"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Dominar el Marketing Digital?",
+        "subtitle": "Creemos campañas que impulsen el crecimiento real de tu negocio",
+        "button": "Comenzar Ahora",
+        "consultation": "Auditoría de Marketing Gratis"
+      }
+    },
+    "socialMedia": {
+      "hero": {
+        "heading": "Marketing en Redes Sociales",
+        "subtitle": "Construye Tu Marca y Conecta con Tu Audiencia",
+        "description": "Gestión estratégica de redes sociales que construye reconocimiento de marca, involucra a tu comunidad e impulsa el crecimiento del negocio.",
+        "features": ["Creación de Contenido", "Gestión de Comunidad", "Marketing de Influencers", "Publicidad Social", "Seguimiento de Analytics", "Estrategia de Marca"],
+        "cta": "Hacer Crecer Mi Audiencia",
+        "consultationCta": "Auditoría de Redes Sociales"
+      },
+      "features": {
+        "title": "Soluciones de Redes Sociales",
+        "subtitle": "Gestión completa de presencia en redes sociales",
+        "items": [
+          {
+            "title": "Creación de Contenido y Estrategia",
+            "description": "Posts, historias y videos atractivos adaptados a cada plataforma y audiencia"
+          },
+          {
+            "title": "Gestión de Comunidad",
+            "description": "Participación activa con tu audiencia para construir relaciones y lealtad"
+          },
+          {
+            "title": "Alianzas con Influencers",
+            "description": "Conecta con influencers relevantes para expandir tu alcance y credibilidad"
+          },
+          {
+            "title": "Publicidad en Redes Sociales",
+            "description": "Campañas publicitarias dirigidas que maximizan el alcance e impulsan conversiones"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Hacer Crecer Tu Presencia Social?",
+        "subtitle": "Construyamos una estrategia de redes sociales que involucre y convierta",
+        "button": "Comenzar a Crecer",
+        "consultation": "Auditoría Social Gratis"
+      }
+    },
+    "influencerMarketing": {
+      "hero": {
+        "heading": "Marketing de Influencers",
+        "subtitle": "Aprovecha Alianzas Auténticas para el Crecimiento",
+        "description": "Conecta con influencers relevantes para expandir tu alcance, construir credibilidad e impulsar el engagement auténtico con tu audiencia objetivo.",
+        "features": ["Matching de Influencers", "Gestión de Campañas", "Colaboración de Contenido", "Seguimiento de Rendimiento", "Construcción de Relaciones", "Optimización de ROI"],
+        "cta": "Encontrar Influencers",
+        "consultationCta": "Sesión de Estrategia"
+      },
+      "features": {
+        "title": "Soluciones de Marketing de Influencers",
+        "subtitle": "Alianzas auténticas que generan resultados",
+        "items": [
+          {
+            "title": "Descubrimiento y Matching de Influencers",
+            "description": "Encuentra y conecta con influencers que se alineen con tu marca y audiencia"
+          },
+          {
+            "title": "Estrategia y Gestión de Campañas",
+            "description": "Planifica y ejecuta campañas de influencers que entreguen resultados medibles"
+          },
+          {
+            "title": "Colaboración de Contenido",
+            "description": "Trabaja con influencers para crear contenido auténtico y atractivo para tu marca"
+          },
+          {
+            "title": "Analytics de Rendimiento",
+            "description": "Rastrea el rendimiento de campañas y ROI con analytics detallados y reportes"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Aliarte con Influencers?",
+        "subtitle": "Encontremos los influencers perfectos para hacer crecer tu marca",
+        "button": "Iniciar Alianza",
+        "consultation": "Encontrar Mis Influencers"
+      }
+    },
+    "business": {
+      "hero": {
+        "heading": "Servicios de Formación de Negocios",
+        "subtitle": "Inicia Tu Negocio de la Manera Correcta",
+        "description": "Servicios completos de formación de negocios para ayudarte a establecer y mantener tu empresa de manera legal y eficiente en Estados Unidos.",
+        "features": ["Formación de LLC", "Agente Registrado", "Soporte de Cumplimiento", "Documentación Legal", "Guía Fiscal", "Soporte Continuo"],
+        "cta": "Formar Mi Negocio",
+        "consultationCta": "Consulta de Negocios Gratis"
+      },
+      "services": {
+        "llc": {
+          "title": "Formación de LLC",
+          "description": "Proceso completo de formación de LLC con toda la documentación requerida y presentación",
+          "features": ["Presentación Estatal", "Acuerdo Operativo", "Número de ID Fiscal", "Paquete de Cumplimiento"]
+        },
+        "agent": {
+          "title": "Agente Registrado",
+          "description": "Servicio profesional de agente registrado para recibir documentos legales en tu nombre",
+          "features": ["Recepción de Documentos Legales", "Protección de Privacidad", "Monitoreo de Cumplimiento", "Reenvío de Documentos"]
+        },
+        "compliance": {
+          "title": "Cumplimiento Anual",
+          "description": "Soporte continuo de cumplimiento para mantener tu negocio en buen estado",
+          "features": ["Reportes Anuales", "Cumplimiento Fiscal", "Renovaciones de Licencias", "Seguimiento de Fechas Límite"]
+        }
+      },
+      "features": {
+        "title": "Soluciones de Formación de Negocios",
+        "subtitle": "Todo lo que necesitas para iniciar tu negocio",
+        "items": [
+          {
+            "title": "Formación de LLC",
+            "description": "Proceso completo de formación de LLC con toda la documentación requerida y presentación"
+          },
+          {
+            "title": "Servicio de Agente Registrado",
+            "description": "Servicio profesional de agente registrado para recibir documentos legales en tu nombre"
+          },
+          {
+            "title": "Gestión de Cumplimiento",
+            "description": "Soporte continuo de cumplimiento para mantener tu negocio en buen estado"
+          },
+          {
+            "title": "Documentación Legal",
+            "description": "Acuerdos operativos y otros documentos legales esenciales para tu negocio"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Iniciar Tu Negocio?",
+        "subtitle": "Comencemos con la formación de tu negocio hoy",
+        "button": "Formar Mi Negocio",
+        "consultation": "Consulta Gratis"
+      }
+    },
+    "llcFormation": {
+      "hero": {
+        "heading": "Servicios de Formación de LLC",
+        "subtitle": "Forma Tu LLC Rápida y Fácilmente",
+        "description": "Servicios profesionales de formación de LLC con todo el papeleo manejado por nosotros. Inicia tu negocio de la manera correcta con guía experta y soporte.",
+        "features": ["Presentación Estatal", "Acuerdo Operativo", "Número de ID Fiscal", "Paquete de Cumplimiento", "Agente Registrado", "Soporte Experto"],
+        "cta": "Formar Mi LLC",
+        "consultationCta": "Comenzar Hoy"
+      },
+      "features": {
+        "title": "Características de Formación de LLC",
+        "subtitle": "Paquete completo de formación de LLC",
+        "items": [
+          {
+            "title": "Presentación y Registro Estatal",
+            "description": "Manejamos todo el papeleo estatal y requisitos de presentación para establecer tu LLC"
+          },
+          {
+            "title": "Acuerdo Operativo",
+            "description": "Acuerdo operativo personalizado adaptado a tu estructura de negocio y necesidades"
+          },
+          {
+            "title": "ID Fiscal Federal (EIN)",
+            "description": "Obtén tu Número de Identificación del Empleador Federal para propósitos fiscales y bancarios"
+          },
+          {
+            "title": "Paquete de Cumplimiento",
+            "description": "Paquete completo para mantener tu LLC en cumplimiento con los requisitos estatales"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Formar Tu LLC?",
+        "subtitle": "Inicia tu proceso de formación de negocio hoy",
+        "button": "Comenzar Formación de LLC",
+        "consultation": "Consulta Gratis"
+      }
+    },
+    "registeredAgent": {
+      "hero": {
+        "heading": "Servicios de Agente Registrado",
+        "subtitle": "Agente Registrado Profesional para Tu Negocio",
+        "description": "Servicios confiables de agente registrado para recibir documentos legales y mantener el cumplimiento de tu negocio. Disponible en los 50 estados.",
+        "features": ["Recepción de Documentos Legales", "Protección de Privacidad", "Monitoreo de Cumplimiento", "Reenvío de Documentos", "Dirección Profesional", "Cobertura Estatal"],
+        "cta": "Obtener Agente Registrado",
+        "consultationCta": "Saber Más"
+      },
+      "features": {
+        "title": "Beneficios del Agente Registrado",
+        "subtitle": "Servicio profesional en el que puedes confiar",
+        "items": [
+          {
+            "title": "Recepción de Documentos Legales",
+            "description": "Recibir y reenviar todos los documentos legales, notificaciones de proceso y correspondencia oficial"
+          },
+          {
+            "title": "Protección de Privacidad",
+            "description": "Mantén tu dirección personal privada usando nuestra dirección comercial profesional"
+          },
+          {
+            "title": "Monitoreo de Cumplimiento",
+            "description": "Mantente informado sobre fechas límite importantes y requisitos de cumplimiento"
+          },
+          {
+            "title": "Gestión Segura de Documentos",
+            "description": "Escaneo digital y almacenamiento seguro de todos los documentos recibidos"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Necesitas un Agente Registrado?",
+        "subtitle": "Servicio profesional de agente registrado para tu negocio",
+        "button": "Comenzar",
+        "consultation": "Saber Más"
+      }
+    },
+    "compliance": {
+      "hero": {
+        "heading": "Servicios de Cumplimiento Empresarial",
+        "subtitle": "Mantente en Cumplimiento y Evita Penalidades",
+        "description": "Servicios integrales de cumplimiento para mantener tu negocio en buen estado con todos los requisitos estatales y federales. Evita penalidades costosas y problemas legales.",
+        "features": ["Reportes Anuales", "Cumplimiento Fiscal", "Renovaciones de Licencias", "Seguimiento de Fechas Límite", "Gestión de Documentos", "Guía Experta"],
+        "cta": "Mantener Cumplimiento",
+        "consultationCta": "Auditoría de Cumplimiento"
+      },
+      "features": {
+        "title": "Soluciones de Cumplimiento",
+        "subtitle": "Gestión completa de cumplimiento para tu negocio",
+        "items": [
+          {
+            "title": "Presentación de Reportes Anuales",
+            "description": "Presentación oportuna de reportes anuales requeridos para mantener buen estado"
+          },
+          {
+            "title": "Soporte de Cumplimiento Fiscal",
+            "description": "Guía sobre obligaciones fiscales y requisitos de presentación para tu negocio"
+          },
+          {
+            "title": "Renovaciones de Licencias y Permisos",
+            "description": "Rastrea y gestiona renovaciones para todas las licencias y permisos comerciales"
+          },
+          {
+            "title": "Gestión de Fechas Límite",
+            "description": "Nunca pierdas fechas límite importantes con nuestro sistema integral de seguimiento"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Mantener el Cumplimiento?",
+        "subtitle": "Déjanos manejar los requisitos de cumplimiento de tu negocio",
+        "button": "Obtener Ayuda de Cumplimiento",
+        "consultation": "Auditoría de Cumplimiento Gratis"
       }
     },
     "webBlog": {

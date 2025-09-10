@@ -8,27 +8,34 @@ export const navItems: NavItem[] = [
       {
         name: 'services.software.title',
         subSections: [
-          { name: 'services.software.web', path: '/software-development/web-and-blog-development' },
-          { name: 'services.software.ecommerce', path: '/software-development/ecommerce-development' },
-          { name: 'services.software.other', path: '/software-development/other-services-personalized' },
+          { name: 'services.software.web', path: '/software/web-blog' },
+          { name: 'services.software.ecommerce', path: '/software/ecommerce' },
+          { name: 'services.software.other', path: '/software/custom' },
         ],
       },
       {
         name: 'services.marketing.title',
         subSections: [
-          { name: 'services.marketing.digital', path: '/marketing/online-marketing-and-content-creation' },
-          { name: 'services.marketing.influencers', path: '/marketing/influencers-collaboration' },
-          { name: 'services.marketing.campaigns', path: '/marketing/campanas-de-publicidad' },
-          { name: 'services.marketing.other', path: '/marketing/other-services-personalized' }
+          { name: 'services.marketing.digital', path: '/marketing/digital' },
+          { name: 'services.marketing.influencers', path: '/marketing/influencer' },
+          { name: 'services.marketing.campaigns', path: '/marketing/social-media' },
+          { name: 'services.marketing.other', path: '/contact' }
         ]
       },
       {
         name: 'services.business.title',
         subSections: [
-          { name: 'services.business.llc', path: '/services/business-formations/form-your-llc' },
-          { name: 'services.business.agent', path: '/services/business-formations/registered-agent' },
-          { name: 'services.business.compliance', path: '/services/business-formations/compliance' },
-          { name: 'services.business.other', path: '/services/other-services-personalized' }
+          { name: 'services.business.llc', path: '/business/llc-formation' },
+          { name: 'services.business.agent', path: '/business/registered-agent' },
+          { name: 'services.business.compliance', path: '/business/compliance' },
+          { name: 'services.business.other', path: '/contact' }
+        ]
+      },
+      {
+        name: 'services.bpo.title',
+        subSections: [
+          { name: 'services.bpo.outbound', path: '/bpo/outbound' },
+          { name: 'services.bpo.backoffice', path: '/bpo/backoffice' }
         ]
       }
     ]

@@ -27,6 +27,11 @@ const MyServices = () => {
       key: 'digitalMarketing',
       imageUrl: './marketing.jpeg',
       imagePosition: 'right' as const,
+    },
+    {
+      key: 'bpo',
+      imageUrl: './marketing.jpeg',
+      imagePosition: 'left' as const,
     }
   ];
 
