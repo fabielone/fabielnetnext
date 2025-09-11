@@ -1,5 +1,6 @@
 // app/blog/layout.jsx
 import { FaTwitter, FaGithub, FaLinkedin, FaHome, FaBook, FaUser } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function BlogLayout({ children }) {
   return (
@@ -9,18 +10,18 @@ export default function BlogLayout({ children }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              <a href="/blog" className="hover:text-purple-600 transition-colors">My Blog</a>
+              <Link href="/blog" className="hover:text-purple-600 transition-colors">My Blog</Link>
             </h1>
             <nav className="flex space-x-4 md:space-x-8">
-              <a href="/" className="text-gray-500 hover:text-purple-600 transition-colors flex items-center">
+              <Link href="/" className="text-gray-500 hover:text-purple-600 transition-colors flex items-center">
                 <FaHome className="mr-1" /> Home
-              </a>
-              <a href="/blog" className="text-gray-500 hover:text-purple-600 transition-colors flex items-center">
+              </Link>
+              <Link href="/blog" className="text-gray-500 hover:text-purple-600 transition-colors flex items-center">
                 <FaBook className="mr-1" /> Posts
-              </a>
-              <a href="/about" className="text-gray-500 hover:text-purple-600 transition-colors flex items-center">
+              </Link>
+              <Link href="/about" className="text-gray-500 hover:text-purple-600 transition-colors flex items-center">
                 <FaUser className="mr-1" /> About
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

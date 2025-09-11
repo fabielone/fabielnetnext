@@ -49,8 +49,10 @@ export default function MarketingPage() {
       />
 
       {/* Services Overview */}
-      <ServicesShowcase 
-              services={marketingServices} translationKey={''}      />
+      <ServicesShowcase
+        translationKey="marketing"
+        services={marketingServices}
+      />
 
       {/* Technology Stack Section */}
       <section className="py-16 lg:py-24 bg-white dark:bg-gray-900">

@@ -1,6 +1,7 @@
 'use client';
 
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa';
+import Link from 'next/link';
 import Image from 'next/image';
 import Newsletter from './newsletter/subscribe';
 import { useTranslations } from 'next-intl';
@@ -77,34 +78,22 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-100">{t('quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/services" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.services')}
-                </a>
+                <Link href="/services" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.services')}</Link>
               </li>
               <li>
-                <a href="/portfolio" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.portfolio')}
-                </a>
+                <Link href="/portfolio" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.portfolio')}</Link>
               </li>
               <li>
-                <a href="/blog" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.blog')}
-                </a>
+                <Link href="/blog" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.blog')}</Link>
               </li>
               <li>
-                <a href="/contact" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.contact')}
-                </a>
+                <Link href="/contact" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.contact')}</Link>
               </li>
               <li>
-                <a href="/terms" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.terms')}
-                </a>
+                <Link href="/terms" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.terms')}</Link>
               </li>
               <li>
-                <a href="/privacy" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.privacy')}
-                </a>
+                <Link href="/privacy" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.privacy')}</Link>
               </li>
             </ul>
           </div>
@@ -114,34 +103,22 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-100">{t('services')}</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/services/business-formations" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.businessFormations')}
-                </a>
+                <Link href="/services/business-formations" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.businessFormations')}</Link>
               </li>
               <li>
-                <a href="/services/software-development" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.softwareDevelopment')}
-                </a>
+                <Link href="/services/software-development" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.softwareDevelopment')}</Link>
               </li>
               <li>
-                <a href="/services/marketing" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.marketing')}
-                </a>
+                <Link href="/services/marketing" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.marketing')}</Link>
               </li>
               <li>
-                <a href="/services/registered-agent" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.registeredAgent')}
-                </a>
+                <Link href="/services/registered-agent" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.registeredAgent')}</Link>
               </li>
               <li>
-                <a href="/services/compliance" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.compliance')}
-                </a>
+                <Link href="/services/compliance" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.compliance')}</Link>
               </li>
               <li>
-                <a href="/services/concierge-service" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  {t('links.concierge')}
-                </a>
+                <Link href="/services/concierge-service" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.concierge')}</Link>
               </li>
             </ul>
           </div>
@@ -159,13 +136,9 @@ export default function Footer() {
             {t('copyright', { year: new Date().getFullYear() })}
           </p>
           <p className="text-sm text-gray-300 mt-2">
-            <a href="/terms" className="hover:text-white transition-colors">
-              {t('links.terms')}
-            </a>{' '}
+            <Link href="/terms" className="hover:text-white transition-colors">{t('links.terms')}</Link>{' '}
             |{' '}
-            <a href="/privacy" className="hover:text-white transition-colors">
-              {t('links.privacy')}
-            </a>
+            <Link href="/privacy" className="hover:text-white transition-colors">{t('links.privacy')}</Link>
           </p>
         </div>
       </div>

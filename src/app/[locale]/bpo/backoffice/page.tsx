@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import SoftwareHero from '../../../components/molecules/hero/software-hero';
 import FeaturesSection from '../../../components/molecules/sections/features-section';
 import CTASection from '../../../components/molecules/sections/cta-section';
@@ -78,7 +79,7 @@ export default function BackOfficeBPOPage() {
                   ))}
                 </ul>
                 <div className="mt-8">
-                  <a href="/contact" className="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg transition-colors">Get Started</a>
+                  <Link href="/contact" className="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg transition-colors">Get Started</Link>
                 </div>
               </div>
             ))}
