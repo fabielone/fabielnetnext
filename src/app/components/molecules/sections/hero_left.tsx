@@ -23,26 +23,18 @@ export default function HeroLeft() {
     {
       title: t('services.llcFormation.title'),
       description: t('services.llcFormation.description'),
-      icon: <MdAccountBalance className="w-7 h-7" />,
-      gradient: 'from-blue-500 to-blue-600'
     },
     {
       title: t('services.operatingAgreement.title'),
       description: t('services.operatingAgreement.description'),
-      icon: <FaFileContract className="w-7 h-7" />,
-      gradient: 'from-emerald-500 to-emerald-600'
     },
     {
       title: t('services.einFormation.title'),
       description: t('services.einFormation.description'),
-      icon: <FaIdCard className="w-7 h-7" />,
-      gradient: 'from-purple-500 to-purple-600'
     },
     {
       title: t('services.bankResolution.title'),
       description: t('services.bankResolution.description'),
-      icon: <FaUniversity className="w-7 h-7" />,
-      gradient: 'from-orange-500 to-orange-600'
     },
   ];
 
@@ -98,9 +90,6 @@ export default function HeroLeft() {
             <motion.p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 mt-3 font-medium">
               {t('subtitle')}
             </motion.p>
-            <motion.div className="mt-3 text-base text-emerald-600 dark:text-emerald-400 font-semibold">
-              {t('pricing')}
-            </motion.div>
           </motion.div>
           <motion.div 
             className="flex justify-center items-center space-x-3 mt-3 mb-6"
@@ -158,28 +147,22 @@ export default function HeroLeft() {
               {t('packageTitle')}
             </motion.h3>
             
-            {/* Services Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            {/* Services List - Bullet Points */}
+            <div className="space-y-2 mb-6">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="group bg-white dark:bg-gray-700/50 p-5 rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-600/30"
-                  whileHover={{ y: -3, scale: 1.02 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-start space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <motion.div 
-                    className={`mx-auto mb-4 p-4 bg-gradient-to-r ${service.gradient} rounded-2xl w-fit shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
-                    whileHover={{ scale: 1.1, rotateY: 10 }}
-                  >
-                    <div className="text-white">
-                      {service.icon}
-                    </div>
-                  </motion.div>
-                  <h4 className="font-bold text-gray-900 dark:text-white mb-2 text-center text-lg">{service.title}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 text-center leading-relaxed">{service.description}</p>
+                  <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 dark:text-white text-base">{service.title}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{service.description}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -229,31 +212,31 @@ export default function HeroLeft() {
               variants={itemVariants}
               whileHover={{ 
                 scale: 1.02,
-                boxShadow: '0 8px 25px rgba(59, 130, 246, 0.3)'
+                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
               }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigateWithLoading('/checkout/businessformation')}
               disabled={isNavigating}
-              className={`bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-bold px-8 py-4 rounded-xl flex items-center shadow-lg hover:shadow-xl relative overflow-hidden text-lg transition-all duration-300 ${
+              className={`bg-amber-500 hover:bg-amber-600 text-black font-semibold px-8 py-4 rounded-lg border border-amber-500 hover:border-amber-600 shadow-md hover:shadow-lg transition-all duration-300 text-lg flex items-center justify-center whitespace-nowrap ${
                 isNavigating ? 'opacity-90' : ''
               }`}
             >
-              <motion.span className="relative z-10">
-                {t('cta')}
-              </motion.span>
-              {isNavigating ? (
-                <div className="ml-3">
-                  <LoadingSpinner size="small" color="text-white" message="" />
-                </div>
-              ) : (
-                <motion.span
-                  className="ml-3"
-                  animate={{ x: [0, 3, 0] }}
-                  transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
-                >
-                  <HiArrowRight className="h-5 w-5" />
-                </motion.span>
-              )}
+              <span className="flex items-center">
+                <span>{t('cta')}</span>
+                {isNavigating ? (
+                  <div className="ml-3">
+                    <LoadingSpinner size="small" color="text-black" message="" />
+                  </div>
+                ) : (
+                  <motion.span
+                    className="ml-3"
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
+                  >
+                    <HiArrowRight className="h-5 w-5" />
+                  </motion.span>
+                )}
+              </span>
             </motion.button>
           </motion.div>
 

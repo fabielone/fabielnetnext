@@ -9,10 +9,9 @@
     "Hero": {
       "Heading": "Tu Empresa Construida Mejor",
       "Subheading": "Servicios Completos de Formación LLC para Empresarios en California",
-      "PriceTimeline": "Desde $49.99 + Tasas Gubernamentales • Listo en 7-10 Días Hábiles",
-      "subtitle": "Paquete Completo de Formación LLC - Todo lo que Necesitas",
-      "pricing": "Los 4 Servicios por Solo $49.99 + Tasas Estatales • Listo en 7-10 Días Hábiles",
-      "packageTitle": "Paquete Completo de Formación LLC",
+      "PriceTimeline": "Desde $99.99 + Tasas Gubernamentales • Listo en 7-10 Días Hábiles",
+      "subtitle": "Servicios diseñados para iniciar y hacer crecer tu negocio.",
+      "packageTitle": "Paquete Completo de Formación Empresarial",
       "services": {
         "llcFormation": {
           "title": "Formación LLC",
@@ -32,7 +31,7 @@
         }
       },
       "valueProposition": {
-        "price": "Los 4 Servicios: $49.99",
+        "price": "Los 4 Servicios: $99.99",
         "stateFees": "+ Tasas de Presentación Estatal",
         "benefits": {
           "fastProcessing": "Procesamiento Rápido",
@@ -64,22 +63,26 @@
       "ReviewCount": "500+ reseñas"
     },
     "HeroRight": {
-      "title": "Tu Socio en Formación LLC",
-      "description": "Paquete completo de formación LLC con todos los documentos que necesitas para iniciar tu negocio legal y profesionalmente.",
+      "title": "Expertos en Formación Empresarial",
+      "description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
       "videoLabel": "Ver Historia de Éxito",
       "newsletter": {
         "title": "Mantente Informado",
-        "subtitle": "Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas",
-        "cta": "Únete a Nuestra Comunidad"
+        "subtitle": "¡Ahorra 20% suscribiéndote! Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas en tu correo.",
+        "cta": "Únete a Nuestra Comunidad",
+        "discount": "Ahorra 20%",
+        "email": "Tu dirección de correo",
+        "button": "Suscribirse Ahora",
+        "thanks": "¡Gracias! Tu cupón del 20% está en camino a tu correo!"
       },
-      "Title": "Tu Aliado Empresarial",
-      "Description": "¡Bienvenido a fabiel! Estamos aquí para ayudarte a establecer y hacer crecer tu negocio en los Estados Unidos con confianza y éxito.",
+      "Title": "Expertos en Formación Empresarial",
+      "Description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
       "VideoLabel": "Ver Historia de Éxito",
       "Trust1": "500+ Empresarios Satisfechos",
       "Trust2": "Agente Registrado Licenciado",
       "Trust3": "Proceso Rápido de 7-10 Días",
       "NewsletterTitle": "Mantente Informado",
-      "NewsletterSubtitle": "Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas",
+      "NewsletterSubtitle": "¡Ahorra 20% suscribiéndote! Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas en tu correo.",
       "NewsletterCTA": "Únete a Nuestra Comunidad"
     },
     "Blog": {

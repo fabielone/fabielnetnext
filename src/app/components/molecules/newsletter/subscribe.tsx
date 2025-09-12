@@ -5,6 +5,7 @@ import { FormEvent, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheckCircle, FaEnvelope } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
+import { useTranslations } from 'next-intl';
 
 interface NewsletterProps {
   title?: string;
@@ -14,11 +15,12 @@ interface NewsletterProps {
 }
 
 export default function Newsletter({
-  title = 'Recibe consejos y actualizaciones empresariales',
-  description = 'Suscríbete a nuestro newsletter para recibir las últimas noticias y actualizaciones.',
+  title,
+  description,
   className = '',
   compact = false
 }: NewsletterProps) {
+  const t = useTranslations('HeroRight.newsletter');
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { ref, inView } = useInView({
@@ -32,7 +34,7 @@ export default function Newsletter({
     setTimeout(() => {
       setIsSubmitted(false);
       setEmail('');
-    }, 3000);
+    }, 5000); // Extended to 5 seconds to give users time to read the coupon message
   };
 
   return (
@@ -45,10 +47,10 @@ export default function Newsletter({
           transition={{ duration: 0.3 }}
         >
           <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-700 dark:text-gray-200">
-            {title}
+            {title || t('title')}
           </h3>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-            {description}
+            {description || t('subtitle')}
           </p>
         </motion.div>
       )}
@@ -63,7 +65,7 @@ export default function Newsletter({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Tu correo electrónico"
+              placeholder={t('email')}
               className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm sm:text-base
                 bg-white dark:bg-gray-800/50 
                 border border-gray-200 dark:border-gray-700 
@@ -82,12 +84,12 @@ export default function Newsletter({
             whileTap={{ scale: 0.98 }}
             className="px-6 py-2.5 rounded-lg transition-colors duration-300 
               font-medium text-sm sm:text-base whitespace-nowrap
-              bg-amber-50 dark:bg-amber-500 
-              text-gray-700 dark:text-gray-900 
-              border border-amber-200 dark:border-amber-500
-              hover:bg-amber-100 dark:hover:bg-amber-400"
+              bg-amber-500 hover:bg-amber-600 
+              text-black 
+              border border-amber-500 hover:border-amber-600
+              shadow-md hover:shadow-lg"
           >
-            Suscribirse
+            {t('button')}
           </motion.button>
         </div>
 
@@ -101,10 +103,15 @@ export default function Newsletter({
                 justify-center bg-white/95 dark:bg-gray-900/95 
                 rounded-lg backdrop-blur-sm"
             >
-              <div className="flex items-center text-green-600 dark:text-green-400">
-                <FaCheckCircle className="text-xl sm:text-2xl mr-2" />
-                <span className="font-medium text-sm sm:text-base">
-                  ¡Gracias por suscribirte!
+              <div className="flex flex-col items-center text-center text-green-600 dark:text-green-400">
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <FaCheckCircle className="text-2xl sm:text-3xl mb-2" />
+                </motion.div>
+                <span className="font-medium text-sm sm:text-base px-2">
+                  {t('thanks')}
                 </span>
               </div>
             </motion.div>

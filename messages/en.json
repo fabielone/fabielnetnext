@@ -9,7 +9,7 @@
     "Hero": {
       "Heading": "Your Business Built Better",
       "Subheading": "Complete LLC Formation Services for Entrepreneurs in California",
-      "PriceTimeline": "Starting at $49.99 + Government Fees • Ready in 7-10 Business Days",
+      "PriceTimeline": "Starting at $99.99 + Government Fees • Ready in 7-10 Business Days",
       "BenefitsTitle": "Everything You Need to Start Your LLC",
       "Bullet1": "Complete LLC Formation",
       "Bullet2": "Custom Operating Agreement",
@@ -30,8 +30,7 @@
       "Pill5": "Digital Marketing",
       "Pill6": "Business Banking Setup",
       "ReviewCount": "500+ reviews",
-      "subtitle": "Professional LLC formation services designed to get your business started quickly and legally.",
-      "pricing": "Starting at $49.99 + State Fees",
+      "subtitle": "Services designed to start and grow your business.",
       "packageTitle": "Complete Business Formation Package",
       "cta": "Start My LLC Formation",
       "services": {
@@ -53,7 +52,7 @@
         }
       },
       "valueProposition": {
-        "price": "$49.99 + State Fees",
+        "price": "$99.99 + State Fees",
         "stateFees": "State fees vary by location",
         "benefits": {
           "fastProcessing": "7-10 Days",
@@ -65,22 +64,26 @@
       }
     },
     "HeroRight": {
-      "title": "Your Business Partner",
-      "description": "Welcome to fabiel! We're here to help you establish and grow your business in the United States with confidence and success.",
+      "title": "Business Formation Experts",
+      "description": "Professional LLC formation services with expert guidance throughout the entire process.",
       "videoLabel": "Watch Success Story",
       "Trust1": "500+ Happy Entrepreneurs",
       "Trust2": "Licensed Registered Agent",
       "Trust3": "Fast 7-10 Day Process",
       "newsletter": {
         "title": "Stay Informed",
-        "subtitle": "Get business tips, legal updates, and exclusive offers",
-        "cta": "Join Our Community"
+        "subtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
+        "cta": "Join Our Community",
+        "discount": "Save 20% off",
+        "email": "Your email address",
+        "button": "Subscribe Now",
+        "thanks": "Thanks! Your 20% coupon is on the way to your mailbox!"
       },
-      "Title": "Your Business Partner",
-      "Description": "Welcome to fabiel! We're here to help you establish and grow your business in the United States with confidence and success.",
+      "Title": "Business Formation Experts",
+      "Description": "Professional LLC formation services with expert guidance throughout the entire process.",
       "VideoLabel": "Watch Success Story",
       "NewsletterTitle": "Stay Informed",
-      "NewsletterSubtitle": "Get business tips, legal updates, and exclusive offers",
+      "NewsletterSubtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
       "NewsletterCTA": "Join Our Community"
     },
     "Blog": {

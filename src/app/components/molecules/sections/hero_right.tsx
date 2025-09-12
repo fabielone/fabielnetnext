@@ -97,19 +97,7 @@ export default function HeroRight() {
                     className="opacity-90"
                   />
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-400 dark:to-green-400 bg-clip-text text-transparent mb-2">
-                  {t('title')}
-                </h2>
               </motion.div>
-              
-              <motion.p 
-                className="text-gray-600 dark:text-gray-400 text-center mb-4 text-sm sm:text-base leading-relaxed px-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                {t('description')}
-              </motion.p>
 
               {/* Social Icons */}
               <motion.div 
@@ -138,11 +126,18 @@ export default function HeroRight() {
                 transition={{ delay: 0.5 }}
                 className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 rounded-xl p-4 text-white"
               >
-                <h3 className="text-base font-bold mb-1 text-center">{t('newsletter.title')}</h3>
-                <p className="text-blue-100 dark:text-blue-200 text-center mb-3 text-xs">{t('newsletter.subtitle')}</p>
+                <div className="text-center mb-3">
+                  <div className="inline-block bg-amber-500 text-black px-3 py-1 rounded-full text-xs font-bold mb-2">
+                    {t('newsletter.discount')}
+                  </div>
+                  <h3 className="text-base font-bold mb-1">{t('newsletter.title')}</h3>
+                  <p className="text-blue-100 dark:text-blue-200 text-center mb-3 text-xs">{t('newsletter.subtitle')}</p>
+                </div>
                 
                 <Newsletter
-                  title={t('newsletter.cta')}
+                  title=""
+                  description=""
+                  compact={true}
                 /> 
               </motion.div>
             </div>
