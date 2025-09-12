@@ -229,9 +229,14 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-2xl"></div>
                   
                   {/* Content */}
-                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 ${theme.buttonBg.split(' ')[0]} rounded-xl flex items-center justify-center shadow-lg border border-white/30`}>
+                  {/* Desktop: Show checkmark icon */}
+                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 ${theme.buttonBg.split(' ')[0]} rounded-xl items-center justify-center shadow-lg border border-white/30 hidden sm:flex`}>
                     <FiCheck className="w-5 h-5 text-white" />
                   </div>
+                  
+                  {/* Mobile: Show bullet point */}
+                  <div className="relative z-10 flex-shrink-0 w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full mt-2 sm:hidden"></div>
+                  
                   <span className="relative z-10 text-base font-medium text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors leading-tight">
                     {item.text}
                   </span>
