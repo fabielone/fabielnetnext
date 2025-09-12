@@ -159,50 +159,62 @@
     },
     "services": {
       "title": "Nuestros Servicios",
-      "subtitle": "Soluciones para tu Negocio",
+      "subtitle": "Soluciones Integrales de Negocio",
       "items": {
         "businessFormation": {
           "pill": "Formación de Empresas",
           "title": "Establece tu Negocio con Confianza",
-          "subtitle": "Formación de empresas en EE.UU. de manera rápida y segura",
-          "description": "Nuestros expertos te ayudan a establecer tu negocio en los Estados Unidos de manera eficiente y cumpliendo con todos los requisitos legales.",
+          "subtitle": "Formación completa de LLC en 7-10 días hábiles",
+          "description": "Desde la presentación inicial hasta el cumplimiento continuo, manejamos cada aspecto de tu proceso de formación empresarial con orientación experta y precios transparentes.",
           "features": [
-            "Registro de Empresa",
-            "Cumplimiento Anual",
-            "Documentación Legal"
+            "Registro Completo de LLC y Presentación Estatal",
+            "Solicitud de Número de ID Fiscal EIN",
+            "Plantilla de Acuerdo Operativo Personalizado",
+            "Servicio de Agente Registrado Disponible",
+            "Carta de Resolución Bancaria para Apertura de Cuenta",
+            "Soporte Continuo de Cumplimiento y Recordatorios"
           ]
         },
         "webDevelopment": {
           "pill": "Desarrollo Web",
-          "title": "Crea una Presencia en Línea Fuerte",
-          "subtitle": "Desarrollo de sitios web personalizados y responsivos",
-          "description": "Nuestros desarrolladores web crean sitios web atractivos y fáciles de navegar que reflejan tu marca y atraen a tus clientes.",
+          "title": "Construye una Presencia Online Poderosa",
+          "subtitle": "Sitios web personalizados que convierten visitantes en clientes",
+          "description": "Sitios web modernos y responsivos construidos con las últimas tecnologías, optimizados para motores de búsqueda y diseñados para hacer crecer tu negocio en línea.",
           "features": [
-            "Diseño Profesional",
-            "Desarrollo Personalizado",
-            "Optimización de Rendimiento"
+            "Diseño Responsivo Mobile-First",
+            "Optimización SEO y Carga Rápida",
+            "Sistema de Gestión de Contenido (CMS)",
+            "Integración E-commerce y Pagos",
+            "Seguimiento de Analytics y Rendimiento",
+            "Mantenimiento Continuo y Actualizaciones de Seguridad"
           ]
         },
         "digitalMarketing": {
           "pill": "Marketing Digital",
-          "title": "Aumenta tu Visibilidad en Línea",
-          "subtitle": "Estrategias de marketing digital efectivas para tu negocio",
-          "description": "Nuestros expertos en marketing digital te ayudan a crear campañas que atraen a tus clientes y aumentan tus ventas.",
+          "title": "Haz Crecer tu Negocio Online",
+          "subtitle": "Marketing basado en datos que entrega resultados",
+          "description": "Campañas estratégicas de marketing digital diseñadas para aumentar tu visibilidad online, atraer leads calificados e impulsar tus ingresos.",
           "features": [
-            "SEO y Posicionamiento",
-            "Gestión de Redes Sociales",
-            "Análisis y Reportes"
+            "Optimización para Motores de Búsqueda (SEO)",
+            "Gestión de Google Ads y Campañas PPC",
+            "Estrategia y Gestión de Redes Sociales",
+            "Marketing de Contenido y Copywriting",
+            "Automatización de Email Marketing",
+            "Analytics y Reportes Mensuales de Rendimiento"
           ]
         },
         "bpo": {
           "pill": "Servicios BPO",
-          "title": "Escala con Operaciones Externalizadas",
-          "subtitle": "Llamadas outbound y ejecución operativa",
-          "description": "Aprovecha talento bilingüe entrenado para llamadas outbound, agendamiento de citas y tareas back office.",
+          "title": "Escala con Operaciones Expertas",
+          "subtitle": "Llamadas outbound profesionales y soporte administrativo",
+          "description": "Equipo bilingüe experimentado que proporciona llamadas outbound, agendamiento de citas y soporte back-office con métricas transparentes e integración CRM.",
           "features": [
-            "Llamadas Outbound",
-            "Agendamiento",
-            "Tareas Back Office"
+            "Ventas Outbound y Generación de Leads",
+            "Agendamiento y Calificación de Citas",
+            "Servicio y Soporte al Cliente",
+            "Entrada de Datos y Tareas Administrativas",
+            "Gestión y Actualizaciones de CRM",
+            "Reportes Diarios de Rendimiento y Analytics"
           ]
         }
       },
@@ -805,5 +817,62 @@
         "consultation": "Discutir Tus Necesidades"
       }
     }
-    
+  ,
+  "allies": {
+    "title": "Nuestros Aliados Comerciales",
+    "subtitle": "Descubre negocios y organizaciones que apoyan y fortalecen nuestra comunidad",
+    "filters": {
+      "search": "Buscar negocio...",
+      "allCountries": "Todos los Países",
+      "allStates": "Todos los Estados", 
+      "allCities": "Todas las Ciudades",
+      "allCategories": "Todas las Categorías",
+      "allIndustries": "Todas las Industrias",
+      "allModalities": "Todas las Modalidades",
+      "clearFilters": "Limpiar Filtros",
+      "showFilters": "Mostrar Filtros",
+      "hideFilters": "Ocultar Filtros"
+    },
+    "modalities": {
+      "online": "En Línea",
+      "inPerson": "Presencial", 
+      "hybrid": "Híbrido"
+    },
+    "categories": {
+      "technology": "Tecnología",
+      "services": "Servicios",
+      "commerce": "Comercio",
+      "food": "Alimentación"
+    },
+    "industries": {
+      "software": "Software",
+      "hardware": "Hardware",
+      "saas": "SaaS",
+      "itConsulting": "Consultoría IT",
+      "consulting": "Consultoría",
+      "marketing": "Marketing",
+      "design": "Diseño",
+      "education": "Educación",
+      "retail": "Retail",
+      "ecommerce": "E-commerce",
+      "products": "Productos",
+      "distribution": "Distribución",
+      "restaurants": "Restaurantes",
+      "catering": "Catering",
+      "production": "Producción"
+    },
+    "card": {
+      "website": "Sitio Web",
+      "contact": "Contacto"
+    },
+    "cta": {
+      "joinNetwork": "Únete a la Red de Negocios",
+      "learnMore": "Saber Más"
+    },
+    "noResults": {
+      "title": "No se encontraron negocios",
+      "description": "Intenta ajustar los filtros de búsqueda"
+    },
+    "resultsCount": "Mostrando {count} de {total} negocios"
   }
+}

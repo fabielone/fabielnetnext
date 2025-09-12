@@ -2,6 +2,7 @@ import { motion, useAnimation, Variants } from 'framer-motion';
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { HiArrowRight } from 'react-icons/hi';
+import { FiCheck, FiArrowUpRight } from 'react-icons/fi';
 
 interface HeaderProps {
   pill: string;
@@ -13,7 +14,7 @@ interface HeaderProps {
   learnMoreLink: string;
   imageUrl: string;
   items: { icon: string; text: string }[];
-  imagePosition?: 'left' | 'right';
+  serviceKey: string;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -26,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({
   learnMoreLink,
   imageUrl,
   items,
-  imagePosition = 'right',
+  serviceKey,
 }) => {
   const [contentRef, inView] = useInView({
     triggerOnce: false,
@@ -43,13 +44,58 @@ const Header: React.FC<HeaderProps> = ({
     }
   }, [controls, inView]);
 
+  // Service-specific styling
+  const getServiceTheme = (key: string) => {
+    const themes = {
+      businessFormation: {
+        gradient: 'from-blue-50 via-blue-100/50 to-indigo-50',
+        pillBg: 'bg-blue-100 text-blue-800',
+        buttonBg: 'bg-blue-600 hover:bg-blue-700 shadow-blue-200',
+        darkGradient: 'dark:from-blue-900/20 dark:via-blue-800/20 dark:to-indigo-900/20',
+        darkPill: 'dark:bg-blue-900/50 dark:text-blue-200',
+        accent: 'text-blue-600',
+        iconBg: 'bg-blue-100 dark:bg-blue-900/30'
+      },
+      webDevelopment: {
+        gradient: 'from-purple-50 via-purple-100/50 to-pink-50',
+        pillBg: 'bg-purple-100 text-purple-800',
+        buttonBg: 'bg-purple-600 hover:bg-purple-700 shadow-purple-200',
+        darkGradient: 'dark:from-purple-900/20 dark:via-purple-800/20 dark:to-pink-900/20',
+        darkPill: 'dark:bg-purple-900/50 dark:text-purple-200',
+        accent: 'text-purple-600',
+        iconBg: 'bg-purple-100 dark:bg-purple-900/30'
+      },
+      digitalMarketing: {
+        gradient: 'from-emerald-50 via-emerald-100/50 to-teal-50',
+        pillBg: 'bg-emerald-100 text-emerald-800',
+        buttonBg: 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200',
+        darkGradient: 'dark:from-emerald-900/20 dark:via-emerald-800/20 dark:to-teal-900/20',
+        darkPill: 'dark:bg-emerald-900/50 dark:text-emerald-200',
+        accent: 'text-emerald-600',
+        iconBg: 'bg-emerald-100 dark:bg-emerald-900/30'
+      },
+      bpo: {
+        gradient: 'from-amber-50 via-amber-100/50 to-orange-50',
+        pillBg: 'bg-amber-100 text-amber-800',
+        buttonBg: 'bg-amber-600 hover:bg-amber-700 shadow-amber-200',
+        darkGradient: 'dark:from-amber-900/20 dark:via-amber-800/20 dark:to-orange-900/20',
+        darkPill: 'dark:bg-amber-900/50 dark:text-amber-200',
+        accent: 'text-amber-600',
+        iconBg: 'bg-amber-100 dark:bg-amber-900/30'
+      }
+    };
+    return themes[key as keyof typeof themes] || themes.businessFormation;
+  };
+
+  const theme = getServiceTheme(serviceKey);
+
   const imageVariants: Variants = {
     hidden: { 
-      x: imagePosition === 'left' ? '-100%' : '100%',
+      scale: 0.8,
       opacity: 0 
     },
     visible: { 
-      x: 0,
+      scale: 1,
       opacity: 1,
       transition: {
         type: 'spring',
@@ -86,104 +132,144 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div 
       ref={contentRef} 
-      className="relative font-serif px-4 py-8 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full bg-gradient-to-b from-amber-50/50 to-white dark:from-gray-800/50 dark:to-gray-900"
+      className={'relative font-sans px-4 py-12 lg:py-20 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full transition-all duration-700'}
     >
-      <div className={`max-w-7xl mx-auto lg:flex items-center gap-12 ${imagePosition === 'left' ? 'lg:flex-row-reverse' : ''}`}>
-        {/* Image Section */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={imageVariants}
-          className="flex justify-center lg:w-1/2"
-        >
-          <div className="relative group w-full">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-200 to-amber-100 dark:from-amber-800 dark:to-amber-700 rounded-2xl blur opacity-30 group-hover:opacity-40 transition duration-1000"></div>
-            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-800/50">
-              <motion.img
-                src={imageUrl}
-                className="w-full h-full object-cover"
-                whileHover={{ scale: 1.01 }}
-                transition={{ duration: 0.7 }}
-                alt=""
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Content Section */}
+      {/* Soft background with gradient blend */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} ${theme.darkGradient} opacity-30`}></div>
+      <div className={'absolute inset-0 bg-gradient-to-t from-white/50 via-transparent to-white/30 dark:from-gray-900/50 dark:via-transparent dark:to-gray-900/30'}></div>
+      
+      {/* Content with soft edges */}
+      <div className="relative max-w-7xl mx-auto">
+        {/* Header Section - Centered */}
         <motion.div
           initial="hidden"
           animate={controls}
           variants={contentVariants}
-          className="lg:w-1/2 space-y-8"
+          className="text-center mb-16"
         >
-          {/* Pill and Titles */}
-          <motion.div className="space-y-6">
-            <motion.span 
-              variants={itemVariants}
-              className="inline-block px-4 py-2 text-sm font-semibold text-amber-800 dark:text-amber-200 bg-amber-100 dark:bg-amber-900/50 rounded-full shadow-sm"
-            >
-              {pill}
-            </motion.span>
-            
-            <motion.h2 
-              variants={itemVariants} 
-              className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
-            >
-              {title}
-            </motion.h2>
-            
-            <motion.h3 
-              variants={itemVariants} 
-              className="text-2xl lg:text-3xl font-medium text-gray-700 dark:text-gray-300"
-            >
-              {subtitle}
-            </motion.h3>
-            
-            <motion.p 
-              variants={itemVariants} 
-              className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
-            >
-              {description}
-            </motion.p>
-          </motion.div>
-
-          {/* Action Buttons */}
-          <motion.div variants={itemVariants} className="flex items-center gap-6">
-            <motion.a
-              href={buttonLink}
-              className="inline-flex items-center px-8 py-3 text-lg font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-2 border-green-700 dark:border-green-500"
-              whileHover={{ y: -2, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-            >
-              {buttonText}
-              <HiArrowRight className="ml-2 w-5 h-5" />
-            </motion.a>
-            
-            <motion.a
-              href={learnMoreLink}
-              className="text-lg font-medium text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-200 flex items-center gap-2"
-              whileHover={{ x: 2 }}
-            >
-              Conoce más
-              <span className="text-xl">→</span>
-            </motion.a>
-          </motion.div>
-
-          {/* Features List */}
-          <motion.ul className="space-y-4 mt-8">
-            {items.map((item, index) => (
-              <motion.li 
-                key={index}
-                variants={itemVariants}
-                className="flex items-center gap-3 text-gray-700 dark:text-gray-300 bg-amber-50 dark:bg-gray-800 px-4 py-3 rounded-lg shadow-sm dark:shadow-gray-800/50"
-                whileHover={{ y: -2 }}
-              >
-                <span className="text-amber-500 dark:text-amber-400 text-xl">{item.icon}</span>
-                <span className="text-lg">{item.text}</span>
-              </motion.li>
-            ))}
-          </motion.ul>
+          <motion.span 
+            variants={itemVariants}
+            className={`inline-flex items-center px-6 py-3 text-sm font-bold ${theme.pillBg} ${theme.darkPill} rounded-full shadow-lg backdrop-blur-sm mb-6 border border-white/20 dark:border-gray-700/20`}
+          >
+            <span className="w-2 h-2 bg-current rounded-full mr-3 animate-pulse"></span>
+            {pill}
+          </motion.span>
+          
+          <motion.h2 
+            variants={itemVariants} 
+            className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4"
+          >
+            {title}
+          </motion.h2>
+          
+          <motion.h3 
+            variants={itemVariants} 
+            className={`text-2xl lg:text-3xl font-semibold ${theme.accent} dark:text-gray-300 mb-6`}
+          >
+            {subtitle}
+          </motion.h3>
+          
+          <motion.p 
+            variants={itemVariants} 
+            className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-4xl mx-auto"
+          >
+            {description}
+          </motion.p>
         </motion.div>
+
+        {/* Main Content - Symmetrical Layout with Soft Edges */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Image Section with Soft Blend */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={imageVariants}
+            className="lg:col-span-5 flex justify-center"
+          >
+            <div className="relative group w-full max-w-lg">
+              {/* Soft gradient background that blends */}
+              <div className={`absolute -inset-4 bg-gradient-to-r ${theme.gradient} rounded-[2rem] blur-2xl opacity-20 group-hover:opacity-30 transition-all duration-1000`}></div>
+              <div className={`absolute -inset-2 bg-gradient-to-br ${theme.gradient} rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition-all duration-1000`}></div>
+              
+              {/* Image container with soft border */}
+              <div className="relative w-full aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 border border-white/30 dark:border-gray-700/30 backdrop-blur-sm">
+                <motion.img
+                  src={imageUrl}
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.8 }}
+                  alt={title}
+                />
+                {/* Soft overlay gradients */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10"></div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-10 mix-blend-overlay`}></div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Features Section with Soft Cards */}
+          <motion.div
+            initial="hidden"
+            animate={controls}
+            variants={contentVariants}
+            className="lg:col-span-7 space-y-8"
+          >
+            {/* Features Grid with Soft Edges */}
+            <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {items.map((item, index) => (
+                <motion.div 
+                  key={index}
+                  variants={itemVariants}
+                  className={'group relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm'}
+                  whileHover={{ y: -2 }}
+                >
+                  {/* Soft background with blend */}
+                  <div className={'absolute inset-0 bg-white/60 dark:bg-gray-800/60 rounded-2xl border border-white/40 dark:border-gray-700/40'}></div>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${theme.iconBg} opacity-50 rounded-2xl`}></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-2xl"></div>
+                  
+                  {/* Content */}
+                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 ${theme.buttonBg.split(' ')[0]} rounded-xl flex items-center justify-center shadow-lg border border-white/30`}>
+                    <FiCheck className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="relative z-10 text-base font-medium text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors leading-tight">
+                    {item.text}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Action Buttons with Soft Styling */}
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start gap-4 pt-6">
+              <motion.a
+                href={buttonLink}
+                className={'group relative inline-flex items-center px-8 py-4 text-lg font-bold text-white rounded-2xl transition-all duration-300 hover:-translate-y-1 transform-gpu overflow-hidden'}
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {/* Soft gradient background */}
+                <div className={`absolute inset-0 bg-gradient-to-r ${theme.buttonBg.replace('hover:', '')} opacity-90`}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-white/10"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
+                
+                {/* Border gradient */}
+                <div className="absolute inset-0 rounded-2xl border border-white/20"></div>
+                
+                <span className="relative z-10">{buttonText}</span>
+                <HiArrowRight className="relative z-10 ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </motion.a>
+              
+              <motion.a
+                href={learnMoreLink}
+                className={`group inline-flex items-center text-lg font-semibold ${theme.accent} dark:text-gray-300 hover:underline transition-all duration-200 px-4 py-2 rounded-xl backdrop-blur-sm border border-transparent hover:border-current/20`}
+                whileHover={{ x: 4 }}
+              >
+                Learn More
+                <FiArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              </motion.a>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

@@ -148,7 +148,11 @@ function useCalendar({
 }
 
 // Main Consultation Form Component
-export default function ConsultationForm() {
+interface ConsultationFormProps {
+  defaultService?: string;
+}
+
+export default function ConsultationForm({ defaultService }: ConsultationFormProps = {}) {
   const [step, setStep] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -157,11 +161,19 @@ export default function ConsultationForm() {
     name: '',
     email: '',
     phone: '',
-    service: '',
+    service: defaultService || '',
     message: '',
     urgency: 'scheduled',
   });
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  
+  // Skip service selection if default service is provided
+  useEffect(() => {
+    if (defaultService && formData.service === defaultService) {
+      setStep(2); // Skip to scheduling step
+    }
+  }, [defaultService, formData.service]);
+  
   // Add this scroll effect
   useEffect(() => {
     window.scrollTo({

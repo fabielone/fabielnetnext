@@ -150,7 +150,8 @@ export default [
       "@stylistic": stylistic,
     },
     rules: {
-      "@stylistic/indent": ["error", 2],
+  // Disable indent rule due to recursion/stack overflow in some TSX files
+  "@stylistic/indent": "off",
       "@stylistic/quotes": ["error", "single"],
     },
   },

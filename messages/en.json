@@ -160,50 +160,62 @@
     },
     "services": {
       "title": "Our Services",
-      "subtitle": "Business Solutions",
+      "subtitle": "Comprehensive Business Solutions",
       "items": {
         "businessFormation": {
           "pill": "Business Formation",
-          "title": "Establish Your Business with Confidence",
-          "subtitle": "Quick and secure business formation in the US",
-          "description": "Our experts help you establish your business in the United States efficiently while meeting all legal requirements.",
+          "title": "Establish Your Business with Confidence", 
+          "subtitle": "Complete LLC formation in 7-10 business days",
+          "description": "From initial filing to ongoing compliance, we handle every aspect of your business formation process with expert guidance and transparent pricing.",
           "features": [
-            "Business Registration",
-            "Annual Compliance",
-            "Legal Documentation"
+            "Complete LLC Registration & State Filing",
+            "EIN Tax ID Number Application", 
+            "Custom Operating Agreement Template",
+            "Registered Agent Service Available",
+            "Bank Resolution Letter for Account Opening",
+            "Ongoing Compliance Support & Reminders"
           ]
         },
         "webDevelopment": {
           "pill": "Web Development",
-          "title": "Build a Strong Online Presence",
-          "subtitle": "Custom responsive website development",
-          "description": "Our web developers create attractive, easy-to-navigate websites that reflect your brand and attract customers.",
+          "title": "Build a Powerful Online Presence",
+          "subtitle": "Custom websites that convert visitors to customers",
+          "description": "Modern, responsive websites built with the latest technologies, optimized for search engines and designed to grow your business online.",
           "features": [
-            "Professional Design",
-            "Custom Development",
-            "Performance Optimization"
+            "Mobile-First Responsive Design",
+            "SEO Optimization & Fast Loading",
+            "Content Management System (CMS)",
+            "E-commerce & Payment Integration",
+            "Analytics & Performance Tracking",
+            "Ongoing Maintenance & Security Updates"
           ]
         },
         "digitalMarketing": {
           "pill": "Digital Marketing",
-          "title": "Increase Your Online Visibility",
-          "subtitle": "Effective digital marketing strategies for your business",
-          "description": "Our digital marketing experts help create campaigns that attract customers and increase sales.",
+          "title": "Grow Your Business Online",
+          "subtitle": "Data-driven marketing that delivers results",
+          "description": "Strategic digital marketing campaigns designed to increase your online visibility, attract qualified leads, and boost your revenue.",
           "features": [
-            "SEO & Positioning",
-            "Social Media Management",
-            "Analytics & Reports"
+            "Search Engine Optimization (SEO)",
+            "Google Ads & PPC Campaign Management",
+            "Social Media Strategy & Management",
+            "Content Marketing & Copywriting",
+            "Email Marketing Automation",
+            "Analytics & Monthly Performance Reports"
           ]
         },
         "bpo": {
           "pill": "BPO Services",
-          "title": "Scale with Outsourced Operations",
-          "subtitle": "Outbound calling & back office execution",
-          "description": "Leverage trained bilingual talent for outbound calling, appointment setting, data tasks and operational workflows.",
+          "title": "Scale with Expert Operations",
+          "subtitle": "Professional outbound calling & administrative support",
+          "description": "Experienced bilingual team providing outbound calling, appointment setting, and back-office support with transparent metrics and CRM integration.",
           "features": [
-            "Outbound Calling",
-            "Appointment Setting",
-            "Back Office Tasks"
+            "Outbound Sales & Lead Generation",
+            "Appointment Setting & Qualification",
+            "Customer Service & Support",
+            "Data Entry & Administrative Tasks",
+            "CRM Management & Updates",
+            "Daily Performance Reports & Analytics"
           ]
         }
       },
@@ -806,4 +818,62 @@
         "consultation": "Discuss Your Needs"
       }
     }
+  ,
+  "allies": {
+    "title": "Our Business Allies",
+    "subtitle": "Discover businesses and organizations that support and strengthen our community",
+    "filters": {
+      "search": "Search business...",
+      "allCountries": "All Countries",
+      "allStates": "All States", 
+      "allCities": "All Cities",
+      "allCategories": "All Categories",
+      "allIndustries": "All Industries",
+      "allModalities": "All Modalities",
+      "clearFilters": "Clear Filters",
+      "showFilters": "Show Filters",
+      "hideFilters": "Hide Filters"
+    },
+    "modalities": {
+      "online": "Online",
+      "inPerson": "In-Person", 
+      "hybrid": "Hybrid"
+    },
+    "categories": {
+      "technology": "Technology",
+      "services": "Services",
+      "commerce": "Commerce",
+      "food": "Food"
+    },
+    "industries": {
+      "software": "Software",
+      "hardware": "Hardware",
+      "saas": "SaaS",
+      "itConsulting": "IT Consulting",
+      "consulting": "Consulting",
+      "marketing": "Marketing",
+      "design": "Design",
+      "education": "Education",
+      "retail": "Retail",
+      "ecommerce": "E-commerce",
+      "products": "Products",
+      "distribution": "Distribution",
+      "restaurants": "Restaurants",
+      "catering": "Catering",
+      "production": "Production"
+    },
+    "card": {
+      "website": "Website",
+      "contact": "Contact"
+    },
+    "cta": {
+      "joinNetwork": "Join the Business Network",
+      "learnMore": "Learn More"
+    },
+    "noResults": {
+      "title": "No businesses found",
+      "description": "Try adjusting your search filters"
+    },
+    "resultsCount": "Showing {count} of {total} businesses"
   }
+}
