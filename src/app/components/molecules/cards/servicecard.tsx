@@ -1,6 +1,4 @@
-import { motion, useAnimation, Variants } from 'framer-motion';
 import React from 'react';
-import { useInView } from 'react-intersection-observer';
 import { HiArrowRight } from 'react-icons/hi';
 import { FiCheck, FiArrowUpRight } from 'react-icons/fi';
 
@@ -29,20 +27,6 @@ const Header: React.FC<HeaderProps> = ({
   items,
   serviceKey,
 }) => {
-  const [contentRef, inView] = useInView({
-    triggerOnce: false,
-    threshold: 0.2,
-  });
-
-  const controls = useAnimation();
-
-  React.useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    } else {
-      controls.start('hidden');
-    }
-  }, [controls, inView]);
 
   // Service-specific styling
   const getServiceTheme = (key: string) => {
@@ -89,49 +73,8 @@ const Header: React.FC<HeaderProps> = ({
 
   const theme = getServiceTheme(serviceKey);
 
-  const imageVariants: Variants = {
-    hidden: { 
-      scale: 0.8,
-      opacity: 0 
-    },
-    visible: { 
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 60,
-        damping: 20,
-      }
-    }
-  };
-
-  const contentVariants: Variants = {
-    hidden: { 
-      opacity: 0, 
-      y: 30,
-      scale: 0.95 
-    },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-        damping: 20,
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
   return (
     <div 
-      ref={contentRef} 
       className={'relative font-sans px-4 py-12 lg:py-20 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full transition-all duration-700'}
     >
       {/* Soft background with gradient blend */}
@@ -141,51 +84,29 @@ const Header: React.FC<HeaderProps> = ({
       {/* Content with soft edges */}
       <div className="relative max-w-7xl mx-auto">
         {/* Header Section - Centered */}
-        <motion.div
-          initial="hidden"
-          animate={controls}
-          variants={contentVariants}
-          className="text-center mb-16"
-        >
-          <motion.span 
-            variants={itemVariants}
-            className={`inline-flex items-center px-6 py-3 text-sm font-bold ${theme.pillBg} ${theme.darkPill} rounded-full shadow-lg backdrop-blur-sm mb-6 border border-white/20 dark:border-gray-700/20`}
-          >
+        <div className="text-center mb-16">
+          <span className={`inline-flex items-center px-6 py-3 text-sm font-bold ${theme.pillBg} ${theme.darkPill} rounded-full shadow-lg backdrop-blur-sm mb-6 border border-white/20 dark:border-gray-700/20`}>
             <span className="w-2 h-2 bg-current rounded-full mr-3 animate-pulse"></span>
             {pill}
-          </motion.span>
+          </span>
           
-          <motion.h2 
-            variants={itemVariants} 
-            className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4"
-          >
+          <h2 className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4">
             {title}
-          </motion.h2>
+          </h2>
           
-          <motion.h3 
-            variants={itemVariants} 
-            className={`text-2xl lg:text-3xl font-semibold ${theme.accent} dark:text-gray-300 mb-6`}
-          >
+          <h3 className={`text-2xl lg:text-3xl font-semibold ${theme.accent} dark:text-gray-300 mb-6`}>
             {subtitle}
-          </motion.h3>
+          </h3>
           
-          <motion.p 
-            variants={itemVariants} 
-            className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-4xl mx-auto"
-          >
+          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-4xl mx-auto">
             {description}
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
         {/* Main Content - Symmetrical Layout with Soft Edges */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Image Section with Soft Blend */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={imageVariants}
-            className="lg:col-span-5 flex justify-center"
-          >
+          <div className="lg:col-span-5 flex justify-center">
             <div className="relative group w-full max-w-lg">
               {/* Soft gradient background that blends */}
               <div className={`absolute -inset-4 bg-gradient-to-r ${theme.gradient} rounded-[2rem] blur-2xl opacity-20 group-hover:opacity-30 transition-all duration-1000`}></div>
@@ -193,11 +114,9 @@ const Header: React.FC<HeaderProps> = ({
               
               {/* Image container with soft border */}
               <div className="relative w-full aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 border border-white/30 dark:border-gray-700/30 backdrop-blur-sm">
-                <motion.img
+                <img
                   src={imageUrl}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.8 }}
+                  className="w-full h-full object-cover hover:scale-102 transition-transform duration-800"
                   alt={title}
                 />
                 {/* Soft overlay gradients */}
@@ -205,23 +124,16 @@ const Header: React.FC<HeaderProps> = ({
                 <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-10 mix-blend-overlay`}></div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Features Section with Soft Cards */}
-          <motion.div
-            initial="hidden"
-            animate={controls}
-            variants={contentVariants}
-            className="lg:col-span-7 space-y-8"
-          >
+          <div className="lg:col-span-7 space-y-8">
             {/* Features Grid with Soft Edges */}
-            <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {items.map((item, index) => (
-                <motion.div 
+                <div 
                   key={index}
-                  variants={itemVariants}
                   className={'group relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm'}
-                  whileHover={{ y: -2 }}
                 >
                   {/* Soft background with blend */}
                   <div className={'absolute inset-0 bg-white/60 dark:bg-gray-800/60 rounded-2xl border border-white/40 dark:border-gray-700/40'}></div>
@@ -240,17 +152,15 @@ const Header: React.FC<HeaderProps> = ({
                   <span className="relative z-10 text-base font-medium text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors leading-tight">
                     {item.text}
                   </span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* Action Buttons with Soft Styling */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start gap-4 pt-6">
-              <motion.a
+            <div className="flex flex-col sm:flex-row items-start gap-4 pt-6">
+              <a
                 href={buttonLink}
                 className={'group relative inline-flex items-center px-8 py-4 text-lg font-bold text-white rounded-2xl transition-all duration-300 hover:-translate-y-1 transform-gpu overflow-hidden'}
-                whileHover={{ y: -2, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 {/* Soft gradient background */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${theme.buttonBg.replace('hover:', '')} opacity-90`}></div>
@@ -262,18 +172,17 @@ const Header: React.FC<HeaderProps> = ({
                 
                 <span className="relative z-10">{buttonText}</span>
                 <HiArrowRight className="relative z-10 ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </motion.a>
+              </a>
               
-              <motion.a
+              <a
                 href={learnMoreLink}
                 className={`group inline-flex items-center text-lg font-semibold ${theme.accent} dark:text-gray-300 hover:underline transition-all duration-200 px-4 py-2 rounded-xl backdrop-blur-sm border border-transparent hover:border-current/20`}
-                whileHover={{ x: 4 }}
               >
                 Learn More
                 <FiArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-              </motion.a>
-            </motion.div>
-          </motion.div>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
