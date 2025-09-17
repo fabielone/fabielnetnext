@@ -120,6 +120,7 @@
         }
       },
       "clients": "Nuestros Clientes",
+      "partners": "Socios",
       "process": "Nuestro Proceso",
       "blog": "Blog",
       "contact": "Contacto",
@@ -874,5 +875,33 @@
       "description": "Intenta ajustar los filtros de búsqueda"
     },
     "resultsCount": "Mostrando {count} de {total} negocios"
+  },
+  "partners": {
+    "meta": {
+      "title": "Socios Comerciales | Servicios Confiables para Emprendedores",
+      "description": "Descubre nuestros socios comerciales de confianza que ofrecen servicios esenciales para emprendedores: hosting, buzón virtual y servicios de formación empresarial."
+    },
+    "title": "Socios Comerciales de Confianza",
+    "subtitle": "Servicios cuidadosamente seleccionados para ayudar a hacer crecer tu negocio.",
+    "featuresTitle": "Características Principales",
+    "visitService": "Visitar",
+    "morePartnersComingSoon": "Más socios próximamente...",
+    "disclaimer": "Podemos recibir compensación cuando uses servicios a través de nuestros enlaces de socios. Esto nos ayuda a continuar proporcionando recursos gratuitos mientras recomendamos solo servicios en los que confiamos y usamos nosotros mismos.",
+    "categories": {
+      "hosting": "Hosting Web",
+      "mailbox": "Buzón Virtual",
+      "formation": "Formación Empresarial"
+    },
+    "services": {
+      "ionos": {
+        "description": "Hosting web profesional con seguridad y rendimiento de nivel empresarial para el sitio web de tu negocio."
+      },
+      "ipostal1": {
+        "description": "Servicio de buzón virtual que le da a tu negocio una dirección profesional de EE.UU. con escaneo y reenvío de correo."
+      },
+      "corpnet": {
+        "description": "Servicios profesionales de formación empresarial con orientación experta para manejar todo tu papeleo de incorporación."
+      }
+    }
   }
 }

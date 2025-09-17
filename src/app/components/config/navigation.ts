@@ -45,6 +45,10 @@ export const navItems: NavItem[] = [
     path: '/allies'
   },
   {
+    name: 'partners',
+    path: '/partners'
+  },
+  {
     name: 'process',
     path: '/ourprocess'
   },
