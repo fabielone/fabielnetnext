@@ -1,0 +1,908 @@
+{
+    "HomePage": {
+      "title": "Hello World!",
+      "about": "Go to About Us page"
+    },
+    "LanguageSelector": {
+      "changeLanguage": "Change language"
+    },
+    "Hero": {
+      "Heading": "Your Business Built Better",
+      "Subheading": "Complete LLC Formation Services for Entrepreneurs in California",
+      "PriceTimeline": "Starting at $99.99 + Government Fees • Ready in 7-10 Business Days",
+      "BenefitsTitle": "Everything You Need to Start Your LLC",
+      "Bullet1": "Complete LLC Formation",
+      "Bullet2": "Custom Operating Agreement",
+      "Bullet3": "EIN Tax ID Number",
+      "Bullet4": "Professional Website + Marketing",
+      "BulletDescription1": "Articles of incorporation filed with state",
+      "BulletDescription2": "Tailored to your specific business needs",
+      "BulletDescription3": "Federal tax identification setup",
+      "BulletDescription4": "Modern website with SEO optimization",
+      "CTA": "Start My LLC Formation",
+      "Schedule": "Free Consultation",
+      "TrustBadge1": "500+ LLCs Formed",
+      "TrustBadge2": "Licensed Agent",
+      "Pill1": "LLC Formation",
+      "Pill2": "EIN Application",
+      "Pill3": "Operating Agreement",
+      "Pill4": "Website Design",
+      "Pill5": "Digital Marketing",
+      "Pill6": "Business Banking Setup",
+      "ReviewCount": "500+ reviews",
+      "subtitle": "Services designed to start and grow your business.",
+      "packageTitle": "Complete Business Formation Package",
+      "cta": "Start My LLC Formation",
+      "services": {
+        "llcFormation": {
+          "title": "LLC Formation",
+          "description": "Complete business registration with state filing"
+        },
+        "operatingAgreement": {
+          "title": "Operating Agreement",
+          "description": "Custom legal documents for your business structure"
+        },
+        "einFormation": {
+          "title": "EIN Tax ID",
+          "description": "Federal tax identification number setup"
+        },
+        "bankResolution": {
+          "title": "Bank Resolution",
+          "description": "Banking authorization documents for business accounts"
+        }
+      },
+      "valueProposition": {
+        "price": "$99.99 + State Fees",
+        "stateFees": "State fees vary by location",
+        "benefits": {
+          "fastProcessing": "7-10 Days",
+          "clientCount": "500+ Clients",
+          "expertSupport": "Expert Support",
+          "moneyBack": "Money Back"
+        },
+        "footnote": "* Processing time may vary by state requirements"
+      }
+    },
+    "HeroRight": {
+      "title": "Business Formation Experts",
+      "description": "Professional LLC formation services with expert guidance throughout the entire process.",
+      "videoLabel": "Watch Success Story",
+      "Trust1": "500+ Happy Entrepreneurs",
+      "Trust2": "Licensed Registered Agent",
+      "Trust3": "Fast 7-10 Day Process",
+      "newsletter": {
+        "title": "Stay Informed",
+        "subtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
+        "cta": "Join Our Community",
+        "discount": "Save 20% off",
+        "email": "Your email address",
+        "button": "Subscribe Now",
+        "thanks": "Thanks! Your 20% coupon is on the way to your mailbox!"
+      },
+      "Title": "Business Formation Experts",
+      "Description": "Professional LLC formation services with expert guidance throughout the entire process.",
+      "VideoLabel": "Watch Success Story",
+      "NewsletterTitle": "Stay Informed",
+      "NewsletterSubtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
+      "NewsletterCTA": "Join Our Community"
+    },
+    "Blog": {
+      "title": "Blog",
+      "noPosts": "No posts yet",
+      "backToBlog": "Back to blog"
+    },
+    "nav": {
+      "services": {
+        "title": "Our Services",
+        "software": {
+          "title": "Software Development",
+          "web": "Web & Blog Development",
+          "ecommerce": "eCommerce Store Creation",
+          "other": "Other Custom Services"
+        },
+        "marketing": {
+          "title": "Marketing Services",
+          "digital": "Digital Marketing & Content",
+          "influencers": "Influencers & Collaborations",
+          "campaigns": "Advertising Campaigns",
+          "other": "Other Custom Services"
+        },
+        "business": {
+          "title": "Business Formation",
+          "llc": "Form Your LLC",
+          "agent": "Registered Agent",
+          "compliance": "Annual Compliance",
+          "other": "Other Custom Services"
+        },
+        "bpo": {
+          "title": "BPO Services",
+          "outbound": "Outbound Calling",
+          "backoffice": "Back Office Operations"
+        }
+      },
+      "clients": "Our Clients",
+      "partners": "Partners",
+      "process": "Our Process",
+      "blog": "Blog",
+      "contact": "Contact Us",
+      "mobile": {
+        "login": "Sign In",
+        "register": "Register"
+      }
+    },
+    "auth": {
+      "account": "Account",
+      "profile": "Profile",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "signIn": "Sign in",
+      "register": "Register"
+    },
+    "footer": {
+      "description": "We help you form your business and build powerful software solutions to grow your brand.",
+      "quickLinks": "Quick Links",
+      "services": "Our Services",
+      "newsletter": "Newsletter",
+      "copyright": "© {year} Fabiel. All rights reserved.",
+      "links": {
+        "services": "Services",
+        "portfolio": "Portfolio",
+        "blog": "Blog",
+        "contact": "Contact",
+        "terms": "Terms of Service",
+        "privacy": "Privacy Notice",
+        "businessFormations": "Business Formations",
+        "softwareDevelopment": "Software Development",
+        "marketing": "Marketing",
+        "registeredAgent": "Registered Agent",
+        "compliance": "Annual Compliance",
+        "concierge": "Concierge Service"
+      }
+    },
+    "services": {
+      "title": "Our Services",
+      "subtitle": "Comprehensive Business Solutions",
+      "items": {
+        "businessFormation": {
+          "pill": "Business Formation",
+          "title": "Establish Your Business with Confidence", 
+          "subtitle": "Complete LLC formation in 7-10 business days",
+          "description": "From initial filing to ongoing compliance, we handle every aspect of your business formation process with expert guidance and transparent pricing.",
+          "features": [
+            "Complete LLC Registration & State Filing",
+            "EIN Tax ID Number Application", 
+            "Custom Operating Agreement Template",
+            "Registered Agent Service Available",
+            "Bank Resolution Letter for Account Opening",
+            "Ongoing Compliance Support & Reminders"
+          ]
+        },
+        "webDevelopment": {
+          "pill": "Web Development",
+          "title": "Build a Powerful Online Presence",
+          "subtitle": "Custom websites that convert visitors to customers",
+          "description": "Modern, responsive websites built with the latest technologies, optimized for search engines and designed to grow your business online.",
+          "features": [
+            "Mobile-First Responsive Design",
+            "SEO Optimization & Fast Loading",
+            "Content Management System (CMS)",
+            "E-commerce & Payment Integration",
+            "Analytics & Performance Tracking",
+            "Ongoing Maintenance & Security Updates"
+          ]
+        },
+        "digitalMarketing": {
+          "pill": "Digital Marketing",
+          "title": "Grow Your Business Online",
+          "subtitle": "Data-driven marketing that delivers results",
+          "description": "Strategic digital marketing campaigns designed to increase your online visibility, attract qualified leads, and boost your revenue.",
+          "features": [
+            "Search Engine Optimization (SEO)",
+            "Google Ads & PPC Campaign Management",
+            "Social Media Strategy & Management",
+            "Content Marketing & Copywriting",
+            "Email Marketing Automation",
+            "Analytics & Monthly Performance Reports"
+          ]
+        },
+        "bpo": {
+          "pill": "BPO Services",
+          "title": "Scale with Expert Operations",
+          "subtitle": "Professional outbound calling & administrative support",
+          "description": "Experienced bilingual team providing outbound calling, appointment setting, and back-office support with transparent metrics and CRM integration.",
+          "features": [
+            "Outbound Sales & Lead Generation",
+            "Appointment Setting & Qualification",
+            "Customer Service & Support",
+            "Data Entry & Administrative Tasks",
+            "CRM Management & Updates",
+            "Daily Performance Reports & Analytics"
+          ]
+        }
+      },
+      "buttonText": "Get Started Now",
+      "learnMore": "Learn More"
+    },
+    "bpo": {
+      "hero": {
+        "heading": "Business Process Outsourcing (BPO)",
+        "subtitle": "Extend Your Team with Reliable Operational Capacity",
+        "description": "We provide structured outbound calling and back office execution with transparent metrics, QA, and CRM integration.",
+        "features": ["Outbound Calling", "Appointment Setting", "Back Office Tasks", "Daily Metrics"],
+        "cta": "Start Outsourcing",
+        "consultationCta": "Free BPO Assessment"
+      },
+      "services": {
+        "outbound": {
+          "title": "Outbound Calling & Appointment Setting",
+          "description": "Consistent pipeline generation with trained bilingual agents and daily performance reporting.",
+          "features": ["Cold & Warm Outreach", "Live Appointment Setting", "CRM Updates", "Daily KPI Summary"]
+        },
+        "backoffice": {
+          "title": "Back Office Operations",
+          "description": "Process-driven execution for data, documentation, reporting and workflow support.",
+          "features": ["Data Entry", "Document Processing", "Task Tracking", "Reporting Support"]
+        }
+      },
+      "features": {
+        "title": "BPO Capabilities",
+        "subtitle": "Operational leverage without hiring overhead",
+        "items": [
+          {"title": "Outbound Efficiency", "description": "Structured dial blocks with scripts, objections handling and appointment qualification."},
+          {"title": "Back Office Execution", "description": "Data, documentation, light research and workflow updates handled consistently."},
+          {"title": "Metrics & QA", "description": "Daily dashboards: connect %, appointments, show rate, task completion, QA scores."},
+          {"title": "CRM Integration", "description": "We work directly in your CRM or provide synced exports with standardized fields."}
+        ]
+      },
+      "cta": {
+        "title": "Ready to Add BPO Capacity?",
+        "subtitle": "Let our team execute while you focus on growth",
+        "button": "Launch BPO",
+        "consultation": "Free Assessment"
+      }
+    },
+    "outboundBpo": {
+      "hero": {
+        "heading": "Outbound Calling & Appointment Setting",
+        "subtitle": "Consistent Pipeline Through Structured Outreach",
+        "description": "We provide trained bilingual agents that execute daily outbound blocks, set appointments, and log everything in your CRM.",
+        "features": ["4–8 Hour Blocks", "Bilingual Agents", "Daily Metrics", "Live Scheduling"],
+        "cta": "Start Outbound",
+        "consultationCta": "Request Schedule"
+      },
+      "features": {
+        "title": "Outbound Components",
+        "subtitle": "Everything you need for predictable outreach",
+        "items": [
+          {"title": "Dial Blocks", "description": "Structured outreach windows for focus and momentum."},
+            {"title": "Script & Objection", "description": "Refined scripts and objection handling frameworks."},
+            {"title": "Appointment Setting", "description": "Calendar booking with qualification notes."},
+            {"title": "Performance Tracking", "description": "Connect %, appointment rate, show rate and QA scores."}
+        ]
+      },
+      "cta": {
+        "title": "Need Consistent Appointments?",
+        "subtitle": "We'll execute the outbound so you can close deals",
+        "button": "Start Now",
+        "consultation": "Free Strategy Call"
+      }
+    },
+    "backofficeBpo": {
+      "hero": {
+        "heading": "Back Office Operations",
+        "subtitle": "Reliable Execution for Operational Tasks",
+        "description": "Structured support for data entry, documentation, reporting, research and workflow upkeep.",
+        "features": ["Task Execution", "Data Hygiene", "Reporting Support", "Process Alignment"],
+        "cta": "Add Back Office",
+        "consultationCta": "Ops Review"
+      },
+      "features": {
+        "title": "Operational Support",
+        "subtitle": "Enable your core team to stay focused",
+        "items": [
+          {"title": "Data & Records", "description": "Consistent CRM / sheet updates and hygiene."},
+          {"title": "Documentation", "description": "SOP drafting, file organization, structured notes."},
+          {"title": "Workflow Sync", "description": "Task boards, pipeline stages, recurring processes."},
+          {"title": "Reporting", "description": "Scheduled updates for KPIs and operational status."}
+        ]
+      },
+      "cta": {
+        "title": "Need Operational Bandwidth?",
+        "subtitle": "Let us handle recurring tasks and updates",
+        "button": "Get Support",
+        "consultation": "Free Ops Audit"
+      }
+    },
+    "blogSection": {
+      "title": "Explore Our Blog",
+      "subtitle": "Resources and guides for Latino entrepreneurs",
+      "cta": "View Full Library",
+      "posts": [
+        {
+          "title": "How to Form Your LLC in the United States",
+          "description": "A complete guide for Latino entrepreneurs who want to establish their business in the US. Learn the necessary steps, requirements and benefits of forming an LLC.",
+          "category": "Business"
+        },
+        {
+          "title": "Digital Marketing Strategies for Latino Businesses",
+          "description": "Discover best practices in digital marketing to reach your Hispanic audience in the United States. Includes SEO, social media and email marketing.",
+          "category": "Marketing"
+        },
+        {
+          "title": "Tax Compliance for Hispanic Businesses",
+          "description": "Everything you need to know about taxes, financial reports and legal compliance for your business in the US. Keep your company up to date with regulations.",
+          "category": "Legal"
+        },
+        {
+          "title": "Business Expansion: From Local to National",
+          "description": "Step-by-step guide to scaling your local business nationally. Growth strategies, logistics and multi-state operations management.",
+          "category": "Growth"
+        }
+      ]
+    },
+    "blogCard": {
+      "readMore": "Read more",
+      "authorLabel": "Author"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Your orders and subscriptions will appear here."
+    },
+    "questionnaire": {
+      "title": "LLC Questionnaire",
+      "orderId": "Order ID",
+      "thanks": "Thanks! We received your answers. We’ll follow up shortly.",
+      "home": "Home",
+      "goToDashboard": "Go to Dashboard",
+      "contactHelp": "Need help?",
+      "contactSupport": "Contact support"
+    },
+    "software": {
+      "hero": {
+        "heading": "Software Development Services",
+        "subtitle": "Transform Your Ideas Into Powerful Digital Solutions",
+        "description": "We create custom software, websites, and digital platforms that drive business growth and deliver exceptional user experiences.",
+        "cta": "Start Your Project",
+        "consultationCta": "Free Consultation",
+        "features": [
+          "Custom Development",
+          "Modern Technologies", 
+          "Scalable Solutions",
+          "Expert Support"
+        ]
+      },
+      "services": {
+        "title": "Our Software Services",
+        "subtitle": "Comprehensive development solutions for your business",
+        "web": {
+          "title": "Web & Blog Development",
+          "description": "Professional websites and blogs built with modern technologies",
+          "features": ["Responsive Design", "SEO Optimized", "Content Management", "Performance Focused"]
+        },
+        "ecommerce": {
+          "title": "eCommerce Solutions",
+          "description": "Complete online stores with payment integration and inventory management",
+          "features": ["Payment Integration", "Inventory Management", "Mobile Optimized", "Analytics Dashboard"]
+        },
+        "custom": {
+          "title": "Custom Software",
+          "description": "Tailored software solutions for your specific business needs", 
+          "features": ["Custom Development", "API Integration", "Database Design", "Cloud Deployment"]
+        }
+      },
+      "cta": {
+        "title": "Ready to Start Your Software Project?",
+        "subtitle": "Let's build something amazing together",
+        "button": "Get Started Today",
+        "consultation": "Schedule Consultation"
+      }
+    },
+    "marketing": {
+      "hero": {
+        "heading": "Marketing Services",
+        "subtitle": "Grow Your Business With Strategic Marketing",
+        "description": "Comprehensive marketing solutions to increase your visibility, attract customers, and drive sustainable business growth.",
+        "features": ["Digital Marketing", "Content Strategy", "Social Media", "Analytics & Reports", "Campaign Management", "Brand Development"],
+        "cta": "Start Marketing",
+        "consultationCta": "Free Strategy Session"
+      },
+      "services": {
+        "digital": {
+          "title": "Digital Marketing & Content",
+          "description": "Comprehensive digital marketing strategies that drive traffic and generate leads",
+          "features": ["SEO Optimization", "PPC Advertising", "Content Marketing", "Email Campaigns"]
+        },
+        "social": {
+          "title": "Social Media Marketing",
+          "description": "Build your brand presence and engage customers across all social platforms",
+          "features": ["Content Creation", "Community Management", "Social Advertising", "Analytics Tracking"]
+        },
+        "influencer": {
+          "title": "Influencer Marketing",
+          "description": "Connect with relevant influencers to expand your reach and credibility",
+          "features": ["Influencer Matching", "Campaign Management", "Content Collaboration", "Performance Tracking"]
+        }
+      },
+      "features": {
+        "title": "Marketing Solutions",
+        "subtitle": "Complete marketing ecosystem for your business",
+        "items": [
+          {
+            "title": "Digital Marketing Strategy",
+            "description": "Custom strategies to reach your target audience and maximize ROI"
+          },
+          {
+            "title": "Content Creation",
+            "description": "Engaging content that connects with your audience and drives conversions"
+          },
+          {
+            "title": "Social Media Management",
+            "description": "Build and manage your brand presence across all social platforms"
+          },
+          {
+            "title": "Performance Analytics",
+            "description": "Track and optimize your marketing campaigns with detailed insights"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Boost Your Marketing?",
+        "subtitle": "Let's create a marketing strategy that delivers real results",
+        "button": "Start Marketing",
+        "consultation": "Strategy Session"
+      }
+    },
+    "digitalMarketing": {
+      "hero": {
+        "heading": "Digital Marketing Services",
+        "subtitle": "Increase Your Online Visibility & Sales",
+        "description": "Comprehensive digital marketing strategies that drive traffic, generate leads, and increase conversions for your business.",
+        "features": ["SEO Optimization", "PPC Advertising", "Social Media Marketing", "Email Campaigns", "Content Marketing", "Analytics & Reporting"],
+        "cta": "Boost My Business",
+        "consultationCta": "Free Marketing Audit"
+      },
+      "features": {
+        "title": "Digital Marketing Features",
+        "subtitle": "Everything you need to dominate online",
+        "items": [
+          {
+            "title": "Search Engine Optimization",
+            "description": "Improve your search rankings and organic traffic with proven SEO strategies"
+          },
+          {
+            "title": "Social Media Marketing",
+            "description": "Build your brand presence and engage customers across all social platforms"
+          },
+          {
+            "title": "Email Marketing Campaigns",
+            "description": "Create targeted email campaigns that nurture leads and drive conversions"
+          },
+          {
+            "title": "Analytics & Reporting",
+            "description": "Track your marketing performance with detailed analytics and actionable insights"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Dominate Digital Marketing?",
+        "subtitle": "Let's create campaigns that drive real business growth",
+        "button": "Get Started Now",
+        "consultation": "Free Marketing Audit"
+      }
+    },
+    "socialMedia": {
+      "hero": {
+        "heading": "Social Media Marketing",
+        "subtitle": "Build Your Brand & Engage Your Audience",
+        "description": "Strategic social media management that builds brand awareness, engages your community, and drives business growth.",
+        "features": ["Content Creation", "Community Management", "Influencer Marketing", "Social Advertising", "Analytics Tracking", "Brand Strategy"],
+        "cta": "Grow My Following",
+        "consultationCta": "Social Media Audit"
+      },
+      "features": {
+        "title": "Social Media Solutions",
+        "subtitle": "Complete social media presence management",
+        "items": [
+          {
+            "title": "Content Creation & Strategy",
+            "description": "Engaging posts, stories, and videos tailored to each platform and audience"
+          },
+          {
+            "title": "Community Management",
+            "description": "Active engagement with your audience to build relationships and loyalty"
+          },
+          {
+            "title": "Influencer Partnerships",
+            "description": "Connect with relevant influencers to expand your reach and credibility"
+          },
+          {
+            "title": "Social Media Advertising",
+            "description": "Targeted ad campaigns that maximize reach and drive conversions"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Grow Your Social Presence?",
+        "subtitle": "Let's build a social media strategy that engages and converts",
+        "button": "Start Growing",
+        "consultation": "Free Social Audit"
+      }
+    },
+    "influencerMarketing": {
+      "hero": {
+        "heading": "Influencer Marketing",
+        "subtitle": "Leverage Authentic Partnerships for Growth",
+        "description": "Connect with relevant influencers to expand your reach, build credibility, and drive authentic engagement with your target audience.",
+        "features": ["Influencer Matching", "Campaign Management", "Content Collaboration", "Performance Tracking", "Relationship Building", "ROI Optimization"],
+        "cta": "Find Influencers",
+        "consultationCta": "Strategy Session"
+      },
+      "features": {
+        "title": "Influencer Marketing Solutions",
+        "subtitle": "Authentic partnerships that drive results",
+        "items": [
+          {
+            "title": "Influencer Discovery & Matching",
+            "description": "Find and connect with influencers who align with your brand and audience"
+          },
+          {
+            "title": "Campaign Strategy & Management",
+            "description": "Plan and execute influencer campaigns that deliver measurable results"
+          },
+          {
+            "title": "Content Collaboration",
+            "description": "Work with influencers to create authentic, engaging content for your brand"
+          },
+          {
+            "title": "Performance Analytics",
+            "description": "Track campaign performance and ROI with detailed analytics and reporting"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Partner with Influencers?",
+        "subtitle": "Let's find the perfect influencers to grow your brand",
+        "button": "Start Partnership",
+        "consultation": "Find My Influencers"
+      }
+    },
+    "business": {
+      "hero": {
+        "heading": "Business Formation Services",
+        "subtitle": "Start Your Business The Right Way",
+        "description": "Complete business formation services to help you establish and maintain your company legally and efficiently in the United States.",
+        "features": ["LLC Formation", "Registered Agent", "Compliance Support", "Legal Documentation", "Tax Guidance", "Ongoing Support"],
+        "cta": "Form My Business",
+        "consultationCta": "Free Business Consultation"
+      },
+      "services": {
+        "llc": {
+          "title": "LLC Formation",
+          "description": "Complete LLC formation process with all required documentation and filing",
+          "features": ["State Filing", "Operating Agreement", "Tax ID Number", "Compliance Package"]
+        },
+        "agent": {
+          "title": "Registered Agent",
+          "description": "Professional registered agent service to receive legal documents on your behalf",
+          "features": ["Legal Document Receipt", "Privacy Protection", "Compliance Monitoring", "Document Forwarding"]
+        },
+        "compliance": {
+          "title": "Annual Compliance",
+          "description": "Ongoing compliance support to keep your business in good standing",
+          "features": ["Annual Reports", "Tax Compliance", "License Renewals", "Deadline Tracking"]
+        }
+      },
+      "features": {
+        "title": "Business Formation Solutions",
+        "subtitle": "Everything you need to start your business",
+        "items": [
+          {
+            "title": "LLC Formation",
+            "description": "Complete LLC formation process with all required documentation and filing"
+          },
+          {
+            "title": "Registered Agent Service",
+            "description": "Professional registered agent service to receive legal documents on your behalf"
+          },
+          {
+            "title": "Compliance Management",
+            "description": "Ongoing compliance support to keep your business in good standing"
+          },
+          {
+            "title": "Legal Documentation",
+            "description": "Operating agreements and other essential legal documents for your business"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Start Your Business?",
+        "subtitle": "Let's get your business formation started today",
+        "button": "Form My Business",
+        "consultation": "Free Consultation"
+      }
+    },
+    "llcFormation": {
+      "hero": {
+        "heading": "LLC Formation Services",
+        "subtitle": "Form Your LLC Quickly & Easily",
+        "description": "Professional LLC formation services with all paperwork handled for you. Get your business started the right way with expert guidance and support.",
+        "features": ["State Filing", "Operating Agreement", "Tax ID Number", "Compliance Package", "Registered Agent", "Expert Support"],
+        "cta": "Form My LLC",
+        "consultationCta": "Get Started Today"
+      },
+      "features": {
+        "title": "LLC Formation Features",
+        "subtitle": "Complete LLC formation package",
+        "items": [
+          {
+            "title": "State Filing & Registration",
+            "description": "We handle all state paperwork and filing requirements to establish your LLC"
+          },
+          {
+            "title": "Operating Agreement",
+            "description": "Custom operating agreement tailored to your business structure and needs"
+          },
+          {
+            "title": "Federal Tax ID (EIN)",
+            "description": "Obtain your Federal Employer Identification Number for tax and banking purposes"
+          },
+          {
+            "title": "Compliance Package",
+            "description": "Complete package to keep your LLC compliant with state requirements"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Form Your LLC?",
+        "subtitle": "Start your business formation process today",
+        "button": "Start LLC Formation",
+        "consultation": "Free Consultation"
+      }
+    },
+    "registeredAgent": {
+      "hero": {
+        "heading": "Registered Agent Services",
+        "subtitle": "Professional Registered Agent for Your Business",
+        "description": "Reliable registered agent services to receive legal documents and maintain your business compliance. Available in all 50 states.",
+        "features": ["Legal Document Receipt", "Privacy Protection", "Compliance Monitoring", "Document Forwarding", "Professional Address", "State Coverage"],
+        "cta": "Get Registered Agent",
+        "consultationCta": "Learn More"
+      },
+      "features": {
+        "title": "Registered Agent Benefits",
+        "subtitle": "Professional service you can trust",
+        "items": [
+          {
+            "title": "Legal Document Receipt",
+            "description": "Receive and forward all legal documents, service of process, and official correspondence"
+          },
+          {
+            "title": "Privacy Protection",
+            "description": "Keep your personal address private by using our professional business address"
+          },
+          {
+            "title": "Compliance Monitoring",
+            "description": "Stay informed about important deadlines and compliance requirements"
+          },
+          {
+            "title": "Secure Document Management",
+            "description": "Digital scanning and secure storage of all received documents"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Need a Registered Agent?",
+        "subtitle": "Professional registered agent service for your business",
+        "button": "Get Started",
+        "consultation": "Learn More"
+      }
+    },
+    "compliance": {
+      "hero": {
+        "heading": "Business Compliance Services",
+        "subtitle": "Stay Compliant & Avoid Penalties",
+        "description": "Comprehensive compliance services to keep your business in good standing with all state and federal requirements. Avoid costly penalties and legal issues.",
+        "features": ["Annual Reports", "Tax Compliance", "License Renewals", "Deadline Tracking", "Document Management", "Expert Guidance"],
+        "cta": "Stay Compliant",
+        "consultationCta": "Compliance Audit"
+      },
+      "features": {
+        "title": "Compliance Solutions",
+        "subtitle": "Complete compliance management for your business",
+        "items": [
+          {
+            "title": "Annual Report Filing",
+            "description": "Timely filing of required annual reports to maintain good standing"
+          },
+          {
+            "title": "Tax Compliance Support",
+            "description": "Guidance on tax obligations and filing requirements for your business"
+          },
+          {
+            "title": "License & Permit Renewals",
+            "description": "Track and manage renewals for all business licenses and permits"
+          },
+          {
+            "title": "Deadline Management",
+            "description": "Never miss important deadlines with our comprehensive tracking system"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Stay Compliant?",
+        "subtitle": "Let us handle your business compliance requirements",
+        "button": "Get Compliance Help",
+        "consultation": "Free Compliance Audit"
+      }
+    },
+    "webBlog": {
+      "hero": {
+        "heading": "Web & Blog Development",
+        "subtitle": "Professional Websites That Drive Results",
+        "description": "Create stunning, responsive websites and engaging blogs that capture your audience and grow your business online.",
+        "features": ["Responsive Design", "SEO Optimized", "Content Management", "Performance Focused", "Blog Integration", "Social Media Ready"],
+        "cta": "Start Your Website",
+        "consultationCta": "Free Quote"
+      },
+      "features": {
+        "title": "Website Features",
+        "subtitle": "Everything you need for online success",
+        "items": [
+          {
+            "title": "Responsive Design",
+            "description": "Perfect display on all devices - desktop, tablet, and mobile"
+          },
+          {
+            "title": "SEO Optimized", 
+            "description": "Built for search engines to help customers find you online"
+          },
+          {
+            "title": "Fast Loading",
+            "description": "Optimized performance for better user experience and rankings"
+          },
+          {
+            "title": "Content Management",
+            "description": "Easy-to-use system for updating your content and blog posts"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Build Your Website?",
+        "subtitle": "Let's create a website that drives results for your business",
+        "button": "Start Your Website",
+        "consultation": "Free Quote"
+      }
+    },
+    "ecommerce": {
+      "hero": {
+        "heading": "eCommerce Store Development",
+        "subtitle": "Sell Online With Confidence", 
+        "description": "Build a powerful online store that converts visitors into customers with secure payments, inventory management, and mobile optimization.",
+        "features": ["Payment Integration", "Inventory Management", "Mobile Optimized", "Analytics Dashboard", "Product Catalog", "Customer Management"],
+        "cta": "Build My Store",
+        "consultationCta": "Free Consultation"
+      },
+      "features": {
+        "title": "eCommerce Features",
+        "subtitle": "Everything you need to sell online",
+        "items": [
+          {
+            "title": "Secure Payments",
+            "description": "Accept credit cards, PayPal, and other payment methods securely"
+          },
+          {
+            "title": "Inventory Management",
+            "description": "Track products, stock levels, and automate low inventory alerts"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Ready to Launch Your Online Store?",
+        "subtitle": "Start selling online with a professional eCommerce solution",
+        "button": "Build My Store",
+        "consultation": "Free Consultation"
+      }
+    },
+    "customSoftware": {
+      "hero": {
+        "heading": "Custom Software Development",
+        "subtitle": "Tailored Solutions For Your Business",
+        "description": "Build custom applications, APIs, and software solutions designed specifically for your unique business requirements and workflows.",
+        "features": ["Custom Development", "API Integration", "Database Design", "Cloud Deployment", "Scalable Architecture", "Enterprise Security"],
+        "cta": "Start Custom Project",
+        "consultationCta": "Discuss Your Needs"
+      },
+      "cta": {
+        "title": "Ready to Build Your Custom Solution?",
+        "subtitle": "Let's discuss your unique requirements and create the perfect software solution",
+        "button": "Start Custom Project",
+        "consultation": "Discuss Your Needs"
+      }
+    }
+  ,
+  "allies": {
+    "title": "Our Business Allies",
+    "subtitle": "Discover businesses and organizations that support and strengthen our community",
+    "filters": {
+      "search": "Search business...",
+      "allCountries": "All Countries",
+      "allStates": "All States", 
+      "allCities": "All Cities",
+      "allCategories": "All Categories",
+      "allIndustries": "All Industries",
+      "allModalities": "All Modalities",
+      "clearFilters": "Clear Filters",
+      "showFilters": "Show Filters",
+      "hideFilters": "Hide Filters"
+    },
+    "modalities": {
+      "online": "Online",
+      "inPerson": "In-Person", 
+      "hybrid": "Hybrid"
+    },
+    "categories": {
+      "technology": "Technology",
+      "services": "Services",
+      "commerce": "Commerce",
+      "food": "Food"
+    },
+    "industries": {
+      "software": "Software",
+      "hardware": "Hardware",
+      "saas": "SaaS",
+      "itConsulting": "IT Consulting",
+      "consulting": "Consulting",
+      "marketing": "Marketing",
+      "design": "Design",
+      "education": "Education",
+      "retail": "Retail",
+      "ecommerce": "E-commerce",
+      "products": "Products",
+      "distribution": "Distribution",
+      "restaurants": "Restaurants",
+      "catering": "Catering",
+      "production": "Production"
+    },
+    "card": {
+      "website": "Website",
+      "contact": "Contact"
+    },
+    "cta": {
+      "joinNetwork": "Join the Business Network",
+      "learnMore": "Learn More"
+    },
+    "noResults": {
+      "title": "No businesses found",
+      "description": "Try adjusting your search filters"
+    },
+    "resultsCount": "Showing {count} of {total} businesses"
+  },
+  "partners": {
+    "meta": {
+      "title": "Business Partners | Trusted Services for Entrepreneurs",
+      "description": "Discover our trusted business partners offering essential services for entrepreneurs - hosting, virtual mailbox, and business formation services."
+    },
+    "title": "Trusted Business Partners",
+    "subtitle": "Carefully selected services to help grow your business.",
+    "featuresTitle": "Key Features",
+    "visitService": "Visit",
+    "morePartnersComingSoon": "More partners coming soon...",
+    "disclaimer": "We may receive compensation when you use services through our partner links. This helps us continue providing free resources while recommending only services we trust and use ourselves.",
+    "categories": {
+      "hosting": "Web Hosting",
+      "mailbox": "Virtual Mailbox",
+      "formation": "Business Formation"
+    },
+    "services": {
+      "ionos": {
+        "description": "Professional web hosting with enterprise-grade security and performance for your business website."
+      },
+      "ipostal1": {
+        "description": "Virtual mailbox service that gives your business a professional US address with mail scanning and forwarding."
+      },
+      "corpnet": {
+        "description": "Professional business formation services with expert guidance to handle all your incorporation paperwork."
+      }
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "marketing": {
+    "hero": {
+      "heading": "Marketing Services",
+      "subtitle": "Grow Your Business With Strategic Marketing",
+      "description": "Comprehensive marketing solutions to increase your visibility, attract customers, and drive sustainable business growth.",
+      "features": ["Digital Marketing", "Content Strategy", "Social Media", "Analytics & Reports", "Campaign Management", "Brand Development"],
+      "cta": "Start Marketing",
+      "consultationCta": "Free Strategy Session"
+    },
+    "services": {
+      "digital": {
+        "title": "Digital Marketing & Content",
+        "description": "Comprehensive digital marketing strategies that drive traffic and generate leads",
+        "features": ["SEO Optimization", "PPC Advertising", "Content Marketing", "Email Campaigns"]
+      },
+      "social": {
+        "title": "Social Media Marketing",
+        "description": "Build your brand presence and engage customers across all social platforms",
+        "features": ["Content Creation", "Community Management", "Social Advertising", "Analytics Tracking"]
+      },
+      "influencer": {
+        "title": "Influencer Marketing",
+        "description": "Connect with relevant influencers to expand your reach and credibility",
+        "features": ["Influencer Matching", "Campaign Management", "Content Collaboration", "Performance Tracking"]
+      }
+    },
+    "features": {
+      "title": "Marketing Solutions",
+      "subtitle": "Complete marketing ecosystem for your business",
+      "items": [
+        {
+          "title": "Digital Marketing Strategy",
+          "description": "Custom strategies to reach your target audience and maximize ROI"
+        },
+        {
+          "title": "Content Creation",
+          "description": "Engaging content that connects with your audience and drives conversions"
+        },
+        {
+          "title": "Social Media Management",
+          "description": "Build and manage your brand presence across all social platforms"
+        },
+        {
+          "title": "Performance Analytics",
+          "description": "Track and optimize your marketing campaigns with detailed insights"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Boost Your Marketing?",
+      "subtitle": "Let's create a marketing strategy that delivers real results",
+      "button": "Start Marketing",
+      "consultation": "Strategy Session"
+    }
+  },
+  "digitalMarketing": {
+    "hero": {
+      "heading": "Digital Marketing Services",
+      "subtitle": "Increase Your Online Visibility & Sales",
+      "description": "Comprehensive digital marketing strategies that drive traffic, generate leads, and increase conversions for your business.",
+      "features": ["SEO Optimization", "PPC Advertising", "Social Media Marketing", "Email Campaigns", "Content Marketing", "Analytics & Reporting"],
+      "cta": "Boost My Business",
+      "consultationCta": "Free Marketing Audit"
+    },
+    "features": {
+      "title": "Digital Marketing Features",
+      "subtitle": "Everything you need to dominate online",
+      "items": [
+        {
+          "title": "Search Engine Optimization",
+          "description": "Improve your search rankings and organic traffic with proven SEO strategies"
+        },
+        {
+          "title": "Social Media Marketing",
+          "description": "Build your brand presence and engage customers across all social platforms"
+        },
+        {
+          "title": "Email Marketing Campaigns",
+          "description": "Create targeted email campaigns that nurture leads and drive conversions"
+        },
+        {
+          "title": "Analytics & Reporting",
+          "description": "Track your marketing performance with detailed analytics and actionable insights"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Dominate Digital Marketing?",
+      "subtitle": "Let's create campaigns that drive real business growth",
+      "button": "Get Started Now",
+      "consultation": "Free Marketing Audit"
+    }
+  },
+  "socialMedia": {
+    "hero": {
+      "heading": "Social Media Marketing",
+      "subtitle": "Build Your Brand & Engage Your Audience",
+      "description": "Strategic social media management that builds brand awareness, engages your community, and drives business growth.",
+      "features": ["Content Creation", "Community Management", "Influencer Marketing", "Social Advertising", "Analytics Tracking", "Brand Strategy"],
+      "cta": "Grow My Following",
+      "consultationCta": "Social Media Audit"
+    },
+    "features": {
+      "title": "Social Media Solutions",
+      "subtitle": "Complete social media presence management",
+      "items": [
+        {
+          "title": "Content Creation & Strategy",
+          "description": "Engaging posts, stories, and videos tailored to each platform and audience"
+        },
+        {
+          "title": "Community Management",
+          "description": "Active engagement with your audience to build relationships and loyalty"
+        },
+        {
+          "title": "Influencer Partnerships",
+          "description": "Connect with relevant influencers to expand your reach and credibility"
+        },
+        {
+          "title": "Social Media Advertising",
+          "description": "Targeted ad campaigns that maximize reach and drive conversions"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Grow Your Social Presence?",
+      "subtitle": "Let's build a social media strategy that engages and converts",
+      "button": "Start Growing",
+      "consultation": "Free Social Audit"
+    }
+  },
+  "influencerMarketing": {
+    "hero": {
+      "heading": "Influencer Marketing",
+      "subtitle": "Leverage Authentic Partnerships for Growth",
+      "description": "Connect with relevant influencers to expand your reach, build credibility, and drive authentic engagement with your target audience.",
+      "features": ["Influencer Matching", "Campaign Management", "Content Collaboration", "Performance Tracking", "Relationship Building", "ROI Optimization"],
+      "cta": "Find Influencers",
+      "consultationCta": "Strategy Session"
+    },
+    "features": {
+      "title": "Influencer Marketing Solutions",
+      "subtitle": "Authentic partnerships that drive results",
+      "items": [
+        {
+          "title": "Influencer Discovery & Matching",
+          "description": "Find and connect with influencers who align with your brand and audience"
+        },
+        {
+          "title": "Campaign Strategy & Management",
+          "description": "Plan and execute influencer campaigns that deliver measurable results"
+        },
+        {
+          "title": "Content Collaboration",
+          "description": "Work with influencers to create authentic, engaging content for your brand"
+        },
+        {
+          "title": "Performance Analytics",
+          "description": "Track campaign performance and ROI with detailed analytics and reporting"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Partner with Influencers?",
+      "subtitle": "Let's find the perfect influencers to grow your brand",
+      "button": "Start Partnership",
+      "consultation": "Find My Influencers"
+    }
+  }
+}

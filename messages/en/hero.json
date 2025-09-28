@@ -1,0 +1,82 @@
+{
+  "Hero": {
+    "Heading": "Your Business Built Better",
+    "Subheading": "Complete LLC Formation Services for Entrepreneurs in California",
+    "PriceTimeline": "Starting at $99.99 + Government Fees • Ready in 7-10 Business Days",
+    "BenefitsTitle": "Everything You Need to Start Your LLC",
+    "Bullet1": "Complete LLC Formation",
+    "Bullet2": "Custom Operating Agreement",
+    "Bullet3": "EIN Tax ID Number",
+    "Bullet4": "Professional Website + Marketing",
+    "BulletDescription1": "Articles of incorporation filed with state",
+    "BulletDescription2": "Tailored to your specific business needs",
+    "BulletDescription3": "Federal tax identification setup",
+    "BulletDescription4": "Modern website with SEO optimization",
+    "CTA": "Start My LLC Formation",
+    "Schedule": "Free Consultation",
+    "TrustBadge1": "500+ LLCs Formed",
+    "TrustBadge2": "Licensed Agent",
+    "Pill1": "LLC Formation",
+    "Pill2": "EIN Application",
+    "Pill3": "Operating Agreement",
+    "Pill4": "Website Design",
+    "Pill5": "Digital Marketing",
+    "Pill6": "Business Banking Setup",
+    "ReviewCount": "500+ reviews",
+    "subtitle": "Services designed to start and grow your business.",
+    "packageTitle": "Complete Business Formation Package",
+    "cta": "Start My LLC Formation",
+    "services": {
+      "llcFormation": {
+        "title": "LLC Formation",
+        "description": "Complete business registration with state filing"
+      },
+      "operatingAgreement": {
+        "title": "Operating Agreement",
+        "description": "Custom legal documents for your business structure"
+      },
+      "einFormation": {
+        "title": "EIN Tax ID",
+        "description": "Federal tax identification number setup"
+      },
+      "bankResolution": {
+        "title": "Bank Resolution",
+        "description": "Banking authorization documents for business accounts"
+      }
+    },
+    "valueProposition": {
+      "price": "$99.99 + State Fees",
+      "stateFees": "State fees vary by location",
+      "benefits": {
+        "fastProcessing": "7-10 Days",
+        "clientCount": "500+ Clients",
+        "expertSupport": "Expert Support",
+        "moneyBack": "Money Back"
+      },
+      "footnote": "* Processing time may vary by state requirements"
+    }
+  },
+  "HeroRight": {
+    "title": "Business Formation Experts",
+    "description": "Professional LLC formation services with expert guidance throughout the entire process.",
+    "videoLabel": "Watch Success Story",
+    "Trust1": "500+ Happy Entrepreneurs",
+    "Trust2": "Licensed Registered Agent",
+    "Trust3": "Fast 7-10 Day Process",
+    "newsletter": {
+      "title": "Stay Informed",
+      "subtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
+      "cta": "Join Our Community",
+      "discount": "Save 20% off",
+      "email": "Your email address",
+      "button": "Subscribe Now",
+      "thanks": "Thanks! Your 20% coupon is on the way to your mailbox!"
+    },
+    "Title": "Business Formation Experts",
+    "Description": "Professional LLC formation services with expert guidance throughout the entire process.",
+    "VideoLabel": "Watch Success Story",
+    "NewsletterTitle": "Stay Informed",
+    "NewsletterSubtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
+    "NewsletterCTA": "Join Our Community"
+  }
+}

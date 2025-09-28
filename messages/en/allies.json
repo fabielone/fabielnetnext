@@ -1,0 +1,59 @@
+{
+  "allies": {
+    "title": "Our Business Allies",
+    "subtitle": "Discover businesses and organizations that support and strengthen our community",
+    "filters": {
+      "search": "Search business...",
+      "allCountries": "All Countries",
+      "allStates": "All States", 
+      "allCities": "All Cities",
+      "allCategories": "All Categories",
+      "allIndustries": "All Industries",
+      "allModalities": "All Modalities",
+      "clearFilters": "Clear Filters",
+      "showFilters": "Show Filters",
+      "hideFilters": "Hide Filters"
+    },
+    "modalities": {
+      "online": "Online",
+      "inPerson": "In-Person", 
+      "hybrid": "Hybrid"
+    },
+    "categories": {
+      "technology": "Technology",
+      "services": "Services",
+      "commerce": "Commerce",
+      "food": "Food"
+    },
+    "industries": {
+      "software": "Software",
+      "hardware": "Hardware",
+      "saas": "SaaS",
+      "itConsulting": "IT Consulting",
+      "consulting": "Consulting",
+      "marketing": "Marketing",
+      "design": "Design",
+      "education": "Education",
+      "retail": "Retail",
+      "ecommerce": "E-commerce",
+      "products": "Products",
+      "distribution": "Distribution",
+      "restaurants": "Restaurants",
+      "catering": "Catering",
+      "production": "Production"
+    },
+    "card": {
+      "website": "Website",
+      "contact": "Contact"
+    },
+    "cta": {
+      "joinNetwork": "Join the Business Network",
+      "learnMore": "Learn More"
+    },
+    "noResults": {
+      "title": "No businesses found",
+      "description": "Try adjusting your search filters"
+    },
+    "resultsCount": "Showing {count} of {total} businesses"
+  }
+}

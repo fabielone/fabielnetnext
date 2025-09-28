@@ -1,0 +1,156 @@
+{
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Comprehensive Business Solutions",
+    "items": {
+      "businessFormation": {
+        "pill": "Business Formation",
+        "title": "Establish Your Business with Confidence", 
+        "subtitle": "Complete LLC formation in 7-10 business days",
+        "description": "From initial filing to ongoing compliance, we handle every aspect of your business formation process with expert guidance and transparent pricing.",
+        "features": [
+          "Complete LLC Registration & State Filing",
+          "EIN Tax ID Number Application", 
+          "Custom Operating Agreement Template",
+          "Registered Agent Service Available",
+          "Bank Resolution Letter for Account Opening",
+          "Ongoing Compliance Support & Reminders"
+        ]
+      },
+      "webDevelopment": {
+        "pill": "Web Development",
+        "title": "Build a Powerful Online Presence",
+        "subtitle": "Custom websites that convert visitors to customers",
+        "description": "Modern, responsive websites built with the latest technologies, optimized for search engines and designed to grow your business online.",
+        "features": [
+          "Mobile-First Responsive Design",
+          "SEO Optimization & Fast Loading",
+          "Content Management System (CMS)",
+          "E-commerce & Payment Integration",
+          "Analytics & Performance Tracking",
+          "Ongoing Maintenance & Security Updates"
+        ]
+      },
+      "digitalMarketing": {
+        "pill": "Digital Marketing",
+        "title": "Grow Your Business Online",
+        "subtitle": "Data-driven marketing that delivers results",
+        "description": "Strategic digital marketing campaigns designed to increase your online visibility, attract qualified leads, and boost your revenue.",
+        "features": [
+          "Search Engine Optimization (SEO)",
+          "Google Ads & PPC Campaign Management",
+          "Social Media Strategy & Management",
+          "Content Marketing & Copywriting",
+          "Email Marketing Automation",
+          "Analytics & Monthly Performance Reports"
+        ]
+      },
+      "bpo": {
+        "pill": "BPO Services",
+        "title": "Scale with Expert Operations",
+        "subtitle": "Professional outbound calling & administrative support",
+        "description": "Experienced bilingual team providing outbound calling, appointment setting, and back-office support with transparent metrics and CRM integration.",
+        "features": [
+          "Outbound Sales & Lead Generation",
+          "Appointment Setting & Qualification",
+          "Customer Service & Support",
+          "Data Entry & Administrative Tasks",
+          "CRM Management & Updates",
+          "Daily Performance Reports & Analytics"
+        ]
+      }
+    },
+    "buttonText": "Get Started Now",
+    "learnMore": "Learn More"
+  },
+  "bpo": {
+    "hero": {
+      "heading": "Business Process Outsourcing (BPO)",
+      "subtitle": "Extend Your Team with Reliable Operational Capacity",
+      "description": "We provide structured outbound calling and back office execution with transparent metrics, QA, and CRM integration.",
+      "features": ["Outbound Calling", "Appointment Setting", "Back Office Tasks", "Daily Metrics"],
+      "cta": "Start Outsourcing",
+      "consultationCta": "Free BPO Assessment"
+    },
+    "services": {
+      "outbound": {
+        "title": "Outbound Calling & Appointment Setting",
+        "description": "Consistent pipeline generation with trained bilingual agents and daily performance reporting.",
+        "features": ["Cold & Warm Outreach", "Live Appointment Setting", "CRM Updates", "Daily KPI Summary"]
+      },
+      "backoffice": {
+        "title": "Back Office Operations",
+        "description": "Process-driven execution for data, documentation, reporting and workflow support.",
+        "features": ["Data Entry", "Document Processing", "Task Tracking", "Reporting Support"]
+      }
+    },
+    "features": {
+      "title": "BPO Capabilities",
+      "subtitle": "Operational leverage without hiring overhead",
+      "items": [
+        {"title": "Outbound Efficiency", "description": "Structured dial blocks with scripts, objections handling and appointment qualification."},
+        {"title": "Back Office Execution", "description": "Data, documentation, light research and workflow updates handled consistently."},
+        {"title": "Metrics & QA", "description": "Daily dashboards: connect %, appointments, show rate, task completion, QA scores."},
+        {"title": "CRM Integration", "description": "We work directly in your CRM or provide synced exports with standardized fields."}
+      ]
+    },
+    "cta": {
+      "title": "Ready to Add BPO Capacity?",
+      "subtitle": "Let our team execute while you focus on growth",
+      "button": "Launch BPO",
+      "consultation": "Free Assessment"
+    }
+  },
+  "outboundBpo": {
+    "hero": {
+      "heading": "Outbound Calling & Appointment Setting",
+      "subtitle": "Consistent Pipeline Through Structured Outreach",
+      "description": "We provide trained bilingual agents that execute daily outbound blocks, set appointments, and log everything in your CRM.",
+      "features": ["4–8 Hour Blocks", "Bilingual Agents", "Daily Metrics", "Live Scheduling"],
+      "cta": "Start Outbound",
+      "consultationCta": "Request Schedule"
+    },
+    "features": {
+      "title": "Outbound Components",
+      "subtitle": "Everything you need for predictable outreach",
+      "items": [
+        {"title": "Dial Blocks", "description": "Structured outreach windows for focus and momentum."},
+          {"title": "Script & Objection", "description": "Refined scripts and objection handling frameworks."},
+          {"title": "Appointment Setting", "description": "Calendar booking with qualification notes."},
+          {"title": "Performance Tracking", "description": "Connect %, appointment rate, show rate and QA scores."}
+      ]
+    },
+    "cta": {
+      "title": "Need Consistent Appointments?",
+      "subtitle": "We'll execute the outbound so you can close deals",
+      "button": "Start Now",
+      "consultation": "Free Strategy Call"
+    }
+  },
+  "backofficeBpo": {
+    "hero": {
+      "heading": "Back Office Operations",
+      "subtitle": "Reliable Execution for Operational Tasks",
+      "description": "Structured support for data entry, documentation, reporting, research and workflow upkeep.",
+      "features": ["Task Execution", "Data Hygiene", "Reporting Support", "Process Alignment"],
+      "cta": "Add Back Office",
+      "consultationCta": "Ops Review"
+    },
+    "features": {
+      "title": "Operational Support",
+      "subtitle": "Enable your core team to stay focused",
+      "items": [
+        {"title": "Data & Records", "description": "Consistent CRM / sheet updates and hygiene."},
+        {"title": "Documentation", "description": "SOP drafting, file organization, structured notes."},
+        {"title": "Workflow Sync", "description": "Task boards, pipeline stages, recurring processes."},
+        {"title": "Reporting", "description": "Scheduled updates for KPIs and operational status."}
+      ]
+    },
+    "cta": {
+      "title": "Need Operational Bandwidth?",
+      "subtitle": "Let us handle recurring tasks and updates",
+      "button": "Get Support",
+      "consultation": "Free Ops Audit"
+    }
+  }
+}

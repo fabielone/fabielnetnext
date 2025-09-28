@@ -1,0 +1,77 @@
+{
+  "HomePage": {
+    "title": "Hello World!",
+    "about": "Go to About Us page"
+  },
+  "LanguageSelector": {
+    "changeLanguage": "Change language"
+  },
+  "nav": {
+    "services": {
+      "title": "Our Services",
+      "software": {
+        "title": "Software Development",
+        "web": "Web & Blog Development",
+        "ecommerce": "eCommerce Store Creation",
+        "other": "Other Custom Services"
+      },
+      "marketing": {
+        "title": "Marketing Services",
+        "digital": "Digital Marketing & Content",
+        "influencers": "Influencers & Collaborations",
+        "campaigns": "Advertising Campaigns",
+        "other": "Other Custom Services"
+      },
+      "business": {
+        "title": "Business Formation",
+        "llc": "Form Your LLC",
+        "agent": "Registered Agent",
+        "compliance": "Annual Compliance",
+        "other": "Other Custom Services"
+      },
+      "bpo": {
+        "title": "BPO Services",
+        "outbound": "Outbound Calling",
+        "backoffice": "Back Office Operations"
+      }
+    },
+    "clients": "Our Clients",
+    "partners": "Partners",
+    "process": "Our Process",
+    "blog": "Blog",
+    "contact": "Contact Us",
+    "mobile": {
+      "login": "Sign In",
+      "register": "Register"
+    }
+  },
+  "auth": {
+    "account": "Account",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "register": "Register"
+  },
+  "footer": {
+    "description": "We help you form your business and build powerful software solutions to grow your brand.",
+    "quickLinks": "Quick Links",
+    "services": "Our Services",
+    "newsletter": "Newsletter",
+    "copyright": "© {year} Fabiel. All rights reserved.",
+    "links": {
+      "services": "Services",
+      "portfolio": "Portfolio",
+      "blog": "Blog",
+      "contact": "Contact",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Notice",
+      "businessFormations": "Business Formations",
+      "softwareDevelopment": "Software Development",
+      "marketing": "Marketing",
+      "registeredAgent": "Registered Agent",
+      "compliance": "Annual Compliance",
+      "concierge": "Concierge Service"
+    }
+  }
+}

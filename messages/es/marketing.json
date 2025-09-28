@@ -1,0 +1,214 @@
+{
+  "marketing": {
+    "hero": {
+      "heading": "Servicios de Marketing",
+      "subtitle": "Haz Crecer Tu Negocio Con Marketing Estratégico",
+      "description": "Soluciones integrales de marketing para aumentar tu visibilidad, atraer clientes e impulsar el crecimiento sostenible de tu negocio.",
+      "features": [
+        "Marketing Digital",
+        "Estrategia de Contenido",
+        "Redes Sociales",
+        "Analytics y Reportes",
+        "Gestión de Campañas",
+        "Desarrollo de Marca"
+      ],
+      "cta": "Empezar Marketing",
+      "consultationCta": "Sesión de Estrategia Gratis"
+    },
+    "services": {
+      "digital": {
+        "title": "Marketing Digital y Contenido",
+        "description": "Estrategias integrales de marketing digital que generan tráfico y crean leads",
+        "features": [
+          "Optimización SEO",
+          "Publicidad PPC",
+          "Marketing de Contenido",
+          "Campañas de Email"
+        ]
+      },
+      "social": {
+        "title": "Marketing en Redes Sociales",
+        "description": "Construye la presencia de tu marca y conecta con clientes en todas las plataformas sociales",
+        "features": [
+          "Creación de Contenido",
+          "Gestión de Comunidad",
+          "Publicidad Social",
+          "Seguimiento de Analytics"
+        ]
+      },
+      "influencer": {
+        "title": "Marketing de Influencers",
+        "description": "Conecta con influencers relevantes para expandir tu alcance y credibilidad",
+        "features": [
+          "Matching de Influencers",
+          "Gestión de Campañas",
+          "Colaboración de Contenido",
+          "Seguimiento de Rendimiento"
+        ]
+      }
+    },
+    "features": {
+      "title": "Soluciones de Marketing",
+      "subtitle": "Ecosistema completo de marketing para tu negocio",
+      "items": [
+        {
+          "title": "Estrategia de Marketing Digital",
+          "description": "Estrategias personalizadas para alcanzar tu audiencia objetivo y maximizar el ROI"
+        },
+        {
+          "title": "Creación de Contenido",
+          "description": "Contenido atractivo que conecta con tu audiencia e impulsa las conversiones"
+        },
+        {
+          "title": "Gestión de Redes Sociales",
+          "description": "Construye y gestiona la presencia de tu marca en todas las plataformas sociales"
+        },
+        {
+          "title": "Analytics de Rendimiento",
+          "description": "Rastrea y optimiza tus campañas de marketing con insights detallados"
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para Impulsar Tu Marketing?",
+      "subtitle": "Creemos una estrategia de marketing que entregue resultados reales",
+      "button": "Empezar Marketing",
+      "consultation": "Sesión de Estrategia"
+    }
+  },
+  "digitalMarketing": {
+    "hero": {
+      "heading": "Servicios de Marketing Digital",
+      "subtitle": "Aumenta Tu Visibilidad Online y Ventas",
+      "description": "Estrategias integrales de marketing digital que generan tráfico, crean leads y aumentan las conversiones para tu negocio.",
+      "features": [
+        "Optimización SEO",
+        "Publicidad PPC",
+        "Marketing en Redes Sociales",
+        "Campañas de Email",
+        "Marketing de Contenido",
+        "Analytics y Reportes"
+      ],
+      "cta": "Impulsar Mi Negocio",
+      "consultationCta": "Auditoría de Marketing Gratis"
+    },
+    "features": {
+      "title": "Características del Marketing Digital",
+      "subtitle": "Todo lo que necesitas para dominar online",
+      "items": [
+        {
+          "title": "Optimización para Motores de Búsqueda",
+          "description": "Mejora tu posicionamiento en buscadores y tráfico orgánico con estrategias SEO probadas"
+        },
+        {
+          "title": "Marketing en Redes Sociales",
+          "description": "Construye la presencia de tu marca y conecta con clientes en todas las plataformas sociales"
+        },
+        {
+          "title": "Campañas de Email Marketing",
+          "description": "Crea campañas de email dirigidas que nutren leads y impulsan conversiones"
+        },
+        {
+          "title": "Analytics y Reportes",
+          "description": "Rastrea el rendimiento de tu marketing con analytics detallados e insights accionables"
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para Dominar el Marketing Digital?",
+      "subtitle": "Creemos campañas que impulsen el crecimiento real de tu negocio",
+      "button": "Comenzar Ahora",
+      "consultation": "Auditoría de Marketing Gratis"
+    }
+  },
+  "socialMedia": {
+    "hero": {
+      "heading": "Marketing en Redes Sociales",
+      "subtitle": "Construye Tu Marca y Conecta con Tu Audiencia",
+      "description": "Gestión estratégica de redes sociales que construye reconocimiento de marca, involucra a tu comunidad e impulsa el crecimiento del negocio.",
+      "features": [
+        "Creación de Contenido",
+        "Gestión de Comunidad",
+        "Marketing de Influencers",
+        "Publicidad Social",
+        "Seguimiento de Analytics",
+        "Estrategia de Marca"
+      ],
+      "cta": "Hacer Crecer Mi Audiencia",
+      "consultationCta": "Auditoría de Redes Sociales"
+    },
+    "features": {
+      "title": "Soluciones de Redes Sociales",
+      "subtitle": "Gestión completa de presencia en redes sociales",
+      "items": [
+        {
+          "title": "Creación de Contenido y Estrategia",
+          "description": "Posts, historias y videos atractivos adaptados a cada plataforma y audiencia"
+        },
+        {
+          "title": "Gestión de Comunidad",
+          "description": "Participación activa con tu audiencia para construir relaciones y lealtad"
+        },
+        {
+          "title": "Alianzas con Influencers",
+          "description": "Conecta con influencers relevantes para expandir tu alcance y credibilidad"
+        },
+        {
+          "title": "Publicidad en Redes Sociales",
+          "description": "Campañas publicitarias dirigidas que maximizan el alcance e impulsan conversiones"
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para Hacer Crecer Tu Presencia Social?",
+      "subtitle": "Construyamos una estrategia de redes sociales que involucre y convierta",
+      "button": "Comenzar a Crecer",
+      "consultation": "Auditoría Social Gratis"
+    }
+  },
+  "influencerMarketing": {
+    "hero": {
+      "heading": "Marketing de Influencers",
+      "subtitle": "Aprovecha Alianzas Auténticas para el Crecimiento",
+      "description": "Conecta con influencers relevantes para expandir tu alcance, construir credibilidad e impulsar el engagement auténtico con tu audiencia objetivo.",
+      "features": [
+        "Matching de Influencers",
+        "Gestión de Campañas",
+        "Colaboración de Contenido",
+        "Seguimiento de Rendimiento",
+        "Construcción de Relaciones",
+        "Optimización de ROI"
+      ],
+      "cta": "Encontrar Influencers",
+      "consultationCta": "Sesión de Estrategia"
+    },
+    "features": {
+      "title": "Soluciones de Marketing de Influencers",
+      "subtitle": "Alianzas auténticas que generan resultados",
+      "items": [
+        {
+          "title": "Descubrimiento y Matching de Influencers",
+          "description": "Encuentra y conecta con influencers que se alineen con tu marca y audiencia"
+        },
+        {
+          "title": "Estrategia y Gestión de Campañas",
+          "description": "Planifica y ejecuta campañas de influencers que entreguen resultados medibles"
+        },
+        {
+          "title": "Colaboración de Contenido",
+          "description": "Trabaja con influencers para crear contenido auténtico y atractivo para tu marca"
+        },
+        {
+          "title": "Analytics de Rendimiento",
+          "description": "Rastrea el rendimiento de campañas y ROI con analytics detallados y reportes"
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para Aliarte con Influencers?",
+      "subtitle": "Encontremos los influencers perfectos para hacer crecer tu marca",
+      "button": "Iniciar Alianza",
+      "consultation": "Encontrar Mis Influencers"
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "business": {
+    "hero": {
+      "heading": "Business Formation Services",
+      "subtitle": "Start Your Business The Right Way",
+      "description": "Complete business formation services to help you establish and maintain your company legally and efficiently in the United States.",
+      "features": ["LLC Formation", "Registered Agent", "Compliance Support", "Legal Documentation", "Tax Guidance", "Ongoing Support"],
+      "cta": "Form My Business",
+      "consultationCta": "Free Business Consultation"
+    },
+    "services": {
+      "llc": {
+        "title": "LLC Formation",
+        "description": "Complete LLC formation process with all required documentation and filing",
+        "features": ["State Filing", "Operating Agreement", "Tax ID Number", "Compliance Package"]
+      },
+      "agent": {
+        "title": "Registered Agent",
+        "description": "Professional registered agent service to receive legal documents on your behalf",
+        "features": ["Legal Document Receipt", "Privacy Protection", "Compliance Monitoring", "Document Forwarding"]
+      },
+      "compliance": {
+        "title": "Annual Compliance",
+        "description": "Ongoing compliance support to keep your business in good standing",
+        "features": ["Annual Reports", "Tax Compliance", "License Renewals", "Deadline Tracking"]
+      }
+    },
+    "features": {
+      "title": "Business Formation Solutions",
+      "subtitle": "Everything you need to start your business",
+      "items": [
+        {
+          "title": "LLC Formation",
+          "description": "Complete LLC formation process with all required documentation and filing"
+        },
+        {
+          "title": "Registered Agent Service",
+          "description": "Professional registered agent service to receive legal documents on your behalf"
+        },
+        {
+          "title": "Compliance Management",
+          "description": "Ongoing compliance support to keep your business in good standing"
+        },
+        {
+          "title": "Legal Documentation",
+          "description": "Operating agreements and other essential legal documents for your business"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Start Your Business?",
+      "subtitle": "Let's get your business formation started today",
+      "button": "Form My Business",
+      "consultation": "Free Consultation"
+    }
+  },
+  "llcFormation": {
+    "hero": {
+      "heading": "LLC Formation Services",
+      "subtitle": "Form Your LLC Quickly & Easily",
+      "description": "Professional LLC formation services with all paperwork handled for you. Get your business started the right way with expert guidance and support.",
+      "features": ["State Filing", "Operating Agreement", "Tax ID Number", "Compliance Package", "Registered Agent", "Expert Support"],
+      "cta": "Form My LLC",
+      "consultationCta": "Get Started Today"
+    },
+    "features": {
+      "title": "LLC Formation Features",
+      "subtitle": "Complete LLC formation package",
+      "items": [
+        {
+          "title": "State Filing & Registration",
+          "description": "We handle all state paperwork and filing requirements to establish your LLC"
+        },
+        {
+          "title": "Operating Agreement",
+          "description": "Custom operating agreement tailored to your business structure and needs"
+        },
+        {
+          "title": "Federal Tax ID (EIN)",
+          "description": "Obtain your Federal Employer Identification Number for tax and banking purposes"
+        },
+        {
+          "title": "Compliance Package",
+          "description": "Complete package to keep your LLC compliant with state requirements"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Form Your LLC?",
+      "subtitle": "Start your business formation process today",
+      "button": "Start LLC Formation",
+      "consultation": "Free Consultation"
+    }
+  },
+  "registeredAgent": {
+    "hero": {
+      "heading": "Registered Agent Services",
+      "subtitle": "Professional Registered Agent for Your Business",
+      "description": "Reliable registered agent services to receive legal documents and maintain your business compliance. Available in all 50 states.",
+      "features": ["Legal Document Receipt", "Privacy Protection", "Compliance Monitoring", "Document Forwarding", "Professional Address", "State Coverage"],
+      "cta": "Get Registered Agent",
+      "consultationCta": "Learn More"
+    },
+    "features": {
+      "title": "Registered Agent Benefits",
+      "subtitle": "Professional service you can trust",
+      "items": [
+        {
+          "title": "Legal Document Receipt",
+          "description": "Receive and forward all legal documents, service of process, and official correspondence"
+        },
+        {
+          "title": "Privacy Protection",
+          "description": "Keep your personal address private by using our professional business address"
+        },
+        {
+          "title": "Compliance Monitoring",
+          "description": "Stay informed about important deadlines and compliance requirements"
+        },
+        {
+          "title": "Secure Document Management",
+          "description": "Digital scanning and secure storage of all received documents"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Need a Registered Agent?",
+      "subtitle": "Professional registered agent service for your business",
+      "button": "Get Started",
+      "consultation": "Learn More"
+    }
+  },
+  "compliance": {
+    "hero": {
+      "heading": "Business Compliance Services",
+      "subtitle": "Stay Compliant & Avoid Penalties",
+      "description": "Comprehensive compliance services to keep your business in good standing with all state and federal requirements. Avoid costly penalties and legal issues.",
+      "features": ["Annual Reports", "Tax Compliance", "License Renewals", "Deadline Tracking", "Document Management", "Expert Guidance"],
+      "cta": "Stay Compliant",
+      "consultationCta": "Compliance Audit"
+    },
+    "features": {
+      "title": "Compliance Solutions",
+      "subtitle": "Complete compliance management for your business",
+      "items": [
+        {
+          "title": "Annual Report Filing",
+          "description": "Timely filing of required annual reports to maintain good standing"
+        },
+        {
+          "title": "Tax Compliance Support",
+          "description": "Guidance on tax obligations and filing requirements for your business"
+        },
+        {
+          "title": "License & Permit Renewals",
+          "description": "Track and manage renewals for all business licenses and permits"
+        },
+        {
+          "title": "Deadline Management",
+          "description": "Never miss important deadlines with our comprehensive tracking system"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Stay Compliant?",
+      "subtitle": "Let us handle your business compliance requirements",
+      "button": "Get Compliance Help",
+      "consultation": "Free Compliance Audit"
+    }
+  }
+}

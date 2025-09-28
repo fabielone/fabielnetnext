@@ -1,0 +1,38 @@
+{
+  "Blog": {
+    "title": "Blog",
+    "noPosts": "Aún no hay publicaciones",
+    "backToBlog": "Regreso al Blog"
+  },
+  "blogSection": {
+    "title": "Explora Nuestro Blog",
+    "subtitle": "Recursos y guías para emprendedores latinos",
+    "cta": "Ver Biblioteca Completa",
+    "posts": [
+      {
+        "title": "Cómo Formar tu LLC en Estados Unidos",
+        "description": "Una guía completa para emprendedores latinos que desean establecer su negocio en EE.UU. Aprende los pasos necesarios, requisitos y beneficios de formar una LLC.",
+        "category": "Negocios"
+      },
+      {
+        "title": "Estrategias de Marketing Digital para Empresas Latinas",
+        "description": "Descubre las mejores prácticas de marketing digital para alcanzar a tu audiencia hispana en Estados Unidos. Incluye SEO, redes sociales y email marketing.",
+        "category": "Marketing"
+      },
+      {
+        "title": "Cumplimiento Fiscal para Negocios Hispanos",
+        "description": "Todo lo que necesitas saber sobre impuestos, reportes financieros y cumplimiento legal para tu negocio en EE.UU. Mantén tu empresa al día con las regulaciones.",
+        "category": "Legal"
+      },
+      {
+        "title": "Expansión de Negocios: De Local a Nacional",
+        "description": "Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.",
+        "category": "Crecimiento"
+      }
+    ]
+  },
+  "blogCard": {
+    "readMore": "Leer más",
+    "authorLabel": "Autor"
+  }
+}
