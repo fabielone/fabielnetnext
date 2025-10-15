@@ -121,7 +121,7 @@ export default function BlogList() {
       {/* Call to Action Section */}
       <div className="text-center mt-2">
         <a 
-          href="/blog"
+          href="https://blog.fabiel.net"
           className="inline-flex items-center gap-2 bg-amber-200 dark:bg-amber-600 text-slate-900 dark:text-white px-2 py-3 rounded-lg hover:bg-amber-300 dark:hover:bg-amber-500 transition-colors duration-300 font-semibold"
         >
           <FaBookReader className="w-5 h-5" />

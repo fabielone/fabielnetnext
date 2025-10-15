@@ -54,7 +54,6 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
     if (href.includes('/contact')) return 'Loading contact form...'
     if (href.includes('/ourprocess')) return 'Loading our process...'
     if (href.includes('/allies')) return 'Loading our clients...'
-    if (href.includes('/blog')) return 'Loading blog...'
     if (href.includes('/join')) return 'Loading registration...'
     if (href.includes('/login')) return 'Loading login...'
     if (href.includes('/checkout')) return 'Loading secure checkout...'

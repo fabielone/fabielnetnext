@@ -34,16 +34,16 @@ const MyServices = () => {
   const getServiceImages = (locale: string) => {
     const images = {
       en: {
-        businessFormation: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055607/fabiel.net/formation_en_oozgh4.png',
-        webDevelopment: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055610/fabiel.net/web_en_pzoemc.png',
-        digitalMarketing: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055609/fabiel.net/marketing_en_kilcjs.png',
-        bpo: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055607/fabiel.net/bpo_en_y5ibot.png',
+        businessFormation: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759091373/fabiel.net/formation_en_siajuj.png',
+        webDevelopment: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759091614/fabiel.net/web_en_iyhmje.png',
+        digitalMarketing: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759091613/fabiel.net/marketing_en_wkz2wj.png',
+        bpo: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759092362/fabiel.net/bpo_es_bkykpc.png',
       },
       es: {
-        businessFormation: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055608/fabiel.net/formation_es_ra2fqd.png',
-        webDevelopment: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055611/fabiel.net/web_es_q788u3.png',
-        digitalMarketing: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055610/fabiel.net/marketing_es_lidjqs.png',
-        bpo: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759055607/fabiel.net/bpo_es_d2jm3n.png',
+        businessFormation: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759092666/fabiel.net/formation_es_lc5q56.png',
+        webDevelopment: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759091616/fabiel.net/web_es_bnseeo.png',
+        digitalMarketing: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759092364/fabiel.net/marketing_es_cevnv7.png',
+        bpo: 'https://res.cloudinary.com/superbigone/image/upload/f_auto,q_auto,w_500/v1759092362/fabiel.net/bpo_es_bkykpc.png',
       }
     };
     return images[locale as keyof typeof images] || images.en;
