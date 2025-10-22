@@ -16,11 +16,6 @@ export const reviews = {
       verified: 'Verified Client ✓'
     },
     {
-      text: 'Fabiel.Net\'s digital marketing team is exceptional. Our sales have increased by 50% in just 3 months and our online presence is stronger than ever.',
-      author: 'Carlos M., Retail Marketing Manager',
-      verified: 'Verified Client ✓'
-    },
-    {
       text: 'Very professional and attentive. They helped us create a modern, functional website that perfectly reflects our brand and values.',
       author: 'Anna L., Graphic Designer & Entrepreneur',
       verified: 'Verified Client ✓'
@@ -50,11 +45,6 @@ export const reviews = {
     {
       text: 'Me encanta cómo Fabiel.Net se toma el tiempo para entender tus necesidades y objetivos. Son verdaderos socios en el éxito de tu negocio.',
       author: 'Sofía R., Dueña de un negocio de servicios',
-      verified: 'Cliente Verificado ✓'
-    },
-    {
-      text: 'El equipo de marketing digital de Fabiel.Net es excepcional. Nuestras ventas han aumentado un 50% en solo 3 meses y nuestra presencia en línea es más fuerte que nunca.',
-      author: 'Carlos M., Gerente de Marketing de una empresa de retail',
       verified: 'Cliente Verificado ✓'
     },
     {

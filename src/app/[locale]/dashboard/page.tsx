@@ -196,7 +196,7 @@ export default function LocalizedDashboard() {
 
                 <div>
                   <h3 className="font-semibold mb-2">Add services</h3>
-                  <div className="text-sm text-gray-600">Coming next: choose add-ons like Registered Agent, Compliance, Website tiers, Marketing.</div>
+                  <div className="text-sm text-gray-600">Coming next: choose add-ons like Registered Agent, Compliance, Website tiers.</div>
                 </div>
               </div>
             )}

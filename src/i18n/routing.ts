@@ -17,50 +17,14 @@ export const routing = defineRouting({
     '/checkout/businessformation': {
       es:'/checkout/formacion-de-negocio'
     },
-    '/software': {
-      es:'/software'
+    '/checkout/web': {
+      es:'/checkout/desarrollo-web'
     },
-    '/software/web-blog': {
-      es:'/software/desarrollo-web'
-    },
-    '/software/ecommerce': {
-      es:'/software/tienda-online'
-    },
-    '/software/custom': {
-      es:'/software/personalizado'
-    },
-    '/marketing': {
-      es:'/marketing'
-    },
-    '/marketing/digital': {
-      es:'/marketing/digital'
-    },
-    '/marketing/social-media': {
-      es:'/marketing/redes-sociales'
-    },
-    '/marketing/influencer': {
-      es:'/marketing/influencers'
+    '/webdevelopment': {
+      es:'/desarrollo-web'
     },
     '/business': {
       es:'/negocios'
-    },
-    '/business/llc-formation': {
-      es:'/negocios/formar-llc'
-    },
-    '/business/registered-agent': {
-      es:'/negocios/agente-registrado'
-    },
-    '/business/compliance': {
-      es:'/negocios/cumplimiento'
-    },
-    '/bpo': {
-      es:'/bpo'
-    },
-    '/bpo/outbound': {
-      es:'/bpo/outbound'
-    },
-    '/bpo/backoffice': {
-      es:'/bpo/backoffice'
     },
     '/blog/10-consejos':{
       es:'/blog/10-consejos',

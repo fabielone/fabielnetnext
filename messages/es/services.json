@@ -6,212 +6,33 @@
       "businessFormation": {
         "pill": "Formación de Empresas",
         "title": "Establece tu Negocio con Confianza",
-        "subtitle": "Formación completa de LLC en 7-10 días hábiles",
-        "description": "Desde la presentación inicial hasta el cumplimiento continuo, manejamos cada aspecto de tu proceso de formación empresarial con orientación experta y precios transparentes.",
+        "subtitle": "Paquete completo de formación de LLC - $299 + Tarifas Estatales",
+        "description": "Paquete completo de formación empresarial que incluye registro de LLC, servicio de agente registrado (1er año GRATIS) y soporte continuo de cumplimiento. Todo lo que necesitas en un solo paquete.",
         "features": [
           "Registro Completo de LLC y Presentación Estatal",
           "Solicitud de Número de ID Fiscal EIN",
           "Plantilla de Acuerdo Operativo Personalizado",
-          "Servicio de Agente Registrado Disponible",
+          "Servicio de Agente Registrado (1er Año GRATIS)",
           "Carta de Resolución Bancaria para Apertura de Cuenta",
           "Soporte Continuo de Cumplimiento y Recordatorios"
         ]
       },
       "webDevelopment": {
-        "pill": "Desarrollo Web",
-        "title": "Construye una Presencia Online Poderosa",
-        "subtitle": "Sitios web personalizados que convierten visitantes en clientes",
-        "description": "Sitios web modernos y responsivos construidos con las últimas tecnologías, optimizados para motores de búsqueda y diseñados para hacer crecer tu negocio en línea.",
+        "pill": "Desarrollo Web y Blog",
+        "title": "Servicios Profesionales de Desarrollo Web",
+        "subtitle": "Tres niveles para adaptarse a tu negocio - desde $29.99/mes",
+        "description": "Sitios web modernos y responsivos y plataformas de blog construidas con las últimas tecnologías. Elige entre Web Básico ($29.99), Web Pro ($59.99) o Web Alto Tráfico ($299) - cada uno diseñado para diferentes necesidades empresariales.",
         "features": [
           "Diseño Responsivo Mobile-First",
           "Optimización SEO y Carga Rápida",
           "Sistema de Gestión de Contenido (CMS)",
-          "Integración E-commerce y Pagos",
+          "Integración de Pasarela de Pagos",
           "Seguimiento de Analytics y Rendimiento",
           "Mantenimiento Continuo y Actualizaciones de Seguridad"
-        ]
-      },
-      "digitalMarketing": {
-        "pill": "Marketing Digital",
-        "title": "Haz Crecer tu Negocio Online",
-        "subtitle": "Marketing basado en datos que entrega resultados",
-        "description": "Campañas estratégicas de marketing digital diseñadas para aumentar tu visibilidad online, atraer leads calificados e impulsar tus ingresos.",
-        "features": [
-          "Optimización para Motores de Búsqueda (SEO)",
-          "Gestión de Google Ads y Campañas PPC",
-          "Estrategia y Gestión de Redes Sociales",
-          "Marketing de Contenido y Copywriting",
-          "Automatización de Email Marketing",
-          "Analytics y Reportes Mensuales de Rendimiento"
-        ]
-      },
-      "bpo": {
-        "pill": "Servicios BPO",
-        "title": "Escala con Operaciones Expertas",
-        "subtitle": "Llamadas outbound profesionales y soporte administrativo",
-        "description": "Equipo bilingüe experimentado que proporciona llamadas outbound, agendamiento de citas y soporte back-office con métricas transparentes e integración CRM.",
-        "features": [
-          "Ventas Outbound y Generación de Leads",
-          "Agendamiento y Calificación de Citas",
-          "Servicio y Soporte al Cliente",
-          "Entrada de Datos y Tareas Administrativas",
-          "Gestión y Actualizaciones de CRM",
-          "Reportes Diarios de Rendimiento y Analytics"
         ]
       }
     },
     "buttonText": "Empezar Ahora",
     "learnMore": "Saber Más"
-  },
-  "bpo": {
-    "hero": {
-      "heading": "Business Process Outsourcing (BPO)",
-      "subtitle": "Extiende Tu Equipo con Capacidad Operativa Confiable",
-      "description": "Proveemos llamadas outbound estructuradas y ejecución back office con métricas transparentes, QA e integración CRM.",
-      "features": [
-        "Llamadas Outbound",
-        "Agendamiento",
-        "Tareas Back Office",
-        "Métricas Diarias"
-      ],
-      "cta": "Iniciar BPO",
-      "consultationCta": "Evaluación Gratis"
-    },
-    "services": {
-      "outbound": {
-        "title": "Llamadas Outbound y Agendamiento",
-        "description": "Generación de pipeline constante con agentes bilingües entrenados y reportes diarios.",
-        "features": [
-          "Outreach Frío y Tibio",
-          "Agendamiento en Vivo",
-          "Actualizaciones CRM",
-          "Resumen Diario KPIs"
-        ]
-      },
-      "backoffice": {
-        "title": "Operaciones Back Office",
-        "description": "Ejecución basada en procesos para datos, documentación, reportes y soporte de flujos.",
-        "features": [
-          "Ingreso de Datos",
-          "Procesamiento Documental",
-          "Seguimiento de Tareas",
-          "Soporte de Reportes"
-        ]
-      }
-    },
-    "features": {
-      "title": "Capacidades BPO",
-      "subtitle": "Apalancamiento operativo sin contratar",
-      "items": [
-        {
-          "title": "Eficiencia Outbound",
-          "description": "Bloques de llamadas estructurados con guiones y objeciones."
-        },
-        {
-          "title": "Ejecución Back Office",
-          "description": "Datos, documentación, investigación ligera y flujos."
-        },
-        {
-          "title": "Métricas y QA",
-          "description": "Conectados %, citas, show rate, tareas y QA diario."
-        },
-        {
-          "title": "Integración CRM",
-          "description": "Trabajamos directo en tu CRM o exportaciones estandarizadas."
-        }
-      ]
-    },
-    "cta": {
-      "title": "¿Listo para Agregar BPO?",
-      "subtitle": "Nosotros ejecutamos mientras tú escalas",
-      "button": "Lanzar BPO",
-      "consultation": "Evaluación Gratis"
-    }
-  },
-  "outboundBpo": {
-    "hero": {
-      "heading": "Llamadas Outbound y Agendamiento",
-      "subtitle": "Pipeline Consistente con Outreach Estructurado",
-      "description": "Agentes bilingües ejecutan bloques diarios, agendan citas y registran todo en tu CRM.",
-      "features": [
-        "Bloques 4–8 Horas",
-        "Agentes Bilingües",
-        "Métricas Diarias",
-        "Agenda en Vivo"
-      ],
-      "cta": "Iniciar Outbound",
-      "consultationCta": "Solicitar Agenda"
-    },
-    "features": {
-      "title": "Componentes Outbound",
-      "subtitle": "Todo para outreach predecible",
-      "items": [
-        {
-          "title": "Bloques de Llamadas",
-          "description": "Ventanas de enfoque para volumen y calidad."
-        },
-        {
-          "title": "Guiones y Objeciones",
-          "description": "Framework refinado de conversación y objeciones."
-        },
-        {
-          "title": "Agendamiento",
-          "description": "Reserva con notas y calificación."
-        },
-        {
-          "title": "Métricas",
-          "description": "% conexión, citas, show rate y QA."
-        }
-      ]
-    },
-    "cta": {
-      "title": "¿Necesitas Más Citas?",
-      "subtitle": "Ejecutamos el outreach mientras cierras",
-      "button": "Empezar",
-      "consultation": "Evaluación"
-    }
-  },
-  "backofficeBpo": {
-    "hero": {
-      "heading": "Operaciones Back Office",
-      "subtitle": "Ejecución Confiable de Tareas",
-      "description": "Soporte estructurado para datos, documentación, reportes y flujos.",
-      "features": [
-        "Tareas",
-        "Datos",
-        "Reportes",
-        "Procesos"
-      ],
-      "cta": "Agregar Soporte",
-      "consultationCta": "Revisión"
-    },
-    "features": {
-      "title": "Soporte Operativo",
-      "subtitle": "Desbloquea tiempo de tu equipo",
-      "items": [
-        {
-          "title": "Datos",
-          "description": "Actualizaciones e higiene CRM / planillas."
-        },
-        {
-          "title": "Documentación",
-          "description": "Organización y estandarización."
-        },
-        {
-          "title": "Flujos",
-          "description": "Seguimiento de tableros y pipelines."
-        },
-        {
-          "title": "Reportes",
-          "description": "Actualizaciones programadas KPIs."
-        }
-      ]
-    },
-    "cta": {
-      "title": "¿Necesitas Capacidad?",
-      "subtitle": "Deleguemos ejecución repetitiva",
-      "button": "Obtener Soporte",
-      "consultation": "Auditoría"
-    }
   }
 }

@@ -138,7 +138,7 @@ export default function HeroLeft() {
           </motion.div>
           */}
 
-          {/* LLC Formation Services */}
+          {/* Services Overview - Simplified (Pricing and Button moved to right) */}
           <motion.div 
             className="text-gray-800 dark:text-gray-200 my-6 p-6 mx-4 sm:mx-6 md:mx-8 bg-gradient-to-br from-white via-blue-50/30 to-white dark:from-gray-800 dark:via-blue-900/10 dark:to-gray-800 rounded-2xl shadow-lg border border-blue-100 dark:border-blue-800/30"
             variants={itemVariants}
@@ -167,77 +167,27 @@ export default function HeroLeft() {
               ))}
             </div>
 
-            {/* Value Proposition */}
-            <div className="bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-emerald-200 dark:border-emerald-800/30">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">
-                  {t('valueProposition.price')}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  {t('valueProposition.stateFees')}
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                  <div className="flex items-center justify-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                    <span>{t('valueProposition.benefits.fastProcessing')}</span>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                    <span>{t('valueProposition.benefits.clientCount')}</span>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                    <span>{t('valueProposition.benefits.expertSupport')}</span>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                    <span>{t('valueProposition.benefits.moneyBack')}</span>
-                  </div>
-                </div>
-                <div className="mt-3 pt-2 border-t border-emerald-200 dark:border-emerald-800/30">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                    {t('valueProposition.footnote')}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Call-to-Action Buttons */}
-          <motion.div 
-            className="text-lg mb-4 flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 justify-center"
-            variants={containerVariants}
-          >
-            <motion.button
-              variants={itemVariants}
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
-              }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigateWithLoading('/checkout/businessformation')}
-              disabled={isNavigating}
-              className={`bg-amber-500 hover:bg-amber-600 text-black font-semibold px-8 py-4 rounded-lg border border-amber-500 hover:border-amber-600 shadow-md hover:shadow-lg transition-all duration-300 text-lg flex items-center justify-center whitespace-nowrap ${
-                isNavigating ? 'opacity-90' : ''
-              }`}
+            {/* Bundle Discount Section */}
+            <motion.div 
+              className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl p-4 border border-amber-200 dark:border-amber-800/30"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
             >
-              <span className="flex items-center">
-                <span>{t('cta')}</span>
-                {isNavigating ? (
-                  <div className="ml-3">
-                    <LoadingSpinner size="small" color="text-black" message="" />
-                  </div>
-                ) : (
-                  <motion.span
-                    className="ml-3"
-                    animate={{ x: [0, 3, 0] }}
-                    transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
-                  >
-                    <HiArrowRight className="h-5 w-5" />
-                  </motion.span>
-                )}
-              </span>
-            </motion.button>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <span className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                    {t('bundleText')}
+                  </span>
+                </div>
+                <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-1">
+                  {t('bundleDiscount')}
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 italic mt-2">
+                  * Applies to Web Services + Business Formation packages
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Remove Social Icons from here - moving to right side */}

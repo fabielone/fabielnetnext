@@ -48,18 +48,7 @@ const projects: Project[] = [
     location: "Colombia · Medellín",
     mode: "Presencial",
     website: "https://saborlatino.com",
-  },
-  {
-    id: 3,
-    title: "Digital Marketing Pros",
-    description: "Marketing digital y crecimiento en redes.",
-    image: "/web.jpeg",
-    category: "Servicios",
-    tech: ["SEO", "Ads", "Estrategia"],
-    location: "Estados Unidos · Miami",
-    mode: "Híbrido",
-    website: "https://digitalmarketingpros.com",
-  },
+  }
 ];
 
 const categories = ["Todas", ...Array.from(new Set(projects.map((p) => p.category)))];

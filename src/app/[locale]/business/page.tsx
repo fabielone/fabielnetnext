@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic';
 import SoftwareHero from '../../components/molecules/hero/software-hero';
 import ServicesShowcase from '../../components/molecules/sections/services-showcase';
 import CTASection from '../../components/molecules/sections/cta-section';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { FaBuilding, FaShieldAlt, FaClipboardCheck, FaUsers } from 'react-icons/fa';
+import { useNavigationLoading } from '../../components/hooks/useNavigationLoading';
 
 // Dynamically import performance monitor for better loading
 const PerformanceMonitor = dynamic(() => import('../../components/utils/performance-monitor'), {
@@ -14,33 +15,8 @@ const PerformanceMonitor = dynamic(() => import('../../components/utils/performa
 
 export default function BusinessPage() {
   const t = useTranslations('business');
-
-  const services = [
-    {
-      title: t('services.llc.title'),
-      description: t('services.llc.description'),
-      features: t.raw('services.llc.features'),
-      link: '/business/llc-formation'
-    },
-    {
-      title: t('services.agent.title'),
-      description: t('services.agent.description'),
-      features: t.raw('services.agent.features'),
-      link: '/business/registered-agent'
-    },
-    {
-      title: t('services.compliance.title'),
-      description: t('services.compliance.description'),
-      features: t.raw('services.compliance.features'),
-      link: '/business/compliance'
-    }
-  ];
-
-  const serviceIcons = [
-    <FaBuilding key="building" className="h-8 w-8" />,
-    <FaShieldAlt key="shield" className="h-8 w-8" />,
-    <FaClipboardCheck key="clipboard" className="h-8 w-8" />
-  ];
+  const locale = useLocale();
+  const { isNavigating, navigateWithLoading } = useNavigationLoading();
 
   return (
     <div className="min-h-screen">
@@ -50,16 +26,104 @@ export default function BusinessPage() {
       <SoftwareHero 
         translationKey="business"
         backgroundGradient="from-emerald-600 via-teal-600 to-cyan-600"
-        ctaLink="/contact"
-        consultationLink="/contact"
+        ctaLink="/checkout/businessformation"
+        consultationLink="/checkout/businessformation"
       />
 
-      {/* Services Showcase */}
-      <ServicesShowcase
-        translationKey="business"
-        services={services}
-        icons={serviceIcons}
-      />
+      {/* Main Service Overview - Business Formation */}
+      <section className="py-16 lg:py-24 bg-white dark:bg-gray-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
+              Complete Business Formation Package
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-600 dark:text-gray-300">
+              Everything you need to start and maintain your LLC - all in one package
+            </p>
+          </div>
+
+          {/* Package Includes */}
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mb-12">
+            {[
+              {
+                title: 'LLC Formation & Filing',
+                description: 'Complete LLC registration with the state, including all necessary documents and filing fees.',
+                features: [
+                  'Articles of Organization filing',
+                  'EIN Tax ID Number application',
+                  'Operating Agreement template',
+                  'Bank Resolution Letter',
+                  'Compliance Calendar'
+                ],
+                icon: <FaBuilding className="h-12 w-12 text-emerald-600" />
+              },
+              {
+                title: 'Registered Agent Service',
+                description: 'Professional registered agent service to receive legal documents on behalf of your business.',
+                features: [
+                  'First year included FREE',
+                  'Privacy protection',
+                  'Immediate document forwarding',
+                  'Online document access',
+                  'Compliance reminders'
+                ],
+                icon: <FaShieldAlt className="h-12 w-12 text-emerald-600" />
+              },
+              {
+                title: 'Ongoing Compliance Support',
+                description: 'Keep your business in good standing with ongoing compliance monitoring and reminders.',
+                features: [
+                  'Annual report reminders',
+                  'Compliance deadline tracking',
+                  'Document management',
+                  'State requirement updates',
+                  'Email & dashboard alerts'
+                ],
+                icon: <FaClipboardCheck className="h-12 w-12 text-emerald-600" />
+              }
+            ].map((service, index) => (
+              <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow-lg">
+                <div className="flex justify-center mb-4">
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 text-center">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4 text-center">
+                  {service.description}
+                </p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start text-gray-700 dark:text-gray-300">
+                      <span className="text-emerald-600 mr-2">✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Single CTA for entire package */}
+          <div className="text-center">
+            <div className="bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-lg p-8 shadow-xl">
+              <h3 className="text-2xl font-bold text-white mb-4">
+                Complete Package: $299 + State Fees
+              </h3>
+              <p className="text-white/90 mb-6 max-w-2xl mx-auto">
+                Get your LLC formed with registered agent service and ongoing compliance support - everything you need in one package
+              </p>
+              <button
+                onClick={() => navigateWithLoading(`/${locale}/checkout/businessformation`)}
+                disabled={isNavigating}
+                className="inline-block bg-white text-emerald-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isNavigating ? 'Loading...' : 'Start Your LLC Today'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Why Choose Us Section */}
       <section className="py-16 lg:py-24 bg-white dark:bg-gray-800">

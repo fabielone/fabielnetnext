@@ -28,7 +28,6 @@ export async function POST(request) {
       'innovative designs',
       'advanced systems',
       'professional services',
-      'digital marketing',
       'creative agency'
     ];
 

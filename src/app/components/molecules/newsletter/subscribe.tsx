@@ -20,7 +20,7 @@ export default function Newsletter({
   className = '',
   compact = false
 }: NewsletterProps) {
-  const t = useTranslations('HeroRight.newsletter');
+  const t = useTranslations('Newsletter');
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { ref, inView } = useInView({

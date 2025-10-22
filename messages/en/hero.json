@@ -13,7 +13,6 @@
     "BulletDescription3": "Federal tax identification setup",
     "BulletDescription4": "Modern website with SEO optimization",
     "CTA": "Start My LLC Formation",
-    "Schedule": "Free Consultation",
     "TrustBadge1": "500+ LLCs Formed",
     "TrustBadge2": "Licensed Agent",
     "Pill1": "LLC Formation",
@@ -24,6 +23,8 @@
     "Pill6": "Business Banking Setup",
     "ReviewCount": "500+ reviews",
     "subtitle": "Services designed to start and grow your business.",
+    "bundleText": "Bundle with Web Services",
+    "bundleDiscount": "Save 20%",
     "packageTitle": "Complete Business Formation Package",
     "cta": "Start My LLC Formation",
     "services": {
@@ -63,20 +64,24 @@
     "Trust1": "500+ Happy Entrepreneurs",
     "Trust2": "Licensed Registered Agent",
     "Trust3": "Fast 7-10 Day Process",
-    "newsletter": {
-      "title": "Stay Informed",
-      "subtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
-      "cta": "Join Our Community",
-      "discount": "Save 20% off",
-      "email": "Your email address",
-      "button": "Subscribe Now",
-      "thanks": "Thanks! Your 20% coupon is on the way to your mailbox!"
+    "pricing": {
+      "price": "$99.99 + State Fees",
+      "stateFees": "State fees vary by location",
+      "benefits": {
+        "fastProcessing": "7-10 Days",
+        "clientCount": "500+ Clients",
+        "expertSupport": "Expert Support",
+        "moneyBack": "Money Back"
+      },
+      "bundleDiscount": {
+        "title": "🎉 Save 20% on Bundles!",
+        "description": "Bundle Web Service + Formation and save 20% on your entire order, including monthly subscriptions!"
+      },
+      "footnote": "* Processing time may vary by state requirements"
     },
+    "cta": "Start My LLC Formation",
     "Title": "Business Formation Experts",
     "Description": "Professional LLC formation services with expert guidance throughout the entire process.",
-    "VideoLabel": "Watch Success Story",
-    "NewsletterTitle": "Stay Informed",
-    "NewsletterSubtitle": "Save 20% off by subscribing! Get business tips, legal updates, and exclusive offers delivered to your inbox.",
-    "NewsletterCTA": "Join Our Community"
+    "VideoLabel": "Watch Success Story"
   }
 }

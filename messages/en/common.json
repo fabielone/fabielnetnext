@@ -15,24 +15,12 @@
         "ecommerce": "eCommerce Store Creation",
         "other": "Other Custom Services"
       },
-      "marketing": {
-        "title": "Marketing Services",
-        "digital": "Digital Marketing & Content",
-        "influencers": "Influencers & Collaborations",
-        "campaigns": "Advertising Campaigns",
-        "other": "Other Custom Services"
-      },
       "business": {
         "title": "Business Formation",
         "llc": "Form Your LLC",
         "agent": "Registered Agent",
         "compliance": "Annual Compliance",
         "other": "Other Custom Services"
-      },
-      "bpo": {
-        "title": "BPO Services",
-        "outbound": "Outbound Calling",
-        "backoffice": "Back Office Operations"
       }
     },
     "clients": "Our Clients",
@@ -68,7 +56,6 @@
       "privacy": "Privacy Notice",
       "businessFormations": "Business Formations",
       "softwareDevelopment": "Software Development",
-      "marketing": "Marketing",
       "registeredAgent": "Registered Agent",
       "compliance": "Annual Compliance",
       "concierge": "Concierge Service"

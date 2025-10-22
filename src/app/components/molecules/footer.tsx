@@ -109,9 +109,6 @@ export default function Footer() {
                 <Link href="/services/software-development" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.softwareDevelopment')}</Link>
               </li>
               <li>
-                <Link href="/services/marketing" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.marketing')}</Link>
-              </li>
-              <li>
                 <Link href="/services/registered-agent" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.registeredAgent')}</Link>
               </li>
               <li>

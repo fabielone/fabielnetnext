@@ -48,24 +48,6 @@ const Header: React.FC<HeaderProps> = ({
         darkPill: 'dark:bg-purple-900/50 dark:text-purple-200',
         accent: 'text-purple-600',
         iconBg: 'bg-purple-100 dark:bg-purple-900/30'
-      },
-      digitalMarketing: {
-        gradient: 'from-emerald-50 via-emerald-100/50 to-teal-50',
-        pillBg: 'bg-emerald-100 text-emerald-800',
-        buttonBg: 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200',
-        darkGradient: 'dark:from-emerald-900/20 dark:via-emerald-800/20 dark:to-teal-900/20',
-        darkPill: 'dark:bg-emerald-900/50 dark:text-emerald-200',
-        accent: 'text-emerald-600',
-        iconBg: 'bg-emerald-100 dark:bg-emerald-900/30'
-      },
-      bpo: {
-        gradient: 'from-amber-50 via-amber-100/50 to-orange-50',
-        pillBg: 'bg-amber-100 text-amber-800',
-        buttonBg: 'bg-amber-600 hover:bg-amber-700 shadow-amber-200',
-        darkGradient: 'dark:from-amber-900/20 dark:via-amber-800/20 dark:to-orange-900/20',
-        darkPill: 'dark:bg-amber-900/50 dark:text-amber-200',
-        accent: 'text-amber-600',
-        iconBg: 'bg-amber-100 dark:bg-amber-900/30'
       }
     };
     return themes[key as keyof typeof themes] || themes.businessFormation;

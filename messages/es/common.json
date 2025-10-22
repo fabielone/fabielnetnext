@@ -15,24 +15,12 @@
         "ecommerce": "Creación de Tiendas eCommerce",
         "other": "Otros Servicios Personalizados"
       },
-      "marketing": {
-        "title": "Servicios de Marketing",
-        "digital": "Marketing Digital y Contenido",
-        "influencers": "Influencers y Colaboraciones",
-        "campaigns": "Campañas de Publicidad",
-        "other": "Otros Servicios Personalizados"
-      },
       "business": {
         "title": "Formación de Empresas",
         "llc": "Forma tu LLC",
         "agent": "Agente Registrado",
         "compliance": "Cumplimiento Anual",
         "other": "Otros Servicios Personalizados"
-      },
-      "bpo": {
-        "title": "Servicios BPO",
-        "outbound": "Llamadas Outbound",
-        "backoffice": "Operaciones Back Office"
       }
     },
     "clients": "Nuestros Clientes",
@@ -66,9 +54,8 @@
       "contact": "Contacto",
       "terms": "Términos de Servicio",
       "privacy": "Aviso de Privacidad",
-      "businessFormations": "Formaciones de Empresas",
+      "businessFormations": "Formación de Empresas",
       "softwareDevelopment": "Desarrollo de Software",
-      "marketing": "Marketing",
       "registeredAgent": "Agente Registrado",
       "compliance": "Cumplimiento Anual",
       "concierge": "Servicio de Conserjería"

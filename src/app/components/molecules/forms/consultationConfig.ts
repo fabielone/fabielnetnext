@@ -8,12 +8,7 @@ export const services = [
     id: 'software', 
     name: 'Software Development', 
     description: 'Web & mobile app development' 
-  },
-  { 
-    id: 'marketing', 
-    name: 'Marketing Services', 
-    description: 'Digital marketing & branding' 
-  },
+  }
 ];
   
 export const availableTimes = [

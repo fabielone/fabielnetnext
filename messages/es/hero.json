@@ -4,6 +4,8 @@
     "Subheading": "Servicios Completos de Formación LLC para Empresarios en California",
     "PriceTimeline": "Desde $99.99 + Tasas Gubernamentales • Listo en 7-10 Días Hábiles",
     "subtitle": "Servicios diseñados para iniciar y hacer crecer tu negocio.",
+    "bundleText": "Combina con Servicios Web",
+    "bundleDiscount": "Ahorra 20%",
     "packageTitle": "Paquete Completo de Formación Empresarial",
     "services": {
       "llcFormation": {
@@ -39,12 +41,11 @@
     "Bullet1": "Formación Completa de LLC",
     "Bullet2": "Acuerdo Operativo Personalizado",
     "Bullet3": "Número de Identificación EIN",
-    "Bullet4": "Sitio Web Profesional + Marketing",
+    "Bullet4": "Sitio Web Profesional",
     "BulletDescription1": "Artículos de incorporación presentados al estado",
     "BulletDescription2": "Adaptado a las necesidades específicas de tu negocio",
     "BulletDescription3": "Configuración de identificación fiscal federal",
     "BulletDescription4": "Sitio web moderno con optimización SEO",
-    "Schedule": "Consulta Gratuita",
     "TrustBadge1": "500+ LLCs Formadas",
     "TrustBadge2": "Agente Licenciado",
     "Pill1": "Formación LLC",
@@ -59,23 +60,27 @@
     "title": "Expertos en Formación Empresarial",
     "description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
     "videoLabel": "Ver Historia de Éxito",
-    "newsletter": {
-      "title": "Mantente Informado",
-      "subtitle": "¡Ahorra 20% suscribiéndote! Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas en tu correo.",
-      "cta": "Únete a Nuestra Comunidad",
-      "discount": "Ahorra 20%",
-      "email": "Tu dirección de correo",
-      "button": "Suscribirse Ahora",
-      "thanks": "¡Gracias! Tu cupón del 20% está en camino a tu correo!"
+    "pricing": {
+      "price": "$99.99 + Tasas Estatales",
+      "stateFees": "Las tasas estatales varían según la ubicación",
+      "benefits": {
+        "fastProcessing": "7-10 Días",
+        "clientCount": "500+ Clientes",
+        "expertSupport": "Soporte Experto",
+        "moneyBack": "Garantía Devolución"
+      },
+      "bundleDiscount": {
+        "title": "🎉 ¡Ahorra 20% en Paquetes!",
+        "description": "Combina Servicio Web + Formación y ahorra 20% en todo tu pedido, ¡incluyendo suscripciones mensuales!"
+      },
+      "footnote": "* El tiempo de procesamiento puede variar según los requisitos estatales"
     },
+    "cta": "Iniciar Mi Formación LLC",
     "Title": "Expertos en Formación Empresarial",
     "Description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
     "VideoLabel": "Ver Historia de Éxito",
     "Trust1": "500+ Empresarios Satisfechos",
     "Trust2": "Agente Registrado Licenciado",
-    "Trust3": "Proceso Rápido de 7-10 Días",
-    "NewsletterTitle": "Mantente Informado",
-    "NewsletterSubtitle": "¡Ahorra 20% suscribiéndote! Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas en tu correo.",
-    "NewsletterCTA": "Únete a Nuestra Comunidad"
+    "Trust3": "Proceso Rápido de 7-10 Días"
   }
 }

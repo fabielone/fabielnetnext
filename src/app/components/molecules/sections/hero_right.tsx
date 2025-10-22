@@ -2,12 +2,10 @@
 
 import { useState } from 'react';
 import { motion} from 'framer-motion';
-import { FaPlay, FaLinkedin } from 'react-icons/fa';
-import Newsletter from '../newsletter/subscribe';
+import { FaPlay } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
 import { useInView } from 'react-intersection-observer';
-import ThemeAwareLogo from '../../atoms/theme-aware-logo';
-import { SocialIcons } from '../socials/socialicons';
+
 
 export default function HeroRight() {
   const [isVideoHovered, setIsVideoHovered] = useState(false);
@@ -83,62 +81,75 @@ export default function HeroRight() {
 
             {/* Content Section */}
             <div className="p-4 sm:p-5 flex-grow bg-gradient-to-b from-white/90 via-blue-50/20 to-white/80 dark:from-gray-800/90 dark:via-gray-800/95 dark:to-gray-900/90">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-center mb-4"
-              >
-                
-                <div className="flex items-center justify-center space-x-2 mb-3">
-                  <ThemeAwareLogo
-                    width={40}
-                    height={25}
-                    className="opacity-90"
-                  />
-                </div>
-              </motion.div>
-
-              {/* Social Icons */}
-              <motion.div 
-                className="flex justify-center p-4 space-x-4 mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                <SocialIcons />
-                <motion.a
-                  href="https://www.linkedin.com/your-linkedin-page"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
-                >
-                  <FaLinkedin className="w-5 h-5" />
-                </motion.a>
-              </motion.div>
-
-              {/* Newsletter Section */}
+      
+              {/* Pricing Box */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 rounded-xl p-4 text-white"
+                className="bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-emerald-200 dark:border-emerald-800/30 mb-4"
               >
-                <div className="text-center mb-3">
-                  <div className="inline-block bg-amber-500 text-black px-3 py-1 rounded-full text-xs font-bold mb-2">
-                    {t('newsletter.discount')}
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">
+                    {t('pricing.price')}
                   </div>
-                  <h3 className="text-base font-bold mb-1">{t('newsletter.title')}</h3>
-                  <p className="text-blue-100 dark:text-blue-200 text-center mb-3 text-xs">{t('newsletter.subtitle')}</p>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    {t('pricing.stateFees')}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 text-xs mb-3">
+                    <div className="flex items-center justify-center">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                      <span>{t('pricing.benefits.fastProcessing')}</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                      <span>{t('pricing.benefits.clientCount')}</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                      <span>{t('pricing.benefits.expertSupport')}</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                      <span>{t('pricing.benefits.moneyBack')}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 pt-2 border-t border-emerald-200 dark:border-emerald-800/30">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                      {t('pricing.footnote')}
+                    </p>
+                  </div>
                 </div>
-                
-                <Newsletter
-                  title=""
-                  description=""
-                  compact={true}
-                /> 
+              </motion.div>
+
+              {/* CTA Button */}
+              <motion.div 
+                className="text-lg flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <motion.button
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => window.location.href = '/checkout/businessformation'}
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold px-8 py-4 rounded-lg border border-amber-500 hover:border-amber-600 shadow-md hover:shadow-lg transition-all duration-300 text-lg flex items-center justify-center"
+                >
+                  <span className="flex items-center">
+                    <span>{t('cta')}</span>
+                    <motion.span
+                      className="ml-3"
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
+                    >
+                      <FaPlay className="h-4 w-4" />
+                    </motion.span>
+                  </span>
+                </motion.button>
               </motion.div>
             </div>
           </motion.div>

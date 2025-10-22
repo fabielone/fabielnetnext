@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { PillsProps } from '../../atoms/pills/pills';
 import TwoColumn from '../../atoms/layout/twocolumns';   
 import HeroLeft from '../sections/hero_left'
 

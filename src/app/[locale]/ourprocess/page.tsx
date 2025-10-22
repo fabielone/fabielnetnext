@@ -55,13 +55,6 @@ export default function ProcesoPage() {
       descripcion: 'Soluciones tecnológicas personalizadas para optimizar tus operaciones.',
       icono: <FaLaptop className="text-amber-500 w-6 h-6" />,
       url: '/servicios/software'
-    },
-    {
-      id: 'marketing',
-      nombre: 'Estrategias de Marketing',
-      descripcion: 'Campañas digitales efectivas para aumentar tu presencia en el mercado.',
-      icono: <FaChartLine className="text-amber-500 w-6 h-6" />,
-      url: '/servicios/marketing'
     }
   ];
 
@@ -72,7 +65,7 @@ export default function ProcesoPage() {
     },
     { 
       pregunta: '¿Qué información necesitan para procesar mi pedido?', 
-      respuesta: 'Depende del servicio. Para formación de empresas necesitaremos documentos de identificación y detalles comerciales. Para software y marketing, analizaremos tus requerimientos específicos.' 
+      respuesta: 'Depende del servicio. Para formación de empresas necesitaremos documentos de identificación y detalles comerciales. Para desarrollo de software, analizaremos tus requerimientos específicos.' 
     },
     { 
       pregunta: '¿Puedo añadir servicios adicionales después?', 
