@@ -10,7 +10,7 @@ export async function getPost(locale: string, slug: string) {
   try {
     const fileContent = await fs.readFile(filePath, 'utf8')
     return matter(fileContent)
-  } catch (error) {
+  } catch (_error) {
     return null
   }
 }

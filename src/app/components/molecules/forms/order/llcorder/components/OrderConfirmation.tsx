@@ -20,7 +20,7 @@ interface ServiceBreakdown {
   monthlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }>;
 }
 
-const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scrollToError }: OrderConfirmationProps) => {
+const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
   const [isProcessing, setIsProcessing] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
   const [savedToDatabase, setSavedToDatabase] = useState(false);
@@ -162,11 +162,6 @@ const OrderConfirmation = ({ formData, orderTotal, orderId, updateFormData, scro
     } catch (e) {
       console.error('Failed to send emails:', e);
     }
-  };
-
-  const sendQuestionnaireEmail = async () => {
-    // No-op; questionnaire link is included in the confirmation API
-    return;
   };
 
   const processSubscriptions = async () => {

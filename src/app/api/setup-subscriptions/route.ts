@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     });
 
     // Create subscriptions
-    const results = await Promise.all(
+    await Promise.all(
       subscriptions.map((sub: any) => 
         stripe.subscriptions.create({
           customer: customerId,
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     );
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Subscription setup failed' },
       { status: 500 }

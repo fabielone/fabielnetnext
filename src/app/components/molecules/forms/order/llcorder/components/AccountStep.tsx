@@ -15,13 +15,6 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validatePassword = () => {
-    return (
-      formData.password.length >= 8 && 
-      formData.password === formData.confirmPassword
-    );
-  };
-
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };

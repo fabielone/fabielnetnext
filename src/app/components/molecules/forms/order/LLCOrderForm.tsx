@@ -243,7 +243,7 @@ const LLCOrderForm = () => {
       if (orderError) throw orderError
 
       // Create user account
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
