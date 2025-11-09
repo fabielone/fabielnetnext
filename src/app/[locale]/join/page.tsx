@@ -77,7 +77,7 @@ export default function Page() {
       // Aquí iría tu lógica de registro
       await new Promise(resolve => setTimeout(resolve, 1000));
       router.push('/verificacion-email');
-    } catch (_err) {
+    } catch {
       setError('Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo.');
     } finally {
       setIsLoading(false);

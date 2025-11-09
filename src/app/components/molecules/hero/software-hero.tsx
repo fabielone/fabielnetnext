@@ -133,7 +133,7 @@ export default function SoftwareHero({
                   ))}
                 </motion.div>
               ) : null;
-            } catch (_e) {
+            } catch {
               return null;
             }
           })()}

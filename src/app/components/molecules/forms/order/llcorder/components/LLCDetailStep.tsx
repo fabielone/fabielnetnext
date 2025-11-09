@@ -82,7 +82,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
           suggestions: result.suggestions || []
         });
       }
-    } catch (_error) {
+    } catch {
       setNameAvailability({
         status: 'error',
         message: 'Unable to check name availability. Please try again.'

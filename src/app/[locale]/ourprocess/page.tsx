@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FaShoppingCart, FaHeadset, FaFileAlt, FaPlusCircle, FaCheckCircle, FaQuestionCircle, FaArrowRight, FaLaptop } from 'react-icons/fa';
 import { MdPayment } from 'react-icons/md';
@@ -185,18 +186,18 @@ export default function ProcesoPage() {
           Selecciona tu servicio ahora o habla con un agente para una recomendación personalizada.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <a
+          <Link
             href="/servicios"
             className="px-6 py-3 bg-white text-amber-600 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
           >
             Ver Servicios <FaArrowRight className="ml-2" />
-          </a>
-          <a
+          </Link>
+          <Link
             href="/contacto"
             className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-amber-700 transition-colors flex items-center justify-center"
           >
             Hablar con Agente <FaHeadset className="ml-2" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
