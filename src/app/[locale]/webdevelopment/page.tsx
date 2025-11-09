@@ -87,7 +87,7 @@ export default function WebDevelopmentPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {currentTiers.map((tier, index) => (
+            {currentTiers.map((tier) => (
               <div
                 key={tier.tier}
                 className={`relative rounded-2xl shadow-xl ${

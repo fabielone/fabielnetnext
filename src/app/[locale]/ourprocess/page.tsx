@@ -3,8 +3,8 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaShoppingCart, FaChartLine, FaHeadset, FaFileAlt, FaPlusCircle, FaCheckCircle, FaQuestionCircle, FaArrowRight, FaLaptop } from 'react-icons/fa';
-import { MdPayment, MdPayments } from 'react-icons/md';
+import { FaShoppingCart, FaHeadset, FaFileAlt, FaPlusCircle, FaCheckCircle, FaQuestionCircle, FaArrowRight, FaLaptop } from 'react-icons/fa';
+import { MdPayment } from 'react-icons/md';
 export default function ProcesoPage() {
   const [mostrarFAQ, setMostrarFAQ] = useState<number | null>(null);
 

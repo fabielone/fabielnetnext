@@ -43,10 +43,16 @@ const nextConfig = {
   
   // Optionally, add any other Next.js config below
   async rewrites() {
+    // Only add WordPress rewrites if the URL is configured
+    const wordpressUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+    if (!wordpressUrl) {
+      return [];
+    }
+    
     return [
       {
         source: '/:locale/wp-json/:path*',
-        destination: `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/:path*`,
+        destination: `${wordpressUrl}/wp-json/:path*`,
       },
     ];
   },

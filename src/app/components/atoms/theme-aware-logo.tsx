@@ -15,7 +15,7 @@ export default function ThemeAwareLogo({
   height = 30, 
   className = 'opacity-90 sm:w-18 sm:h-6' 
 }: ThemeAwareLogoProps) {
-  const { theme, resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Prevent hydration mismatch by only rendering after client mount

@@ -70,7 +70,7 @@ export default async function PartnersPage({ params }: Props) {
 
         {/* Partner Services - Linktree Style */}
         <div className="space-y-4 mb-12">
-          {partnerServices.map((service, index) => (
+          {partnerServices.map((service) => (
             <a
               key={service.name}
               href={service.url}

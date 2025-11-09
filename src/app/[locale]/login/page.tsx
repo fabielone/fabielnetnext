@@ -34,7 +34,7 @@ export default function LoginPage() {
       // Aquí iría tu lógica de autenticación
       await new Promise(resolve => setTimeout(resolve, 1000));
       router.push('/dashboard');
-    } catch (err) {
+    } catch (_err) {
       setError('Credenciales inválidas. Por favor, intenta de nuevo.');
     } finally {
       setIsLoading(false);
