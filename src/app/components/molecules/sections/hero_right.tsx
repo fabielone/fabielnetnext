@@ -3,13 +3,16 @@
 import { useState } from 'react';
 import { motion} from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useInView } from 'react-intersection-observer';
+import { useNavigationLoading } from '../../hooks/useNavigationLoading';
 
 
 export default function HeroRight() {
   const [isVideoHovered, setIsVideoHovered] = useState(false);
   const t = useTranslations('HeroRight');
+  const locale = useLocale();
+  const { isNavigating, navigateWithLoading } = useNavigationLoading();
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true
@@ -136,18 +139,21 @@ export default function HeroRight() {
                     boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
                   }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => window.location.href = '/checkout/businessformation'}
-                  className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold px-8 py-4 rounded-lg border border-amber-500 hover:border-amber-600 shadow-md hover:shadow-lg transition-all duration-300 text-lg flex items-center justify-center"
+                  onClick={() => navigateWithLoading(`/${locale}/checkout/businessformation`)}
+                  disabled={isNavigating}
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold px-8 py-4 rounded-lg border border-amber-500 hover:border-amber-600 shadow-md hover:shadow-lg transition-all duration-300 text-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="flex items-center">
-                    <span>{t('cta')}</span>
-                    <motion.span
-                      className="ml-3"
-                      animate={{ x: [0, 3, 0] }}
-                      transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
-                    >
-                      <FaPlay className="h-4 w-4" />
-                    </motion.span>
+                    <span>{isNavigating ? 'Loading...' : t('cta')}</span>
+                    {!isNavigating && (
+                      <motion.span
+                        className="ml-3"
+                        animate={{ x: [0, 3, 0] }}
+                        transition={{ repeat: Infinity, repeatType: 'reverse', duration: 2 }}
+                      >
+                        <FaPlay className="h-4 w-4" />
+                      </motion.span>
+                    )}
                   </span>
                 </motion.button>
               </motion.div>

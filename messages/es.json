@@ -68,6 +68,22 @@
       "title": "Expertos en Formación Empresarial",
       "description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
       "videoLabel": "Ver Historia de Éxito",
+      "pricing": {
+        "price": "$99.99 + Tasas Estatales",
+        "stateFees": "Las tasas estatales varían según la ubicación",
+        "benefits": {
+          "fastProcessing": "7-10 Días",
+          "clientCount": "500+ Clientes",
+          "expertSupport": "Soporte Experto",
+          "moneyBack": "Garantía Devolución"
+        },
+        "bundleDiscount": {
+          "title": "🎉 ¡Ahorra 20% en Paquetes!",
+          "description": "Combina Servicio Web + Formación y ahorra 20% en todo tu pedido, ¡incluyendo suscripciones mensuales!"
+        },
+        "footnote": "* El tiempo de procesamiento puede variar según los requisitos estatales"
+      },
+      "cta": "Iniciar Mi Formación LLC",
       "Title": "Expertos en Formación Empresarial",
       "Description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
       "VideoLabel": "Ver Historia de Éxito",
