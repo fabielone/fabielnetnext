@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import SoftwareHero from '../../components/molecules/hero/software-hero';
-import ServicesShowcase from '../../components/molecules/sections/services-showcase';
 import CTASection from '../../components/molecules/sections/cta-section';
 import { useTranslations, useLocale } from 'next-intl';
 import { FaBuilding, FaShieldAlt, FaClipboardCheck, FaUsers } from 'react-icons/fa';
@@ -14,7 +13,7 @@ const PerformanceMonitor = dynamic(() => import('../../components/utils/performa
 });
 
 export default function BusinessPage() {
-  const t = useTranslations('business');
+  useTranslations('business');
   const locale = useLocale();
   const { isNavigating, navigateWithLoading } = useNavigationLoading();
 

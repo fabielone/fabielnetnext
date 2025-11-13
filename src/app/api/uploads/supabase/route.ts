@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const key = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
 
     const arrayBuffer = await file.arrayBuffer()
-    const { data, error } = await supabaseAdmin.storage.from('public').upload(key, Buffer.from(arrayBuffer), {
+    const { error } = await supabaseAdmin.storage.from('public').upload(key, Buffer.from(arrayBuffer), {
       contentType: file.type || 'application/octet-stream',
       upsert: false,
     })

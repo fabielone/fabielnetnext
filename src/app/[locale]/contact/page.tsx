@@ -1,4 +1,5 @@
 // app/contacto/page.tsx
+import Link from 'next/link';
 import { 
   RiCustomerService2Line, 
   RiTimeLine, 
@@ -175,20 +176,20 @@ export default function                          Page() {
             Consulta nuestras preguntas frecuentes o base de conocimientos.
           </p>
           <div className="flex justify-center space-x-4">
-            <a
+            <Link
               href="/preguntas-frecuentes"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
             >
               <RiQuestionLine className="mr-2" />
               Preguntas Frecuentes
-            </a>
-            <a
+            </Link>
+            <Link
               href="/base-de-conocimiento"
               className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
             >
               <RiBookReadLine className="mr-2" />
               Base de Conocimiento
-            </a>
+            </Link>
           </div>
         </div>
       </div>

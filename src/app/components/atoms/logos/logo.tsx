@@ -21,7 +21,7 @@ export const Logo = ({
   inline = false,
   centerVertically = false
 }: LogoProps) => {
-  const { theme, resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

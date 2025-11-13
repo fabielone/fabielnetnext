@@ -1,6 +1,6 @@
 // src/app/api/check-business-name/route.js
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   console.log('=== API CALLED ===');

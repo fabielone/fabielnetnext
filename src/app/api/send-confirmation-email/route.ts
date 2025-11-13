@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     let body: any
     try {
       body = await req.json()
-    } catch (e: any) {
+    } catch {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
     const {

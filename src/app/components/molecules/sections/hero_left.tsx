@@ -1,14 +1,10 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { HiArrowRight } from 'react-icons/hi';
-import { SocialIcons } from '../socials/socialicons';
 import { useTranslations } from 'next-intl';
-import { FaLinkedin, FaStar, FaBuilding, FaFileContract, FaIdCard, FaUniversity } from 'react-icons/fa';
-import { MdBusiness, MdAccountBalance } from 'react-icons/md';
+import { FaStar } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
 import { useNavigationLoading } from '../../hooks/useNavigationLoading';
-import LoadingSpinner from '../../atoms/LoadingSpinner';
 
 export default function HeroLeft() {
   const t = useTranslations('Hero');
@@ -17,7 +13,7 @@ export default function HeroLeft() {
     triggerOnce: true
   });
   
-  const { isNavigating, navigateWithLoading } = useNavigationLoading();
+  useNavigationLoading();
   
   const services = [
     {

@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       form.forEach((value, key) => { (data as any)[key] = value })
     }
 
-    const { orderId, businessPurpose, members, managementType, address, email, companyName, customerName } = data
+    const { orderId, email, companyName, customerName } = data
 
     if (!orderId) {
       return NextResponse.json({ error: 'Missing orderId' }, { status: 400 })

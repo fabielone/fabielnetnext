@@ -21,7 +21,7 @@ interface PaymentStepProps {
   onPrev: () => void;
 }
 
-const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: PaymentStepProps) => {
+const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepProps) => {
   const [processing, setProcessing] = useState(false);
 
   // Calculate order breakdown - ONLY main service charged today
