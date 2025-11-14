@@ -50,7 +50,7 @@ export default function Navbar() {
     <nav className="bg-background-primary dark:bg-dark-background-primary 
      text-tx-primary  dark:text-dark-tx-primary
     shadow-md fixed w-full z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div className="flex items-center justify-between h-16">
           <Logo 
             onClick={() => {
@@ -67,8 +67,8 @@ export default function Navbar() {
             navItems={navItems} 
             onNavigate={handleNavigationClick} />
 
-          {/* Language Selector and Login */}
-          <div className="flex items-center space-x-4">
+          {/* Language Selector and Login - Desktop Only */}
+          <div className="hidden lg:flex items-center space-x-4">
           
             <LanguageSelector />
             <ThemeToggle />

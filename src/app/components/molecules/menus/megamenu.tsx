@@ -10,15 +10,16 @@ import { useTranslations } from 'next-intl';
 interface MegaMenuProps {
   subItems?: SubItem[];
   onNavigate: () => void;
+  isOpen: boolean;
 }
 
 const normalizeKey = (key: string) => key.startsWith('nav.') ? key.slice(4) : key;
 
-export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate }) => {
+export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate, isOpen }) => {
   const t = useTranslations('nav'); // Use the 'nav' namespace
 
   return (
-    <div className="fixed left-1/2 transform -translate-x-1/2 mt-2 w-3xl bg-amber-100 dark:bg-gray-800 shadow-lg rounded-lg py-4 hidden group-hover:block z-50">
+    <div className={`absolute left-0 mt-2 w-3xl bg-amber-100 dark:bg-gray-800 shadow-lg rounded-lg py-4 z-50 ${isOpen ? 'block' : 'hidden group-hover:block'}`}>
       <div className="grid grid-cols-3 gap-8 px-8">
         {subItems?.map((subItem, subIndex) => (
           <div

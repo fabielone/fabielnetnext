@@ -31,7 +31,7 @@ export function HamburgerButton({
   iconClassName,
 }: HamburgerButtonProps) {
   return (
-    <div className="flex md:hidden">
+    <div className="flex lg:hidden">
       <button
         onClick={onClick}
         className={`${buttonTextColor} focus:outline-none menu-icon`}

@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { SocialIcons } from '../socials/socialicons';
 import { IoMdArrowForward } from 'react-icons/io';
 import { useTranslations } from 'next-intl';
+import LanguageSelector from '../languageselector';
+import ThemeToggle from '../themeselector';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -30,8 +32,14 @@ export const MobileMenu: FC<MobileMenuProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div ref={menuRef} className="md:hidden mt-2">
+    <div ref={menuRef} className="lg:hidden mt-2">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        {/* Language Selector and Theme Toggle - Mobile/Tablet Only */}
+        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
+          <LanguageSelector />
+          <ThemeToggle />
+        </div>
+
         {/* Log In Link */}
         <Link
           href="/login"
