@@ -10,10 +10,10 @@ export default function Footer() {
   const t = useTranslations('footer');
 
   return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-gray-900 text-white py-6 xl:py-12">
+      <div className="xl:container mx-auto px-4 xl:px-8">
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 xl:gap-8">
           {/* Column 1: Logo and Social Links */}
           <div className="space-y-4 sm:col-span-2 md:col-span-1">
             {/* Logo */}
@@ -130,7 +130,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+        <div className="border-t border-gray-800 mt-4 xl:mt-8 pt-4 xl:pt-8 text-center">
           <p className="text-sm text-gray-300">
             {t('copyright', { year: new Date().getFullYear() })}
           </p>
