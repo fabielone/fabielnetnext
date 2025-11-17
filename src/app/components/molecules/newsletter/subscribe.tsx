@@ -56,8 +56,8 @@ export default function Newsletter({
       )}
 
       <form onSubmit={handleSubmit} className="relative">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-grow">
+        <div className="flex flex-col gap-3">
+          <div className="relative flex-grow min-w-0">
             <FaEnvelope 
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" 
             />
@@ -83,7 +83,7 @@ export default function Newsletter({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="px-6 py-2.5 rounded-lg transition-colors duration-300 
-              font-medium text-sm sm:text-base whitespace-nowrap
+              font-medium text-sm sm:text-base whitespace-nowrap w-full
               bg-amber-500 hover:bg-amber-600 
               text-black 
               border border-amber-500 hover:border-amber-600

@@ -13,9 +13,9 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Column 1: Logo and Social Links */}
-          <div className="space-y-4">
+          <div className="space-y-4 sm:col-span-2 md:col-span-1">
             {/* Logo */}
             <div className="flex items-center">
               <Image
@@ -78,19 +78,19 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-100">{t('quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/services" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.services')}</Link>
+                <Link href="/" className="text-sm text-gray-300 hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link href="/portfolio" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.portfolio')}</Link>
+                <Link href="/ourprocess" className="text-sm text-gray-300 hover:text-white transition-colors">Our Process</Link>
               </li>
               <li>
-                <Link href="/blog" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.blog')}</Link>
+                <Link href="/allies" className="text-sm text-gray-300 hover:text-white transition-colors">Clients</Link>
+              </li>
+              <li>
+                <Link href="/partners" className="text-sm text-gray-300 hover:text-white transition-colors">Partners</Link>
               </li>
               <li>
                 <Link href="/contact" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.contact')}</Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.terms')}</Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.privacy')}</Link>
@@ -103,28 +103,30 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-100">{t('services')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/services/business-formations" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.businessFormations')}</Link>
+                <Link href="/webdevelopment" className="text-sm text-gray-300 hover:text-white transition-colors">Web Development</Link>
               </li>
               <li>
-                <Link href="/services/software-development" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.softwareDevelopment')}</Link>
+                <Link href="/business" className="text-sm text-gray-300 hover:text-white transition-colors">Business Formations</Link>
               </li>
               <li>
-                <Link href="/services/registered-agent" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.registeredAgent')}</Link>
+                <a href="https://blog.fabiel.net" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-300 hover:text-white transition-colors">Blog</a>
               </li>
               <li>
-                <Link href="/services/compliance" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.compliance')}</Link>
+                <Link href="/join" className="text-sm text-gray-300 hover:text-white transition-colors">Join Us</Link>
               </li>
               <li>
-                <Link href="/services/concierge-service" className="text-sm text-gray-300 hover:text-white transition-colors">{t('links.concierge')}</Link>
+                <Link href="/login" className="text-sm text-gray-300 hover:text-white transition-colors">Login</Link>
               </li>
             </ul>
           </div>
 
           {/* Newsletter Subscription Form */}
-          <Newsletter
-                        
-            title={t('newsletter')}
-          /> 
+          <div className="sm:col-span-2 md:col-span-1">
+            <Newsletter
+                          
+              title={t('newsletter')}
+            />
+          </div>
         </div>
 
         {/* Bottom Section */}
@@ -133,8 +135,6 @@ export default function Footer() {
             {t('copyright', { year: new Date().getFullYear() })}
           </p>
           <p className="text-sm text-gray-300 mt-2">
-            <Link href="/terms" className="hover:text-white transition-colors">{t('links.terms')}</Link>{' '}
-            |{' '}
             <Link href="/privacy" className="hover:text-white transition-colors">{t('links.privacy')}</Link>
           </p>
         </div>
