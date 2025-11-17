@@ -7,8 +7,6 @@ import Link from 'next/link';
 import { SocialIcons } from '../socials/socialicons';
 import { IoMdArrowForward } from 'react-icons/io';
 import { useTranslations } from 'next-intl';
-import LanguageSelector from '../languageselector';
-import ThemeToggle from '../themeselector';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -32,18 +30,12 @@ export const MobileMenu: FC<MobileMenuProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div ref={menuRef} className="lg:hidden mt-2">
+    <div ref={menuRef} className="lg:hidden mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        {/* Language Selector and Theme Toggle - Mobile/Tablet Only */}
-        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
-          <LanguageSelector />
-          <ThemeToggle />
-        </div>
-
         {/* Log In Link */}
         <Link
           href="/login"
-          className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+          className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
           onClick={onNavigate}
         >
           {t('mobile.login')}
@@ -52,7 +44,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
         {/* Register Link */}
         <Link
           href="/join"
-          className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+          className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
           onClick={onNavigate}
         >
           {t('mobile.register')}
@@ -64,16 +56,16 @@ export const MobileMenu: FC<MobileMenuProps> = ({
             {item.path ? (
               <Link
                 href={item.path}
-                className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
                 onClick={onNavigate}
               >
                 <span>{t(normalizeKey(item.name))}</span>
               </Link>
             ) : (
-              <div className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">
+              <div className="text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
                 <button
                   onClick={() => onToggleCategory(item.name)}
-                  className="flex items-center justify-between w-full"
+                  className="flex items-center gap-2 w-full"
                 >
                   <span>{t(normalizeKey(item.name))}</span>
                   <svg
@@ -97,7 +89,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                   <div className="pl-4">
                     {item.subItems?.map((subItem, subIndex) => (
                       <div key={subIndex} className="mt-2">
-                        <p className="text-gray-800 font-semibold">
+                        <p className="text-gray-800 dark:text-gray-200 font-semibold">
                           <span>{t(normalizeKey(subItem.name))}</span>
                         </p>
                         <div>
@@ -105,11 +97,11 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                             <Link
                               key={subSecIndex}
                               href={subSection.path}
-                              className="flex items-center text-gray-600 hover:text-gray-800 py-1"
+                              className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
                               onClick={onNavigate}
                             >
                               <IoMdArrowForward 
-                                className="mr-2 text-gray-500" 
+                                className="mr-2 text-gray-500 dark:text-gray-400" 
                               />
                               <span>{t(normalizeKey(subSection.name))}</span>
                             </Link>

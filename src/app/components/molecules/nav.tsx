@@ -49,9 +49,9 @@ export default function Navbar() {
   return (
     <nav className="bg-background-primary dark:bg-dark-background-primary 
      text-tx-primary  dark:text-dark-tx-primary
-    shadow-md fixed w-full z-50">
-      <div className="container">
-        <div className="flex items-center justify-between h-16">
+    shadow-md fixed w-full z-50 px-5">
+      <div className="max-w-[1920px] mx-auto">
+        <div className="flex items-center h-16 gap-2">
           <Logo 
             onClick={() => {
               throw new Error('Function not implemented.');
@@ -63,13 +63,22 @@ export default function Navbar() {
           <HamburgerButton onClick={toggleMenu} buttonTextColor={'text-hamburger dark:text-dark-hamburger'} />
 
           {/* Desktop Menu */}
-          <DesktopMenu 
-            navItems={navItems} 
-            onNavigate={handleNavigationClick} />
+          <div className="flex-grow flex justify-center min-w-0">
+            <DesktopMenu 
+              navItems={navItems} 
+              onNavigate={handleNavigationClick} />
+          </div>
 
           {/* Language Selector and Login - Desktop Only */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4 ml-auto">
           
+            <LanguageSelector />
+            <ThemeToggle />
+            <AuthNavigation />
+          </div>
+
+          {/* Mobile/Tablet Utility Icons - Show on mobile/tablet only */}
+          <div className="flex lg:hidden items-center space-x-2 ml-auto">
             <LanguageSelector />
             <ThemeToggle />
             <AuthNavigation />

@@ -12,7 +12,7 @@ const HeroRight = dynamic(() => import('../sections/hero_right'), {
 
 export default function Hero() {
   return(
-    <div className="px-2 md:px-16 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="px-4 lg:px-16 bg-white dark:bg-gray-900 transition-colors duration-300">
       <TwoColumn 
         leftContent={<HeroLeft  />} 
         rightContent={<HeroRight />}

@@ -24,23 +24,23 @@ export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate, isOpen }) =>
         {subItems?.map((subItem, subIndex) => (
           <div
             key={subIndex}
-            className="border-r border-gray-200 dark:border-gray-700 pr-8 last:border-r-0"
+            className="border-r border-gray-200 dark:border-gray-700 pr-6 last:border-r-0"
           >
-            <p className="text-gray-800 dark:text-white font-semibold mb-2">
+            <p className="text-gray-800 dark:text-white font-semibold mb-2 -ml-3 text-left">
               <span>{t(normalizeKey(subItem.name))}</span> {/* Translate subItem name */}
             </p>
-            <div>
+            <div className="text-left">
               {subItem.subSections?.map((subSection, subSecIndex) => (
                 <Link
                   key={subSecIndex}
                   href={subSection.path}
-                  className="group flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
+                  className="flex items-start text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1 gap-1"
                   onClick={onNavigate}
                 >
                   <IoMdArrowForward 
-                    className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-500" 
+                    className="flex-shrink-0 mt-0.5 text-gray-500 dark:text-gray-400" 
                   />
-                  <span>{t(normalizeKey(subSection.name))}</span> {/* Translate subSection name */}
+                  <span className="whitespace-nowrap">{t(normalizeKey(subSection.name))}</span> {/* Translate subSection name */}
                 </Link>
               ))}
             </div>

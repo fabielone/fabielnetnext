@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, Variants } from 'framer-motion';
+import { useState } from 'react';
+import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FaStar } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
@@ -14,6 +15,8 @@ export default function HeroLeft() {
   });
   
   useNavigationLoading();
+  
+  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   
   const services = [
     {
@@ -143,21 +146,49 @@ export default function HeroLeft() {
               {t('packageTitle')}
             </motion.h3>
             
-            {/* Services List - Bullet Points */}
+            {/* Services List - Accordion */}
             <div className="space-y-2 mb-6">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="flex items-start space-x-3"
+                  className="flex flex-col"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900 dark:text-white text-base">{service.title}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{service.description}</p>
+                  <div className="flex items-start space-x-3">
+                    <button
+                      onClick={() => setOpenAccordion(openAccordion === index ? null : index)}
+                      className="mt-2 flex-shrink-0 focus:outline-none"
+                      aria-label={openAccordion === index ? "Collapse" : "Expand"}
+                    >
+                      <motion.div
+                        animate={{ rotate: openAccordion === index ? 90 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-amber-500"
+                      >
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </motion.div>
+                    </button>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 dark:text-white text-base">{service.title}</h4>
+                      <AnimatePresence initial={false}>
+                        {openAccordion === index && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            className="overflow-hidden"
+                          >
+                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">{service.description}</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
                 </motion.div>
               ))}
