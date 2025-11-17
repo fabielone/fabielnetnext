@@ -27,19 +27,33 @@ export const OptimizedLink = ({
   const { navigateWithLoading, isNavigating } = useNavigationContext()
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    // Call custom onClick if provided
+    // Don't handle external links
+    if (external) {
+      if (onClick) onClick(e)
+      return
+    }
+
+    // Prevent navigation if already navigating
+    if (isNavigating) {
+      e.preventDefault()
+      return
+    }
+
+    // Prevent default behavior for internal links
+    e.preventDefault()
+    
+    // Stop propagation to prevent conflicts with other handlers
+    e.stopPropagation()
+
+    // Call custom onClick if provided (after preventDefault to ensure it doesn't interfere)
     if (onClick) {
       onClick(e)
     }
 
-    // Don't handle external links or if navigation is in progress
-    if (external || isNavigating) {
-      return
-    }
-
-    // Handle internal navigation with loading
-    e.preventDefault()
-    navigateWithLoading(href, loadingMessage)
+    // Small delay to ensure state updates complete (helps with Samsung Chrome)
+    requestAnimationFrame(() => {
+      navigateWithLoading(href, loadingMessage)
+    })
   }
 
   // For external links, use regular link behavior

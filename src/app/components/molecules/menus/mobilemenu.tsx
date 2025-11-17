@@ -4,6 +4,7 @@
 import { FC, useRef } from 'react';
 import { NavItem } from '../../types/navigation';
 import Link from 'next/link';
+import { OptimizedLink } from '../../atoms/OptimizedLink';
 import { SocialIcons } from '../socials/socialicons';
 import { IoMdArrowForward } from 'react-icons/io';
 import { useTranslations } from 'next-intl';
@@ -33,34 +34,56 @@ export const MobileMenu: FC<MobileMenuProps> = ({
     <div ref={menuRef} className="lg:hidden mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         {/* Log In Link */}
-        <Link
+        <OptimizedLink
           href="/login"
           className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-          onClick={onNavigate}
+          loadingMessage="Loading login..."
+          onClick={(e) => {
+            // Ensure we close menu but don't interfere with navigation
+            setTimeout(() => onNavigate(), 100);
+          }}
         >
           {t('mobile.login')}
-        </Link>
+        </OptimizedLink>
 
         {/* Register Link */}
-        <Link
+        <OptimizedLink
           href="/join"
           className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-          onClick={onNavigate}
+          loadingMessage="Loading registration..."
+          onClick={(e) => {
+            // Ensure we close menu but don't interfere with navigation
+            setTimeout(() => onNavigate(), 100);
+          }}
         >
           {t('mobile.register')}
-        </Link>
+        </OptimizedLink>
 
         {/* Navigation Items */}
         {navItems.map((item, index) => (
           <div key={index}>
             {item.path ? (
-              <Link
-                href={item.path}
-                className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                onClick={onNavigate}
-              >
-                <span>{t(normalizeKey(item.name))}</span>
-              </Link>
+              item.path.startsWith('http') ? (
+                <a
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+                  onClick={onNavigate}
+                >
+                  <span>{t(normalizeKey(item.name))}</span>
+                </a>
+              ) : (
+                <OptimizedLink
+                  href={item.path}
+                  className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+                  onClick={(e) => {
+                    setTimeout(() => onNavigate(), 100);
+                  }}
+                >
+                  <span>{t(normalizeKey(item.name))}</span>
+                </OptimizedLink>
+              )
             ) : (
               <div className="text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
                 <button
@@ -94,17 +117,19 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                         </p>
                         <div>
                           {subItem.subSections?.map((subSection, subSecIndex) => (
-                            <Link
+                            <OptimizedLink
                               key={subSecIndex}
                               href={subSection.path}
                               className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
-                              onClick={onNavigate}
+                              onClick={(e) => {
+                                setTimeout(() => onNavigate(), 100);
+                              }}
                             >
                               <IoMdArrowForward 
                                 className="mr-2 text-gray-500 dark:text-gray-400" 
                               />
                               <span>{t(normalizeKey(subSection.name))}</span>
-                            </Link>
+                            </OptimizedLink>
                           ))}
                         </div>
                       </div>
