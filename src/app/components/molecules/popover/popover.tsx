@@ -1,6 +1,7 @@
 // components/ui/popover.tsx
 import { useState, useRef, useEffect, CSSProperties, ReactNode } from 'react';
 import { FiX } from 'react-icons/fi';
+import { usePathname } from 'next/navigation';
 
 type PopoverProps = {
   trigger: ReactNode;
@@ -20,6 +21,12 @@ export function Popover({
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+
+  // Close popover when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -104,6 +111,13 @@ export function Popover({
             shadow-lg transition-opacity duration-200 dark:border-gray-700 dark:bg-gray-800
             ${className}
           `}
+          onClick={(e) => {
+            // Close popover when clicking on any link inside
+            if ((e.target as HTMLElement).closest('a, button[type="button"]')) {
+              // Small delay to allow navigation to start
+              setTimeout(() => setIsOpen(false), 50);
+            }
+          }}
         >
           <div className="relative p-1">
             <button
