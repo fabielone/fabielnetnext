@@ -1,26 +1,17 @@
 // components/atoms/Logo.tsx
 'use client';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { cn } from '../../utils/twmerge'; // Assuming you're using clsx or tailwind-merge
 
 interface LogoProps {
   onClick: () => void;
-  minWidth?: number | string; // Optional minimum width (number for px or string for any unit)
-  maxWidth?: number | string; // Optional maximum width
-  inline?: boolean; // Whether to display inline (default: false)
-  centerVertically?: boolean; // Whether to center vertically when inline (default: false)
 }
 
 export const Logo = ({ 
-  onClick, 
-  minWidth = 100, // Default minimum width
-  maxWidth,
-  inline = false,
-  centerVertically = false
+  onClick
 }: LogoProps) => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -68,24 +59,6 @@ export const Logo = ({
       return `/${localeMatch[1]}`;
     }
     return '/';
-  };
-
-  // Convert numeric width to px string if needed
-  const formatWidth = (width: number | string | undefined) => {
-    if (typeof width === 'number') return `${width}px`;
-    return width;
-  };
-
-  const containerClasses = cn(
-    {
-      'inline-flex': inline,
-      'items-center': centerVertically && inline,
-    }
-  );
-
-  const logoStyle = {
-    minWidth: formatWidth(minWidth),
-    maxWidth: formatWidth(maxWidth),
   };
 
   return (

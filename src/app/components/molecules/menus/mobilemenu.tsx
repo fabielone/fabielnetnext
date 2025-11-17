@@ -3,7 +3,6 @@
 
 import { FC, useRef } from 'react';
 import { NavItem } from '../../types/navigation';
-import Link from 'next/link';
 import { OptimizedLink } from '../../atoms/OptimizedLink';
 import { SocialIcons } from '../socials/socialicons';
 import { IoMdArrowForward } from 'react-icons/io';
@@ -38,7 +37,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
           href="/login"
           className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
           loadingMessage="Loading login..."
-          onClick={(e) => {
+          onClick={() => {
             onNavigate();
           }}
         >
@@ -50,7 +49,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
           href="/join"
           className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
           loadingMessage="Loading registration..."
-          onClick={(e) => {
+          onClick={() => {
             // Close menu immediately before navigation
             onNavigate();
           }}
@@ -76,7 +75,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                 <OptimizedLink
                   href={item.path}
                   className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                  onClick={(e) => {
+                  onClick={() => {
                     onNavigate();
                   }}
                 >
@@ -120,7 +119,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                               key={subSecIndex}
                               href={subSection.path}
                               className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
-                              onClick={(e) => {
+                              onClick={() => {
                                 onNavigate();
                               }}
                             >

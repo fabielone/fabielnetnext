@@ -52,11 +52,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Logo 
             onClick={() => {
-              throw new Error('Function not implemented.');
-    
+              handleNavigationClick();
             }}
-            minWidth={'200px'}
-  
           />
           <HamburgerButton onClick={toggleMenu} buttonTextColor={'text-hamburger dark:text-dark-hamburger'} />
 
