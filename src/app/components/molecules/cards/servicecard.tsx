@@ -38,7 +38,8 @@ const Header: React.FC<HeaderProps> = ({
         darkGradient: 'dark:from-blue-900/20 dark:via-blue-800/20 dark:to-indigo-900/20',
         darkPill: 'dark:bg-blue-900/50 dark:text-blue-200',
         accent: 'text-blue-600',
-        iconBg: 'bg-blue-100 dark:bg-blue-900/30'
+        iconBg: 'bg-blue-100 dark:bg-blue-900/30',
+        checkColor: 'text-blue-500 dark:text-blue-400'
       },
       webDevelopment: {
         gradient: 'from-purple-50 via-purple-100/50 to-pink-50',
@@ -47,7 +48,8 @@ const Header: React.FC<HeaderProps> = ({
         darkGradient: 'dark:from-purple-900/20 dark:via-purple-800/20 dark:to-pink-900/20',
         darkPill: 'dark:bg-purple-900/50 dark:text-purple-200',
         accent: 'text-purple-600',
-        iconBg: 'bg-purple-100 dark:bg-purple-900/30'
+        iconBg: 'bg-purple-100 dark:bg-purple-900/30',
+        checkColor: 'text-purple-500 dark:text-purple-400'
       }
     };
     return themes[key as keyof typeof themes] || themes.businessFormation;
@@ -86,10 +88,10 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Main Content - Symmetrical Layout with Soft Edges */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Image Section with Soft Blend */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="relative group w-full max-w-lg">
+            <div className="relative group w-full max-w-md">
               {/* Soft gradient background that blends */}
               <div className={`absolute -inset-4 bg-gradient-to-r ${theme.gradient} rounded-[2rem] blur-2xl opacity-20 group-hover:opacity-30 transition-all duration-1000`}></div>
               <div className={`absolute -inset-2 bg-gradient-to-br ${theme.gradient} rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition-all duration-1000`}></div>
@@ -109,29 +111,20 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Features Section with Soft Cards */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-7 space-y-8 flex flex-col justify-center">
             {/* Features Grid with Soft Edges */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {items.map((item, index) => (
                 <div 
                   key={index}
-                  className={'group relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm'}
+                  className={'flex items-start gap-3 transition-all duration-200'}
                 >
-                  {/* Soft background with blend */}
-                  <div className={'absolute inset-0 bg-white/60 dark:bg-gray-800/60 rounded-2xl border border-white/40 dark:border-gray-700/40'}></div>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${theme.iconBg} opacity-50 rounded-2xl`}></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-2xl"></div>
-                  
-                  {/* Content */}
-                  {/* Desktop: Show checkmark icon */}
-                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 ${theme.buttonBg.split(' ')[0]} rounded-xl items-center justify-center shadow-lg border border-white/30 hidden sm:flex`}>
-                    <FiCheck className="w-5 h-5 text-white" />
+                  {/* Checkmark icon */}
+                  <div className="flex-shrink-0 mt-0.5">
+                    <FiCheck className={`w-5 h-5 ${theme.checkColor}`} />
                   </div>
                   
-                  {/* Mobile: Show bullet point */}
-                  <div className="relative z-10 flex-shrink-0 w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full mt-2 sm:hidden"></div>
-                  
-                  <span className="relative z-10 text-base font-medium text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors leading-tight">
+                  <span className="text-base font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
                     {item.text}
                   </span>
                 </div>
@@ -139,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Action Buttons with Soft Styling */}
-            <div className="flex flex-col sm:flex-row items-start gap-4 pt-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
               <a
                 href={buttonLink}
                 className={'group relative inline-flex items-center px-8 py-4 text-lg font-bold text-white rounded-2xl transition-all duration-300 hover:-translate-y-1 transform-gpu overflow-hidden'}
