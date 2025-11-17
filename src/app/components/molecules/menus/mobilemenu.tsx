@@ -8,7 +8,6 @@ import { OptimizedLink } from '../../atoms/OptimizedLink';
 import { SocialIcons } from '../socials/socialicons';
 import { IoMdArrowForward } from 'react-icons/io';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -26,7 +25,6 @@ export const MobileMenu: FC<MobileMenuProps> = ({
   onNavigate,
 }) => {
   const t = useTranslations('nav');
-  const router = useRouter();
   const normalizeKey = (key: string) => key.startsWith('nav.') ? key.slice(4) : key;
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -35,20 +33,17 @@ export const MobileMenu: FC<MobileMenuProps> = ({
   return (
     <div ref={menuRef} className="lg:hidden mt-2 max-h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        {/* Log In Link - Using native button with router for Samsung Chrome compatibility */}
-        <button
-          type="button"
-          onClick={() => {
-            onNavigate(); // Close menu first
-            // Use setTimeout to ensure menu close animation completes before navigation
-            setTimeout(() => {
-              router.push('/login');
-            }, 150);
+        {/* Log In Link */}
+        <OptimizedLink
+          href="/login"
+          className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+          loadingMessage="Loading login..."
+          onClick={(e) => {
+            onNavigate();
           }}
-          className="block w-full text-left text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium transition-colors"
         >
           {t('mobile.login')}
-        </button>
+        </OptimizedLink>
 
         {/* Register Link */}
         <OptimizedLink

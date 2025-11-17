@@ -52,14 +52,14 @@ export default function Navbar() {
     shadow-md fixed w-full z-50 px-5">
       <div className="max-w-[1920px] mx-auto">
         <div className="flex items-center h-16 gap-2">
-          <Logo 
-            onClick={() => {
-              throw new Error('Function not implemented.');
-    
-            }}
-            // minWidth={"200px"}
-  
-          />
+          <div className="flex-shrink-0">
+            <Logo 
+              onClick={() => {
+                // Close mobile menu when logo is clicked
+                handleNavigationClick();
+              }}
+            />
+          </div>
           <HamburgerButton onClick={toggleMenu} buttonTextColor={'text-hamburger dark:text-dark-hamburger'} />
 
           {/* Desktop Menu */}
@@ -70,7 +70,7 @@ export default function Navbar() {
           </div>
 
           {/* Language Selector and Login - Desktop Only */}
-          <div className="hidden lg:flex items-center space-x-4 ml-auto">
+          <div className="hidden lg:flex items-center space-x-4 ml-auto flex-shrink-0">
           
             <LanguageSelector />
             <ThemeToggle />
@@ -78,7 +78,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile/Tablet Utility Icons - Show on mobile/tablet only */}
-          <div className="flex lg:hidden items-center space-x-2 ml-auto">
+          <div className="flex lg:hidden items-center space-x-2 ml-auto flex-shrink-0">
             <LanguageSelector />
             <ThemeToggle />
             <AuthNavigation />

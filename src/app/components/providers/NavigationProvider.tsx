@@ -38,8 +38,34 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
   const pathname = usePathname()
 
   const navigateWithLoading = (href: string, customMessage?: string) => {
-    // Don't navigate if already on the same page
-    if (pathname === href) return
+    // Normalize paths for comparison (remove trailing slashes)
+    const normalizePathname = (path: string) => {
+      return path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+    };
+    
+    const normalizedPathname = normalizePathname(pathname);
+    const normalizedHref = normalizePathname(href);
+    
+    // Check if already on the same page (exact match)
+    if (normalizedPathname === normalizedHref) return;
+    
+    // Check if the destination is the same page but without locale prefix
+    // e.g., current: /en/contact, href: /contact -> same page
+    const localeMatch = normalizedPathname.match(/^\/([a-z]{2})(\/.*)?$/);
+    if (localeMatch) {
+      const locale = localeMatch[1];
+      const pathWithoutLocale = localeMatch[2] || '/';
+      
+      // If href doesn't have locale, add current locale for comparison
+      const hrefWithLocale = normalizedHref.startsWith(`/${locale}`) 
+        ? normalizedHref 
+        : `/${locale}${normalizedHref}`;
+      
+      if (normalizedPathname === hrefWithLocale) return;
+      
+      // Also check if we're comparing path without locale to path with locale
+      if (pathWithoutLocale === normalizedHref) return;
+    }
     
     // Set appropriate loading message based on destination
     const message = customMessage || getLoadingMessage(href)
