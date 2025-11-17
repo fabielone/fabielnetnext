@@ -39,16 +39,16 @@ export const OptimizedLink = ({
       return
     }
 
+    // Call custom onClick FIRST (before preventDefault) so menu can close
+    if (onClick) {
+      onClick(e)
+    }
+
     // Prevent default behavior for internal links
     e.preventDefault()
     
     // Stop propagation to prevent conflicts with other handlers
     e.stopPropagation()
-
-    // Call custom onClick if provided (after preventDefault to ensure it doesn't interfere)
-    if (onClick) {
-      onClick(e)
-    }
 
     // Small delay to ensure state updates complete (helps with Samsung Chrome)
     requestAnimationFrame(() => {

@@ -39,8 +39,8 @@ export const MobileMenu: FC<MobileMenuProps> = ({
           className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
           loadingMessage="Loading login..."
           onClick={(e) => {
-            // Ensure we close menu but don't interfere with navigation
-            setTimeout(() => onNavigate(), 100);
+            // Close menu immediately before navigation
+            onNavigate();
           }}
         >
           {t('mobile.login')}
@@ -52,8 +52,8 @@ export const MobileMenu: FC<MobileMenuProps> = ({
           className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
           loadingMessage="Loading registration..."
           onClick={(e) => {
-            // Ensure we close menu but don't interfere with navigation
-            setTimeout(() => onNavigate(), 100);
+            // Close menu immediately before navigation
+            onNavigate();
           }}
         >
           {t('mobile.register')}
@@ -78,7 +78,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                   href={item.path}
                   className="block text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
                   onClick={(e) => {
-                    setTimeout(() => onNavigate(), 100);
+                    onNavigate();
                   }}
                 >
                   <span>{t(normalizeKey(item.name))}</span>
@@ -122,7 +122,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({
                               href={subSection.path}
                               className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1"
                               onClick={(e) => {
-                                setTimeout(() => onNavigate(), 100);
+                                onNavigate();
                               }}
                             >
                               <IoMdArrowForward 
