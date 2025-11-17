@@ -74,7 +74,7 @@ export default function BlogCard({
           </div>
 
           {/* Title */}
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-3 break-words whitespace-normal leading-snug group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-3 break-words whitespace-normal leading-snug line-clamp-3 min-h-[4.5rem] sm:min-h-[5.25rem] group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
             {title}
           </h3>
 

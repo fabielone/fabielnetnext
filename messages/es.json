@@ -351,6 +351,21 @@
           "title": "Expansión de Negocios: De Local a Nacional",
           "description": "Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.",
           "category": "Crecimiento"
+        },
+        {
+          "title": "Construyendo tu Identidad de Marca en el Mercado de EE.UU.",
+          "description": "Consejos esenciales para crear una presencia de marca sólida que resuene tanto con audiencias hispanas como generales. Estrategias de diseño de logo, mensajería y posicionamiento.",
+          "category": "Marca"
+        },
+        {
+          "title": "Entendiendo el Comercio Electrónico para Pequeños Negocios",
+          "description": "Lanza tu tienda en línea con éxito. Aprende sobre plataformas, procesamiento de pagos, logística de envíos y mejores prácticas de servicio al cliente para emprendedores hispanos.",
+          "category": "Tecnología"
+        },
+        {
+          "title": "Networking y Asociaciones: Expandiendo tus Conexiones de Negocio",
+          "description": "Cómo construir relaciones comerciales significativas, encontrar mentores y crear asociaciones estratégicas que aceleren el crecimiento de tu empresa en el mercado americano.",
+          "category": "Networking"
         }
       ]
     },

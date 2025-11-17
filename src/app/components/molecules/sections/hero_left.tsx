@@ -161,7 +161,7 @@ export default function HeroLeft() {
                     <button
                       onClick={() => setOpenAccordion(openAccordion === index ? null : index)}
                       className="mt-2 flex-shrink-0 focus:outline-none"
-                      aria-label={openAccordion === index ? "Collapse" : "Expand"}
+                      aria-label={openAccordion === index ? 'Collapse' : 'Expand'}
                     >
                       <motion.div
                         animate={{ rotate: openAccordion === index ? 90 : 0 }}
