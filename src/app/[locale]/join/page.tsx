@@ -1,9 +1,9 @@
 // app/join/page.tsx
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { 
   RiUserLine,
   RiPhoneLine,
@@ -15,7 +15,9 @@ import {
   RiShieldCheckLine,
   RiErrorWarningLine,
   RiCheckLine,
+  RiGoogleFill,
 } from 'react-icons/ri';
+import { useAuth } from 'src/app/components/providers/AuthProvider';
 
 interface PasswordStrength {
   hasMinLength: boolean;
@@ -25,8 +27,10 @@ interface PasswordStrength {
   hasSpecialChar: boolean;
 }
 
-export default function Page() {
-  const router = useRouter();
+export default function JoinPage() {
+  const locale = useLocale();
+  const { user, register, loading: authLoading } = useAuth();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -50,6 +54,13 @@ export default function Page() {
     hasSpecialChar: false
   });
 
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!authLoading && user) {
+      window.location.href = `/${locale}/dashboard`;
+    }
+  }, [user, authLoading, locale]);
+
   const checkPasswordStrength = (password: string) => {
     setPasswordStrength({
       hasMinLength: password.length >= 8,
@@ -68,21 +79,46 @@ export default function Page() {
     // Validate password requirements
     const isPasswordValid = Object.values(passwordStrength).every(Boolean);
     if (!isPasswordValid) {
-      setError('Por favor, asegúrate de cumplir todos los requisitos de la contraseña.');
+      setError('Please make sure your password meets all requirements.');
       setIsLoading(false);
       return;
     }
 
-    try {
-      // Aquí iría tu lógica de registro
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      router.push('/verificacion-email');
-    } catch {
-      setError('Ocurrió un error al crear tu cuenta. Por favor, intenta de nuevo.');
-    } finally {
+    // Validate agreements
+    if (!formData.agreeTerms || !formData.agreePrivacy) {
+      setError('Please accept the Terms and Privacy Policy to continue.');
+      setIsLoading(false);
+      return;
+    }
+
+    const result = await register({
+      email: formData.email,
+      password: formData.password,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone ? `${formData.countryCode}${formData.phone}` : undefined,
+    });
+
+    if (result.success) {
+      // Use window.location for full page navigation to ensure cookies are picked up
+      window.location.href = `/${locale}/dashboard`;
+    } else {
+      setError(result.error || 'Failed to create account. Please try again.');
       setIsLoading(false);
     }
   };
+
+  const handleGoogleSignup = () => {
+    window.location.href = `/api/auth/google?locale=${locale}`;
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -95,15 +131,15 @@ export default function Page() {
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Crea tu cuenta
+            Create your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            ¿Ya tienes una cuenta?{' '}
+            Already have an account?{' '}
             <Link 
-              href="/login" 
+              href={`/${locale}/login`}
               className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
             >
-              Inicia sesión aquí
+              Sign in here
             </Link>
           </p>
         </div>
@@ -111,12 +147,31 @@ export default function Page() {
         {/* Form Card */}
         <div className="mt-8 bg-white rounded-xl shadow-xl border border-amber-100/50">
           <div className="px-6 py-8 sm:px-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Google Sign Up */}
+            <button
+              type="button"
+              onClick={handleGoogleSignup}
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all"
+            >
+              <RiGoogleFill className="h-5 w-5 text-red-500" />
+              Sign up with Google
+            </button>
+
+            <div className="mt-6 relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Or sign up with email</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
               {/* Name Fields */}
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                    Nombre
+                    First Name
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -127,7 +182,7 @@ export default function Page() {
                       id="firstName"
                       required
                       className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition-all"
-                      placeholder="Juan"
+                      placeholder="John"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     />
@@ -136,7 +191,7 @@ export default function Page() {
 
                 <div className="space-y-2">
                   <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                    Apellido
+                    Last Name
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -147,7 +202,7 @@ export default function Page() {
                       id="lastName"
                       required
                       className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition-all"
-                      placeholder="Pérez"
+                      placeholder="Doe"
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     />
@@ -158,7 +213,7 @@ export default function Page() {
               {/* Phone Number */}
               <div className="space-y-2">
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                  Teléfono
+                  Phone Number (Optional)
                 </label>
                 <div className="flex gap-2">
                   <select
@@ -169,7 +224,6 @@ export default function Page() {
                     <option value="+1">+1</option>
                     <option value="+52">+52</option>
                     <option value="+34">+34</option>
-                    {/* Add more country codes as needed */}
                   </select>
                   <div className="relative flex-1">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -178,7 +232,6 @@ export default function Page() {
                     <input
                       type="tel"
                       id="phone"
-                      required
                       className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition-all"
                       placeholder="123-456-7890"
                       value={formData.phone}
@@ -191,7 +244,7 @@ export default function Page() {
               {/* Email */}
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Correo electrónico
+                  Email address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -202,7 +255,7 @@ export default function Page() {
                     id="email"
                     required
                     className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition-all"
-                    placeholder="tu@ejemplo.com"
+                    placeholder="you@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
@@ -212,7 +265,7 @@ export default function Page() {
               {/* Password */}
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Contraseña
+                  Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -245,14 +298,14 @@ export default function Page() {
 
                 {/* Password Requirements */}
                 <div className="mt-2 space-y-2 text-sm">
-                  <p className="font-medium text-gray-700">La contraseña debe tener:</p>
+                  <p className="font-medium text-gray-700">Password must have:</p>
                   <ul className="space-y-1 text-gray-500">
                     {Object.entries({
-                      'Mínimo 8 caracteres': passwordStrength.hasMinLength,
-                      'Al menos una mayúscula': passwordStrength.hasUpperCase,
-                      'Al menos una minúscula': passwordStrength.hasLowerCase,
-                      'Al menos un número': passwordStrength.hasNumber,
-                      'Al menos un carácter especial (!@#$%^&*)': passwordStrength.hasSpecialChar
+                      'At least 8 characters': passwordStrength.hasMinLength,
+                      'At least one uppercase letter': passwordStrength.hasUpperCase,
+                      'At least one lowercase letter': passwordStrength.hasLowerCase,
+                      'At least one number': passwordStrength.hasNumber,
+                      'At least one special character (!@#$%^&*)': passwordStrength.hasSpecialChar
                     }).map(([requirement, isMet]) => (
                       <li key={requirement} className="flex items-center">
                         {isMet ? (
@@ -282,9 +335,9 @@ export default function Page() {
                   </div>
                   <div className="ml-3 text-sm">
                     <label htmlFor="terms" className="font-medium text-gray-700">
-                      Acepto los{' '}
-                      <Link href="/terminos" className="text-amber-600 hover:text-amber-500">
-                        Términos y Condiciones
+                      I agree to the{' '}
+                      <Link href={`/${locale}/terms`} className="text-amber-600 hover:text-amber-500">
+                        Terms of Service
                       </Link>
                     </label>
                   </div>
@@ -303,9 +356,9 @@ export default function Page() {
                   </div>
                   <div className="ml-3 text-sm">
                     <label htmlFor="privacy" className="font-medium text-gray-700">
-                      Acepto la{' '}
-                      <Link href="/privacidad" className="text-amber-600 hover:text-amber-500">
-                        Política de Privacidad
+                      I agree to the{' '}
+                      <Link href={`/${locale}/privacy`} className="text-amber-600 hover:text-amber-500">
+                        Privacy Policy
                       </Link>
                     </label>
                   </div>
@@ -323,7 +376,7 @@ export default function Page() {
                   </div>
                   <div className="ml-3 text-sm">
                     <label htmlFor="marketing" className="text-gray-700">
-                      Me gustaría recibir ofertas exclusivas, noticias y actualizaciones de marketing
+                      I would like to receive exclusive offers, news, and marketing updates
                     </label>
                   </div>
                 </div>
@@ -333,8 +386,22 @@ export default function Page() {
               {error && (
                 <div className="rounded-lg bg-red-50 p-4">
                   <div className="flex">
-                    <RiErrorWarningLine className="h-5 w-5 text-red-400" />
-                    <p className="ml-3 text-sm text-red-700">{error}</p>
+                    <RiErrorWarningLine className="h-5 w-5 text-red-400 flex-shrink-0" />
+                    <div className="ml-3">
+                      <p className="text-sm text-red-700">{error}</p>
+                      {(error.toLowerCase().includes('already exists') || 
+                        error.toLowerCase().includes('already registered') ||
+                        error.toLowerCase().includes('email is taken')) && (
+                        <p className="mt-2 text-sm">
+                          <Link 
+                            href={`/${locale}/forgot-password`}
+                            className="font-medium text-amber-600 hover:text-amber-500 underline"
+                          >
+                            Forgot your password? Reset it here →
+                          </Link>
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -352,10 +419,10 @@ export default function Page() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Creando cuenta...
+                    Creating account...
                   </>
                 ) : (
-                  'Registrarme'
+                  'Create Account'
                 )}
               </button>
             </form>
@@ -365,9 +432,9 @@ export default function Page() {
         {/* Security Note */}
         <div className="mt-6 flex items-center justify-center text-sm text-gray-500">
           <RiShieldCheckLine className="h-5 w-5 text-gray-400 mr-2" />
-          <p>Tus datos están seguros y protegidos</p>
+          <p>Your data is secure and protected</p>
         </div>
       </div>
     </div>
   );
-}                           
+}

@@ -12,17 +12,18 @@ datasource db {
 }
 
 // ==============================================
-// USER MANAGEMENT
+// USER MANAGEMENT & AUTHENTICATION
 // ==============================================
 
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
-  passwordHash  String    @map("password_hash")
+  passwordHash  String?   @map("password_hash") // Nullable for OAuth users
   firstName     String    @map("first_name")
   lastName      String    @map("last_name")
   phone         String?
   address       String?
+  avatarUrl     String?   @map("avatar_url")
   emailVerified Boolean   @default(false) @map("email_verified")
   isActive      Boolean   @default(true) @map("is_active")
   role          UserRole  @default(CUSTOMER)
@@ -32,10 +33,32 @@ model User {
   metadata         Json?
   
   // Relationships
-  orders        Order[]
-  userSessions  UserSession[]
+  orders           Order[]
+  userSessions     UserSession[]
+  oauthAccounts    OAuthAccount[]
+  businesses       Business[]       // User can have multiple businesses
+  businessMembers  BusinessMember[] // User can be member of other businesses
   
   @@map("users")
+}
+
+model OAuthAccount {
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  provider          OAuthProvider
+  providerAccountId String   @map("provider_account_id")
+  accessToken       String?  @map("access_token")
+  refreshToken      String?  @map("refresh_token")
+  expiresAt         DateTime? @map("expires_at")
+  tokenType         String?  @map("token_type")
+  scope             String?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@map("oauth_accounts")
 }
 
 model UserSession {
@@ -52,10 +75,354 @@ model UserSession {
   @@map("user_sessions")
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("email_verification_tokens")
+}
+
 enum UserRole {
   CUSTOMER    @map("customer")
   ADMIN       @map("admin")
   SUPER_ADMIN @map("super_admin")
+}
+
+enum OAuthProvider {
+  GOOGLE   @map("google")
+  FACEBOOK @map("facebook")
+  APPLE    @map("apple")
+}
+
+// ==============================================
+// BUSINESS ENTITY MANAGEMENT
+// ==============================================
+
+model Business {
+  id              String   @id @default(cuid())
+  ownerId         String   @map("owner_id")
+  
+  // Business Information
+  name            String
+  legalName       String?  @map("legal_name") // e.g., "Company Name LLC"
+  entityType      BusinessEntityType @default(LLC) @map("entity_type")
+  state           String   @default("CA") // Formation state
+  status          BusinessStatus @default(PENDING)
+  
+  // Formation Details (for new LLCs)
+  formationOrderId String?  @unique @map("formation_order_id")
+  formationDate   DateTime? @map("formation_date")
+  einNumber       String?   @map("ein_number")
+  stateFileNumber String?   @map("state_file_number")
+  
+  // Contact & Address
+  businessAddress String?  @map("business_address")
+  businessCity    String?  @map("business_city")
+  businessZip     String?  @map("business_zip")
+  phone           String?
+  email           String?
+  website         String?
+  
+  // External & Existing Business Info
+  isExisting      Boolean  @default(false) @map("is_existing") // True if imported, not formed through us
+  externalId      String?  @map("external_id") // For tracking external references
+  
+  // Compliance & Important Dates
+  annualReportDueDate   DateTime? @map("annual_report_due_date")
+  franchiseTaxDueDate   DateTime? @map("franchise_tax_due_date")
+  registeredAgentExpiry DateTime? @map("registered_agent_expiry")
+  
+  // Timestamps
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Relationships
+  owner           User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  formationOrder  Order?   @relation("BusinessFormation", fields: [formationOrderId], references: [id])
+  members         BusinessMember[]
+  documents       BusinessDocument[]
+  events          BusinessEvent[]
+  services        BusinessService[]
+  complianceTasks ComplianceTask[]
+  notes           BusinessNote[]
+  
+  @@map("businesses")
+}
+
+model BusinessMember {
+  id          String   @id @default(cuid())
+  businessId  String   @map("business_id")
+  userId      String?  @map("user_id") // Nullable if member doesn't have account
+  
+  // Member Info
+  name        String
+  email       String?
+  phone       String?
+  role        BusinessMemberRole @default(MEMBER)
+  title       String? // e.g., "Managing Member", "CFO"
+  
+  // Ownership
+  ownershipPercentage Float? @map("ownership_percentage")
+  
+  // Permissions
+  canViewDocuments  Boolean @default(true) @map("can_view_documents")
+  canUploadDocuments Boolean @default(false) @map("can_upload_documents")
+  canManageServices Boolean @default(false) @map("can_manage_services")
+  canInviteMembers  Boolean @default(false) @map("can_invite_members")
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@unique([businessId, email])
+  @@map("business_members")
+}
+
+model BusinessDocument {
+  id           String   @id @default(cuid())
+  businessId   String   @map("business_id")
+  
+  // Document Info
+  category     DocumentCategory
+  name         String
+  fileName     String   @map("file_name")
+  filePath     String   @map("file_path")
+  fileSize     Int?     @map("file_size")
+  mimeType     String?  @map("mime_type")
+  
+  // Status
+  isLatest     Boolean  @default(true) @map("is_latest")
+  isFinal      Boolean  @default(false) @map("is_final")
+  
+  // Metadata
+  description  String?
+  uploadedBy   String?  @map("uploaded_by") // User ID who uploaded
+  
+  // Timestamps
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  
+  business     Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  @@map("business_documents")
+}
+
+model BusinessEvent {
+  id          String   @id @default(cuid())
+  businessId  String   @map("business_id")
+  
+  // Event Info
+  title       String
+  description String?
+  eventType   BusinessEventType @map("event_type")
+  
+  // Date & Time
+  startDate   DateTime @map("start_date")
+  endDate     DateTime? @map("end_date")
+  isAllDay    Boolean  @default(false) @map("is_all_day")
+  
+  // Reminders
+  reminderDays Int?     @map("reminder_days") // Days before to remind
+  isRecurring  Boolean  @default(false) @map("is_recurring")
+  recurringRule String? @map("recurring_rule") // RRULE format
+  
+  // Status
+  status      EventStatus @default(UPCOMING)
+  completedAt DateTime?   @map("completed_at")
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  @@map("business_events")
+}
+
+model BusinessService {
+  id          String   @id @default(cuid())
+  businessId  String   @map("business_id")
+  
+  // Service Info
+  serviceType ServiceCategory @map("service_type")
+  name        String
+  description String?
+  
+  // Billing
+  price       Decimal  @db.Decimal(10, 2)
+  billingCycle BillingCycle? @map("billing_cycle")
+  
+  // Status
+  status      ServiceStatus @default(ACTIVE)
+  startDate   DateTime @map("start_date")
+  endDate     DateTime? @map("end_date")
+  renewalDate DateTime? @map("renewal_date")
+  
+  // External References
+  stripeSubscriptionId String? @map("stripe_subscription_id")
+  orderId     String?  @map("order_id") // Reference to original order if applicable
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  @@map("business_services")
+}
+
+model ComplianceTask {
+  id          String   @id @default(cuid())
+  businessId  String   @map("business_id")
+  
+  // Task Info
+  title       String
+  description String?
+  taskType    ComplianceTaskType @map("task_type")
+  
+  // Dates
+  dueDate     DateTime @map("due_date")
+  reminderDate DateTime? @map("reminder_date")
+  
+  // Status
+  status      ComplianceTaskStatus @default(PENDING)
+  completedAt DateTime? @map("completed_at")
+  completedBy String?   @map("completed_by") // User ID
+  
+  // Additional Info
+  notes       String?
+  documentId  String?  @map("document_id") // Reference to related document
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  @@map("compliance_tasks")
+}
+
+model BusinessNote {
+  id          String   @id @default(cuid())
+  businessId  String   @map("business_id")
+  
+  // Note Info
+  title       String?
+  content     String
+  isPinned    Boolean  @default(false) @map("is_pinned")
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdBy   String?  @map("created_by") // User ID
+  
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  @@map("business_notes")
+}
+
+enum BusinessEntityType {
+  LLC                @map("llc")
+  CORPORATION        @map("corporation")
+  S_CORPORATION      @map("s_corporation")
+  SOLE_PROPRIETORSHIP @map("sole_proprietorship")
+  PARTNERSHIP        @map("partnership")
+  NON_PROFIT         @map("non_profit")
+}
+
+enum BusinessStatus {
+  PENDING       @map("pending")       // Formation in progress
+  ACTIVE        @map("active")        // Active and in good standing
+  INACTIVE      @map("inactive")      // Not currently operating
+  SUSPENDED     @map("suspended")     // Suspended by state
+  DISSOLVED     @map("dissolved")     // Officially dissolved
+}
+
+enum BusinessMemberRole {
+  OWNER          @map("owner")
+  MEMBER         @map("member")
+  MANAGER        @map("manager")
+  VIEWER         @map("viewer")
+}
+
+enum DocumentCategory {
+  FORMATION      @map("formation")     // Articles, Operating Agreement
+  TAX            @map("tax")           // Tax returns, EIN
+  COMPLIANCE     @map("compliance")    // Annual reports, licenses
+  FINANCIAL      @map("financial")     // Bank statements, invoices
+  LEGAL          @map("legal")         // Contracts, agreements
+  OTHER          @map("other")
+}
+
+enum BusinessEventType {
+  DEADLINE       @map("deadline")      // Filing deadlines
+  RENEWAL        @map("renewal")       // Service renewals
+  MEETING        @map("meeting")       // Business meetings
+  TAX_DUE        @map("tax_due")       // Tax payment due dates
+  REMINDER       @map("reminder")      // General reminders
+  MILESTONE      @map("milestone")     // Business milestones
+}
+
+enum EventStatus {
+  UPCOMING       @map("upcoming")
+  IN_PROGRESS    @map("in_progress")
+  COMPLETED      @map("completed")
+  OVERDUE        @map("overdue")
+  CANCELLED      @map("cancelled")
+}
+
+enum ServiceCategory {
+  LLC_FORMATION      @map("llc_formation")
+  REGISTERED_AGENT   @map("registered_agent")
+  COMPLIANCE_PACKAGE @map("compliance_package")
+  WEBSITE_BASIC      @map("website_basic")
+  WEBSITE_PRO        @map("website_pro")
+  WEBSITE_GROWTH     @map("website_growth")
+  EIN_SERVICE        @map("ein_service")
+  ANNUAL_REPORT      @map("annual_report")
+  OTHER              @map("other")
+}
+
+enum ServiceStatus {
+  PENDING        @map("pending")
+  ACTIVE         @map("active")
+  PAUSED         @map("paused")
+  CANCELLED      @map("cancelled")
+  EXPIRED        @map("expired")
+}
+
+enum ComplianceTaskType {
+  ANNUAL_REPORT      @map("annual_report")
+  FRANCHISE_TAX      @map("franchise_tax")
+  BUSINESS_LICENSE   @map("business_license")
+  REGISTERED_AGENT   @map("registered_agent")
+  STATEMENT_INFO     @map("statement_info")
+  TAX_FILING         @map("tax_filing")
+  OTHER              @map("other")
+}
+
+enum ComplianceTaskStatus {
+  PENDING        @map("pending")
+  IN_PROGRESS    @map("in_progress")
+  COMPLETED      @map("completed")
+  OVERDUE        @map("overdue")
+  NOT_APPLICABLE @map("not_applicable")
 }
 
 // ==============================================
@@ -66,6 +433,7 @@ model Order {
   id       String @id @default(cuid())
   orderId  String @unique @map("order_id") // ORD-timestamp-random format
   userId   String? @map("user_id")
+  businessId String? @map("business_id") // Link to business entity
   
   // Basic Company Information
   companyName     String @map("company_name")
@@ -131,6 +499,7 @@ model Order {
   
   // Relationships
   user               User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  business           Business? @relation("BusinessFormation")
   operatingAgreement OperatingAgreement?
   statusHistory      OrderStatusHistory[]
   communications     Communication[]

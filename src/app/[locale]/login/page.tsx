@@ -1,9 +1,10 @@
 // app/login/page.tsx
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { 
   RiMailLine, 
   RiLockLine, 
@@ -11,11 +12,17 @@ import {
   RiEyeOffLine, 
   RiLoginBoxLine,
   RiErrorWarningLine,
-  RiShieldCheckLine
+  RiShieldCheckLine,
+  RiGoogleFill
 } from 'react-icons/ri';
+import { useAuth } from 'src/app/components/providers/AuthProvider';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const locale = useLocale();
+  const { user, login, loading: authLoading } = useAuth();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,21 +32,54 @@ export default function LoginPage() {
     rememberMe: false
   });
 
+  // Get redirect URL from query params
+  const redirectUrl = searchParams.get('redirect');
+
+  // Check for OAuth errors
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      setError('Failed to sign in with Google. Please try again.');
+    }
+  }, [searchParams]);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!authLoading && user) {
+      const destination = redirectUrl || `/${locale}/dashboard`;
+      window.location.href = destination;
+    }
+  }, [user, authLoading, locale, redirectUrl]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    try {
-      // Aquí iría tu lógica de autenticación
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      router.push('/dashboard');
-    } catch {
-      setError('Credenciales inválidas. Por favor, intenta de nuevo.');
-    } finally {
+    const result = await login(formData.email, formData.password);
+
+    if (result.success) {
+      // Use window.location for a full page navigation to ensure cookies are picked up
+      const destination = redirectUrl || `/${locale}/dashboard`;
+      window.location.href = destination;
+    } else {
+      setError(result.error || 'Invalid credentials. Please try again.');
       setIsLoading(false);
     }
   };
+
+  const handleGoogleLogin = () => {
+    const redirect = redirectUrl || `/${locale}/dashboard`;
+    window.location.href = `/api/auth/google?locale=${locale}&redirect=${encodeURIComponent(redirect)}`;
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -52,15 +92,15 @@ export default function LoginPage() {
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Bienvenido de nuevo
+            Welcome back
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            ¿No tienes una cuenta?{' '}
+            Don&apos;t have an account?{' '}
             <Link 
-              href="/join" 
+              href={`/${locale}/join`}
               className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
             >
-              Regístrate aquí
+              Sign up here
             </Link>
           </p>
         </div>
@@ -68,11 +108,30 @@ export default function LoginPage() {
         {/* Form Card */}
         <div className="mt-8 bg-white rounded-xl shadow-xl border border-amber-100/50">
           <div className="px-6 py-8 sm:px-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Google Sign In */}
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all"
+            >
+              <RiGoogleFill className="h-5 w-5 text-red-500" />
+              Continue with Google
+            </button>
+
+            <div className="mt-6 relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Or continue with email</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
               {/* Email Field */}
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Correo electrónico
+                  Email address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -83,7 +142,7 @@ export default function LoginPage() {
                     id="email"
                     required
                     className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition-all"
-                    placeholder="tu@ejemplo.com"
+                    placeholder="you@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
@@ -93,7 +152,7 @@ export default function LoginPage() {
               {/* Password Field */}
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Contraseña
+                  Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -134,16 +193,16 @@ export default function LoginPage() {
                     onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                   />
                   <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-700">
-                    Recordarme
+                    Remember me
                   </label>
                 </div>
 
                 <div className="text-sm">
                   <Link
-                    href="/recuperar-password"
+                    href={`/${locale}/forgot-password`}
                     className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
                   >
-                    ¿Olvidaste tu contraseña?
+                    Forgot password?
                   </Link>
                 </div>
               </div>
@@ -171,36 +230,46 @@ export default function LoginPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Iniciando sesión...
+                    Signing in...
                   </>
                 ) : (
-                  'Iniciar Sesión'
+                  'Sign In'
                 )}
               </button>
             </form>
-
-          
           </div>
         </div>
 
         {/* Security Note */}
         <div className="mt-6 flex items-center justify-center text-sm text-gray-500">
           <RiShieldCheckLine className="h-5 w-5 text-gray-400 mr-2" />
-          <p>Conexión segura y encriptada</p>
+          <p>Secure encrypted connection</p>
         </div>
 
         {/* Terms Note */}
         <p className="mt-4 text-center text-xs text-gray-500">
-          Al iniciar sesión, aceptas nuestros{' '}
-          <Link href="/terms" className="text-amber-600 hover:text-amber-500">
-            Términos y Condiciones
+          By signing in, you agree to our{' '}
+          <Link href={`/${locale}/terms`} className="text-amber-600 hover:text-amber-500">
+            Terms of Service
           </Link>
-          {' '}y{' '}
-          <Link href="/privacy" className="text-amber-600 hover:text-amber-500">
-            Política de Privacidad
+          {' '}and{' '}
+          <Link href={`/${locale}/privacy`} className="text-amber-600 hover:text-amber-500">
+            Privacy Policy
           </Link>
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

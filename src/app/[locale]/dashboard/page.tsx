@@ -1,208 +1,337 @@
 'use client'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { useSearchParams, useRouter, useParams } from 'next/navigation'
+import React, { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { useAuth } from '@/app/components/providers/AuthProvider'
+import { 
+  RiBuilding2Line, 
+  RiAddLine, 
+  RiFileTextLine, 
+  RiCalendarLine,
+  RiCheckboxCircleLine,
+  RiSettings4Line,
+  RiLogoutBoxLine,
+  RiArrowRightLine,
+  RiAlertLine,
+  RiTimeLine,
+  RiShieldCheckLine,
+  RiGlobalLine
+} from 'react-icons/ri'
+import type { Business, DashboardSummary } from '@/app/components/types/dashboard'
+import AddBusinessModal from './components/AddBusinessModal'
+import BusinessCard from './components/BusinessCard'
 
-type Order = {
-  id: string
-  orderId: string
-  companyName: string
-  totalAmount: string | number | null
-  status: string
-  websiteService: string | null
-  createdAt: string
-}
+export default function DashboardPage() {
+  const { user, loading: authLoading, logout } = useAuth()
+  const router = useRouter()
+  const locale = useLocale()
+  
+  const [businesses, setBusinesses] = useState<Business[]>([])
+  const [summary, setSummary] = useState<DashboardSummary | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [showAddModal, setShowAddModal] = useState(false)
 
-type Document = {
-  id: string
-  documentType: string
-  fileName: string
-  filePath: string
-  isFinal: boolean
-  isLatest: boolean
-  generatedAt: string
-}
-
-export default function LocalizedDashboard() {
-  const t = useTranslations('dashboard')
-  const sp = useSearchParams()
-  const _router = useRouter()
-  const { locale: _locale } = useParams() as { locale: string }
-  const token = sp.get('t')
-
-  const [orders, setOrders] = useState<Order[]>([])
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-  const [documents, setDocuments] = useState<Document[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const qs = useMemo(() => (token ? `?t=${encodeURIComponent(token)}` : ''), [token])
+  const fetchData = useCallback(async () => {
+    try {
+      const [bizRes, summaryRes] = await Promise.all([
+        fetch('/api/businesses', { credentials: 'include' }),
+        fetch('/api/dashboard/summary', { credentials: 'include' })
+      ])
+      
+      if (bizRes.ok) {
+        const bizData = await bizRes.json()
+        setBusinesses(bizData.businesses)
+      }
+      
+      if (summaryRes.ok) {
+        const summaryData = await summaryRes.json()
+        setSummary(summaryData.summary)
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
-    let ignore = false
-    async function run() {
-      if (!token) {
-        setError('Missing secure link. Please use the link from your email.')
-        return
-      }
-      setLoading(true)
-      setError(null)
-      try {
-        const res = await fetch(`/api/orders/list${qs}`, { cache: 'no-store' })
-        if (!res.ok) throw new Error(`Failed to load orders (${res.status})`)
-        const data = await res.json()
-        if (ignore) return
-        setOrders(data.orders)
-        setSelectedOrder(data.orders?.[0] || null)
-      } catch (e: unknown) {
-        if (ignore) return
-        const errorMessage = e instanceof Error ? e.message : 'Failed to load'
-        setError(errorMessage)
-      } finally {
-        if (!ignore) setLoading(false)
-      }
+    if (!authLoading && !user) {
+      router.push(`/${locale}/login`)
+      return
     }
-    run()
-    return () => { ignore = true }
-  }, [qs, token])
+    
+    if (user) {
+      fetchData()
+    }
+  }, [user, authLoading, router, locale, fetchData])
 
-  useEffect(() => {
-    let ignore = false
-    async function loadDocs(order: Order | null) {
-      if (!order || !token) return setDocuments([])
-      try {
-        const res = await fetch(`/api/orders/${order.orderId}/documents${qs}`, { cache: 'no-store' })
-        if (!res.ok) throw new Error(`Failed to load documents (${res.status})`)
-        const data = await res.json()
-        if (!ignore) setDocuments(data.documents)
-      } catch {
-        if (!ignore) setDocuments([])
-      }
-    }
-    loadDocs(selectedOrder)
-    return () => { ignore = true }
-  }, [selectedOrder, qs, token])
-
-  async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    if (!selectedOrder || !token) return
-    const form = e.currentTarget
-    const fd = new FormData(form)
-    // If a file input is provided, upload it to storage first
-    const file = (form.querySelector('input[name="blob"]') as HTMLInputElement)?.files?.[0]
-    let fileUrl = String(fd.get('filePath') || '')
-    if (file) {
-      const uploadFd = new FormData()
-      uploadFd.append('file', file)
-      uploadFd.append('folder', `orders/${selectedOrder.orderId}`)
-      const up = await fetch(`/api/uploads/supabase${qs}`, { method: 'POST', body: uploadFd })
-      if (!up.ok) throw new Error('Upload failed')
-      const upJson = await up.json()
-      fileUrl = upJson.url
-      fd.set('filePath', fileUrl)
-      fd.set('fileName', file.name)
-    }
-
-    const payload = {
-      documentType: String(fd.get('documentType')),
-      fileName: String(fd.get('fileName')),
-      filePath: String(fd.get('filePath')) || fileUrl,
-      fileSize: file ? file.size : (fd.get('fileSize') ? Number(fd.get('fileSize')) : undefined),
-    }
-    const res = await fetch(`/api/orders/${selectedOrder.orderId}/documents${qs}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    if (res.ok) {
-      form.reset()
-      // refresh documents
-      const d = await fetch(`/api/orders/${selectedOrder.orderId}/documents${qs}`).then(r => r.json())
-      setDocuments(d.documents)
-    }
+  const handleBusinessCreated = () => {
+    setShowAddModal(false)
+    fetchData()
   }
 
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!user) return null
+
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div className="bg-white shadow rounded-xl p-6">
-          <h1 className="text-2xl font-bold mb-2">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
-          {!token && (
-            <p className="mt-4 text-sm text-red-600">Secure token missing. Use your emailed dashboard link.</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium text-gray-900">{user.firstName} {user.lastName}</p>
+                <p className="text-xs text-gray-500">{user.email}</p>
+              </div>
+              <button
+                onClick={logout}
+                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                title="Sign out"
+              >
+                <RiLogoutBoxLine className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome & Summary */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Welcome back, {user.firstName}!
+          </h2>
+          <p className="text-gray-600">
+            Manage your businesses, documents, and compliance from one place.
+          </p>
+        </div>
+
+        {/* Summary Stats */}
+        {summary && (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <RiBuilding2Line className="w-5 h-5 text-amber-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{summary.totalBusinesses}</p>
+                  <p className="text-xs text-gray-500">Businesses</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{summary.activeBusinesses}</p>
+                  <p className="text-xs text-gray-500">Active</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <RiAlertLine className="w-5 h-5 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{summary.pendingTasks}</p>
+                  <p className="text-xs text-gray-500">Pending Tasks</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <RiCalendarLine className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{summary.upcomingEvents}</p>
+                  <p className="text-xs text-gray-500">Events</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <RiFileTextLine className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{summary.totalDocuments}</p>
+                  <p className="text-xs text-gray-500">Documents</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-indigo-100 rounded-lg">
+                  <RiSettings4Line className="w-5 h-5 text-indigo-600" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{summary.activeServices}</p>
+                  <p className="text-xs text-gray-500">Services</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Businesses Section */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Your Businesses</h3>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+            >
+              <RiAddLine className="w-4 h-4" />
+              Add Business
+            </button>
+          </div>
+
+          {businesses.length === 0 ? (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+              <div className="max-w-md mx-auto">
+                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <RiBuilding2Line className="w-8 h-8 text-amber-600" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2">No businesses yet</h4>
+                <p className="text-gray-600 mb-6">
+                  Get started by forming a new LLC or adding an existing business.
+                </p>
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-medium"
+                >
+                  <RiAddLine className="w-5 h-5" />
+                  Add Your First Business
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {businesses.map(business => (
+                <BusinessCard 
+                  key={business.id} 
+                  business={business}
+                  locale={locale}
+                />
+              ))}
+            </div>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white shadow rounded-xl p-4 md:col-span-1">
-            <h2 className="font-semibold mb-3">Your Orders</h2>
-            {loading && <p className="text-sm text-gray-500">Loading…</p>}
-            {error && <p className="text-sm text-red-600">{error}</p>}
-            <ul className="divide-y">
-              {orders.map(o => (
-                <li key={o.id} className={`py-3 cursor-pointer ${selectedOrder?.id === o.id ? 'bg-amber-50 rounded-lg px-2' : ''}`} onClick={() => setSelectedOrder(o)}>
-                  <div className="text-sm font-medium">{o.companyName} LLC</div>
-                  <div className="text-xs text-gray-600">{o.orderId} • {(o.totalAmount ?? 0).toString()}</div>
-                  <div className="text-xs text-gray-500">{o.status.replaceAll('_', ' ').toLowerCase()}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white shadow rounded-xl p-4 md:col-span-2">
-            <h2 className="font-semibold mb-3">Order Details</h2>
-            {!selectedOrder && <p className="text-sm text-gray-500">Select an order to view details.</p>}
-            {selectedOrder && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><span className="text-gray-500">Order ID:</span> {selectedOrder.orderId}</div>
-                  <div><span className="text-gray-500">Company:</span> {selectedOrder.companyName} LLC</div>
-                  <div><span className="text-gray-500">Website Service:</span> {selectedOrder.websiteService || '—'}</div>
-                  <div><span className="text-gray-500">Status:</span> {selectedOrder.status.replaceAll('_',' ').toLowerCase()}</div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Documents</h3>
-                  <ul className="divide-y">
-                    {documents.map(d => (
-                      <li key={d.id} className="py-2 text-sm">
-                        <div className="font-medium">{d.documentType.replaceAll('_',' ')}</div>
-                        <div className="text-gray-600">{d.fileName}</div>
-                        <a className="text-amber-700 hover:underline" href={d.filePath} target="_blank" rel="noreferrer">View</a>
-                      </li>
-                    ))}
-                    {documents.length === 0 && <li className="py-2 text-sm text-gray-500">No documents yet.</li>}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Upload a file</h3>
-                  <form onSubmit={handleUpload} className="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
-                    <select name="documentType" required className="border rounded px-2 py-1">
-                      <option value="INVOICE">Invoice</option>
-                      <option value="RECEIPT">Receipt</option>
-                      <option value="OPERATING_AGREEMENT">Operating Agreement</option>
-                      <option value="ARTICLES_OF_ORGANIZATION">Articles of Organization</option>
-                      <option value="EIN_CONFIRMATION">EIN Confirmation</option>
-                      <option value="BANK_RESOLUTION_LETTER">Bank Resolution Letter</option>
-                    </select>
-                    <input name="fileName" placeholder="file.pdf" className="border rounded px-2 py-1" />
-                    <input name="filePath" placeholder="https://storage.example.com/file.pdf" className="border rounded px-2 py-1" />
-                    <input type="file" name="blob" className="border rounded px-2 py-1" />
-                    <button className="bg-amber-600 text-white rounded px-3 py-1">Save</button>
-                  </form>
-                  <p className="mt-2 text-xs text-gray-500">Tip: Provide either a URL or select a file to upload (Supabase Storage).</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Add services</h3>
-                  <div className="text-sm text-gray-600">Coming next: choose add-ons like Registered Agent, Compliance, Website tiers.</div>
-                </div>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href={`/${locale}/checkout/businessformation`}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow group"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-amber-100 rounded-lg group-hover:bg-amber-200 transition-colors">
+                <RiBuilding2Line className="w-6 h-6 text-amber-600" />
               </div>
-            )}
-          </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900 mb-1">Form New LLC</h4>
+                <p className="text-sm text-gray-600 mb-2">
+                  Start a new California LLC from $49.99
+                </p>
+                <span className="text-amber-600 text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Get Started <RiArrowRightLine />
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href={`/${locale}/webdevelopment`}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow group"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
+                <RiGlobalLine className="w-6 h-6 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900 mb-1">Website Services</h4>
+                <p className="text-sm text-gray-600 mb-2">
+                  Professional websites for your business
+                </p>
+                <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Explore Plans <RiArrowRightLine />
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href={`/${locale}/contact`}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow group"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
+                <RiShieldCheckLine className="w-6 h-6 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900 mb-1">Compliance Help</h4>
+                <p className="text-sm text-gray-600 mb-2">
+                  Stay compliant with expert guidance
+                </p>
+                <span className="text-green-600 text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Contact Us <RiArrowRightLine />
+                </span>
+              </div>
+            </div>
+          </a>
         </div>
-      </div>
+
+        {/* Important Dates Section */}
+        {summary && summary.pendingTasks > 0 && (
+          <div className="mt-8 bg-amber-50 border border-amber-200 rounded-xl p-6">
+            <div className="flex items-start gap-4">
+              <div className="p-2 bg-amber-200 rounded-lg">
+                <RiTimeLine className="w-6 h-6 text-amber-700" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-amber-900 mb-1">Upcoming Deadlines</h4>
+                <p className="text-sm text-amber-800">
+                  You have {summary.pendingTasks} pending compliance task{summary.pendingTasks !== 1 ? 's' : ''}. 
+                  Select a business above to view and manage your deadlines.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Add Business Modal */}
+      {showAddModal && (
+        <AddBusinessModal
+          onClose={() => setShowAddModal(false)}
+          onSuccess={handleBusinessCreated}
+          locale={locale}
+        />
+      )}
     </div>
   )
 }

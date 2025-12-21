@@ -3,6 +3,7 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import './global.css';
 import { ThemeProvider } from './components/config/theme-provider';
+import { AuthProvider } from './components/providers/AuthProvider';
 import { ReactNode } from 'react';
 export const metadata = {
   metadataBase: new URL('https://fabiel.net'),
@@ -25,7 +26,9 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
