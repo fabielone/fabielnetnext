@@ -28,16 +28,6 @@ export default function HeroRight() {
     >
       <div className="container mx-auto px-2 sm:px-4">
         <div className="flex flex-col items-center h-full">
-          {/* Heading */}
-          <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-400 dark:to-green-400 bg-clip-text text-transparent"
-          >
-            Start Your LLC in Any of the 50 States
-          </motion.h2>
-
           <motion.div 
             className="bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-gray-800/90 dark:to-gray-900 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden flex flex-col h-full w-full max-w-sm sm:max-w-lg border border-white/20 dark:border-gray-700/50"
             whileHover={{ 

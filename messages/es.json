@@ -148,9 +148,11 @@
       "account": "Cuenta",
       "profile": "Perfil",
       "settings": "Configuración",
+      "dashboard": "Panel",
       "signOut": "Cerrar sesión",
       "signIn": "Iniciar sesión",
-      "register": "Registrarse"
+      "register": "Registrarse",
+      "createAccount": "Crear Cuenta"
     },
     "footer": {
       "description": "Te ayudamos a formar tu negocio y construir soluciones de software poderosas para hacer crecer tu marca.",

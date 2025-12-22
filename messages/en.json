@@ -149,9 +149,11 @@
       "account": "Account",
       "profile": "Profile",
       "settings": "Settings",
+      "dashboard": "Dashboard",
       "signOut": "Sign out",
       "signIn": "Sign in",
-      "register": "Register"
+      "register": "Register",
+      "createAccount": "Create Account"
     },
     "footer": {
       "description": "We help you form your business and build powerful software solutions to grow your brand.",

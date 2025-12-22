@@ -10,6 +10,7 @@ type User = {
   lastName: string
   emailVerified: boolean
   avatarUrl?: string
+  phone?: string
   role: string
   businessCount: number
 }

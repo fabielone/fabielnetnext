@@ -217,7 +217,62 @@ export default function HeroLeft() {
             </motion.div>
           </motion.div>
 
-          {/* Remove Social Icons from here - moving to right side */}
+          {/* 50 States Section */}
+          <motion.div
+            className="mt-8 mx-4 sm:mx-6 md:mx-8"
+            variants={itemVariants}
+          >
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 p-6 sm:p-8">
+              {/* Decorative elements */}
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl" />
+              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl" />
+              
+              <div className="relative z-10 text-center">
+                <motion.div
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span className="text-xs font-medium text-white/90">Now Available Nationwide</span>
+                </motion.div>
+                
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3">
+                  Start Your LLC in{' '}
+                  <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
+                    Any of the 50 States
+                  </span>
+                </h3>
+                
+                <p className="text-sm text-white/70 max-w-md mx-auto">
+                  From California to New York, we handle LLC formation in every state with fast processing and expert support.
+                </p>
+                
+                {/* State icons row */}
+                <div className="flex justify-center items-center gap-3 mt-5">
+                  <div className="flex -space-x-2">
+                    {['CA', 'TX', 'NY', 'FL', 'WA'].map((state, i) => (
+                      <motion.div
+                        key={state}
+                        className="w-8 h-8 rounded-full bg-gradient-to-br from-white/20 to-white/5 border border-white/20 flex items-center justify-center text-[10px] font-bold text-white"
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.7 + i * 0.1 }}
+                      >
+                        {state}
+                      </motion.div>
+                    ))}
+                  </div>
+                  <span className="text-white/50 text-sm">+ 45 more</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>
