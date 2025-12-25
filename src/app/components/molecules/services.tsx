@@ -89,6 +89,7 @@ const MyServices = () => {
                   icon: ['📈', '📆', '📝', '📱', '💻', '⚡'][i],
                   text
                 }))}
+                reverse={index % 2 === 1}
               />
             </div>
           );

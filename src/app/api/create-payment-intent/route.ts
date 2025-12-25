@@ -45,7 +45,9 @@ export async function POST(request: Request) {
           passwordHash: '', // You might want to handle this differently
           emailVerified: false,
           isActive: true,
-          role: 'CUSTOMER'
+          role: 'CUSTOMER',
+          createdViaCheckout: true, // Mark as created during checkout
+          onboardingCompleted: true, // Skip onboarding for checkout users
         },
         select: {
           id: true,

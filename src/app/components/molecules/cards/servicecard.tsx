@@ -13,6 +13,7 @@ interface HeaderProps {
   imageUrl: string;
   items: { icon: string; text: string }[];
   serviceKey: string;
+  reverse?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -26,6 +27,7 @@ const Header: React.FC<HeaderProps> = ({
   imageUrl,
   items,
   serviceKey,
+  reverse = false,
 }) => {
 
   // Service-specific styling
@@ -90,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* Main Content - Symmetrical Layout with Soft Edges */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Image Section with Soft Blend */}
-          <div className="lg:col-span-5 flex justify-center">
+          <div className={`lg:col-span-5 flex justify-center order-1 ${reverse ? 'lg:order-2' : 'lg:order-1'}`}>
             <div className="relative group w-full max-w-md">
               {/* Soft gradient background that blends */}
               <div className={`absolute -inset-4 bg-gradient-to-r ${theme.gradient} rounded-[2rem] blur-2xl opacity-20 group-hover:opacity-30 transition-all duration-1000`}></div>
@@ -111,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Features Section with Soft Cards */}
-          <div className="lg:col-span-7 space-y-8 flex flex-col justify-center">
+          <div className={`lg:col-span-7 space-y-8 flex flex-col justify-center order-2 ${reverse ? 'lg:order-1' : 'lg:order-2'}`}>
             {/* Features Grid with Soft Edges */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {items.map((item, index) => (

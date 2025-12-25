@@ -13,6 +13,11 @@ type User = {
   phone?: string
   role: string
   businessCount: number
+  // Onboarding fields
+  onboardingCompleted?: boolean
+  onboardingSkippedAt?: string | null
+  createdViaCheckout?: boolean
+  welcomeShown?: boolean
 }
 
 type AuthContextType = {

@@ -20,9 +20,10 @@ import {
 import type { Business, DashboardSummary } from '@/app/components/types/dashboard'
 import AddBusinessModal from './components/AddBusinessModal'
 import BusinessCard from './components/BusinessCard'
+import WelcomeModal from '@/app/components/molecules/modals/WelcomeModal'
 
 export default function DashboardPage() {
-  const { user, loading: authLoading, logout } = useAuth()
+  const { user, loading: authLoading, logout, refreshUser } = useAuth()
   const router = useRouter()
   const locale = useLocale()
   
@@ -30,6 +31,7 @@ export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
@@ -62,8 +64,22 @@ export default function DashboardPage() {
     
     if (user) {
       fetchData()
+      
+      // Show welcome modal for checkout users who haven't seen it
+      if (user.createdViaCheckout && !user.welcomeShown) {
+        setShowWelcomeModal(true)
+      }
+      // Redirect to onboarding if needed (not checkout user and not completed)
+      else if (!user.onboardingCompleted && !user.onboardingSkippedAt && !user.createdViaCheckout) {
+        router.push(`/${locale}/onboarding`)
+      }
     }
   }, [user, authLoading, router, locale, fetchData])
+
+  const handleWelcomeClose = () => {
+    setShowWelcomeModal(false)
+    refreshUser()
+  }
 
   const handleBusinessCreated = () => {
     setShowAddModal(false)
@@ -85,6 +101,14 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Welcome Modal for checkout users */}
+      {showWelcomeModal && (
+        <WelcomeModal 
+          userName={user.firstName} 
+          onClose={handleWelcomeClose} 
+        />
+      )}
+      
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

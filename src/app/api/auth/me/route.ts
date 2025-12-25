@@ -29,6 +29,11 @@ export async function GET() {
         avatarUrl: user.avatarUrl,
         role: user.role,
         businessCount,
+        // Onboarding fields
+        onboardingCompleted: user.onboardingCompleted,
+        onboardingSkippedAt: user.onboardingSkippedAt,
+        createdViaCheckout: user.createdViaCheckout,
+        welcomeShown: user.welcomeShown,
       },
     })
   } catch (error) {

@@ -32,6 +32,15 @@ model User {
   stripeCustomerId String? @map("stripe_customer_id")
   metadata         Json?
   
+  // Onboarding fields
+  onboardingCompleted  Boolean   @default(false) @map("onboarding_completed")
+  onboardingSkippedAt  DateTime? @map("onboarding_skipped_at")
+  createdViaCheckout   Boolean   @default(false) @map("created_via_checkout")
+  welcomeShown         Boolean   @default(false) @map("welcome_shown")
+  lastLoginAt          DateTime? @map("last_login_at")
+  referralSource       String?   @map("referral_source") // How they heard about us
+  businessGoals        String?   @map("business_goals")   // What they want to achieve
+  
   // Relationships
   orders           Order[]
   userSessions     UserSession[]
