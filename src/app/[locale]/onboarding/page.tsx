@@ -79,7 +79,7 @@ export default function OnboardingPage() {
     {
       id: 'welcome',
       title: 'Welcome to Fabiel! 👋',
-      subtitle: "Let's personalize your experience",
+      subtitle: 'Let\'s personalize your experience',
       skipLabel: null, // Can't skip welcome
     },
     {

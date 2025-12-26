@@ -1,7 +1,7 @@
 'use client'
-import { LLCFormData, UpdateFormData } from '../types'; 
-import { useState } from 'react';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { LLCFormData, UpdateFormData, StateFee } from '../types'; 
+import { useState, useEffect } from 'react';
+import { InformationCircleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   formData: LLCFormData;
@@ -22,7 +22,7 @@ const includedServices: ServiceInfo[] = [
   {
     key: 'needLLCFormation',
     label: 'LLC Formation',
-    description: 'Articles of Organization filing with California Secretary of State',
+    description: 'Articles of Organization filing with your selected state',
     required: true
   },
   {
@@ -42,13 +42,89 @@ const includedServices: ServiceInfo[] = [
   }
 ];
 
+// All 50 US States
+const US_STATES = [
+  { code: 'AL', name: 'Alabama' }, { code: 'AK', name: 'Alaska' }, { code: 'AZ', name: 'Arizona' },
+  { code: 'AR', name: 'Arkansas' }, { code: 'CA', name: 'California' }, { code: 'CO', name: 'Colorado' },
+  { code: 'CT', name: 'Connecticut' }, { code: 'DE', name: 'Delaware' }, { code: 'FL', name: 'Florida' },
+  { code: 'GA', name: 'Georgia' }, { code: 'HI', name: 'Hawaii' }, { code: 'ID', name: 'Idaho' },
+  { code: 'IL', name: 'Illinois' }, { code: 'IN', name: 'Indiana' }, { code: 'IA', name: 'Iowa' },
+  { code: 'KS', name: 'Kansas' }, { code: 'KY', name: 'Kentucky' }, { code: 'LA', name: 'Louisiana' },
+  { code: 'ME', name: 'Maine' }, { code: 'MD', name: 'Maryland' }, { code: 'MA', name: 'Massachusetts' },
+  { code: 'MI', name: 'Michigan' }, { code: 'MN', name: 'Minnesota' }, { code: 'MS', name: 'Mississippi' },
+  { code: 'MO', name: 'Missouri' }, { code: 'MT', name: 'Montana' }, { code: 'NE', name: 'Nebraska' },
+  { code: 'NV', name: 'Nevada' }, { code: 'NH', name: 'New Hampshire' }, { code: 'NJ', name: 'New Jersey' },
+  { code: 'NM', name: 'New Mexico' }, { code: 'NY', name: 'New York' }, { code: 'NC', name: 'North Carolina' },
+  { code: 'ND', name: 'North Dakota' }, { code: 'OH', name: 'Ohio' }, { code: 'OK', name: 'Oklahoma' },
+  { code: 'OR', name: 'Oregon' }, { code: 'PA', name: 'Pennsylvania' }, { code: 'RI', name: 'Rhode Island' },
+  { code: 'SC', name: 'South Carolina' }, { code: 'SD', name: 'South Dakota' }, { code: 'TN', name: 'Tennessee' },
+  { code: 'TX', name: 'Texas' }, { code: 'UT', name: 'Utah' }, { code: 'VT', name: 'Vermont' },
+  { code: 'VA', name: 'Virginia' }, { code: 'WA', name: 'Washington' }, { code: 'WV', name: 'West Virginia' },
+  { code: 'WI', name: 'Wisconsin' }, { code: 'WY', name: 'Wyoming' }
+];
+
 const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hoveredService, setHoveredService] = useState<string | null>(null);
+  const [stateFees, setStateFees] = useState<StateFee[]>([]);
+  const [selectedStateFee, setSelectedStateFee] = useState<StateFee | null>(null);
+  const [loadingFees, setLoadingFees] = useState(true);
+  const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
+  const [stateSearchQuery, setStateSearchQuery] = useState('');
+
+  // Fetch state fees on mount
+  useEffect(() => {
+    const fetchStateFees = async () => {
+      try {
+        const response = await fetch('/api/state-fees');
+        const result = await response.json();
+        if (result.success) {
+          setStateFees(result.data);
+        }
+      } catch (error) {
+        console.error('Error fetching state fees:', error);
+      } finally {
+        setLoadingFees(false);
+      }
+    };
+    fetchStateFees();
+  }, []);
+
+  // Update selected state fee when formation state changes
+  useEffect(() => {
+    if (formData.formationState && stateFees.length > 0) {
+      const fee = stateFees.find(f => f.stateCode === formData.formationState);
+      setSelectedStateFee(fee || null);
+    } else {
+      setSelectedStateFee(null);
+    }
+  }, [formData.formationState, stateFees]);
+
+  // Filter states based on search
+  const filteredStates = US_STATES.filter(state => 
+    state.name.toLowerCase().includes(stateSearchQuery.toLowerCase()) ||
+    state.code.toLowerCase().includes(stateSearchQuery.toLowerCase())
+  );
+
+  const handleStateSelect = (stateCode: string) => {
+    updateFormData('formationState', stateCode);
+    setStateDropdownOpen(false);
+    setStateSearchQuery('');
+    if (errors.formationState) {
+      setErrors(prev => ({ ...prev, formationState: '' }));
+    }
+  };
+
+  const calculateTotal = () => {
+    const basePrice = 99.99;
+    const stateFee = selectedStateFee?.filingFee || 0;
+    return basePrice + stateFee;
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
+    if (!formData.formationState) newErrors.formationState = 'Please select a state for your LLC formation';
     if (!formData.companyName) newErrors.companyName = 'Company name is required';
     if (!formData.firstName) newErrors.firstName = 'First name is required';
     if (!formData.lastName) newErrors.lastName = 'Last name is required';
@@ -97,13 +173,105 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
           Step 1 of 6: Basic Information
         </div>
         
-        <p className="text-gray-600 mb-6">Enter your basic business and contact information</p>
+        <p className="text-gray-600 mb-6">Select your formation state and enter your contact information</p>
+      </div>
+
+      {/* Formation State Selector - FIRST */}
+      <div className="bg-amber-50 rounded-lg p-4 text-left max-w-lg mx-auto">
+        <h3 className="font-semibold text-amber-900 mb-2 text-center">Select Formation State *</h3>
+        <p className="text-xs text-amber-700 mb-4 text-center">
+          Choose the state where you want to form your LLC. Each state has different filing fees and processing times.
+        </p>
         
-        {/* Pricing */}
-        <div className="bg-amber-50 rounded-lg p-4 mb-4 max-w-md mx-auto">
-          <div className="text-2xl font-bold text-amber-900 mb-1">$124.99 Total</div>
-          <div className="text-amber-700 text-sm">$49.99 service fee + $75.00 state filing fee</div>
-          <div className="text-xs text-amber-600 mt-1">Price includes all selected services below</div>
+        <div className="relative">
+          <button
+            type="button"
+            id="formationState"
+            onClick={() => setStateDropdownOpen(!stateDropdownOpen)}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-left flex items-center justify-between ${
+              errors.formationState ? 'border-red-500' : 'border-gray-200'
+            }`}
+          >
+            <span className={formData.formationState ? 'text-gray-900' : 'text-gray-500'}>
+              {formData.formationState 
+                ? US_STATES.find(s => s.code === formData.formationState)?.name || 'Select a state'
+                : 'Select a state for your LLC'
+              }
+            </span>
+            <ChevronDownIcon className={`w-5 h-5 text-gray-400 transition-transform ${stateDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {stateDropdownOpen && (
+            <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-hidden">
+              <div className="p-2 border-b">
+                <input
+                  type="text"
+                  value={stateSearchQuery}
+                  onChange={(e) => setStateSearchQuery(e.target.value)}
+                  placeholder="Search states..."
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  autoFocus
+                />
+              </div>
+              <div className="overflow-y-auto max-h-48">
+                {loadingFees ? (
+                  <div className="p-4 text-center text-gray-500">Loading state fees...</div>
+                ) : filteredStates.length === 0 ? (
+                  <div className="p-4 text-center text-gray-500">No states found</div>
+                ) : (
+                  filteredStates.map((state) => {
+                    const fee = stateFees.find(f => f.stateCode === state.code);
+                    return (
+                      <button
+                        key={state.code}
+                        type="button"
+                        onClick={() => handleStateSelect(state.code)}
+                        className={`w-full px-4 py-3 text-left hover:bg-amber-50 transition-colors flex items-center justify-between ${
+                          formData.formationState === state.code ? 'bg-amber-100' : ''
+                        }`}
+                      >
+                        <span className="font-medium text-gray-900">{state.name}</span>
+                        <span className="text-sm text-amber-600">
+                          {fee ? `+$${fee.filingFee.toFixed(2)}` : 'Loading...'}
+                        </span>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        {errors.formationState && <p className="text-red-500 text-sm mt-1">{errors.formationState}</p>}
+      </div>
+
+      {/* Pricing - AFTER State Selection */}
+      <div className="bg-amber-50 rounded-lg p-4 max-w-lg mx-auto">
+        <div className="text-center">
+          <div className="text-amber-700 text-sm space-y-1">
+            <div className="flex justify-between items-center">
+              <span>Service Fee:</span>
+              <span className="font-semibold text-amber-900">$99.99</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>State Filing Fee:</span>
+              {selectedStateFee ? (
+                <span className="font-semibold text-amber-900">${selectedStateFee.filingFee.toFixed(2)}</span>
+              ) : (
+                <span className="text-amber-600 italic">Select state above</span>
+              )}
+            </div>
+          </div>
+          {selectedStateFee && (
+            <div className="mt-3 pt-3 border-t border-amber-200">
+              <div className="text-xs text-amber-600">
+                Processing time: {selectedStateFee.standardDays} business days
+                {selectedStateFee.rushAvailable && selectedStateFee.rushFee && (
+                  <span> (Rush available: {selectedStateFee.rushDays} day for +${selectedStateFee.rushFee.toFixed(2)})</span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

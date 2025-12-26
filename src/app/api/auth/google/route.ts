@@ -8,6 +8,10 @@ const REDIRECT_URI = process.env.NEXTAUTH_URL
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const locale = searchParams.get('locale') || 'en'
+  const redirect = searchParams.get('redirect') || '' // Custom redirect URL (e.g., /checkout/businessformation?step=3)
+  
+  // Encode locale and redirect in state as JSON
+  const state = JSON.stringify({ locale, redirect })
   
   const googleAuthUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
   googleAuthUrl.searchParams.set('client_id', GOOGLE_CLIENT_ID)
@@ -16,7 +20,7 @@ export async function GET(request: NextRequest) {
   googleAuthUrl.searchParams.set('scope', 'email profile')
   googleAuthUrl.searchParams.set('access_type', 'offline')
   googleAuthUrl.searchParams.set('prompt', 'select_account')
-  googleAuthUrl.searchParams.set('state', locale) // Pass locale in state
+  googleAuthUrl.searchParams.set('state', state) // Pass locale and redirect in state
   
   return NextResponse.redirect(googleAuthUrl)
 }

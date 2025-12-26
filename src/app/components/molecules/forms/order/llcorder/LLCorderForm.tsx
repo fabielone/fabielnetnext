@@ -3,6 +3,7 @@ import { useOrderForm } from './hooks/useOrderForm';
 import ProgressSteps from './components/ProgressSteps';
 import { LLCFormData, Step } from './types';
 import { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { UserIcon, BuildingOfficeIcon, ShieldCheckIcon, GlobeAltIcon, CreditCardIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import LoadingSpinner from '../../../../atoms/LoadingSpinner';
 
@@ -33,6 +34,10 @@ const initialFormState: LLCFormData = {
   phone: '',
   address: '',
   
+  // Formation state
+  formationState: '',  // Must select a state
+  rushProcessing: false,
+  
   // Service selections - all selected by default
   needLLCFormation: true,  // Required service, always true
   needEIN: true,
@@ -62,9 +67,36 @@ const handleOrderSubmit = (formData: LLCFormData): void => {
 
 const LLCOrderForm = () => {
   const { formData, updateFormData } = useOrderForm(initialFormState);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  // Get initial step from URL or default to 1
+  const getInitialStep = () => {
+    const stepParam = searchParams.get('step');
+    if (stepParam) {
+      const step = parseInt(stepParam, 10);
+      if (step >= 1 && step <= 6) return step;
+    }
+    return 1;
+  };
+  
+  const [currentStep, setCurrentStep] = useState(getInitialStep);
+  const [completedSteps, setCompletedSteps] = useState<number[]>(() => {
+    // If starting from a later step (e.g., returning from login), mark previous steps as completed
+    const initialStep = getInitialStep();
+    if (initialStep > 1) {
+      return Array.from({ length: initialStep - 1 }, (_, i) => i + 1);
+    }
+    return [];
+  });
   const formRef = useRef<HTMLDivElement>(null);
+
+  // Update URL when step changes
+  useEffect(() => {
+    const newUrl = `${pathname}?step=${currentStep}`;
+    router.replace(newUrl, { scroll: false });
+  }, [currentStep, pathname, router]);
 
   const steps: Step[] = [
     { id: 1, name: 'Basic Info', icon: UserIcon },
@@ -244,7 +276,7 @@ const LLCOrderForm = () => {
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-              California LLC Formation
+              LLC Formation
             </h1>
             <p className="text-sm sm:text-base text-gray-600">
               Professional business formation services by <span className="font-semibold text-amber-600">Fabiel.net</span>

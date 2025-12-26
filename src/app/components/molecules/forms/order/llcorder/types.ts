@@ -1,5 +1,21 @@
 import { ComponentType, SVGProps } from 'react';
 
+export interface StateFee {
+  stateCode: string;
+  stateName: string;
+  filingFee: number;
+  rushFee: number | null;
+  rushAvailable: boolean;
+  rushDays: number | null;
+  standardDays: number;
+}
+
+export interface RegisteredAgentPrice {
+  stateCode: string;
+  annualFee: number;
+  firstYearFee: number | null;
+}
+
 export interface LLCFormData {
   // Basic Info
   companyName: string;
@@ -30,6 +46,10 @@ export interface LLCFormData {
   requireMeetings?: boolean;
   paymentTransactionId?: string;
   paymentProvider?: 'stripe' | 'paypal';
+  
+  // Formation State
+  formationState: string;      // State code (e.g., "CA", "TX")
+  rushProcessing: boolean;     // Rush processing option
   
   // Service Selection Fields (just types, not initial values)
   needLLCFormation?: boolean;  // Required service

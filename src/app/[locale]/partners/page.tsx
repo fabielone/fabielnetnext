@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useMemo, useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -11,7 +11,7 @@ import {
   CheckIcon,
   ArrowTopRightOnSquareIcon,
   TagIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 
 interface Partner {
   id: number;
@@ -27,38 +27,38 @@ interface Partner {
 const partners: Partner[] = [
   {
     id: 1,
-    name: "Ionos",
-    description: "Professional web hosting with enterprise-grade security and performance for your business website. Reliable uptime, fast servers, and excellent customer support.",
-    url: "https://acn.ionos.com/aff_c?offer_id=1&aff_id=10824",
-    tags: ["Web Hosting", "Domains", "SSL Certificates", "Cloud"],
-    image: "/marketing.jpeg",
-    icon: "🌐",
-    location: "Global",
+    name: 'Ionos',
+    description: 'Professional web hosting with enterprise-grade security and performance for your business website. Reliable uptime, fast servers, and excellent customer support.',
+    url: 'https://acn.ionos.com/aff_c?offer_id=1&aff_id=10824',
+    tags: ['Web Hosting', 'Domains', 'SSL Certificates', 'Cloud'],
+    image: '/marketing.jpeg',
+    icon: '🌐',
+    location: 'Global',
   },
   {
     id: 2,
-    name: "iPostal1",
-    description: "Virtual mailbox service that gives your business a professional US address with mail scanning and forwarding. Perfect for remote businesses and entrepreneurs.",
-    url: "https://ipostal1.com/?ref=7070",
-    tags: ["Virtual Mailbox", "Mail Forwarding", "Business Address"],
-    image: "/formacion.jpeg",
-    icon: "📮",
-    location: "United States",
+    name: 'iPostal1',
+    description: 'Virtual mailbox service that gives your business a professional US address with mail scanning and forwarding. Perfect for remote businesses and entrepreneurs.',
+    url: 'https://ipostal1.com/?ref=7070',
+    tags: ['Virtual Mailbox', 'Mail Forwarding', 'Business Address'],
+    image: '/formacion.jpeg',
+    icon: '📮',
+    location: 'United States',
   },
   {
     id: 3,
-    name: "CorpNet",
-    description: "Professional business formation services with expert guidance to handle all your incorporation paperwork. LLC, Corporation, and more.",
-    url: "http://www.corpnet.com/?PID=26466",
-    tags: ["LLC Formation", "Incorporation", "Registered Agent", "Compliance"],
-    image: "/marketing.jpeg",
-    icon: "🏢",
-    location: "United States",
+    name: 'CorpNet',
+    description: 'Professional business formation services with expert guidance to handle all your incorporation paperwork. LLC, Corporation, and more.',
+    url: 'http://www.corpnet.com/?PID=26466',
+    tags: ['LLC Formation', 'Incorporation', 'Registered Agent', 'Compliance'],
+    image: '/marketing.jpeg',
+    icon: '🏢',
+    location: 'United States',
   }
 ];
 
 // Get all unique tags
-const allTags = ["Todas", ...Array.from(new Set(partners.flatMap((p) => p.tags)))];
+const allTags = ['Todas', ...Array.from(new Set(partners.flatMap((p) => p.tags)))];
 
 // Searchable Dropdown Component
 interface SearchableDropdownProps {
@@ -71,7 +71,7 @@ interface SearchableDropdownProps {
 
 function SearchableDropdown({ options, value, onChange, placeholder, icon }: SearchableDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -83,11 +83,11 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
-        setSearchQuery("");
+        setSearchQuery('');
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -105,8 +105,8 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
       >
         <div className="flex items-center gap-2">
           {icon && <span className="text-gray-400">{icon}</span>}
-          <span className={value === "Todas" ? "text-gray-500" : "text-gray-900 dark:text-gray-100 font-medium"}>
-            {value === "Todas" ? placeholder : value}
+          <span className={value === 'Todas' ? 'text-gray-500' : 'text-gray-900 dark:text-gray-100 font-medium'}>
+            {value === 'Todas' ? placeholder : value}
           </span>
         </div>
         <ChevronDownIcon className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -138,7 +138,7 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
                   onClick={() => {
                     onChange(opt);
                     setIsOpen(false);
-                    setSearchQuery("");
+                    setSearchQuery('');
                   }}
                   className={`flex items-center justify-between w-full px-4 py-2.5 text-sm text-left hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors ${
                     value === opt ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-gray-700 dark:text-gray-300'
@@ -196,11 +196,11 @@ function ExpandableDescription({ text }: { text: string }) {
 }
 
 export default function PartnersPage() {
-  const [search, setSearch] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string>("Todas");
+  const [search, setSearch] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string>('Todas');
   const [showFilters, setShowFilters] = useState(false);
   
-  const [pendingTag, setPendingTag] = useState<string>("Todas");
+  const [pendingTag, setPendingTag] = useState<string>('Todas');
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -212,22 +212,22 @@ export default function PartnersPage() {
         p.tags.some((t) => t.toLowerCase().includes(q)) ||
         (p.location && p.location.toLowerCase().includes(q)) ||
         p.url.toLowerCase().includes(q);
-      const matchTag = selectedTag === "Todas" || p.tags.includes(selectedTag);
+      const matchTag = selectedTag === 'Todas' || p.tags.includes(selectedTag);
       return matchSearch && matchTag;
     });
   }, [search, selectedTag]);
 
   const clearAll = () => {
-    setSearch("");
-    setSelectedTag("Todas");
-    setPendingTag("Todas");
+    setSearch('');
+    setSelectedTag('Todas');
+    setPendingTag('Todas');
   };
 
   const applyFilters = () => {
     setSelectedTag(pendingTag);
   };
 
-  const hasActiveFilters = search || selectedTag !== "Todas";
+  const hasActiveFilters = search || selectedTag !== 'Todas';
   const hasPendingChanges = pendingTag !== selectedTag;
 
   return (
@@ -275,13 +275,13 @@ export default function PartnersPage() {
               onClick={() => setShowFilters((s) => !s)}
               className={`inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] ${
                 showFilters
-                  ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border-2 border-indigo-300 dark:border-indigo-700"
-                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600"
+                  ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border-2 border-indigo-300 dark:border-indigo-700'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600'
               }`}
             >
               <FunnelIcon className="h-5 w-5" />
-              <span className="hidden sm:inline">{showFilters ? "Hide" : "Filters"}</span>
-              {selectedTag !== "Todas" && (
+              <span className="hidden sm:inline">{showFilters ? 'Hide' : 'Filters'}</span>
+              {selectedTag !== 'Todas' && (
                 <span className="flex items-center justify-center w-5 h-5 text-xs font-bold bg-indigo-600 text-white rounded-full">
                   1
                 </span>
@@ -323,8 +323,8 @@ export default function PartnersPage() {
                       disabled={!hasPendingChanges}
                       className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-semibold transition-all duration-200 ${
                         hasPendingChanges
-                          ? "bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-md hover:shadow-lg transform hover:scale-[1.02]"
-                          : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                          ? 'bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-md hover:shadow-lg transform hover:scale-[1.02]'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                       }`}
                     >
                       <CheckIcon className="h-5 w-5" />

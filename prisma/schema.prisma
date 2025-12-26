@@ -435,7 +435,91 @@ enum ComplianceTaskStatus {
 }
 
 // ==============================================
-// LLC FORMATION ORDERS ($49.99 FLAT RATE)
+// STATE FEES & PRICING CONFIGURATION
+// ==============================================
+
+// State LLC filing fees - can be managed via admin panel
+model StateFee {
+  id              String   @id @default(cuid())
+  stateCode       String   @unique @map("state_code") // e.g., "CA", "TX", "NY"
+  stateName       String   @map("state_name")         // e.g., "California", "Texas"
+  
+  // Filing Fees
+  filingFee       Decimal  @map("filing_fee") @db.Decimal(10, 2)
+  rushFee         Decimal? @map("rush_fee") @db.Decimal(10, 2)     // Optional rush processing fee
+  rushAvailable   Boolean  @default(false) @map("rush_available")
+  rushDays        Int?     @map("rush_days")                        // Processing time with rush (days)
+  standardDays    Int      @default(7) @map("standard_days")        // Normal processing time (days)
+  
+  // Additional state-specific fees
+  annualReportFee Decimal? @map("annual_report_fee") @db.Decimal(10, 2)
+  franchiseTaxFee Decimal? @map("franchise_tax_fee") @db.Decimal(10, 2)
+  
+  // State-specific requirements
+  requiresPublishedNotice Boolean @default(false) @map("requires_published_notice")
+  publishedNoticeFee      Decimal? @map("published_notice_fee") @db.Decimal(10, 2)
+  
+  // Status
+  isActive        Boolean  @default(true) @map("is_active")
+  
+  // Timestamps
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  @@map("state_fees")
+}
+
+// Registered Agent Pricing - can be managed via admin panel
+model RegisteredAgentPricing {
+  id              String   @id @default(cuid())
+  stateCode       String   @unique @map("state_code") // e.g., "CA", "TX" or "ALL" for default
+  
+  // Pricing
+  annualFee       Decimal  @map("annual_fee") @db.Decimal(10, 2)
+  firstYearFee    Decimal? @map("first_year_fee") @db.Decimal(10, 2) // Promotional first year pricing
+  
+  // Included with formation
+  includedWithFormation   Boolean @default(false) @map("included_with_formation")
+  includedMonths         Int?     @map("included_months")          // e.g., first 6 months free with formation
+  
+  // Status
+  isActive        Boolean  @default(true) @map("is_active")
+  
+  // Timestamps
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  @@map("registered_agent_pricing")
+}
+
+// Service Pricing - Base prices for services (managed via admin panel)
+model ServicePricing {
+  id              String   @id @default(cuid())
+  serviceKey      String   @unique @map("service_key") // e.g., "llc_formation", "ein", "operating_agreement"
+  serviceName     String   @map("service_name")
+  description     String?
+  
+  // Pricing
+  basePrice       Decimal  @map("base_price") @db.Decimal(10, 2)
+  
+  // Optional recurring pricing
+  isRecurring     Boolean  @default(false) @map("is_recurring")
+  recurringPrice  Decimal? @map("recurring_price") @db.Decimal(10, 2)
+  billingCycle    BillingCycle? @map("billing_cycle")
+  
+  // Status
+  isActive        Boolean  @default(true) @map("is_active")
+  isRequired      Boolean  @default(false) @map("is_required") // Required service (e.g., LLC formation itself)
+  
+  // Timestamps
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  @@map("service_pricing")
+}
+
+// ==============================================
+// LLC FORMATION ORDERS ($99.99 + STATE FEES)
 // ==============================================
 
 model Order {
@@ -459,16 +543,22 @@ model Order {
   contactPhone     String? @map("contact_phone")
   contactAddress   String? @map("contact_address")
   
-  // Service Selections (all included in $49.99)
+  // Service Selections (all included in $99.99)
   needEIN              Boolean @default(true) @map("need_ein")
   needOperatingAgreement Boolean @default(true) @map("need_operating_agreement")
   needBankLetter       Boolean @default(true) @map("need_bank_letter")
-  registeredAgent      Boolean @default(false) @map("registered_agent") // Optional add-on
+  registeredAgent      Boolean @default(false) @map("registered_agent") // Required by law add-on
   compliance           Boolean @default(false) // Optional add-on
   websiteService       WebsiteServiceTier? @map("website_service") // Optional tiered website service
   
-  // Pricing (Flat Rate + Optional Add-ons)
-  basePrice            Decimal @default(49.99) @map("base_price") @db.Decimal(10, 2)
+  // Formation State & Rush Processing
+  formationState       String @default("CA") @map("formation_state") // State where LLC is being formed
+  rushProcessing       Boolean @default(false) @map("rush_processing")
+  
+  // Pricing ($99.99 base + state fees + optional add-ons)
+  basePrice            Decimal @default(99.99) @map("base_price") @db.Decimal(10, 2)
+  stateFilingFee       Decimal @default(0.00) @map("state_filing_fee") @db.Decimal(10, 2)
+  rushFee              Decimal @default(0.00) @map("rush_fee") @db.Decimal(10, 2)
   registeredAgentPrice Decimal @default(149.00) @map("registered_agent_price") @db.Decimal(10, 2)
   compliancePrice      Decimal @default(99.00) @map("compliance_price") @db.Decimal(10, 2)
   websiteSetupFee      Decimal @default(0.00) @map("website_setup_fee") @db.Decimal(10, 2) // One-time setup fee

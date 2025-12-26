@@ -1,5 +1,6 @@
-import { LLCFormData, UpdateFormData } from '../types';
+import { LLCFormData, UpdateFormData, StateFee } from '../types';
 import { useState, useEffect } from 'react';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface LLCDetailStepProps {
   formData: LLCFormData;
@@ -7,6 +8,27 @@ interface LLCDetailStepProps {
   onNext: () => void;
   onPrev: () => void;
 }
+
+// All 50 US States
+const US_STATES = [
+  { code: 'AL', name: 'Alabama' }, { code: 'AK', name: 'Alaska' }, { code: 'AZ', name: 'Arizona' },
+  { code: 'AR', name: 'Arkansas' }, { code: 'CA', name: 'California' }, { code: 'CO', name: 'Colorado' },
+  { code: 'CT', name: 'Connecticut' }, { code: 'DE', name: 'Delaware' }, { code: 'FL', name: 'Florida' },
+  { code: 'GA', name: 'Georgia' }, { code: 'HI', name: 'Hawaii' }, { code: 'ID', name: 'Idaho' },
+  { code: 'IL', name: 'Illinois' }, { code: 'IN', name: 'Indiana' }, { code: 'IA', name: 'Iowa' },
+  { code: 'KS', name: 'Kansas' }, { code: 'KY', name: 'Kentucky' }, { code: 'LA', name: 'Louisiana' },
+  { code: 'ME', name: 'Maine' }, { code: 'MD', name: 'Maryland' }, { code: 'MA', name: 'Massachusetts' },
+  { code: 'MI', name: 'Michigan' }, { code: 'MN', name: 'Minnesota' }, { code: 'MS', name: 'Mississippi' },
+  { code: 'MO', name: 'Missouri' }, { code: 'MT', name: 'Montana' }, { code: 'NE', name: 'Nebraska' },
+  { code: 'NV', name: 'Nevada' }, { code: 'NH', name: 'New Hampshire' }, { code: 'NJ', name: 'New Jersey' },
+  { code: 'NM', name: 'New Mexico' }, { code: 'NY', name: 'New York' }, { code: 'NC', name: 'North Carolina' },
+  { code: 'ND', name: 'North Dakota' }, { code: 'OH', name: 'Ohio' }, { code: 'OK', name: 'Oklahoma' },
+  { code: 'OR', name: 'Oregon' }, { code: 'PA', name: 'Pennsylvania' }, { code: 'RI', name: 'Rhode Island' },
+  { code: 'SC', name: 'South Carolina' }, { code: 'SD', name: 'South Dakota' }, { code: 'TN', name: 'Tennessee' },
+  { code: 'TX', name: 'Texas' }, { code: 'UT', name: 'Utah' }, { code: 'VT', name: 'Vermont' },
+  { code: 'VA', name: 'Virginia' }, { code: 'WA', name: 'Washington' }, { code: 'WV', name: 'West Virginia' },
+  { code: 'WI', name: 'Wisconsin' }, { code: 'WY', name: 'Wyoming' }
+];
 
 const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailStepProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -16,6 +38,50 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
     suggestions?: string[];
   }>({ status: null });
   const [isCheckingName, setIsCheckingName] = useState(false);
+  const [stateFees, setStateFees] = useState<StateFee[]>([]);
+  const [selectedStateFee, setSelectedStateFee] = useState<StateFee | null>(null);
+  const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
+  const [stateSearchQuery, setStateSearchQuery] = useState('');
+
+  // Fetch state fees on mount
+  useEffect(() => {
+    const fetchStateFees = async () => {
+      try {
+        const response = await fetch('/api/state-fees');
+        const result = await response.json();
+        if (result.success) {
+          setStateFees(result.data);
+        }
+      } catch (error) {
+        console.error('Error fetching state fees:', error);
+      }
+    };
+    fetchStateFees();
+  }, []);
+
+  // Update selected state fee when formation state changes
+  useEffect(() => {
+    if (formData.formationState && stateFees.length > 0) {
+      const fee = stateFees.find(f => f.stateCode === formData.formationState);
+      setSelectedStateFee(fee || null);
+    }
+  }, [formData.formationState, stateFees]);
+
+  // Filter states based on search
+  const filteredStates = US_STATES.filter(state => 
+    state.name.toLowerCase().includes(stateSearchQuery.toLowerCase()) ||
+    state.code.toLowerCase().includes(stateSearchQuery.toLowerCase())
+  );
+
+  const handleStateSelect = (stateCode: string) => {
+    updateFormData('formationState', stateCode);
+    setStateDropdownOpen(false);
+    setStateSearchQuery('');
+    // Re-check name availability for new state
+    if (formData.companyName && formData.companyName.length > 2) {
+      checkNameAvailability(formData.companyName, stateCode);
+    }
+  };
 
   const validateStep = () => {
     const newErrors: Record<string, string> = {};
@@ -45,8 +111,17 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
   };
 
   // Business name availability check
-  const checkNameAvailability = async (name: string) => {
+  const checkNameAvailability = async (name: string, stateCode?: string) => {
     if (!name.trim()) return;
+    
+    const state = stateCode || formData.formationState;
+    if (!state) {
+      setNameAvailability({
+        status: 'error',
+        message: 'Please select a formation state first to check name availability.'
+      });
+      return;
+    }
     
     setIsCheckingName(true);
     setNameAvailability({ status: 'checking' });
@@ -57,28 +132,29 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           name: name,
-          state: 'CA',
+          state: state,
           entityType: 'LLC'
         })
       });
 
       const result = await response.json();
+      const stateName = US_STATES.find(s => s.code === state)?.name || state;
 
       if (result.available) {
         setNameAvailability({
           status: 'available',
-          message: 'Great! This name appears to be available.'
+          message: `Great! This name appears to be available in ${stateName}.`
         });
       } else if (result.similar && result.similar.length > 0) {
         setNameAvailability({
           status: 'similar',
-          message: 'Similar names found. Consider these alternatives:',
+          message: `Similar names found in ${stateName}. Consider these alternatives:`,
           suggestions: result.suggestions || []
         });
       } else {
         setNameAvailability({
           status: 'taken',
-          message: 'This name is already taken or too similar to existing businesses.',
+          message: `This name is already taken or too similar to existing businesses in ${stateName}.`,
           suggestions: result.suggestions || []
         });
       }
@@ -95,13 +171,13 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
   // Debounced name check
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (formData.companyName && formData.companyName.length > 2) {
+      if (formData.companyName && formData.companyName.length > 2 && formData.formationState) {
         checkNameAvailability(formData.companyName);
       }
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [formData.companyName]);
+  }, [formData.companyName, formData.formationState]);
 
   const selectSuggestedName = (suggestedName: string) => {
     handleChange('companyName', suggestedName);
@@ -114,12 +190,74 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
         <div className="inline-flex items-center px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-medium mb-4">
           Step 4 of 6: LLC Formation Details
         </div>
-        <p className="text-gray-600">Complete information required for your California LLC filing</p>
+        <p className="text-gray-600">
+          Complete information required for your {formData.formationState ? US_STATES.find(s => s.code === formData.formationState)?.name : ''} LLC filing
+        </p>
       </div>
 
       {/* Main Content Card */}
       <div className="bg-amber-50 rounded-lg p-6 md:p-8">
         <div className="max-w-4xl mx-auto space-y-6">
+          
+          {/* Formation State Display/Selector */}
+          <div className="bg-amber-100 rounded-lg p-4 mb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-amber-900">Formation State</h4>
+                <p className="text-sm text-amber-700">
+                  {formData.formationState 
+                    ? `${US_STATES.find(s => s.code === formData.formationState)?.name} - $${selectedStateFee?.filingFee?.toFixed(2) || '0.00'} filing fee`
+                    : 'No state selected'
+                  }
+                </p>
+              </div>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setStateDropdownOpen(!stateDropdownOpen)}
+                  className="px-4 py-2 text-sm bg-white border border-amber-300 rounded-lg hover:bg-amber-50 transition-colors flex items-center gap-2"
+                >
+                  Change State
+                  <ChevronDownIcon className={`w-4 h-4 transition-transform ${stateDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {stateDropdownOpen && (
+                  <div className="absolute z-20 right-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-hidden">
+                    <div className="p-2 border-b">
+                      <input
+                        type="text"
+                        value={stateSearchQuery}
+                        onChange={(e) => setStateSearchQuery(e.target.value)}
+                        placeholder="Search states..."
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        autoFocus
+                      />
+                    </div>
+                    <div className="overflow-y-auto max-h-48">
+                      {filteredStates.map((state) => {
+                        const fee = stateFees.find(f => f.stateCode === state.code);
+                        return (
+                          <button
+                            key={state.code}
+                            type="button"
+                            onClick={() => handleStateSelect(state.code)}
+                            className={`w-full px-4 py-2 text-left hover:bg-amber-50 transition-colors flex items-center justify-between text-sm ${
+                              formData.formationState === state.code ? 'bg-amber-100' : ''
+                            }`}
+                          >
+                            <span className="font-medium text-gray-900">{state.name}</span>
+                            <span className="text-amber-600">
+                              {fee ? `$${fee.filingFee.toFixed(2)}` : '...'}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
           
           {/* Business Name Verification */}
           <div className="bg-amber-100 rounded-lg p-6">
@@ -239,7 +377,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                     State
                   </label>
                   <input
-                    value="California"
+                    value={formData.formationState ? US_STATES.find(s => s.code === formData.formationState)?.name : 'Select a state'}
                     disabled
                     className="w-full text-gray-900 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm"
                   />

@@ -11,7 +11,19 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const code = searchParams.get('code')
   const error = searchParams.get('error')
-  const locale = searchParams.get('state') || 'en' // We'll use state to pass locale
+  const stateParam = searchParams.get('state') || '{}'
+  
+  // Parse state to get locale and redirect
+  let locale = 'en'
+  let customRedirect = ''
+  try {
+    const state = JSON.parse(stateParam)
+    locale = state.locale || 'en'
+    customRedirect = state.redirect || ''
+  } catch {
+    // If state is not JSON (legacy format), treat it as locale
+    locale = stateParam
+  }
   
   // Error from Google
   if (error) {
@@ -21,6 +33,7 @@ export async function GET(request: NextRequest) {
   
   // No code - redirect to Google OAuth
   if (!code) {
+    const state = JSON.stringify({ locale, redirect: customRedirect })
     const googleAuthUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
     googleAuthUrl.searchParams.set('client_id', GOOGLE_CLIENT_ID)
     googleAuthUrl.searchParams.set('redirect_uri', REDIRECT_URI)
@@ -28,7 +41,7 @@ export async function GET(request: NextRequest) {
     googleAuthUrl.searchParams.set('scope', 'email profile')
     googleAuthUrl.searchParams.set('access_type', 'offline')
     googleAuthUrl.searchParams.set('prompt', 'select_account')
-    googleAuthUrl.searchParams.set('state', locale)
+    googleAuthUrl.searchParams.set('state', state)
     
     return NextResponse.redirect(googleAuthUrl)
   }
@@ -87,7 +100,13 @@ export async function GET(request: NextRequest) {
     // Set session cookie
     await setSessionCookie(sessionToken)
     
-    // Redirect to dashboard
+    // Redirect to custom URL if provided (e.g., checkout flow), otherwise dashboard
+    if (customRedirect) {
+      // Ensure redirect starts with / and add locale prefix
+      const redirectPath = customRedirect.startsWith('/') ? customRedirect : `/${customRedirect}`
+      return NextResponse.redirect(new URL(`/${locale}${redirectPath}`, request.url))
+    }
+    
     return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url))
   } catch (error) {
     console.error('Google OAuth error:', error)

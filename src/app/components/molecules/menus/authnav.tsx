@@ -3,8 +3,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut, FiGrid } from 'react-icons/fi';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import { useTranslations , useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '../../providers/AuthProvider';

@@ -1,4 +1,6 @@
-import { LLCFormData, UpdateFormData } from '../types';
+import { LLCFormData, UpdateFormData, StateFee, RegisteredAgentPrice } from '../types';
+import { useState, useEffect } from 'react';
+import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 
 interface ServicesStepProps {
   formData: LLCFormData;
@@ -7,10 +9,70 @@ interface ServicesStepProps {
   onPrev: () => void;
 }
 
+// All 50 US States (for display purposes)
+const US_STATES = [
+  { code: 'AL', name: 'Alabama' }, { code: 'AK', name: 'Alaska' }, { code: 'AZ', name: 'Arizona' },
+  { code: 'AR', name: 'Arkansas' }, { code: 'CA', name: 'California' }, { code: 'CO', name: 'Colorado' },
+  { code: 'CT', name: 'Connecticut' }, { code: 'DE', name: 'Delaware' }, { code: 'FL', name: 'Florida' },
+  { code: 'GA', name: 'Georgia' }, { code: 'HI', name: 'Hawaii' }, { code: 'ID', name: 'Idaho' },
+  { code: 'IL', name: 'Illinois' }, { code: 'IN', name: 'Indiana' }, { code: 'IA', name: 'Iowa' },
+  { code: 'KS', name: 'Kansas' }, { code: 'KY', name: 'Kentucky' }, { code: 'LA', name: 'Louisiana' },
+  { code: 'ME', name: 'Maine' }, { code: 'MD', name: 'Maryland' }, { code: 'MA', name: 'Massachusetts' },
+  { code: 'MI', name: 'Michigan' }, { code: 'MN', name: 'Minnesota' }, { code: 'MS', name: 'Mississippi' },
+  { code: 'MO', name: 'Missouri' }, { code: 'MT', name: 'Montana' }, { code: 'NE', name: 'Nebraska' },
+  { code: 'NV', name: 'Nevada' }, { code: 'NH', name: 'New Hampshire' }, { code: 'NJ', name: 'New Jersey' },
+  { code: 'NM', name: 'New Mexico' }, { code: 'NY', name: 'New York' }, { code: 'NC', name: 'North Carolina' },
+  { code: 'ND', name: 'North Dakota' }, { code: 'OH', name: 'Ohio' }, { code: 'OK', name: 'Oklahoma' },
+  { code: 'OR', name: 'Oregon' }, { code: 'PA', name: 'Pennsylvania' }, { code: 'RI', name: 'Rhode Island' },
+  { code: 'SC', name: 'South Carolina' }, { code: 'SD', name: 'South Dakota' }, { code: 'TN', name: 'Tennessee' },
+  { code: 'TX', name: 'Texas' }, { code: 'UT', name: 'Utah' }, { code: 'VT', name: 'Vermont' },
+  { code: 'VA', name: 'Virginia' }, { code: 'WA', name: 'Washington' }, { code: 'WV', name: 'West Virginia' },
+  { code: 'WI', name: 'Wisconsin' }, { code: 'WY', name: 'Wyoming' }
+];
+
 const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStepProps) => {
+  const [selectedStateFee, setSelectedStateFee] = useState<StateFee | null>(null);
+  const [registeredAgentPrice, setRegisteredAgentPrice] = useState<RegisteredAgentPrice | null>(null);
+  const [loadingPrices, setLoadingPrices] = useState(true);
+
+  // Fetch pricing on mount
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const [stateResponse, agentResponse] = await Promise.all([
+          fetch('/api/state-fees'),
+          fetch(`/api/registered-agent-pricing?stateCode=${formData.formationState || 'ALL'}`)
+        ]);
+        
+        const stateResult = await stateResponse.json();
+        const agentResult = await agentResponse.json();
+        
+        if (stateResult.success && formData.formationState) {
+          const fee = stateResult.data.find((f: StateFee) => f.stateCode === formData.formationState);
+          setSelectedStateFee(fee || null);
+        }
+        
+        if (agentResult.success) {
+          setRegisteredAgentPrice(agentResult.data);
+        }
+      } catch (error) {
+        console.error('Error fetching pricing:', error);
+      } finally {
+        setLoadingPrices(false);
+      }
+    };
+    fetchPricing();
+  }, [formData.formationState]);
+
   const handleWebsiteSelect = (websiteType: string) => {
     updateFormData('website', formData.website === websiteType ? null : websiteType);
   };
+
+  const stateName = formData.formationState 
+    ? US_STATES.find(s => s.code === formData.formationState)?.name 
+    : 'your state';
+
+  const agentAnnualFee = registeredAgentPrice?.annualFee || 149;
 
   return (
     <div className="space-y-6">
@@ -21,45 +83,109 @@ const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStep
           Step 2 of 6: Additional Services
         </div>
         <p className="text-gray-600">Enhance your LLC with professional services</p>
+        
+        {/* Selected State Display */}
+        {formData.formationState && (
+          <div className="mt-4 inline-flex items-center px-4 py-2 bg-blue-50 text-blue-800 rounded-full text-sm">
+            <ShieldCheckIcon className="w-4 h-4 mr-2" />
+            Forming LLC in {stateName}
+            {selectedStateFee && ` • $${selectedStateFee.filingFee.toFixed(2)} state fee`}
+          </div>
+        )}
       </div>
 
       {/* Main Content Card */}
       <div className="bg-amber-50 rounded-lg p-6 md:p-8">
-        {/* Optional Services */}
-        <div className="space-y-6 mb-8">
-          <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Optional Services</h3>
-          
-          <div className="max-w-4xl mx-auto space-y-4">
-            {/* Registered Agent Service */}
+        {/* Required Services Notice */}
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">Required & Optional Services</h3>
+        </div>
+
+        {/* Registered Agent Service */}
+        <div className="mb-8">
+          <div 
+            className={`p-4 md:p-6 border-2 rounded-lg cursor-pointer transition-all ${
+              formData.registeredAgent 
+                ? 'border-amber-500 bg-amber-100' 
+                : 'border-gray-200 hover:border-amber-300 bg-white'
+            }`}
+            onClick={() => updateFormData('registeredAgent', !formData.registeredAgent)}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex-1">
+                <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                  Registered Agent Service
+                </h4>
+                <div className="text-xl font-bold text-amber-600 mb-2">
+                  {loadingPrices ? '...' : `$${agentAnnualFee.toFixed(2)}/year`}
+                </div>
+                <p className="text-gray-600 mb-3 text-sm">
+                  We'll serve as your official registered agent in {stateName}, receiving legal documents on your behalf and ensuring compliance.
+                </p>
+                <ul className="text-sm text-gray-500 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                  <li>• Legal document reception</li>
+                  <li>• Compliance notifications</li>
+                  <li>• Privacy protection</li>
+                  <li>• Professional address</li>
+                  <li>• Same-day email alerts</li>
+                  <li>• Annual report reminders</li>
+                </ul>
+                
+                {/* Legal requirement notice - subtle info box */}
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                  <p className="text-xs text-blue-800">
+                    <span className="font-medium">Good to know:</span> Every LLC is legally required to have a registered agent. 
+                    You can serve as your own registered agent if you have a physical address in {stateName} and are available during business hours to receive documents. 
+                    Many business owners prefer a professional service for privacy and convenience.
+                  </p>
+                </div>
+              </div>
+              <div className="flex-shrink-0 self-start">
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                  formData.registeredAgent ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
+                }`}>
+                  {formData.registeredAgent && (
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Rush Processing Option */}
+        {selectedStateFee?.rushAvailable && selectedStateFee.rushFee && (
+          <div className="mb-8">
             <div 
               className={`p-4 md:p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.registeredAgent 
+                formData.rushProcessing 
                   ? 'border-amber-500 bg-amber-100' 
                   : 'border-gray-200 hover:border-amber-300 bg-white'
               }`}
-              onClick={() => updateFormData('registeredAgent', !formData.registeredAgent)}
+              onClick={() => updateFormData('rushProcessing', !formData.rushProcessing)}
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                    Registered Agent Service
+                    Rush Processing
+                    <span className="ml-2 text-xs font-normal text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                      {selectedStateFee.rushDays} Day Processing
+                    </span>
                   </h4>
-                  <div className="text-xl font-bold text-amber-600 mb-2">$149/year</div>
+                  <div className="text-xl font-bold text-amber-600 mb-2">
+                    +${selectedStateFee.rushFee.toFixed(2)}
+                  </div>
                   <p className="text-gray-600 mb-3 text-sm">
-                    Required by law. We'll receive legal documents on your behalf and ensure compliance.
+                    Expedite your LLC formation from {selectedStateFee.standardDays} business days to {selectedStateFee.rushDays} business day{selectedStateFee.rushDays !== 1 ? 's' : ''}.
                   </p>
-                  <ul className="text-sm text-gray-500 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
-                    <li>• Legal document reception</li>
-                    <li>• Compliance notifications</li>
-                    <li>• Privacy protection</li>
-                    <li>• Professional address</li>
-                  </ul>
                 </div>
                 <div className="flex-shrink-0 self-start">
                   <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    formData.registeredAgent ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
+                    formData.rushProcessing ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
                   }`}>
-                    {formData.registeredAgent && (
+                    {formData.rushProcessing && (
                       <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -68,42 +194,47 @@ const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStep
                 </div>
               </div>
             </div>
+          </div>
+        )}
 
-            {/* Compliance Service */}
-            <div 
-              className={`p-4 md:p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.compliance 
-                  ? 'border-amber-500 bg-amber-100' 
-                  : 'border-gray-200 hover:border-amber-300 bg-white'
-              }`}
-              onClick={() => updateFormData('compliance', !formData.compliance)}
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                <div className="flex-1">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                    Annual Compliance Service
-                  </h4>
-                  <div className="text-xl font-bold text-amber-600 mb-2">$99/year</div>
-                  <p className="text-gray-600 mb-3 text-sm">
-                    Stay compliant with annual state filings and requirements automatically.
-                  </p>
-                  <ul className="text-sm text-gray-500 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
-                    <li>• Annual report filing</li>
-                    <li>• Deadline reminders</li>
-                    <li>• Document storage</li>
-                    <li>• Compliance monitoring</li>
-                  </ul>
-                </div>
-                <div className="flex-shrink-0 self-start">
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    formData.compliance ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
-                  }`}>
-                    {formData.compliance && (
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
+        {/* Optional Services */}
+        <div className="space-y-6 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 text-center">Optional Services</h3>
+
+          {/* Compliance Service */}
+          <div 
+            className={`p-4 md:p-6 border-2 rounded-lg cursor-pointer transition-all ${
+              formData.compliance 
+                ? 'border-amber-500 bg-amber-100' 
+                : 'border-gray-200 hover:border-amber-300 bg-white'
+            }`}
+            onClick={() => updateFormData('compliance', !formData.compliance)}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex-1">
+                <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                  Annual Compliance Service
+                </h4>
+                <div className="text-xl font-bold text-amber-600 mb-2">$99/year</div>
+                <p className="text-gray-600 mb-3 text-sm">
+                  Stay compliant with annual state filings and requirements automatically.
+                </p>
+                <ul className="text-sm text-gray-500 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                  <li>• Annual report filing</li>
+                  <li>• Deadline reminders</li>
+                  <li>• Document storage</li>
+                  <li>• Compliance monitoring</li>
+                </ul>
+              </div>
+              <div className="flex-shrink-0 self-start">
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                  formData.compliance ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
+                }`}>
+                  {formData.compliance && (
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
                 </div>
               </div>
             </div>

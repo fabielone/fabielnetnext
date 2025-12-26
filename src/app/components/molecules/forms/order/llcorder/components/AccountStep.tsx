@@ -13,20 +13,51 @@ interface AccountStepProps {
 }
 
 const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }: AccountStepProps) => {
-  const { user, login, register, loading: authLoading } = useAuth();
+  const { user, login, register, loading: authLoading, refreshUser } = useAuth();
   const [isLogin, setIsLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState('');
+  const [profileUpdated, setProfileUpdated] = useState(false);
 
-  // If user is already logged in, auto-proceed
+  // Update user profile with BasicInfo data when logged in
+  const updateUserProfile = async () => {
+    if (!user || profileUpdated) return;
+    
+    try {
+      // Update the user's profile with name/phone from BasicInfoStep
+      const response = await fetch('/api/auth/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone || undefined,
+        }),
+      });
+      
+      if (response.ok) {
+        await refreshUser(); // Refresh user data
+        setProfileUpdated(true);
+      }
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
+  };
+
+  // If user is already logged in, update their profile and sync email
   useEffect(() => {
     if (user && !authLoading) {
-      // Update form with user's email
+      // Update form email to match logged-in user's email (from Google/account)
       updateFormData('email', user.email);
+      
+      // Update user's profile with name/phone from BasicInfoStep
+      if (formData.firstName && formData.lastName) {
+        updateUserProfile();
+      }
     }
-  }, [user, authLoading, updateFormData]);
+  }, [user, authLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -92,6 +123,10 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
       }
 
       if (result.success) {
+        // If logging in (not registering), update profile with BasicInfo data
+        if (isLogin) {
+          await updateUserProfile();
+        }
         onNext();
       } else {
         setServerError(result.error || 'Authentication failed. Please try again.');
@@ -106,7 +141,8 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
   const handleGoogleAuth = () => {
     // Store form data in sessionStorage before redirecting
     sessionStorage.setItem('llcFormData', JSON.stringify(formData));
-    window.location.href = '/api/auth/google?locale=en&redirect=/checkout/businessformation';
+    // Include step=3 in redirect URL to return to the same step after login
+    window.location.href = '/api/auth/google?locale=en&redirect=/checkout/businessformation?step=3';
   };
 
   const handleChange = (field: keyof LLCFormData, value: string) => {
