@@ -546,7 +546,7 @@ export function evaluateVisibility(
     case 'product':
       return products.includes(condition.product!);
     
-    case 'answer':
+    case 'answer': {
       const answer = responses[condition.questionId!];
       if (condition.operator === 'equals') {
         return answer === condition.answerValue;
@@ -556,6 +556,7 @@ export function evaluateVisibility(
         return Array.isArray(answer) && answer.includes(condition.answerValue);
       }
       return false;
+    }
     
     case 'compound':
       if (condition.logic === 'and') {

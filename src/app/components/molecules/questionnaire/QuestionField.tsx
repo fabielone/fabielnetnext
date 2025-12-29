@@ -141,7 +141,7 @@ export default function QuestionField({
           </label>
         );
 
-      case 'checkbox_group':
+      case 'checkbox_group': {
         const selectedValues = Array.isArray(value) ? value : [];
         return (
           <div className="space-y-2">
@@ -171,8 +171,9 @@ export default function QuestionField({
             ))}
           </div>
         );
+      }
 
-      case 'address':
+      case 'address': {
         const addressValue = value || { street: '', city: '', state: '', zipCode: '' };
         return (
           <div className="space-y-3">
@@ -208,6 +209,7 @@ export default function QuestionField({
             </div>
           </div>
         );
+      }
 
       case 'member_list':
         return <MemberListField question={question} value={value} onChange={onChange} />;

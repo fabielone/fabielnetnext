@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { 
@@ -168,7 +168,7 @@ export default function PaymentsPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-2">No Payments Found</h2>
             <p className="text-gray-500">
               {filter === 'all' 
-                ? "You haven't made any payments yet." 
+                ? 'You haven\'t made any payments yet.' 
                 : `No ${filter === 'orders' ? 'order' : 'subscription'} payments found.`}
             </p>
           </div>

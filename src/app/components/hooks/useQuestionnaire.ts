@@ -30,7 +30,7 @@ export function useQuestionnaire({ token }: UseQuestionnaireProps) {
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasChangesRef = useRef(false);
 
   // Fetch questionnaire data
