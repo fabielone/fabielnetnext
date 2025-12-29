@@ -42,8 +42,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sig,
       webhookSecret
     );
-  } catch (err: any) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return res.status(400).send(`Webhook Error: ${message}`);
   }
 
   // Handle events (as in your example)
