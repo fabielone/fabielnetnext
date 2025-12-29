@@ -441,9 +441,6 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
             <span>Data Protection</span>
           </div>
         </div>
-        <p className="text-xs">
-          © 2025 Fabiel.net - Your information is secure and encrypted
-        </p>
       </div>
     </div>
   );

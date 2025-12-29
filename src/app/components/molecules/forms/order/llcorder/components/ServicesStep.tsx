@@ -1,6 +1,6 @@
-import { LLCFormData, UpdateFormData, StateFee, RegisteredAgentPrice } from '../types';
+import { LLCFormData, UpdateFormData, StateFee, RegisteredAgentPrice, WEB_SERVICE_PRICING, WebServiceTier } from '../types';
 import { useState, useEffect } from 'react';
-import { ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { ShieldCheckIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 interface ServicesStepProps {
   formData: LLCFormData;
@@ -35,6 +35,9 @@ const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStep
   const [registeredAgentPrice, setRegisteredAgentPrice] = useState<RegisteredAgentPrice | null>(null);
   const [loadingPrices, setLoadingPrices] = useState(true);
 
+  // Check if user qualifies for 25% discount (has compliance OR registered agent selected)
+  const hasSubscriptionDiscount = formData.registeredAgent || formData.compliance;
+
   // Fetch pricing on mount
   useEffect(() => {
     const fetchPricing = async () => {
@@ -64,7 +67,7 @@ const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStep
     fetchPricing();
   }, [formData.formationState]);
 
-  const handleWebsiteSelect = (websiteType: string) => {
+  const handleWebsiteSelect = (websiteType: WebServiceTier) => {
     updateFormData('website', formData.website === websiteType ? null : websiteType);
   };
 
@@ -243,98 +246,140 @@ const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStep
 
         {/* Website Services */}
         <div className="space-y-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Professional Website Services</h3>
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Professional Web Services</h3>
+            <p className="text-gray-600 text-sm mb-2">Save on our web services - launch your online presence today!</p>
+            
+            {/* 25% Discount Banner */}
+            {hasSubscriptionDiscount ? (
+              <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                <SparklesIcon className="w-4 h-4 mr-2" />
+                25% OFF applied! (Compliance/Registered Agent subscriber)
+              </div>
+            ) : (
+              <div className="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm">
+                <SparklesIcon className="w-4 h-4 mr-2" />
+                Add Compliance or Registered Agent service above to get 25% off web services!
+              </div>
+            )}
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-            {/* Basic Website */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+            {/* Essential Website */}
             <div
-              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.website === 'basic' 
+              className={`p-4 border-2 rounded-lg cursor-pointer transition-all relative ${
+                formData.website === 'essential' 
                   ? 'border-amber-500 bg-amber-100' 
                   : 'border-gray-200 hover:border-amber-300 bg-white'
               }`}
-              onClick={() => handleWebsiteSelect('basic')}
+              onClick={() => handleWebsiteSelect('essential')}
             >
               <div className="text-center">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-base font-semibold text-gray-900">Basic Website</h4>
+                  <h4 className="text-base font-semibold text-gray-900">{WEB_SERVICE_PRICING.essential.name}</h4>
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    formData.website === 'basic' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
+                    formData.website === 'essential' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
                   }`}>
-                    {formData.website === 'basic' && <div className="w-2 h-2 bg-white rounded-full" />}
+                    {formData.website === 'essential' && <div className="w-2 h-2 bg-white rounded-full" />}
                   </div>
                 </div>
-                <div className="text-lg font-bold text-amber-600 mb-3">$9.99/month</div>
+                <div className="mb-3">
+                  <span className="text-xs text-gray-400 line-through">${WEB_SERVICE_PRICING.essential.originalPrice.toFixed(2)}/mo</span>
+                  <div className="text-lg font-bold text-amber-600">
+                    ${hasSubscriptionDiscount 
+                      ? (WEB_SERVICE_PRICING.essential.price * 0.75).toFixed(2) 
+                      : WEB_SERVICE_PRICING.essential.price.toFixed(2)}/mo
+                  </div>
+                  {hasSubscriptionDiscount && (
+                    <span className="text-xs text-green-600 font-medium">25% discount applied!</span>
+                  )}
+                </div>
                 <ul className="text-xs text-gray-600 space-y-1 text-left">
-                  <li>• Up to 5 pages</li>
-                  <li>• Mobile responsive design</li>
-                  <li>• SSL certificate included</li>
-                  <li>• Basic SEO setup</li>
-                  <li>• Contact form</li>
-                  <li>• 1 GB hosting</li>
+                  {WEB_SERVICE_PRICING.essential.features.map((feature, idx) => (
+                    <li key={idx}>• {feature}</li>
+                  ))}
                 </ul>
               </div>
             </div>
 
-            {/* Pro Website */}
+            {/* Professional Website */}
             <div
-              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.website === 'pro' 
+              className={`p-4 border-2 rounded-lg cursor-pointer transition-all relative ${
+                formData.website === 'professional' 
                   ? 'border-amber-500 bg-amber-100' 
                   : 'border-gray-200 hover:border-amber-300 bg-white'
               }`}
-              onClick={() => handleWebsiteSelect('pro')}
+              onClick={() => handleWebsiteSelect('professional')}
             >
-              <div className="text-center">
+              {/* Popular Badge */}
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
+              </div>
+              <div className="text-center pt-2">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-base font-semibold text-gray-900">Pro Website</h4>
+                  <h4 className="text-base font-semibold text-gray-900">{WEB_SERVICE_PRICING.professional.name}</h4>
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    formData.website === 'pro' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
+                    formData.website === 'professional' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
                   }`}>
-                    {formData.website === 'pro' && <div className="w-2 h-2 bg-white rounded-full" />}
+                    {formData.website === 'professional' && <div className="w-2 h-2 bg-white rounded-full" />}
                   </div>
                 </div>
-                <div className="text-lg font-bold text-amber-600 mb-3">$49.99/month</div>
+                <div className="mb-3">
+                  <span className="text-xs text-gray-400 line-through">${WEB_SERVICE_PRICING.professional.originalPrice.toFixed(2)}/mo</span>
+                  <div className="text-lg font-bold text-amber-600">
+                    ${hasSubscriptionDiscount 
+                      ? (WEB_SERVICE_PRICING.professional.price * 0.75).toFixed(2) 
+                      : WEB_SERVICE_PRICING.professional.price.toFixed(2)}/mo
+                  </div>
+                  {hasSubscriptionDiscount && (
+                    <span className="text-xs text-green-600 font-medium">25% discount applied!</span>
+                  )}
+                </div>
                 <ul className="text-xs text-gray-600 space-y-1 text-left">
-                  <li>• Unlimited pages</li>
-                  <li>• Advanced SEO optimization</li>
-                  <li>• Google Analytics integration</li>
-                  <li>• Multiple contact forms</li>
-                  <li>• Social media integration</li>
-                  <li>• 10 GB hosting</li>
-                  <li>• Priority support</li>
+                  {WEB_SERVICE_PRICING.professional.features.map((feature, idx) => (
+                    <li key={idx}>• {feature}</li>
+                  ))}
                 </ul>
               </div>
             </div>
 
-            {/* E-commerce Website */}
+            {/* Blog Pro Website */}
             <div
-              className={`p-4 border-2 rounded-lg cursor-pointer transition-all md:col-span-2 lg:col-span-1 md:max-w-sm lg:max-w-none md:mx-auto ${
-                formData.website === 'ecommerce' 
+              className={`p-4 border-2 rounded-lg cursor-pointer transition-all relative ${
+                formData.website === 'blogPro' 
                   ? 'border-amber-500 bg-amber-100' 
                   : 'border-gray-200 hover:border-amber-300 bg-white'
               }`}
-              onClick={() => handleWebsiteSelect('ecommerce')}
+              onClick={() => handleWebsiteSelect('blogPro')}
             >
-              <div className="text-center">
+              {/* Monetization Badge */}
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">MONETIZE</span>
+              </div>
+              <div className="text-center pt-2">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-base font-semibold text-gray-900">E-commerce</h4>
+                  <h4 className="text-base font-semibold text-gray-900">{WEB_SERVICE_PRICING.blogPro.name}</h4>
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    formData.website === 'ecommerce' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
+                    formData.website === 'blogPro' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'
                   }`}>
-                    {formData.website === 'ecommerce' && <div className="w-2 h-2 bg-white rounded-full" />}
+                    {formData.website === 'blogPro' && <div className="w-2 h-2 bg-white rounded-full" />}
                   </div>
                 </div>
-                <div className="text-lg font-bold text-amber-600 mb-1">$49.99/month</div>
-                <div className="text-xs text-amber-700 mb-3">+ transaction fees</div>
+                <div className="mb-3">
+                  <span className="text-xs text-gray-400 line-through">${WEB_SERVICE_PRICING.blogPro.originalPrice.toFixed(2)}/mo</span>
+                  <div className="text-lg font-bold text-amber-600">
+                    ${hasSubscriptionDiscount 
+                      ? (WEB_SERVICE_PRICING.blogPro.price * 0.75).toFixed(2) 
+                      : WEB_SERVICE_PRICING.blogPro.price.toFixed(2)}/mo
+                  </div>
+                  {hasSubscriptionDiscount && (
+                    <span className="text-xs text-green-600 font-medium">25% discount applied!</span>
+                  )}
+                </div>
                 <ul className="text-xs text-gray-600 space-y-1 text-left">
-                  <li>• Online store setup</li>
-                  <li>• Payment processing</li>
-                  <li>• Inventory management</li>
-                  <li>• Order tracking</li>
-                  <li>• Customer accounts</li>
-                  <li>• Shopping cart</li>
-                  <li>• Unlimited products</li>
+                  {WEB_SERVICE_PRICING.blogPro.features.map((feature, idx) => (
+                    <li key={idx}>• {feature}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -380,9 +425,6 @@ const ServicesStep = ({ formData, updateFormData, onNext, onPrev }: ServicesStep
             <span>Registered Agent Available</span>
           </div>
         </div>
-        <p className="text-xs">
-          © 2025 Fabiel.net - Professional Business Formation Services
-        </p>
       </div>
     </div>
   );

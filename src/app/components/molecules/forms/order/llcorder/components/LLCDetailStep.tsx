@@ -1,6 +1,5 @@
 import { LLCFormData, UpdateFormData, StateFee } from '../types';
 import { useState, useEffect } from 'react';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface LLCDetailStepProps {
   formData: LLCFormData;
@@ -30,18 +29,17 @@ const US_STATES = [
   { code: 'WI', name: 'Wisconsin' }, { code: 'WY', name: 'Wyoming' }
 ];
 
+// Validation helper function
+const validateZipCode = (zip: string): boolean => {
+  // US ZIP codes: 5 digits or 5+4 format (12345 or 12345-6789)
+  const zipRegex = /^\d{5}(-\d{4})?$/;
+  return zipRegex.test(zip);
+};
+
 const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailStepProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [nameAvailability, setNameAvailability] = useState<{
-    status: 'checking' | 'available' | 'taken' | 'similar' | 'error' | null;
-    message?: string;
-    suggestions?: string[];
-  }>({ status: null });
-  const [isCheckingName, setIsCheckingName] = useState(false);
   const [stateFees, setStateFees] = useState<StateFee[]>([]);
   const [selectedStateFee, setSelectedStateFee] = useState<StateFee | null>(null);
-  const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
-  const [stateSearchQuery, setStateSearchQuery] = useState('');
 
   // Fetch state fees on mount
   useEffect(() => {
@@ -67,30 +65,20 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
     }
   }, [formData.formationState, stateFees]);
 
-  // Filter states based on search
-  const filteredStates = US_STATES.filter(state => 
-    state.name.toLowerCase().includes(stateSearchQuery.toLowerCase()) ||
-    state.code.toLowerCase().includes(stateSearchQuery.toLowerCase())
-  );
-
-  const handleStateSelect = (stateCode: string) => {
-    updateFormData('formationState', stateCode);
-    setStateDropdownOpen(false);
-    setStateSearchQuery('');
-    // Re-check name availability for new state
-    if (formData.companyName && formData.companyName.length > 2) {
-      checkNameAvailability(formData.companyName, stateCode);
-    }
-  };
-
   const validateStep = () => {
     const newErrors: Record<string, string> = {};
 
     // Required fields validation
-    if (!formData.companyName) newErrors.companyName = 'Company name is required';
     if (!formData.businessAddress) newErrors.businessAddress = 'Business address is required';
     if (!formData.businessCity) newErrors.businessCity = 'City is required';
-    if (!formData.businessZip) newErrors.businessZip = 'ZIP code is required';
+    
+    // ZIP code validation
+    if (!formData.businessZip) {
+      newErrors.businessZip = 'ZIP code is required';
+    } else if (!validateZipCode(formData.businessZip)) {
+      newErrors.businessZip = 'Please enter a valid US ZIP code (12345 or 12345-6789)';
+    }
+    
     if (!formData.businessPurpose) newErrors.businessPurpose = 'Business purpose is required';
 
     setErrors(newErrors);
@@ -110,79 +98,6 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
     }
   };
 
-  // Business name availability check
-  const checkNameAvailability = async (name: string, stateCode?: string) => {
-    if (!name.trim()) return;
-    
-    const state = stateCode || formData.formationState;
-    if (!state) {
-      setNameAvailability({
-        status: 'error',
-        message: 'Please select a formation state first to check name availability.'
-      });
-      return;
-    }
-    
-    setIsCheckingName(true);
-    setNameAvailability({ status: 'checking' });
-
-    try {
-      const response = await fetch('/api/check-business-name', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          name: name,
-          state: state,
-          entityType: 'LLC'
-        })
-      });
-
-      const result = await response.json();
-      const stateName = US_STATES.find(s => s.code === state)?.name || state;
-
-      if (result.available) {
-        setNameAvailability({
-          status: 'available',
-          message: `Great! This name appears to be available in ${stateName}.`
-        });
-      } else if (result.similar && result.similar.length > 0) {
-        setNameAvailability({
-          status: 'similar',
-          message: `Similar names found in ${stateName}. Consider these alternatives:`,
-          suggestions: result.suggestions || []
-        });
-      } else {
-        setNameAvailability({
-          status: 'taken',
-          message: `This name is already taken or too similar to existing businesses in ${stateName}.`,
-          suggestions: result.suggestions || []
-        });
-      }
-    } catch {
-      setNameAvailability({
-        status: 'error',
-        message: 'Unable to check name availability. Please try again.'
-      });
-    } finally {
-      setIsCheckingName(false);
-    }
-  };
-
-  // Debounced name check
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (formData.companyName && formData.companyName.length > 2 && formData.formationState) {
-        checkNameAvailability(formData.companyName);
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [formData.companyName, formData.formationState]);
-
-  const selectSuggestedName = (suggestedName: string) => {
-    handleChange('companyName', suggestedName);
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -199,138 +114,21 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
       <div className="bg-amber-50 rounded-lg p-6 md:p-8">
         <div className="max-w-4xl mx-auto space-y-6">
           
-          {/* Formation State Display/Selector */}
+          {/* Formation State Display (Read-only) */}
           <div className="bg-amber-100 rounded-lg p-4 mb-4">
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="font-semibold text-amber-900">Formation State</h4>
                 <p className="text-sm text-amber-700">
                   {formData.formationState 
-                    ? `${US_STATES.find(s => s.code === formData.formationState)?.name} - $${selectedStateFee?.filingFee?.toFixed(2) || '0.00'} filing fee`
+                    ? `${US_STATES.find(s => s.code === formData.formationState)?.name} - $${selectedStateFee?.filingFee?.toFixed(2) || '0.00'} state filing fee`
                     : 'No state selected'
                   }
                 </p>
               </div>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setStateDropdownOpen(!stateDropdownOpen)}
-                  className="px-4 py-2 text-sm bg-white border border-amber-300 rounded-lg hover:bg-amber-50 transition-colors flex items-center gap-2"
-                >
-                  Change State
-                  <ChevronDownIcon className={`w-4 h-4 transition-transform ${stateDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {stateDropdownOpen && (
-                  <div className="absolute z-20 right-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-hidden">
-                    <div className="p-2 border-b">
-                      <input
-                        type="text"
-                        value={stateSearchQuery}
-                        onChange={(e) => setStateSearchQuery(e.target.value)}
-                        placeholder="Search states..."
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                        autoFocus
-                      />
-                    </div>
-                    <div className="overflow-y-auto max-h-48">
-                      {filteredStates.map((state) => {
-                        const fee = stateFees.find(f => f.stateCode === state.code);
-                        return (
-                          <button
-                            key={state.code}
-                            type="button"
-                            onClick={() => handleStateSelect(state.code)}
-                            className={`w-full px-4 py-2 text-left hover:bg-amber-50 transition-colors flex items-center justify-between text-sm ${
-                              formData.formationState === state.code ? 'bg-amber-100' : ''
-                            }`}
-                          >
-                            <span className="font-medium text-gray-900">{state.name}</span>
-                            <span className="text-amber-600">
-                              {fee ? `$${fee.filingFee.toFixed(2)}` : '...'}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+              <div className="text-xs text-amber-600">
+                Selected in Step 1
               </div>
-            </div>
-          </div>
-          
-          {/* Business Name Verification */}
-          <div className="bg-amber-100 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Name Verification</h3>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                LLC Name *
-              </label>
-              <div className="relative">
-                <input
-                  name="companyName"
-                  id="companyName"
-                  value={formData.companyName}
-                  onChange={(e) => handleChange('companyName', e.target.value)}
-                  className={`w-full text-gray-900 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
-                    errors.companyName ? 'border-red-500' : 'border-gray-200'
-                  }`}
-                  placeholder="Your Business Name"
-                />
-                {isCheckingName && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-600"></div>
-                  </div>
-                )}
-              </div>
-              
-              {/* Name Availability Status */}
-              {nameAvailability.status && !isCheckingName && (
-                <div className={`mt-3 p-3 rounded-lg text-sm ${
-                  nameAvailability.status === 'available' ? 'bg-green-50 text-green-700 border border-green-200' :
-                    nameAvailability.status === 'taken' ? 'bg-red-50 text-red-700 border border-red-200' :
-                      nameAvailability.status === 'similar' ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' :
-                        'bg-gray-50 text-gray-700 border border-gray-200'
-                }`}>
-                  <div className="flex items-center mb-2">
-                    {nameAvailability.status === 'available' && (
-                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    {(nameAvailability.status === 'taken' || nameAvailability.status === 'similar') && (
-                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    <span className="font-medium">{nameAvailability.message}</span>
-                  </div>
-                  
-                  {/* Name Suggestions */}
-                  {nameAvailability.suggestions && nameAvailability.suggestions.length > 0 && (
-                    <div>
-                      <p className="text-xs mb-2">Suggested alternatives:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {nameAvailability.suggestions.map((suggestion, index) => (
-                          <button
-                            key={index}
-                            onClick={() => selectSuggestedName(suggestion)}
-                            className="px-3 py-1 bg-white border border-gray-300 rounded-full text-xs hover:bg-gray-50 transition-colors"
-                          >
-                            {suggestion}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              <p className="text-xs text-amber-600 mt-2">
-                <span className="font-medium">Note:</span> "LLC" will be automatically added to your business name
-              </p>
-              {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
             </div>
           </div>
 
@@ -431,7 +229,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                   <div className="text-sm text-blue-800">
-                    <strong>Additional Details:</strong> After your LLC is formed, we'll send you a link to complete additional questionnaires for services like EIN application and Operating Agreement customization through your client dashboard.
+                    <strong>Next Steps:</strong> After checkout, you&apos;ll receive a questionnaire to complete before we begin filing. This will gather additional details needed for services like EIN application and Operating Agreement customization through your client dashboard.
                   </div>
                 </div>
               </div>
@@ -458,7 +256,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
 
       {/* Trust Indicators */}
       <div className="mt-8 text-center text-sm text-gray-500">
-        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-4">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
           <div className="flex items-center">
             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -478,9 +276,6 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
             <span>Compliance Guaranteed</span>
           </div>
         </div>
-        <p className="text-xs">
-          © 2025 Fabiel.net - All information is kept confidential and secure
-        </p>
       </div>
     </div>
   );

@@ -63,14 +63,42 @@ const US_STATES = [
   { code: 'WI', name: 'Wisconsin' }, { code: 'WY', name: 'Wyoming' }
 ];
 
+// Validation helper functions
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone: string): boolean => {
+  // Check if we have 10 digits (standard US phone)
+  const digitsOnly = phone.replace(/\D/g, '');
+  return digitsOnly.length === 10;
+};
+
+// Format phone number as user types: (555) 123-4567
+const formatPhoneNumber = (value: string): string => {
+  const digits = value.replace(/\D/g, '').slice(0, 10);
+  if (digits.length === 0) return '';
+  if (digits.length <= 3) return `(${digits}`;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
+
+// Get unformatted phone number (digits only) for saving
+const unformatPhoneNumber = (formattedPhone: string): string => {
+  return formattedPhone.replace(/\D/g, '');
+};
+
 const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [displayPhone, setDisplayPhone] = useState(formatPhoneNumber(formData.phone || ''));
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const [stateFees, setStateFees] = useState<StateFee[]>([]);
   const [selectedStateFee, setSelectedStateFee] = useState<StateFee | null>(null);
   const [loadingFees, setLoadingFees] = useState(true);
   const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
   const [stateSearchQuery, setStateSearchQuery] = useState('');
+  const [hasBusinessName, setHasBusinessName] = useState(true);
 
   // Fetch state fees on mount
   useEffect(() => {
@@ -125,11 +153,28 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
     const newErrors: Record<string, string> = {};
 
     if (!formData.formationState) newErrors.formationState = 'Please select a state for your LLC formation';
-    if (!formData.companyName) newErrors.companyName = 'Company name is required';
+    
+    // Business name is optional if user chooses "I don't have a name yet"
+    if (hasBusinessName && !formData.companyName) {
+      newErrors.companyName = 'Company name is required';
+    }
+    
     if (!formData.firstName) newErrors.firstName = 'First name is required';
     if (!formData.lastName) newErrors.lastName = 'Last name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.phone) newErrors.phone = 'Phone number is required';
+    
+    // Email validation
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    // Phone validation
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!validatePhone(formData.phone)) {
+      newErrors.phone = 'Please enter a valid US phone number';
+    }
 
     setErrors(newErrors);
     
@@ -150,10 +195,66 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
 
   const handleChange = (field: keyof LLCFormData, value: string) => {
     updateFormData(field, value);
-    // Clear the error for the field being edited
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+    
+    // Instant validation as user types
+    const newErrors = { ...errors };
+    
+    if (field === 'email') {
+      if (value && !validateEmail(value)) {
+        newErrors.email = 'Please enter a valid email address';
+      } else {
+        delete newErrors.email;
+      }
     }
+    
+    if (field === 'phone') {
+      const digits = value.replace(/\D/g, '');
+      if (value && digits.length > 0 && digits.length < 10) {
+        newErrors.phone = 'Please enter a 10-digit phone number';
+      } else if (value && digits.length === 10) {
+        delete newErrors.phone;
+      } else {
+        delete newErrors.phone;
+      }
+    }
+    
+    if (field === 'companyName' && hasBusinessName && !value) {
+      newErrors.companyName = 'Company name is required';
+    } else if (field === 'companyName') {
+      delete newErrors.companyName;
+    }
+    
+    if (field === 'firstName' && !value) {
+      newErrors.firstName = 'First name is required';
+    } else if (field === 'firstName') {
+      delete newErrors.firstName;
+    }
+    
+    if (field === 'lastName' && !value) {
+      newErrors.lastName = 'Last name is required';
+    } else if (field === 'lastName') {
+      delete newErrors.lastName;
+    }
+    
+    setErrors(newErrors);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const formatted = formatPhoneNumber(input);
+    setDisplayPhone(formatted);
+    // Save unformatted (digits only) to form data
+    updateFormData('phone', unformatPhoneNumber(formatted));
+    
+    // Instant validation
+    const digits = formatted.replace(/\D/g, '');
+    const newErrors = { ...errors };
+    if (digits.length > 0 && digits.length < 10) {
+      newErrors.phone = 'Please enter a 10-digit phone number';
+    } else {
+      delete newErrors.phone;
+    }
+    setErrors(newErrors);
   };
 
   const handleServiceToggle = (serviceKey: keyof LLCFormData) => {
@@ -365,23 +466,67 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
         <div className="max-w-lg mx-auto space-y-4">
           {/* Company Name - Full Width */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Desired LLC Name *
-            </label>
-            <input
-              name="companyName"
-              id="companyName"
-              value={formData.companyName}
-              onChange={(e) => handleChange('companyName', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-gray-900 text-sm ${
-                errors.companyName ? 'border-red-500' : 'border-gray-200'
-              }`}
-              placeholder="Enter your desired LLC name"
-            />
-            <p className="text-xs text-amber-600 mt-1">
-              <span className="font-medium">Do not include "LLC" or "Limited Liability Company"</span>
-            </p>
-            {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Desired LLC Name {hasBusinessName && '*'}
+              </label>
+              <label className="flex items-center text-xs text-gray-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!hasBusinessName}
+                  onChange={(e) => {
+                    setHasBusinessName(!e.target.checked);
+                    if (e.target.checked) {
+                      updateFormData('companyName', '');
+                    }
+                  }}
+                  className="mr-1.5 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                />
+                I don&apos;t have a name yet
+              </label>
+            </div>
+            
+            {hasBusinessName ? (
+              <>
+                <input
+                  name="companyName"
+                  id="companyName"
+                  value={formData.companyName}
+                  onChange={(e) => handleChange('companyName', e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-gray-900 text-sm ${
+                    errors.companyName ? 'border-red-500' : 'border-gray-200'
+                  }`}
+                  placeholder="Enter your desired LLC name"
+                />
+                <div className="flex items-center justify-between mt-1">
+                  <p className="text-xs text-amber-600">
+                    <span className="font-medium">Do not include "LLC" or "Limited Liability Company"</span>
+                  </p>
+                  <a 
+                    href="/blog/how-to-check-llc-name-availability"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    How to check name availability →
+                  </a>
+                </div>
+                {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
+              </>
+            ) : (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                <p className="font-medium">No problem!</p>
+                <p className="text-xs mt-1">You can provide your business name later in the questionnaire after checkout. We recommend checking name availability in your state first.</p>
+                <a 
+                  href="/blog/how-to-check-llc-name-availability"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline mt-2 inline-block"
+                >
+                  Learn how to check name availability →
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Name Fields - Two Columns */}
@@ -448,8 +593,8 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
               <input
                 name="phone"
                 id="phone"
-                value={formData.phone}
-                onChange={(e) => handleChange('phone', e.target.value)}
+                value={displayPhone}
+                onChange={handlePhoneChange}
                 className={`w-full  text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
                   errors.phone ? 'border-red-500' : 'border-gray-200'
                 }`}
@@ -481,7 +626,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
 
       {/* Trust Indicators */}
       <div className="mt-8 text-center text-sm text-gray-500">
-        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-4">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
           <div className="flex items-center">
             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -501,9 +646,6 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
             <span>Registered Agent Available</span>
           </div>
         </div>
-        <p className="text-xs">
-          © 2025 Fabiel.net - Professional Business Formation Services
-        </p>
       </div>
     </div>
   );

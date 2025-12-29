@@ -1,4 +1,4 @@
-import { LLCFormData } from '../types';
+import { LLCFormData, WEB_SERVICE_PRICING } from '../types';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -29,6 +29,9 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
   const [questionnaireToken, setQuestionnaireToken] = useState<string | null>(null);
   const { locale } = useParams<{ locale: string }>();
 
+  // Check if user qualifies for 25% discount
+  const hasSubscriptionDiscount = formData.registeredAgent || formData.compliance;
+
   // Calculate service breakdown
   const getServiceBreakdown = (): ServiceBreakdown => {
     const oneTimeServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [
@@ -44,12 +47,21 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
     }
 
     const monthlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [];
-    if (formData.website === 'basic') {
-      monthlyServices.push({ name: 'Basic Website', price: 9.99, status: 'pending' });
-    } else if (formData.website === 'pro') {
-      monthlyServices.push({ name: 'Pro Website', price: 49.99, status: 'pending' });
-    } else if (formData.website === 'ecommerce') {
-      monthlyServices.push({ name: 'E-commerce Website', price: 49.99, status: 'pending' });
+    if (formData.website === 'essential') {
+      const price = hasSubscriptionDiscount 
+        ? WEB_SERVICE_PRICING.essential.price * 0.75 
+        : WEB_SERVICE_PRICING.essential.price;
+      monthlyServices.push({ name: 'Essential Website', price, status: 'pending' });
+    } else if (formData.website === 'professional') {
+      const price = hasSubscriptionDiscount 
+        ? WEB_SERVICE_PRICING.professional.price * 0.75 
+        : WEB_SERVICE_PRICING.professional.price;
+      monthlyServices.push({ name: 'Professional Website', price, status: 'pending' });
+    } else if (formData.website === 'blogPro') {
+      const price = hasSubscriptionDiscount 
+        ? WEB_SERVICE_PRICING.blogPro.price * 0.75 
+        : WEB_SERVICE_PRICING.blogPro.price;
+      monthlyServices.push({ name: 'Blog Pro Website', price, status: 'pending' });
     }
 
     return { oneTimeServices, yearlyServices, monthlyServices };
@@ -98,7 +110,11 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
 
   const saveOrderToDatabase = async () => {
     const totalAmount = serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0);
-    const websiteService = formData.website === 'basic' ? 'BASIC' : formData.website === 'pro' || formData.website === 'ecommerce' ? 'PRO' : null;
+    // Map new website types to database values
+    const websiteService = formData.website === 'essential' ? 'ESSENTIAL' 
+      : formData.website === 'professional' ? 'PROFESSIONAL' 
+      : formData.website === 'blogPro' ? 'BLOG_PRO' 
+      : null;
     const stateCode = formData.formationState || 'CA';
     const payload = {
       orderId,

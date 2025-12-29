@@ -25,12 +25,14 @@ export default function LocalizedQuestionnairePage() {
     submitting,
     submitted,
     progress,
+    missingFields,
     updateResponse,
     saveProgress,
     submitQuestionnaire,
     goToSection,
     nextSection,
-    prevSection
+    prevSection,
+    clearResponses
   } = useQuestionnaire({ token });
 
   // Loading state
@@ -164,10 +166,16 @@ export default function LocalizedQuestionnairePage() {
                 saving={saving}
                 submitting={submitting}
                 canSubmit={progress === 100}
+                missingFields={missingFields}
                 onPrevious={prevSection}
                 onNext={nextSection}
                 onSave={saveProgress}
                 onSubmit={submitQuestionnaire}
+                onClear={clearResponses}
+                onGoToSection={(sectionId) => {
+                  const idx = sections.findIndex(s => s.id === sectionId);
+                  if (idx >= 0) goToSection(idx);
+                }}
               />
             </>
           ) : (

@@ -1,5 +1,19 @@
 // Questionnaire Schema Definition
 // This defines all sections and questions for the LLC formation questionnaire
+//
+// PRODUCT VISIBILITY RULES:
+// - LLC Formation (base): Basic Info, Members, Management, Review sections (always shown)
+// - EIN Product: Shows Tax Classification and EIN sections
+// - Operating Agreement Product: Shows Operating Agreement section
+// - Bank Resolution Product: Shows Bank Resolution section
+// - Registered Agent Product: Shows Registered Agent section
+//
+// EXAMPLE SCENARIOS:
+// 1. LLC Only: Basic Info → Members → Management → Review (4 sections)
+// 2. LLC + EIN: Basic Info → Members → Management → Tax → EIN → Review (6 sections)
+// 3. LLC + Operating Agreement: Basic Info → Members → Management → Operating Agreement → Review (5 sections)
+// 4. LLC + EIN + Operating Agreement: All except Bank Resolution and Registered Agent (7 sections)
+// 5. Full Package (all products): All 9 sections
 
 import { QuestionnaireSection } from './types';
 
@@ -112,8 +126,8 @@ export const questionnaireSchema: QuestionnaireSection[] = [
             { value: 'individual', label: 'Individual' },
             { value: 'entity', label: 'Business Entity' }
           ], required: true },
-          { id: 'full_name', type: 'text', label: 'Full Legal Name', required: true },
-          { id: 'entity_type', type: 'select', label: 'Entity Type', visibility: { type: 'answer', questionId: 'member_type', answerValue: 'entity', operator: 'equals' }, options: [
+          { id: 'full_name', type: 'text', label: 'Full Legal Name', required: true, helpText: 'For individuals: your full legal name. For entities: the entity\'s legal name.' },
+          { id: 'entity_type', type: 'select', label: 'Entity Type', visibility: { type: 'answer', questionId: 'member_type', answerValue: 'entity', operator: 'equals' }, required: true, options: [
             { value: 'llc', label: 'LLC' },
             { value: 'corporation', label: 'Corporation' },
             { value: 'partnership', label: 'Partnership' },
@@ -125,8 +139,9 @@ export const questionnaireSchema: QuestionnaireSection[] = [
           { id: 'zip_code', type: 'text', label: 'ZIP Code', required: true },
           { id: 'email', type: 'email', label: 'Email Address', required: true },
           { id: 'phone', type: 'phone', label: 'Phone Number', required: true },
-          { id: 'ownership_percentage', type: 'number', label: 'Ownership Percentage', required: true, min: 0.01, max: 100 },
-          { id: 'ssn_ein', type: 'text', label: 'SSN (Individual) or EIN (Entity)', helpText: 'Required for tax purposes', required: true }
+          { id: 'ownership_percentage', type: 'number', label: 'Ownership Percentage', required: true, min: 0.01, max: 100, helpText: 'For single-member LLCs, this will be 100%' },
+          { id: 'ssn', type: 'text', label: 'Social Security Number (SSN)', helpText: 'Required for tax purposes. Format: XXX-XX-XXXX', required: true, visibility: { type: 'answer', questionId: 'member_type', answerValue: 'individual', operator: 'equals' }},
+          { id: 'ein', type: 'text', label: 'Employer Identification Number (EIN)', helpText: 'The entity\'s EIN. Format: XX-XXXXXXX', required: true, visibility: { type: 'answer', questionId: 'member_type', answerValue: 'entity', operator: 'equals' }}
         ]
       }
     ]
@@ -190,7 +205,7 @@ export const questionnaireSchema: QuestionnaireSection[] = [
     title: 'Tax Classification',
     description: 'Important tax decisions for your LLC',
     order: 4,
-    visibility: { type: 'always' },
+    visibility: { type: 'product', product: 'ein' },
     questions: [
       {
         id: 'tax_classification',
@@ -313,7 +328,12 @@ export const questionnaireSchema: QuestionnaireSection[] = [
         type: 'radio',
         label: 'How will profits and losses be allocated?',
         required: true,
-        visibility: { type: 'always' },
+        visibility: {
+          type: 'answer',
+          questionId: 'member_count',
+          answerValue: 'multi',
+          operator: 'equals'
+        },
         options: [
           { value: 'proportional', label: 'Proportional to ownership', description: 'Each member receives their ownership percentage' },
           { value: 'equal', label: 'Equal share to all members', description: 'Each member gets the same share regardless of ownership' }
@@ -369,7 +389,12 @@ export const questionnaireSchema: QuestionnaireSection[] = [
         type: 'radio',
         label: 'Can members transfer their ownership to non-members?',
         required: true,
-        visibility: { type: 'always' },
+        visibility: {
+          type: 'answer',
+          questionId: 'member_count',
+          answerValue: 'multi',
+          operator: 'equals'
+        },
         options: [
           { value: 'yes_rofr', label: 'Yes - But other members have right of first refusal' },
           { value: 'yes_approval', label: 'Yes - But requires approval from other members' },
@@ -388,7 +413,7 @@ export const questionnaireSchema: QuestionnaireSection[] = [
     title: 'Registered Agent Information',
     description: 'Your LLC\'s official contact for legal documents',
     order: 7,
-    visibility: { type: 'always' },
+    visibility: { type: 'product', product: 'registered_agent' },
     questions: [
       {
         id: 'ra_selection',

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { QuestionnaireSection } from '@/lib/questionnaire/types';
+import { QuestionnaireSection, Question } from '@/lib/questionnaire/types';
+import { evaluateVisibility } from '@/lib/questionnaire/schema';
 
 interface UseQuestionnaireProps {
   token: string;
@@ -190,26 +191,78 @@ export function useQuestionnaire({ token }: UseQuestionnaireProps) {
     }
   }, [token, fetchQuestionnaire]);
 
-  // Calculate progress
+  // Calculate progress - only count visible required questions
   const calculateProgress = useCallback(() => {
     if (!sections.length) return 0;
     
+    const products = questionnaire?.products || [];
     let totalQuestions = 0;
     let answeredQuestions = 0;
     
     sections.forEach(section => {
       section.questions.forEach(q => {
-        if (q.required) {
+        // Only count questions that are both required AND visible
+        if (q.required && evaluateVisibility(q.visibility, products, responses)) {
           totalQuestions++;
           if (responses[q.id] !== undefined && responses[q.id] !== '' && responses[q.id] !== null) {
-            answeredQuestions++;
+            // For complex types like member_list, check if array has items
+            if (q.type === 'member_list' && Array.isArray(responses[q.id])) {
+              if (responses[q.id].length > 0) {
+                answeredQuestions++;
+              }
+            } else if (q.type === 'address' && typeof responses[q.id] === 'object') {
+              // For address, check if essential fields are filled
+              const addr = responses[q.id];
+              if (addr.street && addr.city && addr.state && addr.zipCode) {
+                answeredQuestions++;
+              }
+            } else {
+              answeredQuestions++;
+            }
           }
         }
       });
     });
     
     return totalQuestions > 0 ? Math.round((answeredQuestions / totalQuestions) * 100) : 0;
-  }, [sections, responses]);
+  }, [sections, responses, questionnaire?.products]);
+
+  // Get list of missing required fields
+  const getMissingFields = useCallback((): { sectionId: string; sectionTitle: string; questionId: string; questionLabel: string }[] => {
+    if (!sections.length) return [];
+    
+    const products = questionnaire?.products || [];
+    const missing: { sectionId: string; sectionTitle: string; questionId: string; questionLabel: string }[] = [];
+    
+    sections.forEach(section => {
+      section.questions.forEach(q => {
+        // Only check questions that are both required AND visible
+        if (q.required && evaluateVisibility(q.visibility, products, responses)) {
+          const value = responses[q.id];
+          let isMissing = value === undefined || value === '' || value === null;
+          
+          // Special handling for complex types
+          if (!isMissing && q.type === 'member_list' && Array.isArray(value)) {
+            isMissing = value.length === 0;
+          } else if (!isMissing && q.type === 'address' && typeof value === 'object') {
+            const addr = value;
+            isMissing = !addr.street || !addr.city || !addr.state || !addr.zipCode;
+          }
+          
+          if (isMissing) {
+            missing.push({
+              sectionId: section.id,
+              sectionTitle: section.title,
+              questionId: q.id,
+              questionLabel: q.label
+            });
+          }
+        }
+      });
+    });
+    
+    return missing;
+  }, [sections, responses, questionnaire?.products]);
 
   return {
     loading,
@@ -224,6 +277,7 @@ export function useQuestionnaire({ token }: UseQuestionnaireProps) {
     submitting,
     submitted,
     progress: calculateProgress(),
+    missingFields: getMissingFields(),
     isFirstSection: currentSectionIndex === 0,
     isLastSection: currentSectionIndex === sections.length - 1,
     updateResponse,
@@ -233,6 +287,7 @@ export function useQuestionnaire({ token }: UseQuestionnaireProps) {
     goToSection,
     nextSection,
     prevSection,
+    clearResponses: () => setResponses({}),
     refetch: fetchQuestionnaire
   };
 }

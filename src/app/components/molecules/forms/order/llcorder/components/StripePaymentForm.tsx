@@ -1,6 +1,20 @@
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { LLCFormData } from '../types';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
+import { RiBankCardLine, RiAddLine, RiCheckLine } from 'react-icons/ri';
+
+interface SavedPaymentMethod {
+  id: string;
+  provider: string;
+  type: string;
+  cardBrand: string | null;
+  cardLast4: string | null;
+  cardExpMonth: number | null;
+  cardExpYear: number | null;
+  isDefault: boolean;
+  nickname: string | null;
+  stripePaymentMethodId?: string;
+}
 
 interface StripePaymentFormProps {
   amount: number;
@@ -27,15 +41,129 @@ const StripePaymentForm = ({
   const elements = useElements();
   const [error, setError] = useState<string>('');
   const [customerId, setCustomerId] = useState<string | null>(null);
+  
+  // Saved payment methods state
+  const [savedPaymentMethods, setSavedPaymentMethods] = useState<SavedPaymentMethod[]>([]);
+  const [selectedSavedMethod, setSelectedSavedMethod] = useState<string | null>(null);
+  const [loadingSavedMethods, setLoadingSavedMethods] = useState(true);
+  const [useNewCard, setUseNewCard] = useState(false);
+  const [saveCardForFuture, setSaveCardForFuture] = useState(true);
+
+  // Fetch saved payment methods on mount
+  useEffect(() => {
+    const fetchSavedMethods = async () => {
+      try {
+        const res = await fetch('/api/dashboard/payment-methods', {
+          credentials: 'include'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setSavedPaymentMethods(data.paymentMethods || []);
+          // Auto-select default method if exists
+          const defaultMethod = data.paymentMethods?.find((pm: SavedPaymentMethod) => pm.isDefault);
+          if (defaultMethod) {
+            setSelectedSavedMethod(defaultMethod.id);
+          } else if (data.paymentMethods?.length > 0) {
+            setSelectedSavedMethod(data.paymentMethods[0].id);
+          } else {
+            setUseNewCard(true);
+          }
+        } else {
+          // No saved methods - use new card
+          setUseNewCard(true);
+        }
+      } catch {
+        setUseNewCard(true);
+      } finally {
+        setLoadingSavedMethods(false);
+      }
+    };
+    
+    fetchSavedMethods();
+  }, []);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!stripe || !elements || processing) return;
+    if (!stripe || processing) return;
   
     setProcessing(true);
     setError('');
   
     try {
+      // Check if using saved payment method
+      if (selectedSavedMethod && !useNewCard) {
+        // Find the saved method to get the Stripe payment method ID
+        const savedMethod = savedPaymentMethods.find(pm => pm.id === selectedSavedMethod);
+        
+        // Create Payment Intent with saved payment method
+        const response = await fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: Math.round(amount * 100),
+            customer: {
+              email: formData.email,
+              name: `${formData.firstName} ${formData.lastName}`,
+              metadata: {
+                companyName: formData.companyName,
+                orderId: `LLC-${Date.now()}`
+              }
+            },
+            savedPaymentMethodId: savedMethod?.id,
+            subscriptions: futureItems,
+            setup_future_usage: futureItems.length > 0 ? 'off_session' : undefined
+          })
+        });
+    
+        const data = await response.json();
+        if (data.customerId) setCustomerId(data.customerId);
+        
+        if (!response.ok) {
+          throw new Error(data.error || 'Payment setup failed');
+        }
+
+        // If payment was already confirmed (using saved method)
+        if (data.paymentIntentId && data.status === 'succeeded') {
+          // Handle subscriptions
+          if (futureItems.length > 0 && data.customerId) {
+            try {
+              await fetch('/api/setup-subscriptions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  customerId: data.customerId,
+                  paymentMethodId: data.paymentMethodId,
+                  subscriptions: futureItems.map((f) => ({
+                    service: f.name,
+                    amount: f.price,
+                    frequency: f.frequency,
+                    delayDays: 10,
+                  })),
+                }),
+              });
+            } catch (e) {
+              console.warn('Subscription setup scheduling failed:', e);
+            }
+          }
+          onSuccess(data.paymentIntentId);
+          return;
+        }
+
+        // Otherwise confirm with Stripe
+        const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret);
+        
+        if (confirmError) throw confirmError;
+        if (!paymentIntent) throw new Error('Payment failed');
+
+        onSuccess(paymentIntent.id);
+        return;
+      }
+
+      // Using new card - need elements
+      if (!elements) {
+        throw new Error('Payment form not ready');
+      }
+
       // 1. Submit elements FIRST (validates and collects wallet details)
       const { error: submitError } = await elements.submit();
       if (submitError) {
@@ -57,7 +185,8 @@ const StripePaymentForm = ({
             }
           },
           subscriptions: futureItems,
-          setup_future_usage: futureItems.length > 0 ? 'off_session' : undefined
+          setup_future_usage: (futureItems.length > 0 || saveCardForFuture) ? 'off_session' : undefined,
+          savePaymentMethod: saveCardForFuture
         })
       });
   
@@ -82,7 +211,24 @@ const StripePaymentForm = ({
       if (error) throw error;
       if (!paymentIntent) throw new Error('Payment failed');
   
-      // 4. Handle success: schedule subscriptions for 10 days later
+      // 4. Save the payment method if requested
+      if (saveCardForFuture && paymentIntent.payment_method) {
+        try {
+          await fetch('/api/dashboard/payment-methods', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              paymentMethodId: paymentIntent.payment_method,
+              setAsDefault: savedPaymentMethods.length === 0
+            })
+          });
+        } catch (e) {
+          console.warn('Failed to save payment method:', e);
+        }
+      }
+
+      // 5. Handle success: schedule subscriptions for 10 days later
       if (futureItems.length > 0 && customerId) {
         try {
           await fetch('/api/setup-subscriptions', {
@@ -111,14 +257,111 @@ const StripePaymentForm = ({
     }
   };
 
+  if (loadingSavedMethods) {
+    return (
+      <div className="flex items-center justify-center py-6">
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-amber-600"></div>
+        <span className="ml-2 text-gray-600">Loading payment methods...</span>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement options={{
-        layout: 'tabs',
-        wallets: { applePay: 'never', googlePay: 'never' }
-      }} />
+      {/* Saved Payment Methods */}
+      {savedPaymentMethods.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-gray-700">Select payment method</p>
+          
+          {savedPaymentMethods.map((pm) => (
+            <label
+              key={pm.id}
+              className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                selectedSavedMethod === pm.id && !useNewCard
+                  ? 'border-amber-500 bg-amber-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <input
+                type="radio"
+                name="paymentMethod"
+                checked={selectedSavedMethod === pm.id && !useNewCard}
+                onChange={() => {
+                  setSelectedSavedMethod(pm.id);
+                  setUseNewCard(false);
+                }}
+                className="w-4 h-4 text-amber-600 focus:ring-amber-500"
+              />
+              <RiBankCardLine className="w-5 h-5 text-gray-500" />
+              <div className="flex-1">
+                <span className="font-medium text-gray-900">
+                  {pm.nickname || `${pm.cardBrand?.charAt(0).toUpperCase()}${pm.cardBrand?.slice(1) || 'Card'}`}
+                </span>
+                <span className="text-gray-500 ml-2">•••• {pm.cardLast4}</span>
+                {pm.cardExpMonth && pm.cardExpYear && (
+                  <span className="text-gray-400 text-sm ml-2">
+                    {pm.cardExpMonth.toString().padStart(2, '0')}/{pm.cardExpYear.toString().slice(-2)}
+                  </span>
+                )}
+              </div>
+              {pm.isDefault && (
+                <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Default</span>
+              )}
+              {selectedSavedMethod === pm.id && !useNewCard && (
+                <RiCheckLine className="w-5 h-5 text-amber-600" />
+              )}
+            </label>
+          ))}
+          
+          {/* Add New Card Option */}
+          <label
+            className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+              useNewCard
+                ? 'border-amber-500 bg-amber-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <input
+              type="radio"
+              name="paymentMethod"
+              checked={useNewCard}
+              onChange={() => setUseNewCard(true)}
+              className="w-4 h-4 text-amber-600 focus:ring-amber-500"
+            />
+            <RiAddLine className="w-5 h-5 text-gray-500" />
+            <span className="font-medium text-gray-900">Use a new card</span>
+          </label>
+        </div>
+      )}
+
+      {/* New Card Form */}
+      {(useNewCard || savedPaymentMethods.length === 0) && (
+        <div className="space-y-4">
+          {savedPaymentMethods.length > 0 && (
+            <div className="border-t pt-4 mt-4">
+              <p className="text-sm font-medium text-gray-700 mb-3">Enter card details</p>
+            </div>
+          )}
+          
+          <PaymentElement options={{
+            layout: 'tabs',
+            wallets: { applePay: 'never', googlePay: 'never' }
+          }} />
+          
+          {/* Save card checkbox */}
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={saveCardForFuture}
+              onChange={(e) => setSaveCardForFuture(e.target.checked)}
+              className="w-4 h-4 text-amber-600 rounded focus:ring-amber-500"
+            />
+            <span className="text-sm text-gray-600">Save this card for future purchases</span>
+          </label>
+        </div>
+      )}
       
-      {error && <div className="text-red-500">{error}</div>}
+      {error && <div className="text-red-500 text-sm p-3 bg-red-50 rounded-lg">{error}</div>}
 
       <button
         type="submit"

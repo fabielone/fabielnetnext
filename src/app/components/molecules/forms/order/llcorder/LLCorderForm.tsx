@@ -49,7 +49,15 @@ const calculateOrderTotal = (formData: LLCFormData): number => {
   let total = 124.99; // Base price
   if (formData.registeredAgent) total += 149;
   if (formData.compliance) total += 99;
-  if (formData.website) total += 299;
+  
+  // Web services with 25% discount if compliance or registered agent selected
+  const hasSubscriptionDiscount = formData.registeredAgent || formData.compliance;
+  if (formData.website === 'essential') {
+    total += hasSubscriptionDiscount ? 29.99 * 0.75 : 29.99;
+  } else if (formData.website === 'professional' || formData.website === 'blogPro') {
+    total += hasSubscriptionDiscount ? 49.99 * 0.75 : 49.99;
+  }
+  
   return total;
 };
 
@@ -302,13 +310,6 @@ const LLCOrderForm = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="bg-white border-t border-amber-200 py-4">
-        <div className="max-w-4xl mx-auto px-4 text-center text-xs text-gray-500">
-          <p>© 2025 Fabiel.net - Professional Business Formation Services</p>
         </div>
       </div>
     </div>

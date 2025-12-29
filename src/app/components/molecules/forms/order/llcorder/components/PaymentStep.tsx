@@ -1,7 +1,7 @@
 // components/PaymentStep.tsx
 'use client'
 import { useState, Suspense, lazy } from 'react';
-import { LLCFormData , UpdateFormData } from '../types';
+import { LLCFormData , UpdateFormData, WEB_SERVICE_PRICING } from '../types';
 import LoadingSpinner from '../../../../../atoms/LoadingSpinner';
 
 // Dynamic imports for Stripe components
@@ -24,6 +24,9 @@ interface PaymentStepProps {
 const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepProps) => {
   const [processing, setProcessing] = useState(false);
 
+  // Check if user qualifies for 25% discount (has compliance OR registered agent selected)
+  const hasSubscriptionDiscount = formData.registeredAgent || formData.compliance;
+
   // Calculate order breakdown - ONLY main service charged today
   const getOrderBreakdown = () => {
     const todayItems = [
@@ -36,8 +39,10 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
     const futureItems: Array<{
       name: string;
       price: number;
+      originalPrice?: number;
       frequency: 'monthly' | 'yearly';
       note: string;
+      hasDiscount?: boolean;
     }> = [];
     
     if (formData.registeredAgent) {
@@ -58,26 +63,39 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
       });
     }
     
-    if (formData.website === 'basic') {
+    // Web services with 25% discount if applicable
+    if (formData.website === 'essential') {
+      const basePrice = WEB_SERVICE_PRICING.essential.price;
+      const discountedPrice = hasSubscriptionDiscount ? basePrice * 0.75 : basePrice;
       futureItems.push({ 
-        name: 'Basic Website', 
-        price: 9.99,
+        name: 'Essential Website', 
+        price: discountedPrice,
+        originalPrice: hasSubscriptionDiscount ? basePrice : undefined,
         frequency: 'monthly',
-        note: 'Billed in 10 days'
+        note: 'Billed in 10 days',
+        hasDiscount: hasSubscriptionDiscount
       });
-    } else if (formData.website === 'pro') {
+    } else if (formData.website === 'professional') {
+      const basePrice = WEB_SERVICE_PRICING.professional.price;
+      const discountedPrice = hasSubscriptionDiscount ? basePrice * 0.75 : basePrice;
       futureItems.push({ 
-        name: 'Pro Website', 
-        price: 49.99,
+        name: 'Professional Website', 
+        price: discountedPrice,
+        originalPrice: hasSubscriptionDiscount ? basePrice : undefined,
         frequency: 'monthly',
-        note: 'Billed in 10 days'
+        note: 'Billed in 10 days',
+        hasDiscount: hasSubscriptionDiscount
       });
-    } else if (formData.website === 'ecommerce') {
+    } else if (formData.website === 'blogPro') {
+      const basePrice = WEB_SERVICE_PRICING.blogPro.price;
+      const discountedPrice = hasSubscriptionDiscount ? basePrice * 0.75 : basePrice;
       futureItems.push({ 
-        name: 'E-commerce Website', 
-        price: 49.99,
+        name: 'Blog Pro Website', 
+        price: discountedPrice,
+        originalPrice: hasSubscriptionDiscount ? basePrice : undefined,
         frequency: 'monthly',
-        note: 'Billed in 10 days'
+        note: 'Billed in 10 days',
+        hasDiscount: hasSubscriptionDiscount
       });
     }
 
@@ -144,9 +162,21 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
                 <div key={index} className="text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">{item.name}</span>
-                    <span className="font-medium">${item.price.toFixed(2)}/{item.frequency.slice(0, -2)}</span>
+                    <div className="text-right">
+                      {item.hasDiscount && item.originalPrice && (
+                        <span className="text-xs text-gray-400 line-through mr-2">
+                          ${item.originalPrice.toFixed(2)}
+                        </span>
+                      )}
+                      <span className="font-medium">${item.price.toFixed(2)}/{item.frequency.slice(0, -2)}</span>
+                    </div>
                   </div>
-                  <div className="text-xs text-amber-600 mt-1">{item.note}</div>
+                  <div className="flex justify-between items-center mt-1">
+                    <span className="text-xs text-amber-600">{item.note}</span>
+                    {item.hasDiscount && (
+                      <span className="text-xs text-green-600 font-medium">25% off!</span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -260,9 +290,6 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
             <span>Money Back Guarantee</span>
           </div>
         </div>
-        <p className="text-xs">
-          © 2025 Fabiel.net - Your payment information is secure and encrypted
-        </p>
       </div>
     </div>
   );

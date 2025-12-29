@@ -16,6 +16,9 @@ export interface RegisteredAgentPrice {
   firstYearFee: number | null;
 }
 
+// Web service tiers
+export type WebServiceTier = 'essential' | 'professional' | 'blogPro' | null;
+
 export interface LLCFormData {
   // Basic Info
   companyName: string;
@@ -31,7 +34,7 @@ export interface LLCFormData {
   registeredAgent: boolean;
   compliance: boolean;
   paymentMethod: 'stripe' | 'paypal';
-  website: string | null;
+  website: WebServiceTier;
   phone: string;
   address: string;
   managementStructure?: string;
@@ -57,6 +60,54 @@ export interface LLCFormData {
   needOperatingAgreement?: boolean;
   needBankLetter?: boolean;
 }
+
+// Web service pricing configuration
+export const WEB_SERVICE_PRICING = {
+  essential: {
+    name: 'Essential',
+    price: 29.99,
+    originalPrice: 59.99,
+    features: [
+      'Professional business website',
+      'Company information pages',
+      'Contact form with notifications',
+      'Portfolio/gallery section',
+      'Mobile responsive design',
+      'SSL certificate included',
+      'Basic SEO setup'
+    ]
+  },
+  professional: {
+    name: 'Professional',
+    price: 49.99,
+    originalPrice: 99.99,
+    features: [
+      'Everything in Essential',
+      'Live chat integration',
+      'Chat automation & auto-responses',
+      'Appointment scheduling system',
+      'Basic e-commerce (up to 25 products)',
+      'Payment processing setup',
+      'Advanced SEO optimization',
+      'Priority support'
+    ]
+  },
+  blogPro: {
+    name: 'Blog Pro',
+    price: 49.99,
+    originalPrice: 99.99,
+    features: [
+      'Everything in Essential',
+      'Blog with monetization setup',
+      'Ad integration (Google AdSense)',
+      'Automated content scheduling',
+      'Email newsletter integration',
+      'Social media automation',
+      'Analytics dashboard',
+      'Content performance tracking'
+    ]
+  }
+} as const;
 
 export type Step = {
   id: number;

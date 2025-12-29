@@ -40,6 +40,7 @@ export default function QuestionnaireSection({
             value={responses[question.id]}
             onChange={(value) => onResponseChange(question.id, value)}
             error={errors[question.id]}
+            allResponses={responses}
           />
         ))}
       </div>

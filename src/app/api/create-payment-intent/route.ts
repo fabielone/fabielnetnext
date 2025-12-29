@@ -13,7 +13,7 @@ function getStripe() {
 export async function POST(request: Request) {
   try {
     const stripe = getStripe()
-    const { amount, customer, subscriptions, setup_future_usage } = await request.json();
+    const { amount, customer, subscriptions, setup_future_usage, savedPaymentMethodId, savePaymentMethod } = await request.json();
 
     // Validate required fields
     if (!customer?.email) {
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Find or create Stripe customer
-    let stripeCustomer;
+    let stripeCustomer: Stripe.Customer | Stripe.DeletedCustomer;
     if (user.stripeCustomerId) {
       stripeCustomer = await stripe.customers.retrieve(user.stripeCustomerId);
     } else {
@@ -88,21 +88,58 @@ export async function POST(request: Request) {
       });
     }
 
-    // 3. Create Payment Intent
+    // 3. Check if using a saved payment method
+    if (savedPaymentMethodId) {
+      // Find the saved payment method
+      const savedMethod = await prisma.savedPaymentMethod.findUnique({
+        where: { id: savedPaymentMethodId }
+      });
+
+      if (!savedMethod || !savedMethod.stripePaymentMethodId) {
+        return NextResponse.json(
+          { error: 'Invalid saved payment method' },
+          { status: 400 }
+        );
+      }
+
+      // Create and confirm PaymentIntent with the saved payment method
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: 'usd',
+        customer: stripeCustomer.id,
+        payment_method: savedMethod.stripePaymentMethodId,
+        off_session: true,
+        confirm: true,
+        metadata: {
+          userId: user.id,
+          subscriptions: JSON.stringify(subscriptions || [])
+        }
+      });
+
+      return NextResponse.json({
+        paymentIntentId: paymentIntent.id,
+        status: paymentIntent.status,
+        customerId: stripeCustomer.id,
+        paymentMethodId: savedMethod.stripePaymentMethodId
+      });
+    }
+
+    // 4. Create Payment Intent for new card
     const intentParams: Stripe.PaymentIntentCreateParams = {
       amount,
       currency: 'usd',
       customer: stripeCustomer.id,
       metadata: {
         userId: user.id,
-        subscriptions: JSON.stringify(subscriptions)
+        subscriptions: JSON.stringify(subscriptions || []),
+        savePaymentMethod: savePaymentMethod ? 'true' : 'false'
       },
       // Let Stripe determine payment methods available for the mode/amount/currency
       automatic_payment_methods: { enabled: true },
     };
 
-    if (setup_future_usage) {
-      intentParams.setup_future_usage = setup_future_usage as any;
+    if (setup_future_usage || savePaymentMethod) {
+      intentParams.setup_future_usage = 'off_session';
     }
 
     const paymentIntent = await stripe.paymentIntents.create(intentParams);
@@ -113,6 +150,15 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Payment setup error:', error);
+    
+    // Handle Stripe card errors (e.g., card declined)
+    if (error instanceof Stripe.errors.StripeCardError) {
+      return NextResponse.json(
+        { error: error.message || 'Your card was declined' },
+        { status: 400 }
+      );
+    }
+    
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Payment setup failed' },
       { status: 500 }

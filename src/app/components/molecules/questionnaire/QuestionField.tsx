@@ -1,20 +1,46 @@
 'use client';
 
-import { Question, MemberField } from '@/lib/questionnaire/types';
+import { Question, MemberField, VisibilityCondition } from '@/lib/questionnaire/types';
 import { PlusIcon, TrashIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+
+// Helper function to evaluate visibility for member fields
+function evaluateMemberFieldVisibility(
+  visibility: VisibilityCondition | undefined,
+  memberData: Record<string, any>
+): boolean {
+  if (!visibility) return true;
+  
+  switch (visibility.type) {
+    case 'always':
+      return true;
+    case 'answer': {
+      const answer = memberData[visibility.questionId!];
+      if (visibility.operator === 'equals') {
+        return answer === visibility.answerValue;
+      } else if (visibility.operator === 'not_equals') {
+        return answer !== visibility.answerValue;
+      }
+      return true;
+    }
+    default:
+      return true;
+  }
+}
 
 interface QuestionFieldProps {
   question: Question;
   value: any;
   onChange: (value: any) => void;
   error?: string;
+  allResponses?: Record<string, any>; // Add access to all responses for conditional logic
 }
 
 export default function QuestionField({
   question,
   value,
   onChange,
-  error
+  error,
+  allResponses = {}
 }: QuestionFieldProps) {
   const renderField = () => {
     switch (question.type) {
@@ -212,7 +238,7 @@ export default function QuestionField({
       }
 
       case 'member_list':
-        return <MemberListField question={question} value={value} onChange={onChange} />;
+        return <MemberListField question={question} value={value} onChange={onChange} allResponses={allResponses} />;
 
       default:
         return (
@@ -260,19 +286,38 @@ export default function QuestionField({
 function MemberListField({
   question,
   value,
-  onChange
+  onChange,
+  allResponses = {}
 }: {
   question: Question;
   value: any;
   onChange: (value: any) => void;
+  allResponses?: Record<string, any>;
 }) {
   const members = Array.isArray(value) ? value : [];
   const memberFields = question.memberFields || [];
+  
+  // Check if this is a single-member LLC (limits to 1 member)
+  const isSingleMember = allResponses['member_count'] === 'single';
+  const isManagerList = memberFields.some(f => f.id === 'manager_name');
+  const maxMembers = isSingleMember && !isManagerList ? 1 : Infinity;
+  const canAddMore = members.length < maxMembers;
 
   const addMember = () => {
+    if (!canAddMore) return;
+    
     const newMember: Record<string, any> = {};
     memberFields.forEach(field => {
-      newMember[field.id] = field.type === 'number' ? 0 : '';
+      if (field.type === 'number') {
+        // For single-member LLC, auto-set ownership to 100%
+        if (field.id === 'ownership_percentage' && isSingleMember && !isManagerList) {
+          newMember[field.id] = 100;
+        } else {
+          newMember[field.id] = 0;
+        }
+      } else {
+        newMember[field.id] = '';
+      }
     });
     onChange([...members, newMember]);
   };
@@ -285,52 +330,91 @@ function MemberListField({
   const updateMember = (index: number, fieldId: string, fieldValue: any) => {
     const updated = members.map((m: any, i: number) => {
       if (i === index) {
-        return { ...m, [fieldId]: fieldValue };
+        const updatedMember = { ...m, [fieldId]: fieldValue };
+        
+        // If member_type changes, clear the entity-specific or individual-specific fields
+        if (fieldId === 'member_type') {
+          if (fieldValue === 'individual') {
+            // Clear entity fields when switching to individual
+            updatedMember.entity_type = '';
+            updatedMember.ein = '';
+          } else if (fieldValue === 'entity') {
+            // Clear individual fields when switching to entity
+            updatedMember.ssn = '';
+          }
+        }
+        
+        return updatedMember;
       }
       return m;
     });
     onChange(updated);
   };
 
+  // Get visible fields for a specific member (based on that member's data)
+  const getVisibleFields = (memberData: Record<string, any>) => {
+    return memberFields.filter(field => 
+      evaluateMemberFieldVisibility(field.visibility, memberData)
+    );
+  };
+
   return (
     <div className="space-y-4">
-      {members.map((member: any, index: number) => (
-        <div key={index} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-          <div className="flex justify-between items-center mb-4">
-            <h4 className="font-medium text-gray-900">
-              {memberFields.some(f => f.id === 'manager_name') ? 'Manager' : 'Member'} {index + 1}
-            </h4>
-            {members.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeMember(index)}
-                className="text-red-600 hover:text-red-700 p-1"
-              >
-                <TrashIcon className="w-5 h-5" />
-              </button>
-            )}
+      {members.map((member: any, index: number) => {
+        const visibleFields = getVisibleFields(member);
+        
+        return (
+          <div key={index} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-medium text-gray-900">
+                {isManagerList ? 'Manager' : 'Member'} {index + 1}
+                {isSingleMember && !isManagerList && (
+                  <span className="ml-2 text-sm font-normal text-gray-500">(Sole Owner)</span>
+                )}
+              </h4>
+              {(members.length > 1 || (isSingleMember && members.length > 0 && isManagerList)) && (
+                <button
+                  type="button"
+                  onClick={() => removeMember(index)}
+                  className="text-red-600 hover:text-red-700 p-1"
+                  title="Remove"
+                >
+                  <TrashIcon className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {visibleFields.map((field) => (
+                <div key={field.id} className={field.type === 'radio' ? 'md:col-span-2' : ''}>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </label>
+                  {field.helpText && (
+                    <p className="text-xs text-gray-500 mb-1">{field.helpText}</p>
+                  )}
+                  {renderMemberField(field, member[field.id], (val) => updateMember(index, field.id, val))}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {memberFields.map((field) => (
-              <div key={field.id} className={field.type === 'radio' ? 'md:col-span-2' : ''}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {field.label}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
-                </label>
-                {renderMemberField(field, member[field.id], (val) => updateMember(index, field.id, val))}
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-      <button
-        type="button"
-        onClick={addMember}
-        className="flex items-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors w-full justify-center"
-      >
-        <PlusIcon className="w-5 h-5" />
-        Add {memberFields.some(f => f.id === 'manager_name') ? 'Manager' : 'Member'}
-      </button>
+        );
+      })}
+      
+      {canAddMore ? (
+        <button
+          type="button"
+          onClick={addMember}
+          className="flex items-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors w-full justify-center"
+        >
+          <PlusIcon className="w-5 h-5" />
+          Add {isManagerList ? 'Manager' : 'Member'}
+        </button>
+      ) : (
+        <p className="text-sm text-gray-500 text-center py-2 bg-gray-100 rounded-lg">
+          Single-member LLC can only have one owner. Change to &quot;Multiple Members&quot; above to add more owners.
+        </p>
+      )}
     </div>
   );
 }

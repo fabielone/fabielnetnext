@@ -2,7 +2,7 @@
 // Handles questionnaire creation, retrieval, and submission
 
 import prisma from '@/lib/prisma';
-import { QuestionnaireStatus, TaskPriority, TaskStatus } from '@prisma/client';
+import { QuestionnaireStatus, TaskPriority, TaskStatus, BusinessStatus, BusinessEntityType } from '@prisma/client';
 import { questionnaireSchema, getVisibleSections } from './schema';
 import { randomBytes } from 'crypto';
 
@@ -68,6 +68,59 @@ function createPrePopulatedData(order: any): Record<string, any> {
   };
 }
 
+// Create business record for the dashboard when an order is placed
+async function createBusinessForOrder(order: any) {
+  if (!order.userId) {
+    return null;
+  }
+
+  // Check if business already exists for this order
+  const existingBusiness = await prisma.business.findUnique({
+    where: { formationOrderId: order.id }
+  });
+
+  if (existingBusiness) {
+    return existingBusiness;
+  }
+
+  // Create the business with PENDING status
+  const business = await prisma.business.create({
+    data: {
+      ownerId: order.userId,
+      name: order.companyName?.replace(/\s*(LLC|L\.L\.C\.)?\s*$/i, '').trim() || 'New Business',
+      legalName: order.companyName,
+      entityType: BusinessEntityType.LLC,
+      state: order.formationState || order.businessState || 'CA',
+      status: BusinessStatus.PENDING, // Pending until formation is complete
+      formationOrderId: order.id,
+      businessAddress: order.businessAddress,
+      businessCity: order.businessCity,
+      businessZip: order.businessZip,
+      email: order.contactEmail,
+      phone: order.contactPhone,
+      isExisting: false
+    }
+  });
+
+  // Add the purchaser as the first member
+  await prisma.businessMember.create({
+    data: {
+      businessId: business.id,
+      name: `${order.contactFirstName} ${order.contactLastName}`,
+      email: order.contactEmail,
+      phone: order.contactPhone,
+      role: 'OWNER',
+      ownershipPercentage: 100,
+      canViewDocuments: true,
+      canUploadDocuments: true,
+      canManageServices: true,
+      canInviteMembers: true
+    }
+  });
+
+  return business;
+}
+
 // Create questionnaire for a completed order
 export async function createQuestionnaireForOrder(orderId: string) {
   // Get the order
@@ -111,6 +164,9 @@ export async function createQuestionnaireForOrder(orderId: string) {
       tokenExpiresAt: addDays(new Date(), 30) // 30 day expiry
     }
   });
+
+  // Create business record for the dashboard
+  const business = await createBusinessForOrder(order);
 
   // Create pending task
   await prisma.pendingTask.create({
@@ -330,6 +386,9 @@ export async function submitQuestionnaire(
       }
     });
 
+    // Update business with questionnaire data
+    await updateBusinessFromQuestionnaire(tx, questionnaire.orderId, finalResponses);
+
     // Create operating agreement record if purchased
     const products = questionnaire.products as string[];
     if (products.includes('operating_agreement')) {
@@ -404,6 +463,106 @@ function mapTaxClassification(value: string, isSingleMember: boolean) {
   if (value === 's_corp') return 'S_CORPORATION';
   if (value === 'c_corp') return 'C_CORPORATION';
   return isSingleMember ? 'DISREGARDED_ENTITY' : 'PARTNERSHIP';
+}
+
+// Update business record with questionnaire data
+async function updateBusinessFromQuestionnaire(
+  tx: any,
+  orderId: string,
+  responses: Record<string, any>
+) {
+  // Find the business linked to this order
+  const business = await tx.business.findUnique({
+    where: { formationOrderId: orderId }
+  });
+
+  if (!business) {
+    return null; // Business might not exist if it's an older order
+  }
+
+  // Extract address from responses
+  const businessAddress = responses.business_address || {};
+  
+  // Update business with questionnaire data
+  const updatedBusiness = await tx.business.update({
+    where: { id: business.id },
+    data: {
+      name: responses.business_name || business.name,
+      businessAddress: businessAddress.street || business.businessAddress,
+      businessCity: businessAddress.city || business.businessCity,
+      businessZip: businessAddress.zipCode || business.businessZip,
+      // Note: Status stays PENDING until formation is actually complete
+    }
+  });
+
+  // Update/recreate members from questionnaire
+  const memberList = responses.member_list || [];
+  if (memberList.length > 0) {
+    // Delete existing members (except if they have user accounts linked)
+    await tx.businessMember.deleteMany({
+      where: {
+        businessId: business.id,
+        userId: null // Only delete members without linked user accounts
+      }
+    });
+
+    // Create new members from questionnaire
+    for (const member of memberList) {
+      await tx.businessMember.create({
+        data: {
+          businessId: business.id,
+          name: member.full_name || 'Unknown',
+          email: member.email || null,
+          phone: member.phone || null,
+          role: memberList.length === 1 ? 'OWNER' : 'MEMBER',
+          title: member.member_type === 'entity' ? member.entity_type?.toUpperCase() : null,
+          ownershipPercentage: member.ownership_percentage || (100 / memberList.length),
+          canViewDocuments: true,
+          canUploadDocuments: memberList.length === 1,
+          canManageServices: memberList.length === 1,
+          canInviteMembers: memberList.length === 1
+        }
+      });
+    }
+  }
+
+  // Add managers if manager-managed
+  if (responses.management_type === 'manager_managed' && responses.managers) {
+    const managers = responses.managers || [];
+    for (const manager of managers) {
+      // Check if manager already exists as a member
+      const existingMember = await tx.businessMember.findFirst({
+        where: {
+          businessId: business.id,
+          name: manager.manager_name
+        }
+      });
+
+      if (existingMember) {
+        // Update to manager role
+        await tx.businessMember.update({
+          where: { id: existingMember.id },
+          data: { role: 'MANAGER' }
+        });
+      } else {
+        // Create new manager
+        await tx.businessMember.create({
+          data: {
+            businessId: business.id,
+            name: manager.manager_name,
+            role: 'MANAGER',
+            ownershipPercentage: 0, // Managers may not have ownership
+            canViewDocuments: true,
+            canUploadDocuments: true,
+            canManageServices: true,
+            canInviteMembers: false
+          }
+        });
+      }
+    }
+  }
+
+  return updatedBusiness;
 }
 
 // Get state configuration

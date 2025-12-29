@@ -39,6 +39,7 @@ model User {
   questionnaires      QuestionnaireResponse[]
   subscriptions       Subscription[]
   userSessions        UserSession[]
+  savedPaymentMethods SavedPaymentMethod[]
 
   @@map("users")
 }
@@ -750,6 +751,40 @@ model PendingTask {
   @@index([userId, status])
   @@index([taskType])
   @@map("pending_tasks")
+}
+
+model SavedPaymentMethod {
+  id                    String          @id @default(cuid())
+  userId                String          @map("user_id")
+  provider              PaymentProvider
+  
+  // Stripe references
+  stripePaymentMethodId String?         @unique @map("stripe_payment_method_id")
+  stripeCustomerId      String?         @map("stripe_customer_id")
+  
+  // PayPal references  
+  paypalVaultId         String?         @unique @map("paypal_vault_id")
+  
+  // Display info (safe to store, not sensitive)
+  type                  String          // "card", "us_bank_account", "paypal"
+  cardBrand             String?         @map("card_brand") // "visa", "mastercard", etc.
+  cardLast4             String?         @map("card_last4") // "4242"
+  cardExpMonth          Int?            @map("card_exp_month")
+  cardExpYear           Int?            @map("card_exp_year")
+  
+  // PayPal specific
+  paypalEmail           String?         @map("paypal_email")
+  
+  // Preferences
+  isDefault             Boolean         @default(false) @map("is_default")
+  nickname              String?         // User-defined name like "Personal Card"
+  
+  createdAt             DateTime        @default(now()) @map("created_at")
+  updatedAt             DateTime        @updatedAt @map("updated_at")
+  
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("saved_payment_methods")
 }
 
 model PaymentMethodVault {

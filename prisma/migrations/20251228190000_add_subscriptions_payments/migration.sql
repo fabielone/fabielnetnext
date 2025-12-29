@@ -1,16 +1,24 @@
--- CreateEnum
-CREATE TYPE "SubscriptionStatus" AS ENUM ('PENDING', 'ACTIVE', 'PAUSED', 'CANCELLED', 'EXPIRED', 'SUSPENDED');
+-- CreateEnum (only if not exists)
+DO $$ BEGIN
+    CREATE TYPE "SubscriptionStatus" AS ENUM ('pending', 'active', 'paused', 'cancelled', 'expired', 'suspended');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
--- CreateEnum
-CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED');
+-- CreateEnum (only if not exists)
+DO $$ BEGIN
+    CREATE TYPE "PaymentStatus" AS ENUM ('pending', 'completed', 'failed', 'refunded');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateTable
-CREATE TABLE "subscriptions" (
+CREATE TABLE IF NOT EXISTS "subscriptions" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "status" "SubscriptionStatus" NOT NULL DEFAULT 'ACTIVE',
+    "status" "SubscriptionStatus" NOT NULL DEFAULT 'active',
     "amount" DECIMAL(10,2) NOT NULL,
     "currency" TEXT NOT NULL DEFAULT 'usd',
     "interval" TEXT NOT NULL DEFAULT 'month',
@@ -27,14 +35,14 @@ CREATE TABLE "subscriptions" (
 );
 
 -- CreateTable
-CREATE TABLE "payments" (
+CREATE TABLE IF NOT EXISTS "payments" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "order_id" TEXT,
     "subscription_id" TEXT,
     "amount" DECIMAL(10,2) NOT NULL,
     "currency" TEXT NOT NULL DEFAULT 'usd',
-    "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
+    "status" "PaymentStatus" NOT NULL DEFAULT 'pending',
     "payment_method" TEXT NOT NULL,
     "stripe_payment_intent_id" TEXT,
     "paypal_capture_id" TEXT,

@@ -82,6 +82,16 @@ export default function BusinessCard({ business, locale }: BusinessCardProps) {
         </div>
       </div>
 
+      {/* Alert for pending formation */}
+      {business.status === 'PENDING' && !business.formationDate && (
+        <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg text-sm mb-4">
+          <RiTimeLine className="w-4 h-4 text-blue-600" />
+          <span className="text-blue-800">
+            Formation in progress
+          </span>
+        </div>
+      )}
+
       {/* Alert for pending tasks */}
       {business.pendingTaskCount > 0 && (
         <div className="flex items-center gap-2 p-2 bg-amber-50 rounded-lg text-sm mb-4">
