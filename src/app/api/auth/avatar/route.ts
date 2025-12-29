@@ -3,15 +3,21 @@ import { validateSession } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { createClient } from '@supabase/supabase-js'
 
-// Initialize Supabase client for storage
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 const BUCKET_NAME = 'avatars'
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+
+// Helper to get Supabase client
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!url || !key) {
+    throw new Error('Supabase credentials not configured')
+  }
+  
+  return createClient(url, key)
+}
 
 // POST /api/auth/avatar - Upload avatar
 export async function POST(request: Request) {
@@ -49,6 +55,8 @@ export async function POST(request: Request) {
       where: { id: session.userId },
       select: { avatarUrl: true },
     })
+
+    const supabase = getSupabaseClient()
 
     // Delete old avatar if exists
     if (user?.avatarUrl) {
@@ -124,6 +132,8 @@ export async function DELETE() {
       where: { id: session.userId },
       select: { avatarUrl: true },
     })
+
+    const supabase = getSupabaseClient()
 
     // Delete from storage if exists
     if (user?.avatarUrl) {

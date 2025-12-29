@@ -1,7 +1,13 @@
 import Stripe from 'stripe';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY not configured')
+  }
+  return new Stripe(key)
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -10,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    const stripe = getStripe()
     const { amount, formData } = req.body;
 
     const paymentIntent = await stripe.paymentIntents.create({
