@@ -99,12 +99,13 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
   const saveOrderToDatabase = async () => {
     const totalAmount = serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0);
     const websiteService = formData.website === 'basic' ? 'BASIC' : formData.website === 'pro' || formData.website === 'ecommerce' ? 'PRO' : null;
+    const stateCode = formData.formationState || 'CA';
     const payload = {
       orderId,
       companyName: formData.companyName,
       businessAddress: formData.businessAddress,
       businessCity: formData.businessCity,
-      businessState: 'CA',
+      businessState: stateCode,
       businessZip: formData.businessZip,
       businessPurpose: formData.businessPurpose,
       contactFirstName: formData.firstName,
@@ -118,6 +119,7 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       compliance: !!formData.compliance,
       websiteService,
       totalAmount,
+      formationState: stateCode, // Also send formation state
     };
 
     try {
@@ -126,11 +128,15 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+      const data = await res.json().catch(() => ({} as any));
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || 'Failed to save order');
+        throw new Error(data?.error || 'Failed to save order');
       }
-      console.log('Order saved');
+      // Get questionnaire token from order save response
+      if (data?.questionnaireToken) {
+        setQuestionnaireToken(data.questionnaireToken);
+      }
+      console.log('Order saved, questionnaire token:', data?.questionnaireToken);
     } catch (e) {
       console.error('Order save failed (continuing):', e);
     }

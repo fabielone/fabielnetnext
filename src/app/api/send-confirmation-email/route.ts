@@ -69,61 +69,78 @@ export async function POST(req: Request) {
     let resolvedCompany = companyName
     let resolvedCustomer = customerName
     let resolvedAmount = totalAmount
-    if (!resolvedCompany || !resolvedCustomer || typeof resolvedAmount !== 'number') {
-      const { default: prisma } = await import('src/lib/prisma')
-      const db = await prisma.order.findUnique({
-        where: { orderId },
-        select: {
-          companyName: true,
-          contactFirstName: true,
-          contactLastName: true,
-          totalAmount: true,
-          contactEmail: true,
-        }
+    let questionnaireAccessToken: string | null = null
+    
+    const { default: prisma } = await import('src/lib/prisma')
+    
+    // Always fetch from DB to get questionnaire token
+    const db = await prisma.order.findUnique({
+      where: { orderId },
+      select: {
+        id: true,
+        companyName: true,
+        contactFirstName: true,
+        contactLastName: true,
+        totalAmount: true,
+        contactEmail: true,
+      }
+    })
+    
+    if (db) {
+      if (!resolvedCompany) resolvedCompany = db.companyName
+      if (!resolvedCustomer) resolvedCustomer = [db.contactFirstName, db.contactLastName].filter(Boolean).join(' ') || email
+      if (typeof resolvedAmount !== 'number' && db.totalAmount) resolvedAmount = Number(db.totalAmount)
+      // Optional: ensure email matches
+      if (db.contactEmail && db.contactEmail.toLowerCase() !== email.toLowerCase()) {
+        console.warn('[send-confirmation-email] Email mismatch between payload and order record')
+      }
+      
+      // Get questionnaire access token
+      const questionnaire = await prisma.questionnaireResponse.findUnique({
+        where: { orderId: db.id },
+        select: { accessToken: true }
       })
-      if (db) {
-        if (!resolvedCompany) resolvedCompany = db.companyName
-        if (!resolvedCustomer) resolvedCustomer = [db.contactFirstName, db.contactLastName].filter(Boolean).join(' ') || email
-        if (typeof resolvedAmount !== 'number' && db.totalAmount) resolvedAmount = Number(db.totalAmount)
-        // Optional: ensure email matches
-        if (db.contactEmail && db.contactEmail.toLowerCase() !== email.toLowerCase()) {
-          console.warn('[send-confirmation-email] Email mismatch between payload and order record')
-        }
+      if (questionnaire?.accessToken) {
+        questionnaireAccessToken = questionnaire.accessToken
       }
     }
 
     // Send order confirmation
     const { sendLLCConfirmation, sendQuestionnaireLink } = await import('src/lib/email-service')
 
-    const token = await signToken({ orderId, email, exp: Date.now() + 7 * 24 * 60 * 60 * 1000 })
+    const dashboardToken = await signToken({ orderId, email, exp: Date.now() + 7 * 24 * 60 * 60 * 1000 })
     const confirmResp = await withRetry(() => sendLLCConfirmation({
       email,
       companyName: resolvedCompany || 'Your Company',
       customerName: resolvedCustomer || email,
       orderId,
       totalAmount: resolvedAmount ?? 0,
-      token,
+      token: dashboardToken,
     }))
 
     console.log('[send-confirmation-email] Confirmation sent', confirmResp)
 
-    // Send questionnaire link
-    const questionnaireResp = await withRetry(() => sendQuestionnaireLink({
-      email,
-      customerName: resolvedCustomer || email,
-      companyName: resolvedCompany || 'Your Company',
-      orderId,
-      questionnaires: [
-        'Business Details Questionnaire',
-        'Members & Ownership Questionnaire',
-        'Operating Agreement Preferences',
-      ],
-      token,
-    }))
+    // Send questionnaire link (only if we have the questionnaire access token)
+    if (questionnaireAccessToken) {
+      const questionnaireResp = await withRetry(() => sendQuestionnaireLink({
+        email,
+        customerName: resolvedCustomer || email,
+        companyName: resolvedCompany || 'Your Company',
+        orderId,
+        questionnaires: [
+          'Business Details Questionnaire',
+          'Members & Ownership Questionnaire',
+          'Operating Agreement Preferences',
+        ],
+        token: questionnaireAccessToken,
+      }))
 
-    console.log('[send-confirmation-email] Questionnaire sent', questionnaireResp)
+      console.log('[send-confirmation-email] Questionnaire sent', questionnaireResp)
+    } else {
+      console.warn('[send-confirmation-email] No questionnaire token found, skipping questionnaire email')
+    }
 
-    return NextResponse.json({ success: true, token })
+    return NextResponse.json({ success: true, token: questionnaireAccessToken || dashboardToken })
   } catch (err: any) {
     console.error('send-confirmation-email error:', err)
     const message = typeof err?.message === 'string' ? err.message : String(err)

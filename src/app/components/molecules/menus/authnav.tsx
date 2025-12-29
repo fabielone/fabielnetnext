@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut, FiGrid } from 'react-icons/fi';
+import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut, FiGrid, FiShoppingBag, FiCreditCard, FiRefreshCw } from 'react-icons/fi';
 import { useTranslations , useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -131,6 +131,30 @@ export default function AuthNavigation() {
                 >
                   <FiGrid className="h-4 w-4 text-gray-400" />
                   {t('dashboard') || 'Dashboard'}
+                </Link>
+                <Link
+                  href={`/${locale}/dashboard/orders`}
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <FiShoppingBag className="h-4 w-4 text-gray-400" />
+                  {t('orders') || 'Orders'}
+                </Link>
+                <Link
+                  href={`/${locale}/dashboard/subscriptions`}
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <FiRefreshCw className="h-4 w-4 text-gray-400" />
+                  {t('subscriptions') || 'Subscriptions'}
+                </Link>
+                <Link
+                  href={`/${locale}/dashboard/payments`}
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <FiCreditCard className="h-4 w-4 text-gray-400" />
+                  {t('payments') || 'Payments'}
                 </Link>
                 <Link
                   href={`/${locale}/dashboard/settings`}

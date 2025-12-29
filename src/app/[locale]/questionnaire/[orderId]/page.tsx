@@ -1,121 +1,190 @@
-'use client'
-import { useEffect, useState, type FormEvent } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useQuestionnaire } from '@/app/components/hooks/useQuestionnaire';
+import {
+  QuestionnaireProgress,
+  QuestionnaireSection,
+  QuestionnaireNavigation
+} from '@/app/components/molecules/questionnaire';
+import { CheckCircleIcon, ExclamationTriangleIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 export default function LocalizedQuestionnairePage() {
-  const params = useParams<{ locale: string; orderId: string }>()
-  const orderId = (params?.orderId as string) || ''
-  const searchParams = useSearchParams()
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [prefill, setPrefill] = useState<any | null>(null)
+  const searchParams = useSearchParams();
+  const token = searchParams.get('t') || '';
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setSubmitting(true)
-    setError(null)
-    try {
-      const form = new FormData(e.currentTarget)
-      form.set('orderId', orderId)
-      const payload: Record<string, any> = {}
-      form.forEach((v, k) => { payload[k] = v })
-      const res = await fetch('/api/submit-questionnaire', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      if (!res.ok) {
-        const j = await res.json().catch(() => ({}))
-        throw new Error(j.error || 'Failed to submit questionnaire')
-      }
-      setSuccess(true)
-    } catch (err: any) {
-      setError(err?.message || 'Submission failed')
-    } finally {
-      setSubmitting(false)
-    }
+  const {
+    loading,
+    error,
+    questionnaire,
+    sections,
+    responses,
+    currentSectionIndex,
+    saving,
+    submitting,
+    submitted,
+    progress,
+    updateResponse,
+    saveProgress,
+    submitQuestionnaire,
+    goToSection,
+    nextSection,
+    prevSection
+  } = useQuestionnaire({ token });
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading questionnaire...</p>
+        </div>
+      </div>
+    );
   }
 
-  useEffect(() => {
-    const t = searchParams.get('t')
-    if (!t) return
-    ;(async () => {
-      try {
-        const res = await fetch(`/api/orders/${orderId}?t=${encodeURIComponent(t)}`)
-        const json = await res.json()
-        if (res.ok) setPrefill(json.order)
-      } catch (e) {
-        if (process.env.NODE_ENV !== 'production') console.debug('Prefill fetch failed', e)
-      }
-    })()
-  }, [orderId, searchParams])
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
+          <ExclamationTriangleIcon className="w-16 h-16 text-red-500 mx-auto" />
+          <h2 className="mt-4 text-xl font-bold text-gray-900">Unable to Load Questionnaire</h2>
+          <p className="mt-2 text-gray-600">{error}</p>
+          <div className="mt-6 flex gap-3 justify-center">
+            <Link
+              href="/"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              Go Home
+            </Link>
+            <Link
+              href="/dashboard"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No token provided
+  if (!token) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
+          <ClockIcon className="w-16 h-16 text-yellow-500 mx-auto" />
+          <h2 className="mt-4 text-xl font-bold text-gray-900">Access Token Required</h2>
+          <p className="mt-2 text-gray-600">
+            Please use the link from your order confirmation email to access the questionnaire.
+          </p>
+          <div className="mt-6">
+            <Link
+              href="/dashboard"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 inline-block"
+            >
+              Go to Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Submitted state
+  if (submitted || questionnaire?.status === 'COMPLETED') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
+          <CheckCircleIcon className="w-16 h-16 text-green-500 mx-auto" />
+          <h2 className="mt-4 text-xl font-bold text-gray-900">Questionnaire Submitted!</h2>
+          <p className="mt-2 text-gray-600">
+            Thank you for completing your LLC formation questionnaire. We&apos;ll review your information and begin processing your order.
+          </p>
+          <div className="mt-6 flex gap-3 justify-center">
+            <Link
+              href="/"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              Go Home
+            </Link>
+            <Link
+              href="/dashboard"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              View Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentSection = sections[currentSectionIndex];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
-      <div className="max-w-3xl mx-auto bg-white shadow rounded-xl p-6">
-        <h1 className="text-2xl font-bold mb-2">LLC Questionnaire</h1>
-        <p className="text-gray-600 mb-6">Order ID: <span className="font-mono">{orderId}</span></p>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">LLC Formation Questionnaire</h1>
+          <p className="mt-2 text-gray-600">
+            Complete this questionnaire to help us form your LLC in {questionnaire?.stateCode || 'your state'}.
+          </p>
+        </div>
 
-        {success ? (
-          <div className="space-y-4">
-            <div className="bg-green-50 border border-green-200 text-green-800 p-4 rounded">
-              Thanks! We received your answers. We’ll follow up shortly.
+        {/* Progress Section */}
+        <QuestionnaireProgress
+          sections={sections}
+          currentSectionIndex={currentSectionIndex}
+          onSectionClick={goToSection}
+          progress={progress}
+        />
+
+        {/* Main Content */}
+        <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+          {currentSection ? (
+            <>
+              <QuestionnaireSection
+                section={currentSection}
+                responses={responses}
+                products={questionnaire?.products || []}
+                onResponseChange={updateResponse}
+              />
+
+              <QuestionnaireNavigation
+                currentIndex={currentSectionIndex}
+                totalSections={sections.length}
+                isFirstSection={currentSectionIndex === 0}
+                isLastSection={currentSectionIndex === sections.length - 1}
+                saving={saving}
+                submitting={submitting}
+                canSubmit={progress === 100}
+                onPrevious={prevSection}
+                onNext={nextSection}
+                onSave={saveProgress}
+                onSubmit={submitQuestionnaire}
+              />
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No sections available</p>
             </div>
-            <div className="flex gap-3">
-              <Link href="/" className="bg-gray-100 border rounded px-4 py-2">Home</Link>
-              <Link href="/dashboard" className="bg-blue-600 text-white rounded px-4 py-2">Go to Dashboard</Link>
-            </div>
-          </div>
-        ) : (
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium">Contact Email</label>
-                <input name="email" type="email" required className="mt-1 w-full border rounded p-2" placeholder="you@example.com" defaultValue={prefill?.contactEmail || ''} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Company Name</label>
-                <input name="companyName" className="mt-1 w-full border rounded p-2" placeholder="Your LLC Name" defaultValue={prefill?.companyName || ''} />
-              </div>
-            </div>
+          )}
+        </div>
 
-            <div>
-              <label className="block text-sm font-medium">Business Purpose</label>
-              <input name="businessPurpose" className="mt-1 w-full border rounded p-2" placeholder="e.g., e-commerce for apparel" defaultValue={prefill?.businessPurpose || ''} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium">Number of Members</label>
-                <input name="members" className="mt-1 w-full border rounded p-2" placeholder="e.g., 1" defaultValue={prefill?.memberCount || ''} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Management Type</label>
-                <select name="managementType" className="mt-1 w-full border rounded p-2" defaultValue={prefill?.managementStructure || 'member-managed'}>
-                  <option value="member-managed">Member-managed</option>
-                  <option value="manager-managed">Manager-managed</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Principal Business Address</label>
-              <input name="address" className="mt-1 w-full border rounded p-2" placeholder="Street, City, ZIP" defaultValue={prefill ? `${prefill.businessAddress || ''}, ${prefill.businessCity || ''}, ${prefill.businessZip || ''}` : ''} />
-            </div>
-
-            {error && <div className="text-red-600 text-sm" role="alert">{error}</div>}
-
-            <button type="submit" disabled={submitting} className="mt-2 bg-blue-600 text-white px-4 py-2 rounded">
-              {submitting ? 'Submitting...' : 'Submit'}
-            </button>
-          </form>
-        )}
-
-        <p className="text-sm text-gray-500 mt-6">Need help? <Link className="underline" href="/contact">Contact support</Link>.</p>
+        {/* Help Section */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-500">
+            Need help? <Link className="text-blue-600 hover:underline" href="/contact">Contact support</Link>
+          </p>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 

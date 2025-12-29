@@ -48,6 +48,11 @@ model User {
   businesses       Business[]       // User can have multiple businesses
   businessMembers  BusinessMember[] // User can be member of other businesses
   
+  pendingTasks    PendingTask[]
+  questionnaires  QuestionnaireResponse[]
+  subscriptions   Subscription[]
+  payments        Payment[]
+  
   @@map("users")
 }
 
@@ -600,11 +605,13 @@ model Order {
   user               User? @relation(fields: [userId], references: [id], onDelete: SetNull)
   business           Business? @relation("BusinessFormation")
   operatingAgreement OperatingAgreement?
+  questionnaire      QuestionnaireResponse?
   statusHistory      OrderStatusHistory[]
   communications     Communication[]
   documents          Document[]
   websiteSubscription WebsiteSubscription?
   subscriptionIntents SubscriptionIntent[]
+  payments           Payment[]
   
   @@map("orders")
 }
@@ -1283,6 +1290,127 @@ model SubscriptionIntent {
   @@map("subscription_intents")
 }
 
+// ==============================================
+// QUESTIONNAIRE SYSTEM
+// ==============================================
+
+// Questionnaire configuration - stores state-specific rules and options
+model QuestionnaireConfig {
+  id              String   @id @default(cuid())
+  stateCode       String   @map("state_code") // "ALL" for universal, or state code like "CA", "TX"
+  configType      String   @map("config_type") // "professional_licenses", "defaults", "restrictions"
+  configData      Json     @map("config_data") // Flexible JSON for configuration
+  version         Int      @default(1)
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([stateCode, configType])
+  @@index([stateCode, configType])
+  @@map("questionnaire_configs")
+}
+
+// User's questionnaire responses
+model QuestionnaireResponse {
+  id              String   @id @default(cuid())
+  
+  // Link to order/purchase
+  orderId         String   @unique @map("order_id")
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  // Link to user
+  userId          String   @map("user_id")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // State of formation (from checkout)
+  stateCode       String   @map("state_code")
+  
+  // Products purchased (determines which sections to show)
+  products        Json     // Array of product codes: ["llc", "ein", "operating_agreement", "bank_resolution"]
+  
+  // Response data
+  responses       Json     @default("{}") // All questionnaire responses
+  
+  // Status tracking
+  status          QuestionnaireStatus @default(NOT_STARTED)
+  currentSection  String?  @map("current_section") // Track where user left off
+  completedAt     DateTime? @map("completed_at")
+  
+  // Pre-populated data from checkout
+  prePopulatedData Json?   @map("pre_populated_data")
+  
+  // Access control
+  accessToken     String   @unique @default(cuid()) @map("access_token") // For secure link
+  tokenExpiresAt  DateTime? @map("token_expires_at")
+  
+  // Auto-save tracking
+  lastSavedAt     DateTime? @map("last_saved_at")
+  
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@index([accessToken])
+  @@map("questionnaire_responses")
+}
+
+enum QuestionnaireStatus {
+  NOT_STARTED  @map("not_started")
+  IN_PROGRESS  @map("in_progress")
+  COMPLETED    @map("completed")
+  EXPIRED      @map("expired")
+}
+
+// Pending tasks for dashboard
+model PendingTask {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  taskType        String   @map("task_type") // "questionnaire", "document_upload", etc.
+  taskTitle       String   @map("task_title")
+  taskDescription String?  @map("task_description")
+  
+  // Reference to related entity
+  referenceType   String?  @map("reference_type") // "questionnaire", "order", etc.
+  referenceId     String?  @map("reference_id")
+  
+  // Priority and status
+  priority        TaskPriority @default(MEDIUM)
+  status          TaskStatus   @default(PENDING)
+  
+  // Deadlines and reminders
+  dueDate         DateTime? @map("due_date")
+  reminderSentAt  DateTime? @map("reminder_sent_at")
+  
+  // Action URL
+  actionUrl       String?  @map("action_url")
+  
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  completedAt     DateTime? @map("completed_at")
+
+  @@index([userId, status])
+  @@index([taskType])
+  @@map("pending_tasks")
+}
+
+enum TaskPriority {
+  LOW     @map("low")
+  MEDIUM  @map("medium")
+  HIGH    @map("high")
+  URGENT  @map("urgent")
+}
+
+enum TaskStatus {
+  PENDING     @map("pending")
+  IN_PROGRESS @map("in_progress")
+  COMPLETED   @map("completed")
+  DISMISSED   @map("dismissed")
+  SNOOZED     @map("snoozed")
+}
+
 enum SubscriptionFrequency {
   MONTHLY @map("monthly")
   YEARLY  @map("yearly")
@@ -1318,4 +1446,73 @@ model PaymentMethodVault {
   
   @@unique([provider, customerId])
   @@map("payment_method_vaults")
+}
+
+// ==============================================
+// SUBSCRIPTION & PAYMENT TRACKING
+// ==============================================
+
+model Subscription {
+  id                 String   @id @default(cuid())
+  userId             String   @map("user_id")
+  name               String
+  description        String?
+  status             SubscriptionStatus @default(ACTIVE)
+  amount             Decimal  @db.Decimal(10, 2)
+  currency           String   @default("usd")
+  interval           String   @default("month") // month, year, week
+  
+  // External references
+  stripeSubscriptionId String? @unique @map("stripe_subscription_id")
+  paypalSubscriptionId String? @unique @map("paypal_subscription_id")
+  
+  // Billing period
+  currentPeriodStart DateTime? @map("current_period_start")
+  currentPeriodEnd   DateTime? @map("current_period_end")
+  
+  // Cancellation
+  cancelledAt        DateTime? @map("cancelled_at")
+  cancelAtPeriodEnd  Boolean   @default(false) @map("cancel_at_period_end")
+  
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  
+  // Relationships
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments           Payment[]
+  
+  @@map("subscriptions")
+}
+
+model Payment {
+  id               String   @id @default(cuid())
+  userId           String   @map("user_id")
+  orderId          String?  @map("order_id")
+  subscriptionId   String?  @map("subscription_id")
+  
+  amount           Decimal  @db.Decimal(10, 2)
+  currency         String   @default("usd")
+  status           PaymentStatus @default(PENDING)
+  paymentMethod    String   @map("payment_method") // "Stripe", "PayPal", etc.
+  
+  // External references
+  stripePaymentIntentId String? @unique @map("stripe_payment_intent_id")
+  paypalCaptureId       String? @unique @map("paypal_capture_id")
+  
+  description      String?
+  receiptUrl       String?  @map("receipt_url")
+  
+  // Refund info
+  refundedAmount   Decimal? @db.Decimal(10, 2) @map("refunded_amount")
+  refundedAt       DateTime? @map("refunded_at")
+  
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  
+  // Relationships
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order            Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  subscription     Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  
+  @@map("payments")
 }
