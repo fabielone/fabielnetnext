@@ -132,7 +132,7 @@ export async function POST(req: Request) {
           'Members & Ownership Questionnaire',
           'Operating Agreement Preferences',
         ],
-        token: questionnaireAccessToken,
+        token: questionnaireAccessToken || undefined,
       }))
 
       console.log('[send-confirmation-email] Questionnaire sent', questionnaireResp)

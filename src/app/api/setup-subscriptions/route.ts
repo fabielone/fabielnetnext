@@ -2,12 +2,19 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY not configured')
+  }
+  return new Stripe(key)
+}
 
 export async function POST(request: Request) {
   const { customerId, paymentMethodId, subscriptions } = await request.json();
 
   try {
+    const stripe = getStripe()
     // Attach payment method to customer
     await stripe.paymentMethods.attach(paymentMethodId, {
       customer: customerId
