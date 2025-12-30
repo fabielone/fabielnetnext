@@ -255,12 +255,14 @@ export default function AlliesShowcasePage() {
   // Initial fetch
   useEffect(() => {
     fetchBusinesses(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Refetch when filters change
   useEffect(() => {
     fetchBusinesses(1);
     setCurrentPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, location, search]);
 
   const handlePageChange = (page: number) => {
@@ -274,7 +276,6 @@ export default function AlliesShowcasePage() {
     setSearch("");
     setCategory("Todas");
     setLocation("Todas");
-    setMode("Todas");
     setSelectedTechs([]);
     setPendingCategory("Todas");
     setPendingLocation("Todas");

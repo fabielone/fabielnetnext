@@ -12,8 +12,7 @@ import {
   RiCheckLine,
   RiLoader4Line,
   RiAlertLine,
-  RiAddLine,
-  RiArrowDownSLine
+  RiAddLine
 } from 'react-icons/ri'
 
 interface PublicSettings {
@@ -37,7 +36,7 @@ interface BusinessSettingsTabProps {
   locale: string
 }
 
-export default function BusinessSettingsTab({ businessId, businessStatus, locale }: BusinessSettingsTabProps) {
+export default function BusinessSettingsTab({ businessId, businessStatus, locale: _locale }: BusinessSettingsTabProps) {
   const [settings, setSettings] = useState<PublicSettings | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -69,6 +68,7 @@ export default function BusinessSettingsTab({ businessId, businessStatus, locale
   useEffect(() => {
     fetchSettings()
     fetchListingOptions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessId])
 
   const fetchListingOptions = async () => {
@@ -153,7 +153,7 @@ export default function BusinessSettingsTab({ businessId, businessStatus, locale
         const data = await res.json()
         setError(data.error || 'Failed to save settings')
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to save settings')
     } finally {
       setSaving(false)
@@ -199,7 +199,7 @@ export default function BusinessSettingsTab({ businessId, businessStatus, locale
         const data = await res.json()
         setError(data.error || 'Failed to upload image')
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to upload image')
     } finally {
       setUploadingImage(false)

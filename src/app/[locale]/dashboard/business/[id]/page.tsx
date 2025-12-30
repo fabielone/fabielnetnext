@@ -23,9 +23,7 @@ import {
   RiPhoneLine,
   RiMailLine,
   RiMapPinLine,
-  RiRefreshLine,
-  RiImageLine,
-  RiUploadLine
+  RiRefreshLine
 } from 'react-icons/ri'
 
 type BusinessDetail = {
@@ -178,8 +176,7 @@ export default function BusinessDetailPage() {
   const subscriptions = business.subscriptions || [];
   const documents = business.documents || [];
   const events = business.events || [];
-  const services = business.services || [];
-  const notes = business.notes || [];
+  // services and notes available in business object if needed
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode; count?: number }[] = [
     { id: 'overview', label: 'Overview', icon: <RiBuilding2Line className="w-4 h-4" /> },
