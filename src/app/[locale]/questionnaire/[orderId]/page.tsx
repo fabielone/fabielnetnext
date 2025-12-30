@@ -55,6 +55,12 @@ export default function LocalizedQuestionnairePage() {
           <ExclamationTriangleIcon className="w-16 h-16 text-red-500 mx-auto" />
           <h2 className="mt-4 text-xl font-bold text-gray-900">Unable to Load Questionnaire</h2>
           <p className="mt-2 text-gray-600">{error}</p>
+          <p className="mt-4 text-sm text-gray-500">
+            If you continue to experience issues, please contact our support team at{' '}
+            <a href="mailto:support@fabiel.net" className="text-blue-600 hover:underline font-medium">
+              support@fabiel.net
+            </a>
+          </p>
           <div className="mt-6 flex gap-3 justify-center">
             <Link
               href="/"
@@ -83,6 +89,12 @@ export default function LocalizedQuestionnairePage() {
           <h2 className="mt-4 text-xl font-bold text-gray-900">Access Token Required</h2>
           <p className="mt-2 text-gray-600">
             Please use the link from your order confirmation email to access the questionnaire.
+          </p>
+          <p className="mt-4 text-sm text-gray-500">
+            Can&apos;t find your email? Contact us at{' '}
+            <a href="mailto:support@fabiel.net" className="text-blue-600 hover:underline font-medium">
+              support@fabiel.net
+            </a>
           </p>
           <div className="mt-6">
             <Link
@@ -188,7 +200,10 @@ export default function LocalizedQuestionnairePage() {
         {/* Help Section */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
-            Need help? <Link className="text-blue-600 hover:underline" href="/contact">Contact support</Link>
+            Need help? Contact us at{' '}
+            <a href="mailto:support@fabiel.net" className="text-blue-600 hover:underline font-medium">
+              support@fabiel.net
+            </a>
           </p>
         </div>
       </div>

@@ -30,28 +30,28 @@ const Header: React.FC<HeaderProps> = ({
   reverse = false,
 }) => {
 
-  // Service-specific styling
+  // Service-specific styling with better dark mode contrast
   const getServiceTheme = (key: string) => {
     const themes = {
       businessFormation: {
-        gradient: 'from-blue-50 via-blue-100/50 to-indigo-50',
-        pillBg: 'bg-blue-100 text-blue-800',
-        buttonBg: 'bg-blue-600 hover:bg-blue-700 shadow-blue-200',
-        darkGradient: 'dark:from-blue-900/20 dark:via-blue-800/20 dark:to-indigo-900/20',
-        darkPill: 'dark:bg-blue-900/50 dark:text-blue-200',
-        accent: 'text-blue-600',
-        iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-        checkColor: 'text-blue-500 dark:text-blue-400'
+        gradient: 'from-blue-50 via-blue-100/50 to-slate-50',
+        pillBg: 'bg-blue-600 text-white',
+        buttonBg: 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800',
+        darkGradient: 'dark:from-slate-800 dark:via-blue-900/20 dark:to-slate-800',
+        darkPill: 'dark:bg-blue-600 dark:text-white',
+        accent: 'text-blue-600 dark:text-blue-400',
+        iconBg: 'bg-blue-100 dark:bg-blue-900/40',
+        checkColor: 'text-blue-600 dark:text-blue-400'
       },
       webDevelopment: {
-        gradient: 'from-purple-50 via-purple-100/50 to-pink-50',
-        pillBg: 'bg-purple-100 text-purple-800',
-        buttonBg: 'bg-purple-600 hover:bg-purple-700 shadow-purple-200',
-        darkGradient: 'dark:from-purple-900/20 dark:via-purple-800/20 dark:to-pink-900/20',
-        darkPill: 'dark:bg-purple-900/50 dark:text-purple-200',
-        accent: 'text-purple-600',
-        iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-        checkColor: 'text-purple-500 dark:text-purple-400'
+        gradient: 'from-purple-50 via-purple-100/50 to-slate-50',
+        pillBg: 'bg-purple-600 text-white',
+        buttonBg: 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800',
+        darkGradient: 'dark:from-slate-800 dark:via-purple-900/20 dark:to-slate-800',
+        darkPill: 'dark:bg-purple-600 dark:text-white',
+        accent: 'text-purple-600 dark:text-purple-400',
+        iconBg: 'bg-purple-100 dark:bg-purple-900/40',
+        checkColor: 'text-purple-600 dark:text-purple-400'
       }
     };
     return themes[key as keyof typeof themes] || themes.businessFormation;
@@ -61,99 +61,84 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <div 
-      className={'relative font-sans px-4 py-12 lg:py-20 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full transition-all duration-700'}
+      className={'relative font-sans px-4 py-12 lg:py-16 md:px-8 xl:px-2 sm:max-w-xl md:max-w-full transition-all duration-700'}
     >
       {/* Soft background with gradient blend */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} ${theme.darkGradient} opacity-30`}></div>
-      <div className={'absolute inset-0 bg-gradient-to-t from-white/50 via-transparent to-white/30 dark:from-gray-900/50 dark:via-transparent dark:to-gray-900/30'}></div>
+      <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} ${theme.darkGradient} opacity-50`}></div>
       
-      {/* Content with soft edges */}
+      {/* Content */}
       <div className="relative max-w-7xl mx-auto">
         {/* Header Section - Centered */}
-        <div className="text-center mb-16">
-          <span className={`inline-flex items-center px-6 py-3 text-sm font-bold ${theme.pillBg} ${theme.darkPill} rounded-full shadow-lg backdrop-blur-sm mb-6 border border-white/20 dark:border-gray-700/20`}>
-            <span className="w-2 h-2 bg-current rounded-full mr-3 animate-pulse"></span>
+        <div className="text-center mb-12">
+          <span className={`inline-flex items-center px-5 py-2 text-sm font-bold ${theme.pillBg} ${theme.darkPill} rounded-full shadow-lg mb-6`}>
+            <span className="w-2 h-2 bg-white rounded-full mr-3 animate-pulse"></span>
             {pill}
           </span>
           
-          <h2 className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4">
+          <h2 className="text-3xl lg:text-5xl font-bold leading-tight text-slate-900 dark:text-white mb-4">
             {title}
           </h2>
           
-          <h3 className={`text-2xl lg:text-3xl font-semibold ${theme.accent} dark:text-gray-300 mb-6`}>
+          <h3 className={`text-xl lg:text-2xl font-semibold ${theme.accent} mb-4`}>
             {subtitle}
           </h3>
           
-          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-4xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
             {description}
           </p>
         </div>
 
-        {/* Main Content - Symmetrical Layout with Soft Edges */}
+        {/* Main Content - Symmetrical Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Image Section with Soft Blend */}
+          {/* Image Section */}
           <div className={`lg:col-span-5 flex justify-center order-1 ${reverse ? 'lg:order-2' : 'lg:order-1'}`}>
             <div className="relative group w-full max-w-md">
-              {/* Soft gradient background that blends */}
-              <div className={`absolute -inset-4 bg-gradient-to-r ${theme.gradient} rounded-[2rem] blur-2xl opacity-20 group-hover:opacity-30 transition-all duration-1000`}></div>
-              <div className={`absolute -inset-2 bg-gradient-to-br ${theme.gradient} rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition-all duration-1000`}></div>
+              {/* Glow effect */}
+              <div className={`absolute -inset-4 bg-gradient-to-r ${theme.gradient} rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-all duration-500`}></div>
               
-              {/* Image container with soft border */}
-              <div className="relative w-full aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 border border-white/30 dark:border-gray-700/30 backdrop-blur-sm">
+              {/* Image container */}
+              <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <img
                   src={imageUrl}
-                  className="w-full h-full object-cover hover:scale-102 transition-transform duration-800"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   alt={title}
                 />
-                {/* Soft overlay gradients */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10"></div>
-                <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-10 mix-blend-overlay`}></div>
               </div>
             </div>
           </div>
 
-          {/* Features Section with Soft Cards */}
+          {/* Features Section */}
           <div className={`lg:col-span-7 space-y-8 flex flex-col justify-center order-2 ${reverse ? 'lg:order-1' : 'lg:order-2'}`}>
-            {/* Features Grid with Soft Edges */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Features Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {items.map((item, index) => (
                 <div 
                   key={index}
-                  className={'flex items-start gap-3 transition-all duration-200'}
+                  className="flex items-start gap-3 p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700"
                 >
-                  {/* Checkmark icon */}
-                  <div className="flex-shrink-0 mt-0.5">
-                    <FiCheck className={`w-5 h-5 ${theme.checkColor}`} />
+                  <div className={`flex-shrink-0 w-6 h-6 rounded-full ${theme.iconBg} flex items-center justify-center`}>
+                    <FiCheck className={`w-4 h-4 ${theme.checkColor}`} />
                   </div>
-                  
-                  <span className="text-base font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
+                  <span className="text-base font-medium text-slate-800 dark:text-slate-100 leading-relaxed">
                     {item.text}
                   </span>
                 </div>
               ))}
             </div>
 
-            {/* Action Buttons with Soft Styling */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <a
                 href={buttonLink}
-                className={'group relative inline-flex items-center px-8 py-4 text-lg font-bold text-white rounded-2xl transition-all duration-300 hover:-translate-y-1 transform-gpu overflow-hidden'}
+                className={`group inline-flex items-center px-8 py-4 text-lg font-bold text-white rounded-xl ${theme.buttonBg} shadow-lg transition-all duration-300 hover:-translate-y-1`}
               >
-                {/* Soft gradient background */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${theme.buttonBg.replace('hover:', '')} opacity-90`}></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-white/10"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
-                
-                {/* Border gradient */}
-                <div className="absolute inset-0 rounded-2xl border border-white/20"></div>
-                
-                <span className="relative z-10">{buttonText}</span>
-                <HiArrowRight className="relative z-10 ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <span>{buttonText}</span>
+                <HiArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </a>
               
               <a
                 href={learnMoreLink}
-                className={`group inline-flex items-center text-lg font-semibold ${theme.accent} dark:text-gray-300 hover:underline transition-all duration-200 px-4 py-2 rounded-xl backdrop-blur-sm border border-transparent hover:border-current/20`}
+                className={`group inline-flex items-center text-lg font-semibold ${theme.accent} hover:underline transition-all duration-200 px-4 py-2`}
               >
                 Learn More
                 <FiArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />

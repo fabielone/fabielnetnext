@@ -38,12 +38,23 @@ export async function POST(req: Request) {
       companyName,
       customerName,
       totalAmount,
+      // Service selections from form (fallback if DB doesn't have them yet)
+      websiteTier,
+      blogPro,
+      registeredAgent: formRegisteredAgent,
+      compliance: formCompliance,
+      hasWebDiscount,
     } = body as {
       orderId: string
       email: string
       companyName?: string
       customerName?: string
       totalAmount?: number
+      websiteTier?: 'essential' | 'professional' | null
+      blogPro?: boolean
+      registeredAgent?: boolean
+      compliance?: boolean
+      hasWebDiscount?: boolean
     }
 
     const url = new URL(req.url)
@@ -70,10 +81,11 @@ export async function POST(req: Request) {
     let resolvedCustomer = customerName
     let resolvedAmount = totalAmount
     let questionnaireAccessToken: string | null = null
+    let subscriptionsList: Array<{name: string; amount: number; frequency: string}> = []
     
     const { default: prisma } = await import('src/lib/prisma')
     
-    // Always fetch from DB to get questionnaire token
+    // Always fetch from DB to get questionnaire token and subscription info
     const db = await prisma.order.findUnique({
       where: { orderId },
       select: {
@@ -83,6 +95,9 @@ export async function POST(req: Request) {
         contactLastName: true,
         totalAmount: true,
         contactEmail: true,
+        registeredAgent: true,
+        compliance: true,
+        websiteService: true,
       }
     })
     
@@ -103,42 +118,89 @@ export async function POST(req: Request) {
       if (questionnaire?.accessToken) {
         questionnaireAccessToken = questionnaire.accessToken
       }
+
+      // Build subscriptions list from DB data OR form data fallback
+      const useDbRegisteredAgent = db.registeredAgent
+      const useDbCompliance = db.compliance
+      const discountApplies = useDbRegisteredAgent || useDbCompliance || hasWebDiscount
+      
+      if (useDbRegisteredAgent) {
+        subscriptionsList.push({ name: 'Registered Agent Service', amount: 149.00, frequency: 'year' })
+      }
+      if (useDbCompliance) {
+        subscriptionsList.push({ name: 'Compliance Service', amount: 99.00, frequency: 'year' })
+      }
+      
+      // Handle website tier from DB
+      if (db.websiteService) {
+        if (db.websiteService === 'BASIC') {
+          const amount = discountApplies ? 29.99 * 0.75 : 29.99
+          subscriptionsList.push({ name: discountApplies ? 'Essential Website (25% off)' : 'Essential Website', amount, frequency: 'month' })
+        } else if (db.websiteService === 'PRO') {
+          const amount = discountApplies ? 49.99 * 0.75 : 49.99
+          subscriptionsList.push({ name: discountApplies ? 'Professional Website (25% off)' : 'Professional Website', amount, frequency: 'month' })
+        } else if (db.websiteService === 'GROWTH' && !blogPro) {
+          // Only add Blog Pro from DB if not already adding from form
+          const amount = discountApplies ? 49.99 * 0.75 : 49.99
+          subscriptionsList.push({ name: discountApplies ? 'Blog Pro (25% off)' : 'Blog Pro', amount, frequency: 'month' })
+        }
+      }
+      
+      // Use form data for website tier if DB doesn't have it yet (race condition protection)
+      if (!db.websiteService && websiteTier) {
+        if (websiteTier === 'essential') {
+          const amount = discountApplies ? 29.99 * 0.75 : 29.99
+          subscriptionsList.push({ name: discountApplies ? 'Essential Website (25% off)' : 'Essential Website', amount, frequency: 'month' })
+        } else if (websiteTier === 'professional') {
+          const amount = discountApplies ? 49.99 * 0.75 : 49.99
+          subscriptionsList.push({ name: discountApplies ? 'Professional Website (25% off)' : 'Professional Website', amount, frequency: 'month' })
+        }
+      }
+      
+      // Add Blog Pro from form data (since DB may not have separate blogPro field)
+      if (blogPro) {
+        const amount = discountApplies ? 49.99 * 0.75 : 49.99
+        subscriptionsList.push({ name: discountApplies ? 'Blog Pro (25% off)' : 'Blog Pro', amount, frequency: 'month' })
+      }
+    } else {
+      // No DB record yet - use form data directly for subscriptions
+      const discountApplies = formRegisteredAgent || formCompliance || hasWebDiscount
+      
+      if (formRegisteredAgent) {
+        subscriptionsList.push({ name: 'Registered Agent Service', amount: 149.00, frequency: 'year' })
+      }
+      if (formCompliance) {
+        subscriptionsList.push({ name: 'Compliance Service', amount: 99.00, frequency: 'year' })
+      }
+      if (websiteTier === 'essential') {
+        const amount = discountApplies ? 29.99 * 0.75 : 29.99
+        subscriptionsList.push({ name: discountApplies ? 'Essential Website (25% off)' : 'Essential Website', amount, frequency: 'month' })
+      } else if (websiteTier === 'professional') {
+        const amount = discountApplies ? 49.99 * 0.75 : 49.99
+        subscriptionsList.push({ name: discountApplies ? 'Professional Website (25% off)' : 'Professional Website', amount, frequency: 'month' })
+      }
+      if (blogPro) {
+        const amount = discountApplies ? 49.99 * 0.75 : 49.99
+        subscriptionsList.push({ name: discountApplies ? 'Blog Pro (25% off)' : 'Blog Pro', amount, frequency: 'month' })
+      }
     }
 
-    // Send order confirmation
-    const { sendLLCConfirmation, sendQuestionnaireLink } = await import('src/lib/email-service')
+    // Send ONE consolidated email with order summary, subscriptions, and questionnaire link
+    const { sendOrderConfirmation } = await import('src/lib/email-service')
 
     const dashboardToken = await signToken({ orderId, email, exp: Date.now() + 7 * 24 * 60 * 60 * 1000 })
-    const confirmResp = await withRetry(() => sendLLCConfirmation({
+    const confirmResp = await withRetry(() => sendOrderConfirmation({
       email,
       companyName: resolvedCompany || 'Your Company',
       customerName: resolvedCustomer || email,
       orderId,
       totalAmount: resolvedAmount ?? 0,
       token: dashboardToken,
+      questionnaireToken: questionnaireAccessToken || undefined,
+      subscriptions: subscriptionsList.length > 0 ? subscriptionsList : undefined,
     }))
 
-    console.log('[send-confirmation-email] Confirmation sent', confirmResp)
-
-    // Send questionnaire link (only if we have the questionnaire access token)
-    if (questionnaireAccessToken) {
-      const questionnaireResp = await withRetry(() => sendQuestionnaireLink({
-        email,
-        customerName: resolvedCustomer || email,
-        companyName: resolvedCompany || 'Your Company',
-        orderId,
-        questionnaires: [
-          'Business Details Questionnaire',
-          'Members & Ownership Questionnaire',
-          'Operating Agreement Preferences',
-        ],
-        token: questionnaireAccessToken || undefined,
-      }))
-
-      console.log('[send-confirmation-email] Questionnaire sent', questionnaireResp)
-    } else {
-      console.warn('[send-confirmation-email] No questionnaire token found, skipping questionnaire email')
-    }
+    console.log('[send-confirmation-email] Consolidated email sent', confirmResp)
 
     return NextResponse.json({ success: true, token: questionnaireAccessToken || dashboardToken })
   } catch (err: any) {

@@ -69,21 +69,19 @@ export default function BlogList() {
   };
 
   return (
-    <div className="flex flex-col items-center py-12 bg-gradient-to-t from-amber-100 to-white dark:from-gray-800 dark:to-gray-900">
+    <div className="flex flex-col items-center py-16 bg-slate-50 dark:bg-slate-900">
       {/* Header Section */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">
+      <div className="text-center mb-10 px-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">
           {t('title')}
         </h2>
-        <p className="text-slate-600 dark:text-gray-300 text-lg">
+        <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
           {t('subtitle')}
         </p>
       </div>
 
       {/* Blog Cards Carousel */}
       <div className="relative w-full overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none z-10" />
-      
         <div className="relative px-8">
           <div 
             ref={scrollRef}
@@ -100,29 +98,29 @@ export default function BlogList() {
           {showLeftArrow && (
             <button
               onClick={() => handleScroll('left')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-700/80 p-2 rounded-full shadow-lg z-20 hover:bg-white dark:hover:bg-gray-600 transition-all duration-300"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 p-3 rounded-full shadow-lg z-20 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all duration-300 border border-slate-200 dark:border-slate-600"
               aria-label="Scroll left"
             >
-              <FaChevronLeft className="text-gray-800 dark:text-white w-5 h-5" />
+              <FaChevronLeft className="text-slate-700 dark:text-white w-4 h-4" />
             </button>
           )}
           {showRightArrow && (
             <button
               onClick={() => handleScroll('right')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-700/80 p-2 rounded-full shadow-lg z-20 hover:bg-white dark:hover:bg-gray-600 transition-all duration-300"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 p-3 rounded-full shadow-lg z-20 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all duration-300 border border-slate-200 dark:border-slate-600"
               aria-label="Scroll right"
             >
-              <FaChevronRight className="text-gray-800 dark:text-white w-5 h-5" />
+              <FaChevronRight className="text-slate-700 dark:text-white w-4 h-4" />
             </button>
           )}
         </div>
       </div>
 
       {/* Call to Action Section */}
-      <div className="text-center mt-2">
+      <div className="text-center mt-8">
         <a 
           href="https://blog.fabiel.net"
-          className="inline-flex items-center gap-2 bg-amber-200 dark:bg-amber-600 text-slate-900 dark:text-white px-2 py-3 rounded-lg hover:bg-amber-300 dark:hover:bg-amber-500 transition-colors duration-300 font-semibold"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-300 font-semibold"
         >
           <FaBookReader className="w-5 h-5" />
           {t('cta')}

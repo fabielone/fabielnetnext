@@ -6,6 +6,7 @@ import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { UserIcon, BuildingOfficeIcon, ShieldCheckIcon, GlobeAltIcon, CreditCardIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import LoadingSpinner from '../../../../atoms/LoadingSpinner';
+import { useAuth } from '@/app/components/providers/AuthProvider';
 
 // Dynamic imports for step components
 const BasicInfoStep = lazy(() => import('./components/BasicInfoStep'));
@@ -18,6 +19,8 @@ const OrderConfirmation = lazy(() => import('./components/OrderConfirmation'));
 // With this updated version:
 const initialFormState: LLCFormData = {
   companyName: '',
+  llcSuffix: 'LLC',  // Default to LLC
+  alternateNames: [],
   firstName: '',
   lastName: '',
   email: '',
@@ -31,6 +34,7 @@ const initialFormState: LLCFormData = {
   compliance: false,
   paymentMethod: 'stripe',
   website: null,
+  blogPro: false,
   phone: '',
   address: '',
   
@@ -50,13 +54,12 @@ const calculateOrderTotal = (formData: LLCFormData): number => {
   if (formData.registeredAgent) total += 149;
   if (formData.compliance) total += 99;
   
-  // Web services with 25% discount if compliance or registered agent selected
-  const hasSubscriptionDiscount = formData.registeredAgent || formData.compliance;
-  if (formData.website === 'essential') {
-    total += hasSubscriptionDiscount ? 29.99 * 0.75 : 29.99;
-  } else if (formData.website === 'professional' || formData.website === 'blogPro') {
-    total += hasSubscriptionDiscount ? 49.99 * 0.75 : 49.99;
-  }
+  // Website tier pricing
+  if (formData.website === 'essential') total += 29.99;
+  if (formData.website === 'professional') total += 49.99;
+  
+  // Blog Pro pricing (independent add-on)
+  if (formData.blogPro) total += 49.99;
   
   return total;
 };
@@ -74,10 +77,18 @@ const handleOrderSubmit = (formData: LLCFormData): void => {
 };
 
 const LLCOrderForm = () => {
+  const { user } = useAuth();
   const { formData, updateFormData } = useOrderForm(initialFormState);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  
+  // Set email from verified user (Google/account) - supersedes form email
+  useEffect(() => {
+    if (user?.email && formData.email !== user.email) {
+      updateFormData('email', user.email);
+    }
+  }, [user?.email]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // Get initial step from URL or default to 1
   const getInitialStep = () => {
@@ -310,6 +321,13 @@ const LLCOrderForm = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-white border-t border-amber-200 py-4">
+        <div className="max-w-4xl mx-auto px-4 text-center text-xs text-gray-500">
+          <p>© 2025 Fabiel.net - Professional Business Formation Services</p>
         </div>
       </div>
     </div>

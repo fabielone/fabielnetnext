@@ -1,8 +1,9 @@
-import { LLCFormData, WEB_SERVICE_PRICING } from '../types';
+import { LLCFormData } from '../types';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon, CreditCardIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '@/app/components/providers/AuthProvider';
 
 interface OrderConfirmationProps {
   formData: LLCFormData;
@@ -21,6 +22,7 @@ interface ServiceBreakdown {
 }
 
 const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
   const [savedToDatabase, setSavedToDatabase] = useState(false);
@@ -28,9 +30,9 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
   const [subscriptionsProcessed, setSubscriptionsProcessed] = useState(false);
   const [questionnaireToken, setQuestionnaireToken] = useState<string | null>(null);
   const { locale } = useParams<{ locale: string }>();
-
-  // Check if user qualifies for 25% discount
-  const hasSubscriptionDiscount = formData.registeredAgent || formData.compliance;
+  
+  // Use verified email (from Google/account login) as priority over form email
+  const recipientEmail = user?.email || formData.email;
 
   // Calculate service breakdown
   const getServiceBreakdown = (): ServiceBreakdown => {
@@ -47,21 +49,37 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
     }
 
     const monthlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [];
+    
+    // Website tier pricing with 25% discount when registered agent or compliance is selected
+    const hasWebDiscount = formData.registeredAgent || formData.compliance;
+    
     if (formData.website === 'essential') {
-      const price = hasSubscriptionDiscount 
-        ? WEB_SERVICE_PRICING.essential.price * 0.75 
-        : WEB_SERVICE_PRICING.essential.price;
-      monthlyServices.push({ name: 'Essential Website', price, status: 'pending' });
+      const basePrice = 29.99;
+      const finalPrice = hasWebDiscount ? basePrice * 0.75 : basePrice;
+      monthlyServices.push({ 
+        name: hasWebDiscount ? 'Essential Website (25% off)' : 'Essential Website', 
+        price: Number(finalPrice.toFixed(2)), 
+        status: 'pending' 
+      });
     } else if (formData.website === 'professional') {
-      const price = hasSubscriptionDiscount 
-        ? WEB_SERVICE_PRICING.professional.price * 0.75 
-        : WEB_SERVICE_PRICING.professional.price;
-      monthlyServices.push({ name: 'Professional Website', price, status: 'pending' });
-    } else if (formData.website === 'blogPro') {
-      const price = hasSubscriptionDiscount 
-        ? WEB_SERVICE_PRICING.blogPro.price * 0.75 
-        : WEB_SERVICE_PRICING.blogPro.price;
-      monthlyServices.push({ name: 'Blog Pro Website', price, status: 'pending' });
+      const basePrice = 49.99;
+      const finalPrice = hasWebDiscount ? basePrice * 0.75 : basePrice;
+      monthlyServices.push({ 
+        name: hasWebDiscount ? 'Professional Website (25% off)' : 'Professional Website', 
+        price: Number(finalPrice.toFixed(2)), 
+        status: 'pending' 
+      });
+    }
+    
+    // Blog Pro pricing (independent add-on) with 25% discount
+    if (formData.blogPro) {
+      const basePrice = 49.99;
+      const finalPrice = hasWebDiscount ? basePrice * 0.75 : basePrice;
+      monthlyServices.push({ 
+        name: hasWebDiscount ? 'Blog Pro (25% off)' : 'Blog Pro', 
+        price: Number(finalPrice.toFixed(2)), 
+        status: 'pending' 
+      });
     }
 
     return { oneTimeServices, yearlyServices, monthlyServices };
@@ -110,11 +128,28 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
 
   const saveOrderToDatabase = async () => {
     const totalAmount = serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0);
-    // Map new website types to database values
-    const websiteService = formData.website === 'essential' ? 'ESSENTIAL' 
-      : formData.website === 'professional' ? 'PROFESSIONAL' 
-      : formData.website === 'blogPro' ? 'BLOG_PRO' 
-      : null;
+    
+    // Map website tier to database enum (BASIC, PRO, GROWTH)
+    // Note: blogPro uses GROWTH tier. If both tier + blogPro selected, we use PRO (highest tier)
+    let websiteService: string | null = null;
+    if (formData.website === 'essential') {
+      websiteService = 'BASIC';
+    } else if (formData.website === 'professional') {
+      websiteService = 'PRO';
+    }
+    
+    // If Blog Pro selected (with or without a tier), use GROWTH or keep PRO if already selected
+    if (formData.blogPro) {
+      if (!websiteService) {
+        websiteService = 'GROWTH';  // Blog Pro standalone
+      }
+      // If PRO already selected, keep it (PRO includes more features)
+      // If BASIC selected with Blog Pro, upgrade to PRO
+      if (websiteService === 'BASIC') {
+        websiteService = 'PRO';
+      }
+    }
+    
     const stateCode = formData.formationState || 'CA';
     const payload = {
       orderId,
@@ -126,7 +161,7 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       businessPurpose: formData.businessPurpose,
       contactFirstName: formData.firstName,
       contactLastName: formData.lastName,
-      contactEmail: formData.email,
+      contactEmail: recipientEmail, // Use verified email (Gmail/account) over form email
       contactPhone: formData.phone,
       needEIN: true,
       needOperatingAgreement: true,
@@ -160,12 +195,30 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
 
   const sendConfirmationEmail = async () => {
     const totalAmount = serviceBreakdown.oneTimeServices.reduce((sum, service) => sum + service.price, 0);
+    
+    // Use verified email (Gmail/account) over form email
+    const emailToSend = recipientEmail;
+    
+    // Construct full company name with LLC designation
+    const fullCompanyName = `${formData.companyName} ${formData.llcSuffix || 'LLC'}`;
+    
+    // Check for discount eligibility
+    const hasWebDiscount = formData.registeredAgent || formData.compliance;
+    
+    console.log('[OrderConfirmation] Sending email to:', emailToSend, '(user:', user?.email, ', form:', formData.email, ')');
+    
     const payload = {
       orderId,
-      email: formData.email,
-      companyName: formData.companyName,
+      email: emailToSend,
+      companyName: fullCompanyName,
       customerName: `${formData.firstName} ${formData.lastName}`,
       totalAmount,
+      // Pass all service selections for accurate email summary
+      websiteTier: formData.website, // 'essential' | 'professional' | null
+      blogPro: formData.blogPro,
+      registeredAgent: formData.registeredAgent,
+      compliance: formData.compliance,
+      hasWebDiscount,
     };
 
     try {
@@ -305,6 +358,17 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
                   <span>${serviceBreakdown.oneTimeServices.reduce((sum, s) => sum + s.price, 0).toFixed(2)}</span>
                 </div>
               </div>
+              
+              {/* Package Items Included */}
+              <div className="border-t border-green-200 mt-3 pt-3">
+                <p className="text-sm font-semibold text-green-700 mb-2">Your Package Includes:</p>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li className="flex items-center"><CheckCircleIcon className="h-3 w-3 mr-2" /> LLC Formation & State Filing</li>
+                  <li className="flex items-center"><CheckCircleIcon className="h-3 w-3 mr-2" /> EIN Application</li>
+                  <li className="flex items-center"><CheckCircleIcon className="h-3 w-3 mr-2" /> Operating Agreement</li>
+                  <li className="flex items-center"><CheckCircleIcon className="h-3 w-3 mr-2" /> Bank Resolution Letter</li>
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -370,24 +434,38 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
           </p>
         </div>
         
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center mb-2">
-            <DocumentTextIcon className="h-5 w-5 mr-2 text-blue-600" />
-            <span className="font-medium text-blue-800">Questionnaire Link Sent</span>
+        <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-5">
+          <div className="flex items-center mb-3">
+            <DocumentTextIcon className="h-6 w-6 mr-2 text-blue-600" />
+            <span className="font-semibold text-blue-800 text-lg">Action Required: Complete Questionnaire</span>
           </div>
-          <p className="text-sm text-blue-700">
-            Complete additional forms for EIN, Operating Agreement, and other services.
+          <p className="text-sm text-blue-700 mb-3">
+            <strong>Your LLC formation cannot proceed until you complete the questionnaire.</strong> This form collects the information we need to prepare your formation documents, including EIN application, Operating Agreement, and other services.
           </p>
-          {questionnaireToken && (
-            <div className="mt-3">
+          <p className="text-xs text-blue-600 mb-4">
+            The questionnaire link has been sent to your order confirmation email and is also available in your dashboard. Need help? Contact us at <a href="mailto:support@fabiel.net" className="underline font-medium">support@fabiel.net</a>
+          </p>
+          
+          {/* Always show button - with or without token */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-3">
+            {questionnaireToken ? (
               <Link
-                className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-base shadow-md transition-all"
                 href={`/${locale || 'en'}/questionnaire/${orderId}?t=${encodeURIComponent(questionnaireToken)}`}
               >
-                Start Questionnaire
+                <DocumentTextIcon className="h-5 w-5 mr-2" />
+                Start Questionnaire Now
               </Link>
-            </div>
-          )}
+            ) : (
+              <Link
+                className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-base shadow-md transition-all"
+                href={`/${locale || 'en'}/dashboard`}
+              >
+                <DocumentTextIcon className="h-5 w-5 mr-2" />
+                Go to Dashboard to Start Questionnaire
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
@@ -395,22 +473,22 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
         <h4 className="font-semibold text-amber-800 mb-3 text-lg">Next Steps & Important Information</h4>
         <div className="text-amber-700 space-y-3">
-          <div className="flex items-start">
+          <div className="flex items-start bg-amber-100 p-3 rounded-lg border-l-4 border-amber-500">
             <span className="font-semibold mr-2">1.</span>
             <div>
-              <strong>Complete Questionnaires:</strong> Check your email for a link to complete additional questionnaires for your selected services. This helps us customize your documents properly.
+              <strong>Complete Questionnaire (Required):</strong> You must complete the questionnaire to proceed with your LLC formation. Click the &quot;Start Questionnaire Now&quot; button above or use the link sent to your email. This step is mandatory.
             </div>
           </div>
           <div className="flex items-start">
             <span className="font-semibold mr-2">2.</span>
             <div>
-              <strong>LLC Formation Processing:</strong> We'll verify your name availability and file your Articles of Organization within 2-3 business days.
+              <strong>LLC Formation Processing:</strong> Once the questionnaire is complete, we&apos;ll verify your name availability and file your Articles of Organization within 2-3 business days.
             </div>
           </div>
           <div className="flex items-start">
             <span className="font-semibold mr-2">3.</span>
             <div>
-              <strong>Subscription Services:</strong> Recurring services will be processed after LLC approval and you'll receive separate confirmation emails for each.
+              <strong>Subscription Services:</strong> Recurring services will be processed after LLC approval and you&apos;ll receive separate confirmation emails for each.
             </div>
           </div>
           <div className="flex items-start">

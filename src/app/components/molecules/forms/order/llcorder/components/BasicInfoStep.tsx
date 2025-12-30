@@ -2,6 +2,7 @@
 import { LLCFormData, UpdateFormData, StateFee } from '../types'; 
 import { useState, useEffect } from 'react';
 import { InformationCircleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '@/app/components/providers/AuthProvider';
 
 interface Props {
   formData: LLCFormData;
@@ -90,6 +91,7 @@ const unformatPhoneNumber = (formattedPhone: string): string => {
 };
 
 const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }: Props) => {
+  const { user } = useAuth();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [displayPhone, setDisplayPhone] = useState(formatPhoneNumber(formData.phone || ''));
   const [hoveredService, setHoveredService] = useState<string | null>(null);
@@ -98,7 +100,9 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
   const [loadingFees, setLoadingFees] = useState(true);
   const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
   const [stateSearchQuery, setStateSearchQuery] = useState('');
-  const [hasBusinessName, setHasBusinessName] = useState(true);
+  
+  // Check if user has verified email (from Google/account login)
+  const hasVerifiedEmail = !!user?.email;
 
   // Fetch state fees on mount
   useEffect(() => {
@@ -153,9 +157,8 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
     const newErrors: Record<string, string> = {};
 
     if (!formData.formationState) newErrors.formationState = 'Please select a state for your LLC formation';
-    
-    // Business name is optional if user chooses "I don't have a name yet"
-    if (hasBusinessName && !formData.companyName) {
+
+    if (!formData.companyName) {
       newErrors.companyName = 'Company name is required';
     }
     
@@ -207,18 +210,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
       }
     }
     
-    if (field === 'phone') {
-      const digits = value.replace(/\D/g, '');
-      if (value && digits.length > 0 && digits.length < 10) {
-        newErrors.phone = 'Please enter a 10-digit phone number';
-      } else if (value && digits.length === 10) {
-        delete newErrors.phone;
-      } else {
-        delete newErrors.phone;
-      }
-    }
-    
-    if (field === 'companyName' && hasBusinessName && !value) {
+    if (field === 'companyName' && !value) {
       newErrors.companyName = 'Company name is required';
     } else if (field === 'companyName') {
       delete newErrors.companyName;
@@ -466,67 +458,126 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
         <div className="max-w-lg mx-auto space-y-4">
           {/* Company Name - Full Width */}
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Desired LLC Name *
+            </label>
+            <input
+              name="companyName"
+              id="companyName"
+              value={formData.companyName}
+              onChange={(e) => handleChange('companyName', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-gray-900 text-sm ${
+                errors.companyName ? 'border-red-500' : 'border-gray-200'
+              }`}
+              placeholder="Enter your desired LLC name"
+            />
+            <div className="flex items-center justify-between mt-1">
+              <p className="text-xs text-amber-600">
+                <span className="font-medium">Do not include &quot;LLC&quot; or &quot;Limited Liability Company&quot;</span>
+              </p>
+              <a
+                href="/blog/how-to-check-llc-name-availability"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+              >
+                How to check name availability →
+              </a>
+            </div>
+            {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
+          </div>
+
+          {/* LLC Suffix Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              LLC Designation *
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                type="button"
+                onClick={() => updateFormData('llcSuffix', 'LLC')}
+                className={`px-4 py-2 rounded-lg border-2 transition-colors ${
+                  formData.llcSuffix === 'LLC'
+                    ? 'border-amber-500 bg-amber-50 text-amber-700 font-semibold'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300'
+                }`}
+              >
+                LLC
+              </button>
+              <button
+                type="button"
+                onClick={() => updateFormData('llcSuffix', 'L.L.C.')}
+                className={`px-4 py-2 rounded-lg border-2 transition-colors ${
+                  formData.llcSuffix === 'L.L.C.'
+                    ? 'border-amber-500 bg-amber-50 text-amber-700 font-semibold'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300'
+                }`}
+              >
+                L.L.C.
+              </button>
+              <button
+                type="button"
+                onClick={() => updateFormData('llcSuffix', 'Limited Liability Company')}
+                className={`px-4 py-2 rounded-lg border-2 transition-colors text-sm ${
+                  formData.llcSuffix === 'Limited Liability Company'
+                    ? 'border-amber-500 bg-amber-50 text-amber-700 font-semibold'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300'
+                }`}
+              >
+                Limited Liability Company
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Choose how you want your LLC name to appear on official documents
+            </p>
+          </div>
+
+          {/* Alternate Names - Optional */}
+          <div>
             <div className="flex items-center justify-between mb-2">
               <label className="block text-sm font-medium text-gray-700">
-                Desired LLC Name {hasBusinessName && '*'}
+                Alternate Names (Optional)
               </label>
-              <label className="flex items-center text-xs text-gray-600 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={!hasBusinessName}
-                  onChange={(e) => {
-                    setHasBusinessName(!e.target.checked);
-                    if (e.target.checked) {
-                      updateFormData('companyName', '');
-                    }
-                  }}
-                  className="mr-1.5 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
-                />
-                I don&apos;t have a name yet
-              </label>
-            </div>
-            
-            {hasBusinessName ? (
-              <>
-                <input
-                  name="companyName"
-                  id="companyName"
-                  value={formData.companyName}
-                  onChange={(e) => handleChange('companyName', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-gray-900 text-sm ${
-                    errors.companyName ? 'border-red-500' : 'border-gray-200'
-                  }`}
-                  placeholder="Enter your desired LLC name"
-                />
-                <div className="flex items-center justify-between mt-1">
-                  <p className="text-xs text-amber-600">
-                    <span className="font-medium">Do not include "LLC" or "Limited Liability Company"</span>
-                  </p>
-                  <a 
-                    href="/blog/how-to-check-llc-name-availability"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
-                  >
-                    How to check name availability →
-                  </a>
-                </div>
-                {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
-              </>
-            ) : (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
-                <p className="font-medium">No problem!</p>
-                <p className="text-xs mt-1">You can provide your business name later in the questionnaire after checkout. We recommend checking name availability in your state first.</p>
-                <a 
-                  href="/blog/how-to-check-llc-name-availability"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline mt-2 inline-block"
+              {formData.alternateNames.length < 3 && (
+                <button
+                  type="button"
+                  onClick={() => updateFormData('alternateNames', [...formData.alternateNames, ''])}
+                  className="text-xs text-amber-600 hover:text-amber-800 font-medium"
                 >
-                  Learn how to check name availability →
-                </a>
+                  + Add alternate name
+                </button>
+              )}
+            </div>
+            <p className="text-xs text-gray-500 mb-2">
+              Provide backup names in case your first choice is unavailable (up to 3)
+            </p>
+            {formData.alternateNames.map((name, index) => (
+              <div key={index} className="flex items-center gap-2 mb-2">
+                <input
+                  value={name}
+                  onChange={(e) => {
+                    const newNames = [...formData.alternateNames];
+                    newNames[index] = e.target.value;
+                    updateFormData('alternateNames', newNames);
+                  }}
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-gray-900 text-sm"
+                  placeholder={`Alternate name ${index + 1}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newNames = formData.alternateNames.filter((_, i) => i !== index);
+                    updateFormData('alternateNames', newNames);
+                  }}
+                  className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  aria-label="Remove alternate name"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-            )}
+            ))}
           </div>
 
           {/* Name Fields - Two Columns */}
@@ -571,18 +622,26 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address *
+                {hasVerifiedEmail && <span className="ml-2 text-xs text-green-600 font-normal">(Verified)</span>}
               </label>
               <input
                 name="email"
                 id="email"
                 value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white text-sm ${
+                onChange={(e) => !hasVerifiedEmail && handleChange('email', e.target.value)}
+                readOnly={hasVerifiedEmail}
+                disabled={hasVerifiedEmail}
+                className={`w-full text-gray-800 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm ${
+                  hasVerifiedEmail ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+                } ${
                   errors.email ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="your@email.com"
                 type="email"
               />
+              {hasVerifiedEmail && (
+                <p className="text-xs text-gray-500 mt-1">Email from your verified account.</p>
+              )}
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 

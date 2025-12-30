@@ -289,6 +289,7 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email Address *
+              {user && <span className="ml-2 text-xs text-green-600 font-normal">(Using verified account email)</span>}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -299,13 +300,20 @@ const AccountStep = ({ formData, updateFormData, onNext, onPrev, scrollToError }
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                className={`w-full pl-10 px-3 text-gray-800 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm bg-white ${
+                onChange={(e) => !user && handleChange('email', e.target.value)}
+                readOnly={!!user}
+                disabled={!!user}
+                className={`w-full pl-10 px-3 text-gray-800 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm ${
+                  user ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+                } ${
                   errors.email ? 'border-red-500' : 'border-gray-200'
                 }`}
                 placeholder="your@email.com"
               />
             </div>
+            {user && (
+              <p className="text-xs text-gray-500 mt-1">This email is linked to your account and cannot be changed.</p>
+            )}
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 

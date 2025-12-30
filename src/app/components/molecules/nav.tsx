@@ -50,7 +50,7 @@ export default function Navbar() {
     <nav className="bg-background-primary dark:bg-dark-background-primary 
      text-tx-primary  dark:text-dark-tx-primary
     shadow-md fixed w-full z-50 px-5">
-      <div className="max-w-[1920px] mx-auto">
+      <div className="max-w-[1920px] mx-auto 2xl:px-[12%] xl:px-[6%]">
         <div className="flex items-center h-16 gap-2">
           <div className="flex-shrink-0">
             <Logo 

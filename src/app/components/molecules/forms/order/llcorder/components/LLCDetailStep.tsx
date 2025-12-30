@@ -229,7 +229,7 @@ const LLCDetailStep = ({ formData, updateFormData, onNext, onPrev }: LLCDetailSt
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                   <div className="text-sm text-blue-800">
-                    <strong>Next Steps:</strong> After checkout, you&apos;ll receive a questionnaire to complete before we begin filing. This will gather additional details needed for services like EIN application and Operating Agreement customization through your client dashboard.
+                    <strong>Additional Details:</strong> After your LLC is formed, we'll send you a link to complete additional questionnaires for services like EIN application and Operating Agreement customization through your client dashboard.
                   </div>
                 </div>
               </div>

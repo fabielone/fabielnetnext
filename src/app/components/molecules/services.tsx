@@ -51,49 +51,51 @@ const MyServices = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gradient-to-b from-white via-gray-50/30 to-white dark:from-gray-900 dark:via-gray-800/30 dark:to-gray-900">
-      <h2 className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-white">
-        {t('title')}
-      </h2>
-      <span className="text-xl font-semibold text-center mb-8 text-gray-600 dark:text-gray-300">
-        {t('subtitle')}
-      </span>
-      <div className="flex flex-col w-full max-w-8xl relative">
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-50/20 to-transparent dark:via-gray-800/20 pointer-events-none"></div>
+    <div className="flex flex-col items-center py-16 bg-white dark:bg-slate-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+            {t('title')}
+          </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            {t('subtitle')}
+          </p>
+        </div>
         
-        {services.map((service, index) => {
-          const serviceData = t.raw(`items.${service.key}`);
-          const routes = getServiceRoutes(service.key);
-          return (
-            <div
-              key={index}
-              className="relative"
-            >
-              {/* Soft separator between services */}
-              {index > 0 && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-gray-200/50 to-transparent dark:via-gray-700/50"></div>
-              )}
-              
-              <Header
-                serviceKey={service.key}
-                pill={serviceData.pill}
-                title={serviceData.title}
-                subtitle={serviceData.subtitle}
-                description={serviceData.description}
-                buttonText={t('buttonText')}
-                buttonLink={routes.checkout}
-                learnMoreLink={routes.main}
-                imageUrl={service.imageUrl}
-                items={serviceData.features.map((text: string, i: number) => ({
-                  icon: ['📈', '📆', '📝', '📱', '💻', '⚡'][i],
-                  text
-                }))}
-                reverse={index % 2 === 1}
-              />
-            </div>
-          );
-        })}
+        <div className="flex flex-col w-full">
+          {services.map((service, index) => {
+            const serviceData = t.raw(`items.${service.key}`);
+            const routes = getServiceRoutes(service.key);
+            return (
+              <div
+                key={index}
+                className="relative"
+              >
+                {/* Separator between services */}
+                {index > 0 && (
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent my-8"></div>
+                )}
+                
+                <Header
+                  serviceKey={service.key}
+                  pill={serviceData.pill}
+                  title={serviceData.title}
+                  subtitle={serviceData.subtitle}
+                  description={serviceData.description}
+                  buttonText={t('buttonText')}
+                  buttonLink={routes.checkout}
+                  learnMoreLink={routes.main}
+                  imageUrl={service.imageUrl}
+                  items={serviceData.features.map((text: string, i: number) => ({
+                    icon: ['📈', '📆', '📝', '📱', '💻', '⚡'][i],
+                    text
+                  }))}
+                  reverse={index % 2 === 1}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 import { render as _render } from '@react-email/render';
 import React from 'react';
 import {
-  LLCConfirmationEmail,
+  OrderConfirmationEmail,
   SubscriptionConfirmationEmail,
   SubscriptionFailureEmail,
   QuestionnaireEmail
@@ -30,20 +30,26 @@ interface EmailOptions {
 async function sendEmail({ to, subject, react, from }: EmailOptions) {
   try {
     const client = getResend();
+    
+    // Determine the from email - use verified domain or test email
+    const fromEmail = from || process.env.FROM_EMAIL || 'Fabiel.Net <noreply@fabiel.net>';
+    
     if (!client) {
-      console.warn('[email-service] RESEND_API_KEY not set; performing dry-run send', { to, subject });
+      console.warn('[email-service] RESEND_API_KEY not set; performing dry-run send', { to, subject, from: fromEmail });
       return { id: 'dry-run', to: [to], subject } as any;
     }
+    
+    console.log('[email-service] Attempting to send email:', { to, subject, from: fromEmail });
 
     const { data, error } = await client.emails.send({
-      from: from || process.env.FROM_EMAIL || 'LLC Formation <noreply@fabiel.net>',
+      from: fromEmail,
       to: [to],
       subject,
       react,
     });
 
     if (error) {
-      console.error('Resend error:', error);
+      console.error('[email-service] Resend error:', error);
       const err = error as any;
       const code = err?.statusCode || err?.code;
       const name = err?.name || 'resend_error';
@@ -54,30 +60,36 @@ async function sendEmail({ to, subject, react, from }: EmailOptions) {
       throw e;
     }
 
-    console.log('Email sent successfully:', data);
+    console.log('[email-service] Email sent successfully:', data);
     return data;
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error('[email-service] Failed to send email:', error);
     throw error;
   }
 }
 
-export const sendLLCConfirmation = async (data: {
+// Send consolidated order confirmation with questionnaire link
+export const sendOrderConfirmation = async (data: {
   email: string;
   companyName: string;
   customerName: string;
   orderId: string;
   totalAmount: number;
   token?: string;
+  questionnaireToken?: string;
+  subscriptions?: Array<{name: string; amount: number; frequency: string}>;
 }) => {
   return sendEmail({
-    email: data.email,       // Add this
-    companyName: data.companyName,  // Add this
+    email: data.email,
+    companyName: data.companyName,
     to: data.email,
-    subject: `LLC Formation Confirmation - ${data.companyName}`,
-    react: LLCConfirmationEmail({ ...data, _email: data.email }) // Include token if present
+    subject: `Order Confirmation - ${data.companyName}`,
+    react: OrderConfirmationEmail({ ...data, _email: data.email })
   });
 };
+
+// Legacy function for backward compatibility
+export const sendLLCConfirmation = sendOrderConfirmation;
 
 export const sendSubscriptionConfirmation = async (data: {
   email: string;

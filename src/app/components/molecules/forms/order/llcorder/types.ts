@@ -16,12 +16,11 @@ export interface RegisteredAgentPrice {
   firstYearFee: number | null;
 }
 
-// Web service tiers
-export type WebServiceTier = 'essential' | 'professional' | 'blogPro' | null;
-
 export interface LLCFormData {
   // Basic Info
   companyName: string;
+  llcSuffix: 'LLC' | 'L.L.C.' | 'Limited Liability Company';  // LLC suffix choice
+  alternateNames: string[];  // Optional backup LLC names
   firstName: string;
   lastName: string;
   email: string;
@@ -34,7 +33,8 @@ export interface LLCFormData {
   registeredAgent: boolean;
   compliance: boolean;
   paymentMethod: 'stripe' | 'paypal';
-  website: WebServiceTier;
+  website: string | null;  // Primary website tier: 'essential' | 'professional'
+  blogPro: boolean;  // Blog Pro can be added to any tier
   phone: string;
   address: string;
   managementStructure?: string;
@@ -60,6 +60,9 @@ export interface LLCFormData {
   needOperatingAgreement?: boolean;
   needBankLetter?: boolean;
 }
+
+// Web service tiers
+export type WebServiceTier = 'essential' | 'professional' | 'blogPro' | null;
 
 // Web service pricing configuration
 export const WEB_SERVICE_PRICING = {

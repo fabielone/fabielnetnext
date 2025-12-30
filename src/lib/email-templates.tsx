@@ -16,7 +16,28 @@ import {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://fabiel.net';
 
-export const LLCConfirmationEmail = ({ _email, companyName, customerName, orderId, totalAmount, token }: { _email: string; companyName: string; customerName: string; orderId: string; totalAmount: number; token?: string }) => (
+// Consolidated Order Confirmation Email with Questionnaire Link
+export const OrderConfirmationEmail = ({ 
+  _email, 
+  companyName, 
+  customerName, 
+  orderId, 
+  totalAmount, 
+  token,
+  questionnaireToken,
+  subscriptions = [],
+  packageItems = ['LLC Formation', 'EIN Application', 'Operating Agreement', 'Bank Resolution Letter']
+}: { 
+  _email: string; 
+  companyName: string; 
+  customerName: string; 
+  orderId: string; 
+  totalAmount: number; 
+  token?: string;
+  questionnaireToken?: string;
+  subscriptions?: Array<{name: string; amount: number; frequency: string}>;
+  packageItems?: string[];
+}) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -32,60 +53,109 @@ export const LLCConfirmationEmail = ({ _email, companyName, customerName, orderI
         </Section>
         
         <Section style={content}>
-          <Heading style={h1}>LLC Formation Confirmed! 🎉</Heading>
+          <Heading style={h1}>LLC Formation Order Confirmed! 🎉</Heading>
           
           <Text style={text}>
             Dear {customerName},
           </Text>
           
           <Text style={text}>
-            Thank you for choosing Fabiel.net for your California LLC formation. 
+            Thank you for choosing Fabiel.net for your LLC formation. 
             Your order has been successfully received and payment processed.
           </Text>
           
           <Section style={orderDetails}>
-            <Heading style={h2}>Order Details</Heading>
+            <Heading style={h2}>Order Summary</Heading>
             <Text style={orderText}>
               <strong>Order ID:</strong> {orderId}<br/>
-              <strong>Company Name:</strong> {companyName} LLC<br/>
+              <strong>Company Name:</strong> {companyName}<br/>
               <strong>Amount Paid:</strong> ${totalAmount.toFixed(2)}<br/>
               <strong>Status:</strong> Processing
             </Text>
           </Section>
+
+          {/* Package Items Included */}
+          <Section style={packageSection}>
+            <Heading style={h2}>Your Package Includes</Heading>
+            {packageItems.map((item, index) => (
+              <Text key={index} style={packageItem}>
+                ✓ {item}
+              </Text>
+            ))}
+          </Section>
+
+          {subscriptions && subscriptions.length > 0 && (
+            <Section style={subscriptionDetails}>
+              <Heading style={h2}>Active Subscriptions</Heading>
+              {subscriptions.map((sub, index) => (
+                <Text key={index} style={orderText}>
+                  • <strong>{sub.name}:</strong> ${sub.amount.toFixed(2)}/{sub.frequency}
+                </Text>
+              ))}
+            </Section>
+          )}
+
+          {/* QUESTIONNAIRE SECTION - REQUIRED */}
+          <Section style={importantNote}>
+            <Heading style={h2}>⚠️ Action Required: Complete Your Questionnaire</Heading>
+            <Text style={importantText}>
+              <strong>Your LLC formation cannot proceed until you complete the questionnaire.</strong> This is a required step that collects the information we need to prepare your formation documents, including EIN application and Operating Agreement.
+            </Text>
+          </Section>
+
+          <Text style={text}>
+            The questionnaire link has been sent in this email and is also available in your dashboard. You can save your progress and return to complete it later if needed.
+          </Text>
+
+          <Section style={buttonContainer}>
+            <Button style={button} href={`${baseUrl}/en/questionnaire/${orderId}${questionnaireToken ? `?t=${encodeURIComponent(questionnaireToken)}` : ''}`}>
+              Complete Questionnaire Now
+            </Button>
+          </Section>
+
+          <Hr style={hr} />
           
           <Section style={nextSteps}>
             <Heading style={h2}>What Happens Next?</Heading>
             <Text style={stepText}>
-              <strong>1. Name Verification</strong> - We'll verify your LLC name availability (1-2 business days)
+              <strong>1. Complete Questionnaire (Required)</strong> - Fill out the questionnaire to provide necessary information for your LLC formation
             </Text>
             <Text style={stepText}>
-              <strong>2. Articles Filing</strong> - We'll file your Articles of Organization with California (2-3 business days)
+              <strong>2. Name Verification</strong> - We'll verify your LLC name availability (1-2 business days)
             </Text>
             <Text style={stepText}>
-              <strong>3. Document Preparation</strong> - Your EIN, Operating Agreement, and other documents will be prepared
+              <strong>3. Articles Filing</strong> - We'll file your Articles of Organization with your selected state (2-3 business days)
             </Text>
             <Text style={stepText}>
-              <strong>4. Completion</strong> - All documents delivered within 7-10 business days
+              <strong>4. Document Preparation</strong> - Your EIN, Operating Agreement, and other documents will be prepared
+            </Text>
+            <Text style={stepText}>
+              <strong>5. Completion</strong> - All documents delivered within 7-10 business days
             </Text>
           </Section>
           
           {/* Dashboard Link */}
           <Section style={buttonContainer}>
             <Button style={button} href={`${baseUrl}/en/dashboard${token ? `?t=${encodeURIComponent(token)}` : ''}`}>
-              Track Your Order
+              Access Your Dashboard
             </Button>
           </Section>
           
           <Hr style={hr} />
           
           <Text style={footer}>
-            Questions? Reply to this email or contact us at support@fabiel.net
+            Questions? Reply to this email or contact us at support@fabiel.net<br/>
+            <br/>
+            <strong>Important:</strong> Complete the questionnaire within 7 days to avoid delays in your LLC formation process.
           </Text>
         </Section>
       </Container>
     </Body>
   </Html>
 );
+
+// Legacy email for backward compatibility (now just calls OrderConfirmationEmail)
+export const LLCConfirmationEmail = OrderConfirmationEmail;
 
 export const SubscriptionConfirmationEmail = ({ _email, customerName, serviceName, amount, frequency, subscriptionId, companyName }: { _email: string; customerName: string; serviceName: string; amount: number; frequency: string; subscriptionId: string; companyName: string }) => (
   <Html>
@@ -207,18 +277,28 @@ export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId,
             style={logo}
           />
         </Section>
-        
+
         <Section style={content}>
-          <Heading style={h1}>Complete Your LLC Setup 📋</Heading>
-          
+          <Heading style={h1}>Action Required: Complete Your Questionnaire 📋</Heading>
+
           <Text style={text}>
             Dear {customerName},
           </Text>
-          
+
           <Text style={text}>
-            To complete your {companyName} LLC formation, please fill out the following questionnaires:
+            Thank you for your order! <strong>To proceed with your {companyName} LLC formation, you must complete the questionnaire.</strong> This is a required step that allows us to gather the information needed to prepare your formation documents.
           </Text>
-          
+
+          <Section style={importantNote}>
+            <Text style={importantText}>
+              <strong>Important:</strong> Your LLC formation cannot proceed until the questionnaire is completed. Please complete it as soon as possible to avoid delays.
+            </Text>
+          </Section>
+
+          <Text style={text}>
+            The questionnaire covers the following sections:
+          </Text>
+
           <Section style={questionnaireList}>
             {questionnaires.map((questionnaire, index) => (
               <Text key={index} style={listItem}>
@@ -226,21 +306,29 @@ export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId,
               </Text>
             ))}
           </Section>
-          
+
           <Text style={text}>
-            These questionnaires help us customize your documents to your specific business needs.
+            Click the button below to access your questionnaire. You can save your progress and return to complete it later if needed.
           </Text>
-          
+
           <Section style={buttonContainer}>
             <Button style={button} href={`${baseUrl}/en/questionnaire/${orderId}${token ? `?t=${encodeURIComponent(token)}` : ''}`}>
-              Complete Questionnaires
+              Complete Questionnaire Now
             </Button>
           </Section>
-          
+
+          <Text style={text}>
+            <strong>Having trouble?</strong> If the button above doesn&apos;t work, copy and paste this link into your browser:
+          </Text>
+          <Text style={linkText}>
+            {`${baseUrl}/en/questionnaire/${orderId}${token ? `?t=${encodeURIComponent(token)}` : ''}`}
+          </Text>
+
           <Hr style={hr} />
-          
+
           <Text style={footer}>
-            Complete within 7 days to avoid delays in your LLC formation process.
+            Complete within 7 days to avoid delays in your LLC formation process.<br /><br />
+            Need help? Contact our support team at <a href="mailto:support@fabiel.net" style={linkStyle}>support@fabiel.net</a>
           </Text>
         </Section>
       </Container>
@@ -327,6 +415,47 @@ const questionnaireList = {
   padding: '20px',
   borderRadius: '8px',
   margin: '20px 0',
+};
+
+const packageSection = {
+  backgroundColor: '#eff6ff',
+  padding: '20px',
+  borderRadius: '8px',
+  margin: '20px 0',
+  borderLeft: '4px solid #3b82f6',
+};
+
+const packageItem = {
+  color: '#1e40af',
+  fontSize: '15px',
+  lineHeight: '24px',
+  margin: '4px 0',
+};
+
+const importantNote = {
+  backgroundColor: '#fef3c7',
+  padding: '16px',
+  borderRadius: '8px',
+  margin: '20px 0',
+  borderLeft: '4px solid #f59e0b',
+};
+
+const importantText = {
+  ...text,
+  margin: '0',
+  color: '#92400e',
+};
+
+const linkText = {
+  ...text,
+  fontSize: '14px',
+  color: '#6b7280',
+  wordBreak: 'break-all' as const,
+};
+
+const linkStyle = {
+  color: '#f59e0b',
+  textDecoration: 'underline',
 };
 
 const orderText = {
