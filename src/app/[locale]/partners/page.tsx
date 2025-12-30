@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useMemo, useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -156,45 +154,6 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
   );
 }
 
-// Expandable Description Component
-function ExpandableDescription({ text }: { text: string }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isTruncated, setIsTruncated] = useState(false);
-  const textRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    const checkTruncation = () => {
-      if (textRef.current) {
-        setIsTruncated(textRef.current.scrollHeight > textRef.current.clientHeight);
-      }
-    };
-    
-    checkTruncation();
-    window.addEventListener('resize', checkTruncation);
-    return () => window.removeEventListener('resize', checkTruncation);
-  }, [text]);
-
-  return (
-    <div className="mt-2">
-      <p 
-        ref={textRef}
-        className={`text-sm text-gray-600 dark:text-gray-300 leading-relaxed ${!isExpanded ? 'line-clamp-3 min-h-[3.75rem]' : ''}`}
-        style={!isExpanded ? { minHeight: '4.5em', maxHeight: '4.5em' } : undefined}
-      >
-        {text}
-      </p>
-      {(isTruncated || isExpanded) && (
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
-        >
-          {isExpanded ? '← Leer menos' : 'Leer más →'}
-        </button>
-      )}
-    </div>
-  );
-}
-
 export default function PartnersPage() {
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState<string>('Todas');
@@ -340,56 +299,62 @@ export default function PartnersPage() {
 
       {/* Grid */}
       <main className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map((p) => (
             <article
               key={p.id}
-              className="group rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg transition-all duration-300"
+              className="group flex flex-row gap-4 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300"
             >
-              {/* Image container with 3:2 aspect ratio */}
-              <div className="relative aspect-[3/2] overflow-hidden">
-                <Image
-                  src={p.image}
-                  alt={p.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                />
+              {/* Small Icon/Image */}
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-900/30 dark:to-blue-900/30 border border-indigo-200/50 dark:border-indigo-700/30 flex items-center justify-center text-3xl shadow-sm group-hover:scale-105 transition-transform duration-300">
+                  {p.icon}
+                </div>
               </div>
               
-              <div className="p-5">
-                {/* Title */}
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">
-                  {p.name}
-                </h3>
-                
-                {/* Description */}
-                <ExpandableDescription text={p.description} />
-
-                {/* Tags */}
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {p.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
-                    >
-                      <TagIcon className="h-3 w-3" />
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Footer: Visit Link */}
-                <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-end">
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                {/* Header with title and link */}
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">
+                      {p.name}
+                    </h3>
+                    {p.location && (
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{p.location}</span>
+                    )}
+                  </div>
                   <a
                     href={p.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-medium text-sm shadow-md hover:shadow-lg transition-all duration-200"
+                    className="flex-shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+                    aria-label={`Visit ${p.name}`}
                   >
-                    Visit Partner
                     <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                   </a>
+                </div>
+                
+                {/* Description */}
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2">
+                  {p.description}
+                </p>
+
+                {/* Tags */}
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {p.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800/50"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {p.tags.length > 3 && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                      +{p.tags.length - 3}
+                    </span>
+                  )}
                 </div>
               </div>
             </article>

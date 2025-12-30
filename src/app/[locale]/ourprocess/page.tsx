@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import {
   ShoppingCartIcon,
   ChatBubbleLeftRightIcon,
@@ -15,6 +16,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function ProcesoPage() {
+  const t = useTranslations('ourProcess');
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   const toggleFAQ = (index: number) => {
@@ -24,32 +26,32 @@ export default function ProcesoPage() {
   const processSteps = [
     {
       icon: ShoppingCartIcon,
-      title: 'Select Service',
-      description: 'Choose from our main services or combine them according to your needs.',
+      title: t('steps.select.title'),
+      description: t('steps.select.description'),
       color: 'from-indigo-500 to-blue-500',
     },
     {
       icon: ChatBubbleLeftRightIcon,
-      title: 'Consultation',
-      description: 'If needed, speak with a specialist for personalized advice.',
+      title: t('steps.consultation.title'),
+      description: t('steps.consultation.description'),
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: CreditCardIcon,
-      title: 'Process Order',
-      description: 'We confirm details and begin working on your request.',
+      title: t('steps.process.title'),
+      description: t('steps.process.description'),
       color: 'from-cyan-500 to-teal-500',
     },
     {
       icon: PlusCircleIcon,
-      title: 'Additional Requirements',
-      description: 'If we need more information, we\'ll reach out quickly.',
+      title: t('steps.additional.title'),
+      description: t('steps.additional.description'),
       color: 'from-teal-500 to-emerald-500',
     },
     {
       icon: CheckCircleIcon,
-      title: 'Completed',
-      description: 'We finalize the process and deliver the agreed results.',
+      title: t('steps.completed.title'),
+      description: t('steps.completed.description'),
       color: 'from-emerald-500 to-green-500',
     },
   ];
@@ -57,15 +59,15 @@ export default function ProcesoPage() {
   const services = [
     {
       id: 'formation',
-      name: 'Business Formation',
-      description: 'Legal constitution of LLCs, corporations, and other types of business entities.',
+      name: t('services.formation.name'),
+      description: t('services.formation.description'),
       icon: DocumentTextIcon,
       url: '/business',
     },
     {
       id: 'software',
-      name: 'Software Development',
-      description: 'Custom technology solutions to optimize your operations.',
+      name: t('services.software.name'),
+      description: t('services.software.description'),
       icon: ComputerDesktopIcon,
       url: '/webdevelopment',
     },
@@ -73,20 +75,20 @@ export default function ProcesoPage() {
 
   const faqs = [
     {
-      question: 'How do I select the right service?',
-      answer: 'Our services page details each option. If you have questions, you can request a free consultation with an agent for personalized recommendations.',
+      question: t('faq.q1.question'),
+      answer: t('faq.q1.answer'),
     },
     {
-      question: 'What information do you need to process my order?',
-      answer: 'It depends on the service. For business formation we\'ll need identification documents and business details. For software development, we\'ll analyze your specific requirements.',
+      question: t('faq.q2.question'),
+      answer: t('faq.q2.answer'),
     },
     {
-      question: 'Can I add additional services later?',
-      answer: 'Yes, our system is flexible. You can complement your initial order with other services whenever you need.',
+      question: t('faq.q3.question'),
+      answer: t('faq.q3.answer'),
     },
     {
-      question: 'What happens if I don\'t respond to requests for additional information?',
-      answer: 'We\'ll temporarily pause processing until we receive all necessary information, but we\'ll always communicate clearly about timelines.',
+      question: t('faq.q4.question'),
+      answer: t('faq.q4.answer'),
     },
   ];
 
@@ -97,11 +99,11 @@ export default function ProcesoPage() {
         <div className="max-w-4xl mx-auto px-4 py-8 sm:py-10">
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Our
-              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> Process</span>
+              {t('title')}
+              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> {t('titleHighlight')}</span>
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              A clear and transparent process from service selection to final delivery.
+              {t('subtitle')}
             </p>
           </div>
         </div>
@@ -149,7 +151,7 @@ export default function ProcesoPage() {
         {/* Services */}
         <section className="mb-20">
           <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-            Our Services
+            {t('services.title')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {services.map((service) => {
@@ -186,7 +188,7 @@ export default function ProcesoPage() {
         {/* FAQ */}
         <section className="mb-20">
           <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-            Frequently Asked Questions
+            {t('faq.title')}
           </h2>
           <div className="max-w-3xl mx-auto space-y-3">
             {faqs.map((faq, index) => (
@@ -227,17 +229,17 @@ export default function ProcesoPage() {
         <section className="text-center">
           <div className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-8 md:p-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-              Ready to Get Started?
+              {t('cta.title')}
             </h2>
             <p className="text-indigo-100 mb-8 max-w-2xl mx-auto">
-              Select your service now or speak with an agent for a personalized recommendation.
+              {t('cta.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/business"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-indigo-600 font-semibold rounded-xl hover:bg-gray-100 transition-colors shadow-lg"
               >
-                View Services
+                {t('cta.button')}
                 <ArrowRightIcon className="w-4 h-4" />
               </Link>
               <Link

@@ -4,7 +4,7 @@
 import { FormEvent, useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { 
   RiMailLine, 
   RiLockLine, 
@@ -21,6 +21,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const locale = useLocale();
+  const t = useTranslations('login');
   const { user, login, loading: authLoading } = useAuth();
   
   const [showPassword, setShowPassword] = useState(false);
@@ -75,8 +76,11 @@ function LoginContent() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -92,15 +96,15 @@ function LoginContent() {
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Welcome back
+            {t('title')}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Don&apos;t have an account?{' '}
+            {t('noAccount')}{' '}
             <Link 
               href={`/${locale}/join`}
               className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
             >
-              Sign up here
+              {t('createAccount')}
             </Link>
           </p>
         </div>
@@ -115,7 +119,7 @@ function LoginContent() {
               className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all"
             >
               <RiGoogleFill className="h-5 w-5 text-red-500" />
-              Continue with Google
+              {t('google')}
             </button>
 
             <div className="mt-6 relative">
@@ -123,7 +127,7 @@ function LoginContent() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with email</span>
+                <span className="px-2 bg-white text-gray-500">{t('orContinueWith')}</span>
               </div>
             </div>
 
@@ -131,7 +135,7 @@ function LoginContent() {
               {/* Email Field */}
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email address
+                  {t('email')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -152,7 +156,7 @@ function LoginContent() {
               {/* Password Field */}
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
+                  {t('password')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -193,7 +197,7 @@ function LoginContent() {
                     onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                   />
                   <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-700">
-                    Remember me
+                    {t('rememberMe')}
                   </label>
                 </div>
 
@@ -202,7 +206,7 @@ function LoginContent() {
                     href={`/${locale}/forgot-password`}
                     className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
                   >
-                    Forgot password?
+                    {t('forgotPassword')}
                   </Link>
                 </div>
               </div>
@@ -230,10 +234,10 @@ function LoginContent() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Signing in...
+                    {t('signingIn')}
                   </>
                 ) : (
-                  'Sign In'
+                  t('signIn')
                 )}
               </button>
             </form>
@@ -243,7 +247,7 @@ function LoginContent() {
         {/* Security Note */}
         <div className="mt-6 flex items-center justify-center text-sm text-gray-500">
           <RiShieldCheckLine className="h-5 w-5 text-gray-400 mr-2" />
-          <p>Secure encrypted connection</p>
+          <p>{t('secureLogin')}</p>
         </div>
 
         {/* Terms Note */}
@@ -265,8 +269,11 @@ function LoginContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
       </div>
     }>
       <LoginContent />

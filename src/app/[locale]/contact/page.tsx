@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import {
   EnvelopeIcon,
   ClockIcon,
@@ -14,6 +15,8 @@ import {
 import { SocialIcons } from '../../components/molecules/socials/socialicons';
 
 export default function ContactPage() {
+  const t = useTranslations('contact');
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero - Compact */}
@@ -21,11 +24,11 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto px-4 py-8 sm:py-10">
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Connect
-              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> With Us</span>
+              {t('title')}
+              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> {t('titleHighlight')}</span>
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              Whether you're interested in our services or need support, our team is ready to assist you.
+              {t('subtitle')}
             </p>
           </div>
         </div>
@@ -43,12 +46,12 @@ export default function ContactPage() {
                     <UserGroupIcon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Sales Team</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Let's grow together</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('salesTeam.title')}</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('salesTeam.subtitle')}</p>
                   </div>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                  Available
+                  {t('salesTeam.available')}
                 </span>
               </div>
 
@@ -59,16 +62,16 @@ export default function ContactPage() {
                 </a>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
                   <ClockIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-700 dark:text-gray-300">8:00 AM - 5:00 PM (Pacific Time)</span>
+                  <span className="text-gray-700 dark:text-gray-300">{t('salesTeam.hours')}</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
                   <ChatBubbleLeftRightIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Live Chat Available</span>
+                  <span className="text-gray-700 dark:text-gray-300">{t('salesTeam.liveChat')}</span>
                 </div>
               </div>
 
               <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Follow us</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{t('salesTeam.followUs')}</p>
                 <SocialIcons />
               </div>
             </div>
@@ -83,12 +86,12 @@ export default function ContactPage() {
                     <HeartIcon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Customer Support</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">We're here to help</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('support.title')}</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('support.subtitle')}</p>
                   </div>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400">
-                  24/7
+                  {t('support.availability')}
                 </span>
               </div>
 
@@ -99,16 +102,16 @@ export default function ContactPage() {
                 </a>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
                   <PhoneIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Phone Lines Coming Soon</span>
+                  <span className="text-gray-700 dark:text-gray-300">{t('support.phoneComing')}</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50">
                   <ChatBubbleLeftRightIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Priority Chat Support</span>
+                  <span className="text-gray-700 dark:text-gray-300">{t('support.priorityChat')}</span>
                 </div>
               </div>
 
               <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Follow us</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{t('support.followUs')}</p>
                 <SocialIcons />
               </div>
             </div>
@@ -119,28 +122,28 @@ export default function ContactPage() {
         <section className="mb-16">
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 sm:p-8">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-              Additional Ways to Connect
+              {t('additional.title')}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-5 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <ChatBubbleLeftRightIcon className="w-8 h-8 text-indigo-600 dark:text-indigo-400 mb-3" />
-                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Live Chat</h4>
+                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{t('additional.liveChat.title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Get instant answers through our chat system.
+                  {t('additional.liveChat.description')}
                 </p>
               </div>
               <div className="p-5 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <UserGroupIcon className="w-8 h-8 text-indigo-600 dark:text-indigo-400 mb-3" />
-                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Social Media</h4>
+                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{t('additional.socialMedia.title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Follow and contact us through your preferred social network.
+                  {t('additional.socialMedia.description')}
                 </p>
               </div>
               <div className="p-5 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <EnvelopeIcon className="w-8 h-8 text-indigo-600 dark:text-indigo-400 mb-3" />
-                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Email</h4>
+                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{t('additional.email.title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Send us an email and we'll respond within 24 hours.
+                  {t('additional.email.description')}
                 </p>
               </div>
             </div>
@@ -150,10 +153,10 @@ export default function ContactPage() {
         {/* Quick Links Section */}
         <section className="text-center">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-            Looking for Quick Answers?
+            {t('quickLinks.title')}
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Check out our FAQ or explore helpful resources.
+            {t('quickLinks.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
@@ -161,14 +164,14 @@ export default function ContactPage() {
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-md transition-all duration-200"
             >
               <QuestionMarkCircleIcon className="w-5 h-5" />
-              FAQ & Process
+              {t('quickLinks.faq')}
             </Link>
             <Link
               href="/blog"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200"
             >
               <BookOpenIcon className="w-5 h-5" />
-              Resources & Guides
+              {t('quickLinks.resources')}
             </Link>
           </div>
         </section>

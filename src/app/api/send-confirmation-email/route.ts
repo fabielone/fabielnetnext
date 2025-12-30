@@ -81,7 +81,7 @@ export async function POST(req: Request) {
     let resolvedCustomer = customerName
     let resolvedAmount = totalAmount
     let questionnaireAccessToken: string | null = null
-    let subscriptionsList: Array<{name: string; amount: number; frequency: string}> = []
+    const subscriptionsList: Array<{name: string; amount: number; frequency: string}> = []
     
     const { default: prisma } = await import('src/lib/prisma')
     

@@ -1,7 +1,7 @@
 // components/molecules/menus/DesktopMenu.tsx
 'use client';
 
-import Link from 'next/link';
+import { OptimizedLink } from '../../atoms/OptimizedLink';
 import { NavItem } from '../../types/navigation';
 import { MegaMenu } from './megamenu';
 import { SocialIcons } from '../socials/socialicons';
@@ -23,13 +23,13 @@ const NavLink = ({ item, onNavigate, t }: {
 }) => {
   const k = normalizeKey(item.name);
   return (
-    <Link
+    <OptimizedLink
       href={item.path!}
       className="text-gray-800 dark:text-white text-center hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       onClick={onNavigate}
     >
       <span>{t(k)}</span>
-    </Link>
+    </OptimizedLink>
   );
 };
 

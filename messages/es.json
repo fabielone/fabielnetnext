@@ -939,5 +939,241 @@
         "description": "Servicios profesionales de formación empresarial con orientación experta para manejar todo tu papeleo de incorporación."
       }
     }
+  },
+  "contact": {
+    "title": "Conecta",
+    "titleHighlight": "Con Nosotros",
+    "subtitle": "Ya sea que estés interesado en nuestros servicios o necesites soporte, nuestro equipo está listo para ayudarte.",
+    "salesTeam": {
+      "title": "Equipo de Ventas",
+      "subtitle": "Crezcamos juntos",
+      "available": "Disponible",
+      "hours": "8:00 AM - 5:00 PM (Hora del Pacífico)",
+      "liveChat": "Chat en Vivo Disponible",
+      "followUs": "Síguenos"
+    },
+    "support": {
+      "title": "Soporte al Cliente",
+      "subtitle": "Estamos aquí para ayudar",
+      "availability": "24/7",
+      "phoneComing": "Líneas Telefónicas Próximamente",
+      "priorityChat": "Chat de Soporte Prioritario",
+      "followUs": "Síguenos"
+    },
+    "additional": {
+      "title": "Otras Formas de Conectar",
+      "liveChat": {
+        "title": "Chat en Vivo",
+        "description": "Obtén respuestas instantáneas a través de nuestro sistema de chat."
+      },
+      "socialMedia": {
+        "title": "Redes Sociales",
+        "description": "Síguenos y contáctanos a través de tu red social preferida."
+      },
+      "email": {
+        "title": "Correo Electrónico",
+        "description": "Envíanos un correo y responderemos en 24 horas."
+      }
+    },
+    "quickLinks": {
+      "title": "¿Buscas Respuestas Rápidas?",
+      "subtitle": "Consulta nuestras preguntas frecuentes o explora recursos útiles.",
+      "faq": "FAQ y Proceso",
+      "resources": "Recursos y Guías"
+    }
+  },
+  "login": {
+    "title": "Bienvenido de nuevo",
+    "noAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crea una aquí",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "rememberMe": "Recordarme",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión...",
+    "orContinueWith": "O continúa con",
+    "google": "Continuar con Google",
+    "secureLogin": "Tu inicio de sesión está protegido con encriptación de nivel industrial"
+  },
+  "join": {
+    "title": "Crea tu cuenta",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Inicia sesión aquí",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "phone": "Número de teléfono (opcional)",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "passwordRequirements": {
+      "minLength": "Al menos 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "number": "Un número",
+      "special": "Un carácter especial (!@#$%^&*)"
+    },
+    "agreements": {
+      "terms": "Acepto los",
+      "termsLink": "Términos de Servicio",
+      "privacy": "Acepto la",
+      "privacyLink": "Política de Privacidad",
+      "marketing": "Quiero recibir actualizaciones y correos de marketing"
+    },
+    "createAccount": "Crear Cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "orContinueWith": "O continúa con",
+    "google": "Continuar con Google",
+    "secure": "Tu información está protegida con seguridad de nivel empresarial"
+  },
+  "forgotPassword": {
+    "title": "¿Olvidaste tu contraseña?",
+    "subtitle": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "email": "Correo electrónico",
+    "sendLink": "Enviar Enlace de Restablecimiento",
+    "sending": "Enviando...",
+    "backToLogin": "Volver al inicio de sesión",
+    "success": {
+      "title": "Revisa Tu Correo",
+      "message": "Si existe una cuenta con {email}, hemos enviado instrucciones para restablecer la contraseña a esa dirección.",
+      "tips": {
+        "title": "¿No recibiste el correo?",
+        "spam": "Revisa tu carpeta de spam o correo no deseado",
+        "correct": "Asegúrate de haber ingresado el correo correcto",
+        "wait": "Espera unos minutos e intenta de nuevo"
+      },
+      "tryDifferent": "Intentar con otro correo",
+      "backToLogin": "Volver al inicio de sesión"
+    }
+  },
+  "resetPassword": {
+    "title": "Restablece Tu Contraseña",
+    "subtitle": "Crea una nueva contraseña segura para tu cuenta.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "resetButton": "Restablecer Contraseña",
+    "resetting": "Restableciendo...",
+    "passwordsMatch": "Las contraseñas coinciden",
+    "passwordsDontMatch": "Las contraseñas no coinciden",
+    "success": {
+      "title": "Contraseña Restablecida Exitosamente",
+      "message": "Tu contraseña ha sido actualizada. Ahora puedes iniciar sesión con tu nueva contraseña.",
+      "signIn": "Iniciar sesión en tu cuenta"
+    },
+    "invalidToken": {
+      "title": "Enlace de Restablecimiento Inválido",
+      "requestNew": "Solicitar Nuevo Enlace"
+    },
+    "verifying": "Verificando tu enlace de restablecimiento..."
+  },
+  "ourProcess": {
+    "title": "Nuestro",
+    "titleHighlight": "Proceso",
+    "subtitle": "De principio a fin, esto es lo que puedes esperar al trabajar con nosotros.",
+    "steps": {
+      "select": {
+        "title": "Seleccionar Servicio",
+        "description": "Elige de nuestros servicios principales o combínalos según tus necesidades."
+      },
+      "consultation": {
+        "title": "Consulta",
+        "description": "Si es necesario, habla con un especialista para asesoría personalizada."
+      },
+      "process": {
+        "title": "Procesar Pedido",
+        "description": "Confirmamos los detalles y comenzamos a trabajar en tu solicitud."
+      },
+      "additional": {
+        "title": "Requisitos Adicionales",
+        "description": "Si necesitamos más información, nos comunicaremos rápidamente."
+      },
+      "completed": {
+        "title": "Completado",
+        "description": "Finalizamos el proceso y entregamos los resultados acordados."
+      }
+    },
+    "services": {
+      "title": "Nuestros Servicios Principales",
+      "formation": {
+        "name": "Formación de Negocios",
+        "description": "Constitución legal de LLCs, corporaciones y otros tipos de entidades comerciales."
+      },
+      "software": {
+        "name": "Desarrollo de Software",
+        "description": "Soluciones tecnológicas personalizadas para optimizar tus operaciones."
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": {
+        "question": "¿Cómo selecciono el servicio adecuado?",
+        "answer": "Nuestra página de servicios detalla cada opción. Si tienes preguntas, puedes solicitar una consulta gratuita con un agente para recomendaciones personalizadas."
+      },
+      "q2": {
+        "question": "¿Qué información necesitan para procesar mi pedido?",
+        "answer": "Depende del servicio. Para formación de negocios necesitaremos documentos de identificación y detalles del negocio. Para desarrollo de software, analizaremos tus requisitos específicos."
+      },
+      "q3": {
+        "question": "¿Puedo agregar servicios adicionales después?",
+        "answer": "Sí, nuestro sistema es flexible. Puedes complementar tu pedido inicial con otros servicios cuando lo necesites."
+      },
+      "q4": {
+        "question": "¿Qué pasa si no respondo a las solicitudes de información adicional?",
+        "answer": "Pausaremos temporalmente el procesamiento hasta recibir toda la información necesaria, pero siempre comunicaremos claramente sobre los plazos."
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Comenzar?",
+      "subtitle": "Déjanos manejar la complejidad mientras tú te enfocas en tu negocio.",
+      "button": "Iniciar Tu Pedido"
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "subtitle": "Tu privacidad es importante para nosotros. Esta política describe cómo recopilamos, usamos y protegemos tu información personal.",
+    "lastUpdated": "Última actualización",
+    "sections": {
+      "collection": {
+        "title": "Recopilación de Información",
+        "intro": "Recopilamos información que nos proporcionas directamente cuando:",
+        "items": [
+          "Creas una cuenta en nuestra plataforma",
+          "Realizas una compra o transacción",
+          "Te comunicas con nuestro equipo de soporte",
+          "Te suscribes a nuestro boletín",
+          "Participas en encuestas o promociones"
+        ]
+      },
+      "use": {
+        "title": "Uso de la Información",
+        "intro": "Usamos tu información para:",
+        "items": [
+          "Procesar tus pedidos y transacciones",
+          "Proporcionar soporte al cliente",
+          "Enviar actualizaciones relevantes y marketing (con consentimiento)",
+          "Mejorar nuestros servicios y experiencia de usuario",
+          "Cumplir con obligaciones legales"
+        ]
+      },
+      "protection": {
+        "title": "Protección de Datos",
+        "content": "Implementamos medidas de seguridad estándar de la industria para proteger tu información personal del acceso no autorizado, divulgación o mal uso."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "content": "Usamos cookies y tecnologías similares para mejorar tu experiencia, analizar patrones de uso y entregar contenido personalizado."
+      },
+      "communications": {
+        "title": "Comunicaciones",
+        "content": "Podemos enviarte correos transaccionales relacionados con tus pedidos. Las comunicaciones de marketing son opcionales y puedes darte de baja en cualquier momento."
+      },
+      "rights": {
+        "title": "Tus Derechos",
+        "content": "Tienes derecho a acceder, corregir o eliminar tu información personal. Contáctanos para ejercer estos derechos."
+      },
+      "contact": {
+        "title": "Contacto",
+        "content": "Si tienes preguntas sobre esta política de privacidad, contáctanos en privacy@fabiel.net"
+      }
+    }
   }
 }

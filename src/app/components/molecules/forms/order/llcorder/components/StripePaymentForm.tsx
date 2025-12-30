@@ -261,7 +261,7 @@ const StripePaymentForm = ({
     return (
       <div className="flex items-center justify-center py-6">
         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-amber-600"></div>
-        <span className="ml-2 text-gray-600">Loading payment methods...</span>
+        <span className="ml-2 text-gray-600 dark:text-gray-400">Loading payment methods...</span>
       </div>
     );
   }

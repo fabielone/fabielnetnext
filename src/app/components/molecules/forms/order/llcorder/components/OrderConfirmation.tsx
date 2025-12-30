@@ -265,8 +265,8 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       <div className="space-y-8 text-center">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-amber-600 mx-auto"></div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Processing Your Order</h2>
-          <p className="text-gray-600">Setting up your LLC formation and additional services...</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Processing Your Order</h2>
+          <p className="text-gray-600 dark:text-gray-400">Setting up your LLC formation and additional services...</p>
         </div>
         
         {/* Processing Steps */}

@@ -1,7 +1,7 @@
 // components/molecules/menus/MegaMenu.tsx
 'use client';
 
-import Link from 'next/link';
+import { OptimizedLink } from '../../atoms/OptimizedLink';
 import { SubItem } from '../../types/navigation';
 import { IoMdArrowForward } from 'react-icons/io';
 import { FC } from 'react';
@@ -31,7 +31,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate, isOpen }) =>
             </p>
             <div className="text-left">
               {subItem.subSections?.map((subSection, subSecIndex) => (
-                <Link
+                <OptimizedLink
                   key={subSecIndex}
                   href={subSection.path}
                   className="flex items-start text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-1 gap-1"
@@ -41,7 +41,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ subItems, onNavigate, isOpen }) =>
                     className="flex-shrink-0 mt-0.5 text-gray-500 dark:text-gray-400" 
                   />
                   <span className="whitespace-nowrap">{t(normalizeKey(subSection.name))}</span> {/* Translate subSection name */}
-                </Link>
+                </OptimizedLink>
               ))}
             </div>
           </div>

@@ -940,5 +940,241 @@
         "description": "Professional business formation services with expert guidance to handle all your incorporation paperwork."
       }
     }
+  },
+  "contact": {
+    "title": "Connect",
+    "titleHighlight": "With Us",
+    "subtitle": "Whether you're interested in our services or need support, our team is ready to assist you.",
+    "salesTeam": {
+      "title": "Sales Team",
+      "subtitle": "Let's grow together",
+      "available": "Available",
+      "hours": "8:00 AM - 5:00 PM (Pacific Time)",
+      "liveChat": "Live Chat Available",
+      "followUs": "Follow us"
+    },
+    "support": {
+      "title": "Customer Support",
+      "subtitle": "We're here to help",
+      "availability": "24/7",
+      "phoneComing": "Phone Lines Coming Soon",
+      "priorityChat": "Priority Chat Support",
+      "followUs": "Follow us"
+    },
+    "additional": {
+      "title": "Additional Ways to Connect",
+      "liveChat": {
+        "title": "Live Chat",
+        "description": "Get instant answers through our chat system."
+      },
+      "socialMedia": {
+        "title": "Social Media",
+        "description": "Follow and contact us through your preferred social network."
+      },
+      "email": {
+        "title": "Email",
+        "description": "Send us an email and we'll respond within 24 hours."
+      }
+    },
+    "quickLinks": {
+      "title": "Looking for Quick Answers?",
+      "subtitle": "Check out our FAQ or explore helpful resources.",
+      "faq": "FAQ & Process",
+      "resources": "Resources & Guides"
+    }
+  },
+  "login": {
+    "title": "Welcome back",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create one here",
+    "email": "Email address",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "orContinueWith": "Or continue with",
+    "google": "Continue with Google",
+    "secureLogin": "Your login is secured with industry-standard encryption"
+  },
+  "join": {
+    "title": "Create your account",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in here",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone number (optional)",
+    "email": "Email address",
+    "password": "Password",
+    "passwordRequirements": {
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character (!@#$%^&*)"
+    },
+    "agreements": {
+      "terms": "I agree to the",
+      "termsLink": "Terms of Service",
+      "privacy": "I agree to the",
+      "privacyLink": "Privacy Policy",
+      "marketing": "I want to receive updates and marketing emails"
+    },
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating account...",
+    "orContinueWith": "Or continue with",
+    "google": "Continue with Google",
+    "secure": "Your information is protected with enterprise-grade security"
+  },
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "subtitle": "Enter your email address and we'll send you a link to reset your password.",
+    "email": "Email address",
+    "sendLink": "Send Reset Link",
+    "sending": "Sending...",
+    "backToLogin": "Back to login",
+    "success": {
+      "title": "Check Your Email",
+      "message": "If an account exists with {email}, we've sent password reset instructions to that address.",
+      "tips": {
+        "title": "Didn't receive an email?",
+        "spam": "Check your spam or junk folder",
+        "correct": "Make sure you entered the correct email",
+        "wait": "Wait a few minutes and try again"
+      },
+      "tryDifferent": "Try a different email",
+      "backToLogin": "Back to login"
+    }
+  },
+  "resetPassword": {
+    "title": "Reset Your Password",
+    "subtitle": "Create a new secure password for your account.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "resetButton": "Reset Password",
+    "resetting": "Resetting...",
+    "passwordsMatch": "Passwords match",
+    "passwordsDontMatch": "Passwords don't match",
+    "success": {
+      "title": "Password Reset Successfully",
+      "message": "Your password has been updated. You can now sign in with your new password.",
+      "signIn": "Sign in to your account"
+    },
+    "invalidToken": {
+      "title": "Invalid Reset Link",
+      "requestNew": "Request New Link"
+    },
+    "verifying": "Verifying your reset link..."
+  },
+  "ourProcess": {
+    "title": "Our",
+    "titleHighlight": "Process",
+    "subtitle": "From start to finish, here's what to expect when you work with us.",
+    "steps": {
+      "select": {
+        "title": "Select Service",
+        "description": "Choose from our main services or combine them according to your needs."
+      },
+      "consultation": {
+        "title": "Consultation",
+        "description": "If needed, speak with a specialist for personalized advice."
+      },
+      "process": {
+        "title": "Process Order",
+        "description": "We confirm details and begin working on your request."
+      },
+      "additional": {
+        "title": "Additional Requirements",
+        "description": "If we need more information, we'll reach out quickly."
+      },
+      "completed": {
+        "title": "Completed",
+        "description": "We finalize the process and deliver the agreed results."
+      }
+    },
+    "services": {
+      "title": "Our Main Services",
+      "formation": {
+        "name": "Business Formation",
+        "description": "Legal constitution of LLCs, corporations, and other types of business entities."
+      },
+      "software": {
+        "name": "Software Development",
+        "description": "Custom technology solutions to optimize your operations."
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "How do I select the right service?",
+        "answer": "Our services page details each option. If you have questions, you can request a free consultation with an agent for personalized recommendations."
+      },
+      "q2": {
+        "question": "What information do you need to process my order?",
+        "answer": "It depends on the service. For business formation we'll need identification documents and business details. For software development, we'll analyze your specific requirements."
+      },
+      "q3": {
+        "question": "Can I add additional services later?",
+        "answer": "Yes, our system is flexible. You can complement your initial order with other services whenever you need."
+      },
+      "q4": {
+        "question": "What happens if I don't respond to requests for additional information?",
+        "answer": "We'll temporarily pause processing until we receive all necessary information, but we'll always communicate clearly about timelines."
+      }
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Let us handle the complexity while you focus on your business.",
+      "button": "Start Your Order"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "Your privacy is important to us. This policy describes how we collect, use, and protect your personal information.",
+    "lastUpdated": "Last updated",
+    "sections": {
+      "collection": {
+        "title": "Information Collection",
+        "intro": "We collect information you provide directly when:",
+        "items": [
+          "You create an account on our platform",
+          "You make a purchase or transaction",
+          "You communicate with our support team",
+          "You subscribe to our newsletter",
+          "You participate in surveys or promotions"
+        ]
+      },
+      "use": {
+        "title": "Use of Information",
+        "intro": "We use your information to:",
+        "items": [
+          "Process your orders and transactions",
+          "Provide customer support",
+          "Send relevant updates and marketing (with consent)",
+          "Improve our services and user experience",
+          "Comply with legal obligations"
+        ]
+      },
+      "protection": {
+        "title": "Data Protection",
+        "content": "We implement industry-standard security measures to protect your personal information from unauthorized access, disclosure, or misuse."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "content": "We use cookies and similar technologies to enhance your experience, analyze usage patterns, and deliver personalized content."
+      },
+      "communications": {
+        "title": "Communications",
+        "content": "We may send you transactional emails related to your orders. Marketing communications are optional and you can unsubscribe at any time."
+      },
+      "rights": {
+        "title": "Your Rights",
+        "content": "You have the right to access, correct, or delete your personal information. Contact us to exercise these rights."
+      },
+      "contact": {
+        "title": "Contact",
+        "content": "If you have questions about this privacy policy, please contact us at privacy@fabiel.net"
+      }
+    }
   }
 }

@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import LoadingSpinner from '../atoms/LoadingSpinner'
 import { NavigationProgressBar } from '../atoms/NavigationProgressBar'
 
 // Loading style options
@@ -137,31 +136,12 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
             <NavigationProgressBar isVisible={true} />
           )}
           
-          {/* Subtle Overlay Style */}
+          {/* Subtle Overlay Style - Content section spinner (keeps navbar/footer visible) */}
           {loadingStyle === 'subtle-overlay' && (
-            <div className="fixed inset-0 z-[9999] bg-black/10 backdrop-blur-[2px] flex items-start justify-center pt-24 animate-in fade-in duration-200">
-              <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-white/20 p-5 mx-4 max-w-sm animate-in slide-in-from-top-4 duration-300 ease-out">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    <LoadingSpinner 
-                      size="small" 
-                      color="text-blue-600" 
-                      message=""
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">
-                      {currentLoadingMessage}
-                    </p>
-                    <p className="text-xs text-gray-600 mt-1">
-                      Just a moment...
-                    </p>
-                  </div>
-                </div>
-                {/* Subtle progress indicator */}
-                <div className="mt-4 w-full bg-gray-200/60 rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 h-full rounded-full animate-pulse shadow-sm" style={{ width: '75%' }}></div>
-                </div>
+            <div className="fixed top-16 left-0 right-0 bottom-0 z-[100] bg-gray-50 dark:bg-slate-900 flex items-center justify-center animate-in fade-in duration-200">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600 dark:text-gray-400">{currentLoadingMessage}</p>
               </div>
             </div>
           )}
