@@ -261,7 +261,13 @@ const StripePaymentForm = ({
           console.log('Subscription setup result:', subResult);
           
           if (!subResponse.ok) {
-            console.error('Subscription setup failed:', subResult);
+            if (subResult.duplicateServices) {
+              // Show warning for duplicate subscriptions but don't block the order
+              console.warn('Duplicate subscriptions detected:', subResult.duplicateServices);
+              alert(`Warning: You already have active subscriptions for: ${subResult.duplicateServices.join(', ')}. These were not added again.`);
+            } else {
+              console.error('Subscription setup failed:', subResult);
+            }
           }
         } catch (e) {
           console.error('Subscription setup scheduling failed:', e);

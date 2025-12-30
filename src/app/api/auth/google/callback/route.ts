@@ -102,9 +102,17 @@ export async function GET(request: NextRequest) {
     
     // Redirect to custom URL if provided (e.g., checkout flow), otherwise dashboard
     if (customRedirect) {
-      // Ensure redirect starts with / and add locale prefix
-      const redirectPath = customRedirect.startsWith('/') ? customRedirect : `/${customRedirect}`
-      return NextResponse.redirect(new URL(`/${locale}${redirectPath}`, request.url))
+      // Ensure redirect starts with /
+      let redirectPath = customRedirect.startsWith('/') ? customRedirect : `/${customRedirect}`
+      
+      // Check if path already has a locale prefix (e.g., /en/dashboard, /es/checkout)
+      const localePattern = /^\/[a-z]{2}(\/|$)/
+      if (!localePattern.test(redirectPath)) {
+        // Add locale prefix only if not already present
+        redirectPath = `/${locale}${redirectPath}`
+      }
+      
+      return NextResponse.redirect(new URL(redirectPath, request.url))
     }
     
     return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url))

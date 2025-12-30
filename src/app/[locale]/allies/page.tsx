@@ -1,7 +1,7 @@
 /* eslint-disable @stylistic/quotes */
 'use client';
 
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,57 +15,39 @@ import {
   TagIcon,
 } from "@heroicons/react/24/outline";
 
-type Mode = "Online" | "Presencial" | "Híbrido";
-
-type Project = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  tech: string[];
-  location: string; // Country/City
-  mode: Mode;
-  website?: string;
+type Business = {
+  id: string;
+  name: string;
+  publicDescription: string | null;
+  publicImageUrl: string | null;
+  publicCategory: string | null;
+  publicTags: string[];
+  publicLocation: string | null;
+  publicLink: string | null;
 };
 
-const projects: Project[] = [
+// Fallback static projects for when there are no DB entries
+const fallbackProjects: Business[] = [
   {
-    id: 1,
-    title: "TechFlow Solutions",
-    description: "Soluciones tecnológicas y SaaS a medida.",
-    image: "/marketing.jpeg",
-    category: "Tecnología",
-    tech: ["React", "Next.js", "SaaS"],
-    location: "México · CDMX",
-    mode: "Online",
-    website: "https://techflow.com",
+    id: "fallback-1",
+    name: "TechFlow Solutions",
+    publicDescription: "Soluciones tecnológicas y SaaS a medida.",
+    publicImageUrl: "/marketing.jpeg",
+    publicCategory: "Tecnología",
+    publicTags: ["React", "Next.js", "SaaS"],
+    publicLocation: "México · CDMX",
+    publicLink: "https://techflow.com",
   },
   {
-    id: 2,
-    title: "Sabor Latino Catering",
-    description: "Catering con auténticos sabores latinoamericanos.",
-    image: "/formacion.jpeg",
-    category: "Alimentación",
-    tech: ["Branding", "Eventos"],
-    location: "Colombia · Medellín",
-    mode: "Presencial",
-    website: "https://saborlatino.com",
+    id: "fallback-2",
+    name: "Sabor Latino Catering",
+    publicDescription: "Catering con auténticos sabores latinoamericanos.",
+    publicImageUrl: "/formacion.jpeg",
+    publicCategory: "Alimentación",
+    publicTags: ["Branding", "Eventos"],
+    publicLocation: "Colombia · Medellín",
+    publicLink: "https://saborlatino.com",
   }
-];
-
-const categories = ["Todas", ...Array.from(new Set(projects.map((p) => p.category)))];
-const locations = ["Todas", ...Array.from(new Set(projects.map((p) => p.location)))];
-const modes: ("Todas" | Mode)[] = ["Todas", "Online", "Presencial", "Híbrido"];
-const techs = [
-  "React",
-  "Next.js",
-  "SaaS",
-  "Branding",
-  "Eventos",
-  "SEO",
-  "Ads",
-  "Estrategia",
 ];
 
 // Searchable Dropdown Component
@@ -206,37 +188,87 @@ function ExpandableDescription({ text }: { text: string }) {
 }
 
 export default function AlliesShowcasePage() {
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<string[]>(["Todas"]);
+  const [locations, setLocations] = useState<string[]>(["Todas"]);
+  
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<(typeof categories)[number]>("Todas");
-  const [location, setLocation] = useState<(typeof locations)[number]>("Todas");
-  const [mode, setMode] = useState<(typeof modes)[number]>("Todas");
+  const [category, setCategory] = useState<string>("Todas");
+  const [location, setLocation] = useState<string>("Todas");
   const [selectedTechs, setSelectedTechs] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const itemsPerPage = 12;
+  
   // Pending filter states (applied only when clicking "Apply")
-  const [pendingCategory, setPendingCategory] = useState<(typeof categories)[number]>("Todas");
-  const [pendingLocation, setPendingLocation] = useState<(typeof locations)[number]>("Todas");
+  const [pendingCategory, setPendingCategory] = useState<string>("Todas");
+  const [pendingLocation, setPendingLocation] = useState<string>("Todas");
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return projects.filter((p) => {
-      const matchSearch =
-        !q ||
-        p.title.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.tech.some((t) => t.toLowerCase().includes(q)) ||
-        p.location.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        (p.website && p.website.toLowerCase().includes(q)) ||
-        p.image.toLowerCase().includes(q);
-      const matchCategory = category === "Todas" || p.category === category;
-      const matchLocation = location === "Todas" || p.location === location;
-      const matchMode = mode === "Todas" || p.mode === mode;
-      const matchTechs =
-        selectedTechs.length === 0 || selectedTechs.every((t) => p.tech.includes(t));
-      return matchSearch && matchCategory && matchLocation && matchMode && matchTechs;
-    });
-  }, [search, category, location, mode, selectedTechs]);
+  // Fetch businesses from API
+  const fetchBusinesses = async (page: number = 1) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.set('page', page.toString());
+      params.set('limit', itemsPerPage.toString());
+      if (category !== 'Todas') params.set('category', category);
+      if (location !== 'Todas') params.set('location', location);
+      if (search) params.set('search', search);
+      
+      const res = await fetch(`/api/public/businesses?${params.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.businesses.length > 0 || data.pagination.totalCount > 0) {
+          setBusinesses(data.businesses);
+          setCategories(["Todas", ...data.filters.categories]);
+          setLocations(["Todas", ...data.filters.locations]);
+          setTotalPages(data.pagination.totalPages);
+          setTotalCount(data.pagination.totalCount);
+          setCurrentPage(data.pagination.page);
+        } else {
+          // Use fallback if no businesses in DB
+          setBusinesses(fallbackProjects);
+          setTotalPages(1);
+          setTotalCount(fallbackProjects.length);
+        }
+      } else {
+          // Use fallback on error
+          setBusinesses(fallbackProjects);
+          setTotalPages(1);
+          setTotalCount(fallbackProjects.length);
+        }
+      } catch (err) {
+        console.error('Failed to fetch businesses:', err);
+        setBusinesses(fallbackProjects);
+        setTotalPages(1);
+        setTotalCount(fallbackProjects.length);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchBusinesses(1);
+  }, []);
+
+  // Refetch when filters change
+  useEffect(() => {
+    fetchBusinesses(1);
+    setCurrentPage(1);
+  }, [category, location, search]);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      fetchBusinesses(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const clearAll = () => {
     setSearch("");
@@ -246,6 +278,7 @@ export default function AlliesShowcasePage() {
     setSelectedTechs([]);
     setPendingCategory("Todas");
     setPendingLocation("Todas");
+    setCurrentPage(1);
   };
 
   const applyFilters = () => {
@@ -253,7 +286,7 @@ export default function AlliesShowcasePage() {
     setLocation(pendingLocation);
   };
 
-  const hasActiveFilters = search || category !== "Todas" || location !== "Todas" || mode !== "Todas" || selectedTechs.length > 0;
+  const hasActiveFilters = search || category !== "Todas" || location !== "Todas" || selectedTechs.length > 0;
   const hasPendingChanges = pendingCategory !== category || pendingLocation !== location;
 
   return (
@@ -316,7 +349,7 @@ export default function AlliesShowcasePage() {
               <span className="hidden sm:inline sm:ml-2">{showFilters ? "Ocultar" : "Filtros"}</span>
               {hasActiveFilters && (
                 <span className="ml-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-indigo-600 text-white rounded-full">
-                  {[category !== "Todas", location !== "Todas", mode !== "Todas", selectedTechs.length > 0].filter(Boolean).length}
+                  {[category !== "Todas", location !== "Todas", selectedTechs.length > 0].filter(Boolean).length}
                 </span>
               )}
             </button>
@@ -392,58 +425,80 @@ export default function AlliesShowcasePage() {
 
       {/* Grid */}
       <main className="max-w-7xl mx-auto px-4 py-10">
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          </div>
+        ) : (
+          <>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((p) => (
+          {businesses.map((p) => (
             <article
               key={p.id}
               className="group rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg transition-all duration-300"
             >
               {/* Image container with 3:2 aspect ratio (600x400) */}
-              <div className="relative aspect-[3/2] overflow-hidden">
-                <Image
-                  src={p.image}
-                  alt={p.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                />
+              <div className="relative aspect-[3/2] overflow-hidden bg-gray-100 dark:bg-gray-700">
+                {p.publicImageUrl ? (
+                  <Image
+                    src={p.publicImageUrl}
+                    alt={p.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-4xl font-bold text-gray-300 dark:text-gray-500">
+                      {p.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
                 {/* Category badge */}
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-800 dark:text-gray-200">
-                  {p.category}
-                </div>
+                {p.publicCategory && (
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-800 dark:text-gray-200">
+                    {p.publicCategory}
+                  </div>
+                )}
               </div>
               
               <div className="p-5">
                 {/* Title */}
                 <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">
-                  {p.title}
+                  {p.name}
                 </h3>
                 
                 {/* Description with 3 lines max and read more */}
-                <ExpandableDescription text={p.description} />
+                {p.publicDescription && (
+                  <ExpandableDescription text={p.publicDescription} />
+                )}
 
                 {/* Tags */}
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {p.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
-                    >
-                      <TagIcon className="h-3 w-3" />
-                      {t}
-                    </span>
-                  ))}
-                </div>
+                {p.publicTags && p.publicTags.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {p.publicTags.map((t) => (
+                      <span
+                        key={t}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
+                      >
+                        <TagIcon className="h-3 w-3" />
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Footer: Location & Link */}
                 <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-between text-sm">
-                  <div className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
-                    <MapPinIcon className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{p.location}</span>
-                  </div>
-                  {p.website && (
+                  {p.publicLocation && (
+                    <div className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                      <MapPinIcon className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{p.publicLocation}</span>
+                    </div>
+                  )}
+                  {p.publicLink && (
                     <a
-                      href={p.website}
+                      href={p.publicLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors font-medium text-xs"
@@ -458,7 +513,60 @@ export default function AlliesShowcasePage() {
           ))}
         </div>
 
-        {filtered.length === 0 && (
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Mostrando {businesses.length} de {totalCount} negocios
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1 || loading}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Anterior
+              </button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(page => 
+                    page === 1 || 
+                    page === totalPages || 
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  )
+                  .map((page, idx, arr) => (
+                    <Fragment key={page}>
+                      {idx > 0 && arr[idx - 1] !== page - 1 && (
+                        <span className="px-2 text-gray-400">...</span>
+                      )}
+                      <button
+                        onClick={() => handlePageChange(page)}
+                        disabled={loading}
+                        className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
+                          page === currentPage
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    </Fragment>
+                  ))}
+              </div>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages || loading}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+        )}
+          </>
+        )}
+
+        {businesses.length === 0 && !loading && (
           <div className="text-center py-16">
             <div className="w-20 h-20 mx-auto rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
               <FunnelIcon className="h-10 w-10 text-gray-400" />

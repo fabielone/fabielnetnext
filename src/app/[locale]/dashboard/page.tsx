@@ -29,6 +29,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const businessesPerPage = 9
 
   const fetchData = useCallback(async () => {
     try {
@@ -196,15 +198,56 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {businesses.map(business => (
-                <BusinessCard 
-                  key={business.id} 
-                  business={business}
-                  locale={locale}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {businesses
+                  .slice((currentPage - 1) * businessesPerPage, currentPage * businessesPerPage)
+                  .map(business => (
+                    <BusinessCard 
+                      key={business.id} 
+                      business={business}
+                      locale={locale}
+                    />
+                  ))}
+              </div>
+              
+              {/* Pagination */}
+              {businesses.length > businessesPerPage && (
+                <div className="flex items-center justify-center gap-2 mt-6">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.ceil(businesses.length / businessesPerPage) }, (_, i) => i + 1).map(page => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-9 h-9 text-sm font-medium rounded-lg transition-colors ${
+                          currentPage === page
+                            ? 'bg-amber-600 text-white'
+                            : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(Math.ceil(businesses.length / businessesPerPage), p + 1))}
+                    disabled={currentPage === Math.ceil(businesses.length / businessesPerPage)}
+                    className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
 

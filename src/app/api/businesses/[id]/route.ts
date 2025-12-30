@@ -44,6 +44,9 @@ export async function GET(
           orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
           take: 10,
         },
+        subscriptions: {
+          orderBy: { createdAt: 'desc' },
+        },
         formationOrder: {
           select: {
             id: true,
@@ -52,6 +55,15 @@ export async function GET(
             companyName: true,
             totalAmount: true,
             createdAt: true,
+            questionnaire: {
+              select: {
+                id: true,
+                status: true,
+                currentSection: true,
+                createdAt: true,
+                accessToken: true,
+              }
+            }
           }
         }
       }

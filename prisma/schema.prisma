@@ -118,6 +118,15 @@ model Business {
   annualReportDueDate   DateTime?          @map("annual_report_due_date")
   franchiseTaxDueDate   DateTime?          @map("franchise_tax_due_date")
   registeredAgentExpiry DateTime?          @map("registered_agent_expiry")
+  // Public listing fields (for allies/clients page)
+  isPublicListed        Boolean            @default(false) @map("is_public_listed")
+  publicDescription     String?            @map("public_description")
+  publicImageUrl        String?            @map("public_image_url")
+  publicCategory        String?            @map("public_category")
+  publicTags            String[]           @default([]) @map("public_tags")
+  publicLocation        String?            @map("public_location")
+  publicMode            String?            @map("public_mode") // Deprecated - kept for migration
+  publicLink            String?            @map("public_link") // Custom link for the card
   createdAt             DateTime           @default(now()) @map("created_at")
   updatedAt             DateTime           @updatedAt @map("updated_at")
   documents             BusinessDocument[]
@@ -125,6 +134,7 @@ model Business {
   members               BusinessMember[]
   notes                 BusinessNote[]
   services              BusinessService[]
+  subscriptions         Subscription[]
   formationOrder        Order?             @relation("BusinessFormation", fields: [formationOrderId], references: [id])
   owner                 User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   complianceTasks       ComplianceTask[]
@@ -826,6 +836,7 @@ model Subscription {
   updatedAt            DateTime           @updatedAt @map("updated_at")
   payments             Payment[]
   user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business             Business?          @relation(fields: [businessId], references: [id], onDelete: SetNull)
 
   @@map("subscriptions")
 }

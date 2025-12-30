@@ -4,6 +4,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { useAuth } from '@/app/components/providers/AuthProvider'
+import BusinessSettingsTab from './components/BusinessSettingsTab'
 import { 
   RiArrowLeftLine,
   RiBuilding2Line, 
@@ -21,7 +22,10 @@ import {
   RiGlobalLine,
   RiPhoneLine,
   RiMailLine,
-  RiMapPinLine
+  RiMapPinLine,
+  RiRefreshLine,
+  RiImageLine,
+  RiUploadLine
 } from 'react-icons/ri'
 
 type BusinessDetail = {
@@ -75,15 +79,33 @@ type BusinessDetail = {
     isPinned: boolean
     createdAt: string
   }>
+  subscriptions: Array<{
+    id: string
+    name: string
+    description: string | null
+    status: string
+    amount: number
+    interval: string
+    currentPeriodEnd: string | null
+    trialEndsAt: string | null
+    createdAt: string
+  }>
   formationOrder: {
     id: string
     orderId: string
     status: string
     companyName: string
+    questionnaire?: {
+      id: string
+      status: string
+      currentSection: string | null
+      createdAt: string
+      accessToken: string
+    } | null
   } | null
 }
 
-type Tab = 'overview' | 'documents' | 'calendar' | 'services' | 'compliance'
+type Tab = 'overview' | 'documents' | 'calendar' | 'subscriptions' | 'compliance' | 'settings'
 
 export default function BusinessDetailPage() {
   const { user, loading: authLoading } = useAuth()
@@ -148,16 +170,24 @@ export default function BusinessDetailPage() {
   }
 
   const status = statusColors[business.status] || statusColors.PENDING
-  const pendingTasks = business.complianceTasks.filter(t => 
+  const complianceTasks = business.complianceTasks || [];
+  const pendingTasks = complianceTasks.filter(t => 
     ['PENDING', 'IN_PROGRESS', 'OVERDUE'].includes(t.status)
   )
 
+  const subscriptions = business.subscriptions || [];
+  const documents = business.documents || [];
+  const events = business.events || [];
+  const services = business.services || [];
+  const notes = business.notes || [];
+
   const tabs: { id: Tab; label: string; icon: React.ReactNode; count?: number }[] = [
     { id: 'overview', label: 'Overview', icon: <RiBuilding2Line className="w-4 h-4" /> },
-    { id: 'documents', label: 'Files', icon: <RiFileTextLine className="w-4 h-4" />, count: business.documents.length },
-    { id: 'calendar', label: 'Calendar', icon: <RiCalendarLine className="w-4 h-4" />, count: business.events.length },
-    { id: 'services', label: 'Services', icon: <RiSettings4Line className="w-4 h-4" />, count: business.services.length },
+    { id: 'documents', label: 'Files', icon: <RiFileTextLine className="w-4 h-4" />, count: documents.length },
+    { id: 'calendar', label: 'Calendar', icon: <RiCalendarLine className="w-4 h-4" />, count: events.length },
+    { id: 'subscriptions', label: 'Subscriptions', icon: <RiRefreshLine className="w-4 h-4" />, count: subscriptions.length },
     { id: 'compliance', label: 'Compliance', icon: <RiCheckboxCircleLine className="w-4 h-4" />, count: pendingTasks.length },
+    { id: 'settings', label: 'Settings', icon: <RiSettings4Line className="w-4 h-4" /> },
   ]
 
   return (
@@ -311,11 +341,11 @@ export default function BusinessDetailPage() {
                     View All →
                   </button>
                 </div>
-                {business.documents.length === 0 ? (
+                {documents.length === 0 ? (
                   <p className="text-gray-500 text-sm">No documents yet</p>
                 ) : (
                   <div className="space-y-2">
-                    {business.documents.slice(0, 5).map(doc => (
+                    {documents.slice(0, 5).map(doc => (
                       <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                         <div className="flex items-center gap-3">
                           <RiFileTextLine className="w-5 h-5 text-gray-400" />
@@ -345,18 +375,40 @@ export default function BusinessDetailPage() {
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900">Pending Tasks</h3>
-                  {pendingTasks.length > 0 && (
+                  {(pendingTasks.length > 0 || (business.formationOrder?.questionnaire && ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status))) && (
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700">
-                      {pendingTasks.length}
+                      {pendingTasks.length + (business.formationOrder?.questionnaire && ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status) ? 1 : 0)}
                     </span>
                   )}
                 </div>
-                {pendingTasks.length === 0 ? (
+                
+                {/* Pending Questionnaire */}
+                {business.formationOrder?.questionnaire && ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status) && (
+                  <Link
+                    href={`/${locale}/questionnaire/${business.formationOrder.questionnaire.accessToken}`}
+                    className="block p-3 bg-blue-50 rounded-lg border border-blue-100 mb-3 hover:bg-blue-100 transition-colors"
+                  >
+                    <div className="flex items-start gap-2">
+                      <RiFileTextLine className="w-4 h-4 text-blue-500 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Complete Your Questionnaire</p>
+                        <p className="text-xs text-gray-500">
+                          {business.formationOrder.questionnaire.status === 'NOT_STARTED' 
+                            ? 'Not started yet - Click to begin' 
+                            : `In progress - Section: ${business.formationOrder.questionnaire.currentSection || 'Getting started'}`}
+                        </p>
+                      </div>
+                      <RiArrowLeftLine className="w-4 h-4 text-blue-500 rotate-180" />
+                    </div>
+                  </Link>
+                )}
+                
+                {pendingTasks.length === 0 && !(business.formationOrder?.questionnaire && ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status)) ? (
                   <div className="text-center py-4">
                     <RiCheckLine className="w-8 h-8 text-green-500 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">All caught up!</p>
                   </div>
-                ) : (
+                ) : pendingTasks.length > 0 && (
                   <div className="space-y-3">
                     {pendingTasks.slice(0, 5).map(task => (
                       <div key={task.id} className="p-3 bg-amber-50 rounded-lg border border-amber-100">
@@ -384,11 +436,11 @@ export default function BusinessDetailPage() {
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900">Upcoming Events</h3>
                 </div>
-                {business.events.length === 0 ? (
+                {events.length === 0 ? (
                   <p className="text-gray-500 text-sm">No upcoming events</p>
                 ) : (
                   <div className="space-y-3">
-                    {business.events.slice(0, 3).map(event => (
+                    {events.slice(0, 3).map(event => (
                       <div key={event.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                         <RiCalendarLine className="w-4 h-4 text-blue-500 mt-0.5" />
                         <div>
@@ -434,14 +486,14 @@ export default function BusinessDetailPage() {
                 Upload Document
               </button>
             </div>
-            {business.documents.length === 0 ? (
+            {documents.length === 0 ? (
               <div className="text-center py-12">
                 <RiFileTextLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500">No documents uploaded yet</p>
               </div>
             ) : (
               <div className="space-y-2">
-                {business.documents.map(doc => (
+                {documents.map(doc => (
                   <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <div className="flex items-center gap-3">
                       <RiFileTextLine className="w-6 h-6 text-gray-400" />
@@ -476,14 +528,14 @@ export default function BusinessDetailPage() {
                 Add Event
               </button>
             </div>
-            {business.events.length === 0 ? (
+            {events.length === 0 ? (
               <div className="text-center py-12">
                 <RiCalendarLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500">No events scheduled</p>
               </div>
             ) : (
               <div className="space-y-3">
-                {business.events.map(event => (
+                {events.map(event => (
                   <div key={event.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-100 rounded-lg">
@@ -507,40 +559,63 @@ export default function BusinessDetailPage() {
           </div>
         )}
 
-        {activeTab === 'services' && (
+        {activeTab === 'subscriptions' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-semibold text-gray-900">Active Services</h3>
+              <h3 className="font-semibold text-gray-900">Subscriptions</h3>
               <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium">
                 <RiAddLine className="w-4 h-4" />
                 Add Service
               </button>
             </div>
-            {business.services.length === 0 ? (
+            {subscriptions.length === 0 ? (
               <div className="text-center py-12">
-                <RiSettings4Line className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No active services</p>
+                <RiRefreshLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">No subscriptions for this business</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {business.services.map(service => (
-                  <div key={service.id} className="p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="font-medium text-gray-900">{service.name}</p>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        service.status === 'ACTIVE' 
-                          ? 'bg-green-100 text-green-700' 
-                          : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {service.status}
-                      </span>
+              <div className="space-y-4">
+                {subscriptions.map(subscription => {
+                  const isInGracePeriod = subscription.trialEndsAt && new Date(subscription.trialEndsAt) > new Date();
+                  const nextBillingDate = isInGracePeriod 
+                    ? subscription.trialEndsAt 
+                    : subscription.currentPeriodEnd;
+                  
+                  return (
+                    <div key={subscription.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <p className="font-medium text-gray-900">{subscription.name}</p>
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                              subscription.status === 'ACTIVE' 
+                                ? 'bg-green-100 text-green-700' 
+                                : subscription.status === 'CANCELLED'
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              {subscription.status}
+                            </span>
+                          </div>
+                          {subscription.description && (
+                            <p className="text-sm text-gray-500 mb-2">{subscription.description}</p>
+                          )}
+                          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                            <span>
+                              Amount: <span className="font-medium">${Number(subscription.amount).toFixed(2)}/{subscription.interval}</span>
+                            </span>
+                            {nextBillingDate && subscription.status === 'ACTIVE' && (
+                              <span className="flex items-center gap-1">
+                                <RiCalendarLine className="w-4 h-4" />
+                                Next billing: <span className="font-medium">{new Date(nextBillingDate).toLocaleDateString()}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-500">{service.serviceType.replace(/_/g, ' ')}</p>
-                    <p className="text-sm font-medium text-amber-600 mt-2">
-                      ${Number(service.price).toFixed(2)}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -551,14 +626,14 @@ export default function BusinessDetailPage() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-gray-900">Compliance Tasks</h3>
             </div>
-            {business.complianceTasks.length === 0 ? (
+            {complianceTasks.length === 0 ? (
               <div className="text-center py-12">
                 <RiCheckboxCircleLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500">No compliance tasks</p>
               </div>
             ) : (
               <div className="space-y-3">
-                {business.complianceTasks.map(task => (
+                {complianceTasks.map(task => (
                   <div 
                     key={task.id} 
                     className={`flex items-center justify-between p-4 rounded-lg ${
@@ -601,6 +676,10 @@ export default function BusinessDetailPage() {
               </div>
             )}
           </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <BusinessSettingsTab businessId={business.id} businessStatus={business.status} locale={locale} />
         )}
       </main>
     </div>

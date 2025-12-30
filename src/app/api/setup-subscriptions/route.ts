@@ -84,6 +84,33 @@ export async function POST(request: Request) {
     const trialEndsAt = new Date();
     trialEndsAt.setDate(trialEndsAt.getDate() + 10);
 
+    // Check for existing active subscriptions to prevent duplicates (per business)
+    if (user && businessId) {
+      const existingSubscriptions = await prisma.subscription.findMany({
+        where: {
+          userId: user.id,
+          businessId: businessId,
+          status: { in: ['ACTIVE', 'PAUSED'] },
+          name: { in: subscriptions.map((s: any) => s.service) }
+        },
+        select: { name: true }
+      });
+
+      if (existingSubscriptions.length > 0) {
+        const duplicateServices = existingSubscriptions.map(s => s.name);
+        console.warn('Duplicate subscription attempt for business:', {
+          userId: user.id,
+          businessId,
+          duplicateServices
+        });
+        return NextResponse.json({
+          error: 'Duplicate subscription',
+          message: `This business already has active subscriptions for: ${duplicateServices.join(', ')}`,
+          duplicateServices
+        }, { status: 400 });
+      }
+    }
+
     // Create subscriptions and save to database
     const createdSubscriptions = await Promise.all(
       subscriptions.map(async (sub: any) => {
