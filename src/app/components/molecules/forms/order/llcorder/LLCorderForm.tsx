@@ -17,6 +17,10 @@ const PaymentStep = lazy(() => import('./components/PaymentStep'));
 const OrderConfirmation = lazy(() => import('./components/OrderConfirmation'));
 
 // With this updated version:
+const generateOrderId = (): string => {
+  return `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+};
+
 const initialFormState: LLCFormData = {
   companyName: '',
   llcSuffix: 'LLC',  // Default to LLC
@@ -41,6 +45,15 @@ const initialFormState: LLCFormData = {
   // Formation state
   formationState: '',  // Must select a state
   rushProcessing: false,
+  stateFilingFee: 0,   // Will be set when state is selected
+  stateRushFee: null,  // Will be set when state is selected
+  
+  // Coupon/Discount
+  couponCode: '',      // Applied coupon code
+  couponDiscount: 0,   // Discount amount in dollars
+  
+  // Order identification
+  orderId: generateOrderId(),  // Generate order ID at initialization
   
   // Service selections - all selected by default
   needLLCFormation: true,  // Required service, always true
@@ -50,22 +63,28 @@ const initialFormState: LLCFormData = {
 };
 
 const calculateOrderTotal = (formData: LLCFormData): number => {
-  let total = 124.99; // Base price
-  if (formData.registeredAgent) total += 149;
-  if (formData.compliance) total += 99;
+  let total = 99.99; // Base price (our service fee)
   
-  // Website tier pricing
-  if (formData.website === 'essential') total += 29.99;
-  if (formData.website === 'professional') total += 49.99;
+  // Add state filing fee
+  total += formData.stateFilingFee || 0;
   
-  // Blog Pro pricing (independent add-on)
-  if (formData.blogPro) total += 49.99;
+  // Add rush processing fee if selected
+  if (formData.rushProcessing && formData.stateRushFee) {
+    total += formData.stateRushFee;
+  }
+  
+  // Apply coupon discount
+  if (formData.couponDiscount && formData.couponDiscount > 0) {
+    total -= formData.couponDiscount;
+  }
+  
+  // Ensure total doesn't go below 0
+  total = Math.max(0, total);
+  
+  // NOTE: Registered Agent, Compliance, Website, and Blog Pro are billed later (subscriptions)
+  // They should NOT be added to the one-time order total
   
   return total;
-};
-
-const generateOrderId = (): string => {
-  return `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 };
 
 const handleOrderSubmit = (formData: LLCFormData): void => {
@@ -110,6 +129,29 @@ const LLCOrderForm = () => {
     return [];
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  // Safeguard: If on later steps but essential data is missing (e.g., after page refresh), redirect to step 1
+  useEffect(() => {
+    const isEssentialDataMissing = () => {
+      // Check if we're on step 2+ but don't have basic info
+      if (currentStep >= 2 && (!formData.firstName || !formData.lastName || !formData.email || !formData.formationState)) {
+        return true;
+      }
+      // Check if we're on payment step but don't have state fee data
+      if (currentStep >= 5 && !formData.stateFilingFee && formData.formationState) {
+        return true;
+      }
+      return false;
+    };
+
+    if (isEssentialDataMissing()) {
+      // Reset to step 1 if essential data is missing
+      setCurrentStep(1);
+      setCompletedSteps([]);
+      // Update URL to reflect step 1
+      router.replace(`${pathname}?step=1`, { scroll: false });
+    }
+  }, [currentStep, formData.firstName, formData.lastName, formData.email, formData.formationState, formData.stateFilingFee, pathname, router]);
 
   // Update URL when step changes
   useEffect(() => {
@@ -277,7 +319,7 @@ const LLCOrderForm = () => {
             <OrderConfirmation 
               {...commonProps}
               orderTotal={calculateOrderTotal(formData)}
-              orderId={generateOrderId()}
+              orderId={formData.orderId}
               onSubmit={() => handleOrderSubmit(formData)}
               onPrev={() => handlePrevStep(6)}
             />

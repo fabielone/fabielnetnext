@@ -55,7 +55,7 @@ const LLCOrderForm = () => {
     operatingAgreement: true,
   })
   
-  const [orderTotal, setOrderTotal] = useState(124.99)
+  const [orderTotal, setOrderTotal] = useState(99.99)
   const [loading, setLoading] = useState(false)
   const [orderSubmitted, setOrderSubmitted] = useState(false)
   const [orderId, setOrderId] = useState('')
@@ -70,7 +70,7 @@ const LLCOrderForm = () => {
 
   // Calculate total whenever services change
   useEffect(() => {
-    let total = 124.99 // Base price
+    let total = 99.99 // Base price
     if (formData.registeredAgent) total += 149
     if (formData.compliance) total += 99
     setOrderTotal(total)
@@ -348,7 +348,7 @@ const LLCOrderForm = () => {
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Basic Information</h2>
                 <div className="bg-blue-50 rounded-lg p-4">
-                  <div className="text-lg font-semibold text-blue-900">$124.99 Total</div>
+                  <div className="text-lg font-semibold text-blue-900">$99.99 Total</div>
                   <div className="text-sm text-blue-700">$49.99 service fee + $75.00 state filing fee</div>
                 </div>
               </div>

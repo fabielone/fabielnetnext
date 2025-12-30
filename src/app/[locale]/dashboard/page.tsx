@@ -6,10 +6,7 @@ import { useAuth } from '@/app/components/providers/AuthProvider'
 import { 
   RiBuilding2Line, 
   RiAddLine, 
-  RiFileTextLine, 
   RiCalendarLine,
-  RiCheckboxCircleLine,
-  RiSettings4Line,
   RiArrowRightLine,
   RiAlertLine,
   RiTimeLine,
@@ -122,8 +119,8 @@ export default function DashboardPage() {
 
         {/* Summary Stats */}
         {summary && (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+            <div className="flex flex-wrap items-center gap-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-amber-100 rounded-lg">
                   <RiBuilding2Line className="w-5 h-5 text-amber-600" />
@@ -133,21 +130,9 @@ export default function DashboardPage() {
                   <p className="text-xs text-gray-500">Businesses</p>
                 </div>
               </div>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">{summary.activeBusinesses}</p>
-                  <p className="text-xs text-gray-500">Active</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              
+              <div className="h-10 w-px bg-gray-200 hidden sm:block"></div>
+              
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 rounded-lg">
                   <RiAlertLine className="w-5 h-5 text-red-600" />
@@ -157,40 +142,16 @@ export default function DashboardPage() {
                   <p className="text-xs text-gray-500">Pending Tasks</p>
                 </div>
               </div>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              
+              <div className="h-10 w-px bg-gray-200 hidden sm:block"></div>
+              
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <RiCalendarLine className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">{summary.upcomingEvents}</p>
-                  <p className="text-xs text-gray-500">Events</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <RiFileTextLine className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">{summary.totalDocuments}</p>
-                  <p className="text-xs text-gray-500">Documents</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 rounded-lg">
-                  <RiSettings4Line className="w-5 h-5 text-indigo-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">{summary.activeServices}</p>
-                  <p className="text-xs text-gray-500">Services</p>
+                  <p className="text-xs text-gray-500">Upcoming Events</p>
                 </div>
               </div>
             </div>

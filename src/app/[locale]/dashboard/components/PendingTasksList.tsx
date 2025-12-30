@@ -42,6 +42,7 @@ const priorityBorders = {
 
 export default function PendingTasksList() {
   const [tasks, setTasks] = useState<PendingTask[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const locale = useLocale();
 
@@ -56,9 +57,9 @@ export default function PendingTasksList() {
         const data = await res.json();
         // Only show pending and in-progress tasks on dashboard (max 3)
         const activeTasks = (data.tasks || [])
-          .filter((t: PendingTask) => t.status === 'PENDING' || t.status === 'IN_PROGRESS')
-          .slice(0, 3);
-        setTasks(activeTasks);
+          .filter((t: PendingTask) => t.status === 'PENDING' || t.status === 'IN_PROGRESS');
+        setTotalCount(activeTasks.length);
+        setTasks(activeTasks.slice(0, 3));
       }
     } catch (error) {
       console.error('Failed to fetch pending tasks:', error);
@@ -109,7 +110,7 @@ export default function PendingTasksList() {
           </div>
           <h3 className="text-lg font-semibold text-gray-900">Pending Tasks</h3>
           <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
-            {tasks.length}
+            {totalCount}
           </span>
         </div>
         <div className="flex items-center gap-1 text-sm text-amber-600 opacity-0 group-hover:opacity-100 transition-opacity">

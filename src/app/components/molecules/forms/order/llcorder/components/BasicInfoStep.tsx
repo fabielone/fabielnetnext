@@ -140,6 +140,17 @@ const BasicInfoStep = ({ formData, updateFormData, onNext, onPrev, scrollToError
 
   const handleStateSelect = (stateCode: string) => {
     updateFormData('formationState', stateCode);
+    
+    // Also update the state fee data in formData for total calculation
+    const fee = stateFees.find(f => f.stateCode === stateCode);
+    if (fee) {
+      updateFormData('stateFilingFee', fee.filingFee);
+      updateFormData('stateRushFee', fee.rushFee);
+    } else {
+      updateFormData('stateFilingFee', 0);
+      updateFormData('stateRushFee', null);
+    }
+    
     setStateDropdownOpen(false);
     setStateSearchQuery('');
     if (errors.formationState) {

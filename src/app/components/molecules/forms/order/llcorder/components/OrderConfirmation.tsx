@@ -2,7 +2,7 @@ import { LLCFormData } from '../types';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon, CreditCardIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon, CreditCardIcon, PrinterIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/app/components/providers/AuthProvider';
 
 interface OrderConfirmationProps {
@@ -36,9 +36,37 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
 
   // Calculate service breakdown
   const getServiceBreakdown = (): ServiceBreakdown => {
-    const oneTimeServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [
-      { name: 'LLC Formation Package', price: 124.99, status: 'paid' }
+    const oneTimeServices: Array<{ name: string; price: number; status: 'paid' | 'pending'; isDiscount?: boolean }> = [
+      { name: 'LLC Formation Package', price: 99.99, status: 'paid' }
     ];
+
+    // Add state filing fee
+    if (formData.stateFilingFee && formData.stateFilingFee > 0) {
+      oneTimeServices.push({ 
+        name: `${formData.formationState} State Filing Fee`, 
+        price: formData.stateFilingFee, 
+        status: 'paid' 
+      });
+    }
+
+    // Add rush processing fee if selected
+    if (formData.rushProcessing && formData.stateRushFee) {
+      oneTimeServices.push({ 
+        name: 'Rush Processing', 
+        price: formData.stateRushFee, 
+        status: 'paid' 
+      });
+    }
+
+    // Add coupon discount as negative line item (only applies to formation fee)
+    if (formData.couponDiscount && formData.couponDiscount > 0) {
+      oneTimeServices.push({ 
+        name: `Coupon: ${formData.couponCode} (on formation fee)`, 
+        price: -formData.couponDiscount, 
+        status: 'paid',
+        isDiscount: true
+      });
+    }
 
     const yearlyServices: Array<{ name: string; price: number; status: 'paid' | 'pending' }> = [];
     if (formData.registeredAgent) {
@@ -501,30 +529,32 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       </div>
 
       {/* Dashboard Access */}
-      {formData.email && formData.password ? (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-          <h4 className="font-semibold text-green-800 mb-2">Client Dashboard Access</h4>
-          <p className="text-green-700 mb-4">
-            Your account has been created! Access your dashboard to track progress and complete questionnaires.
-          </p>
-          <button 
-            onClick={redirectToDashboard}
-            className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-          >
-            Access Your Dashboard
-          </button>
-        </div>
-      ) : (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-          <h4 className="font-semibold text-gray-800 mb-2">Track Your Order</h4>
-          <p className="text-gray-700 mb-3">
-            We'll send you a special link to track your order progress and complete questionnaires without creating an account.
-          </p>
-          <p className="text-sm text-gray-600">
-            Check your email at <strong>{formData.email}</strong> for the tracking link.
-          </p>
-        </div>
-      )}
+      <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+        <h4 className="font-semibold text-green-800 mb-2">Client Dashboard Access</h4>
+        <p className="text-green-700 mb-4">
+          Your account has been created! Access your dashboard to track your order progress, view documents, and complete questionnaires.
+        </p>
+        <p className="text-sm text-green-600 mb-4">
+          We&apos;ve sent a confirmation email to <strong>{recipientEmail}</strong> with your order details.
+        </p>
+        <button 
+          onClick={redirectToDashboard}
+          className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+        >
+          Access Your Dashboard
+        </button>
+      </div>
+
+      {/* Print Order Confirmation */}
+      <div className="text-center print:hidden">
+        <button
+          onClick={() => window.print()}
+          className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium border border-gray-300"
+        >
+          <PrinterIcon className="h-5 w-5 mr-2" />
+          Print Order Confirmation
+        </button>
+      </div>
 
       {/* Support Information */}
       <div className="text-center text-gray-600 text-sm border-t border-gray-200 pt-6">

@@ -208,52 +208,57 @@ export default function PartnersPage() {
 
       {/* Search Section */}
       <div className="sticky top-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <div className="relative w-full sm:flex-1 sm:max-w-lg">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          {/* Search Bar + Search Button + Filter Toggle - Always in one line */}
+          <div className="flex items-center justify-center gap-2">
+            {/* Search Input */}
+            <div className="relative flex-1 min-w-0">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
               </div>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search partners, services..."
-                className="w-full pl-12 pr-4 py-3.5 text-base bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-2xl text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
+                placeholder="Search..."
+                className="w-full pl-9 sm:pl-11 pr-3 py-2.5 sm:py-3 text-sm sm:text-base bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
               />
             </div>
 
+            {/* Search Button */}
             <button
               type="button"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
+              className="inline-flex items-center justify-center p-2.5 sm:px-5 sm:py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex-shrink-0"
             >
               <MagnifyingGlassIcon className="h-5 w-5" />
-              <span className="hidden sm:inline">Search</span>
+              <span className="hidden sm:inline sm:ml-2">Search</span>
             </button>
 
+            {/* Filter Toggle Button */}
             <button
               onClick={() => setShowFilters((s) => !s)}
-              className={`inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] ${
+              className={`inline-flex items-center justify-center p-2.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0 ${
                 showFilters
                   ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border-2 border-indigo-300 dark:border-indigo-700'
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600'
               }`}
             >
               <FunnelIcon className="h-5 w-5" />
-              <span className="hidden sm:inline">{showFilters ? 'Hide' : 'Filters'}</span>
+              <span className="hidden sm:inline sm:ml-2">{showFilters ? 'Hide' : 'Filters'}</span>
               {selectedTag !== 'Todas' && (
-                <span className="flex items-center justify-center w-5 h-5 text-xs font-bold bg-indigo-600 text-white rounded-full">
+                <span className="ml-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-indigo-600 text-white rounded-full">
                   1
                 </span>
               )}
             </button>
 
+            {/* Clear Button */}
             {hasActiveFilters && (
               <button
                 onClick={clearAll}
-                className="inline-flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="inline-flex items-center justify-center p-2.5 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors flex-shrink-0"
+                title="Clear"
               >
-                <XMarkIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">Clear</span>
+                <XMarkIcon className="h-5 w-5" />
               </button>
             )}
           </div>

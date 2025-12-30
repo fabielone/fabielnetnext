@@ -133,6 +133,8 @@ const StripePaymentForm = ({
                 body: JSON.stringify({
                   customerId: data.customerId,
                   paymentMethodId: data.paymentMethodId,
+                  email: formData.email,
+                  orderId: formData.orderId,
                   subscriptions: futureItems.map((f) => ({
                     service: f.name,
                     amount: f.price,
@@ -191,6 +193,7 @@ const StripePaymentForm = ({
       });
   
       const data = await response.json();
+      const currentCustomerId = data.customerId || customerId;
       if (data.customerId) setCustomerId(data.customerId);
       
       if (!response.ok) {
@@ -229,14 +232,22 @@ const StripePaymentForm = ({
       }
 
       // 5. Handle success: schedule subscriptions for 10 days later
-      if (futureItems.length > 0 && customerId) {
+      if (futureItems.length > 0 && currentCustomerId) {
+        console.log('Setting up subscriptions:', {
+          customerId: currentCustomerId,
+          futureItemsCount: futureItems.length,
+          items: futureItems
+        });
+        
         try {
-          await fetch('/api/setup-subscriptions', {
+          const subResponse = await fetch('/api/setup-subscriptions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              customerId,
+              customerId: currentCustomerId,
               paymentMethodId: paymentIntent.payment_method as string,
+              email: formData.email,
+              orderId: formData.orderId,
               subscriptions: futureItems.map((f) => ({
                 service: f.name,
                 amount: f.price,
@@ -245,9 +256,21 @@ const StripePaymentForm = ({
               })),
             }),
           });
+          
+          const subResult = await subResponse.json();
+          console.log('Subscription setup result:', subResult);
+          
+          if (!subResponse.ok) {
+            console.error('Subscription setup failed:', subResult);
+          }
         } catch (e) {
-          console.warn('Subscription setup scheduling failed:', e);
+          console.error('Subscription setup scheduling failed:', e);
         }
+      } else {
+        console.log('No subscriptions to set up:', { 
+          futureItemsCount: futureItems.length, 
+          hasCustomerId: !!currentCustomerId 
+        });
       }
 
       onSuccess(paymentIntent.id);

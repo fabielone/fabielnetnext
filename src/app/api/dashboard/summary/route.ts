@@ -34,11 +34,11 @@ export async function GET() {
         where: { ownerId: user.id, status: 'ACTIVE' }
       }),
       
-      // Pending tasks across all businesses
-      prisma.complianceTask.count({
+      // Pending tasks (from PendingTask table - tasks not yet completed)
+      prisma.pendingTask.count({
         where: {
-          business: { ownerId: user.id },
-          status: { in: ['PENDING', 'IN_PROGRESS', 'OVERDUE'] }
+          userId: user.id,
+          status: { in: ['PENDING', 'IN_PROGRESS'] }
         }
       }),
       

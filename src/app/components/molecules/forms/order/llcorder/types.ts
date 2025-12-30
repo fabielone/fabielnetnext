@@ -53,6 +53,15 @@ export interface LLCFormData {
   // Formation State
   formationState: string;      // State code (e.g., "CA", "TX")
   rushProcessing: boolean;     // Rush processing option
+  stateFilingFee: number;      // State filing fee (from state-fees API)
+  stateRushFee: number | null; // Rush processing fee (from state-fees API)
+  
+  // Coupon/Discount
+  couponCode: string;          // Applied coupon code
+  couponDiscount: number;      // Discount amount in dollars
+  
+  // Order identification
+  orderId: string;             // Generated order ID (e.g., "ORD-1234567890-123")
   
   // Service Selection Fields (just types, not initial values)
   needLLCFormation?: boolean;  // Required service

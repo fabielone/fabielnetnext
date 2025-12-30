@@ -18,6 +18,20 @@ export async function GET() {
         createdAt: 'desc'
       }
     });
+
+    // Get business names for subscriptions that have a businessId
+    const businessIds = subscriptions
+      .map(sub => sub.businessId)
+      .filter((id): id is string => id !== null);
+    
+    const businesses = businessIds.length > 0 
+      ? await prisma.business.findMany({
+          where: { id: { in: businessIds } },
+          select: { id: true, name: true }
+        })
+      : [];
+    
+    const businessMap = new Map(businesses.map(b => [b.id, b.name]));
     
     return NextResponse.json({
       subscriptions: subscriptions.map(sub => ({
@@ -29,8 +43,12 @@ export async function GET() {
         interval: sub.interval,
         currentPeriodStart: sub.currentPeriodStart,
         currentPeriodEnd: sub.currentPeriodEnd,
+        trialEndsAt: sub.trialEndsAt,
         cancelledAt: sub.cancelledAt,
-        createdAt: sub.createdAt
+        createdAt: sub.createdAt,
+        businessId: sub.businessId,
+        businessName: sub.businessId ? businessMap.get(sub.businessId) || null : null,
+        orderId: sub.orderId
       }))
     });
   } catch (error) {

@@ -3,6 +3,7 @@
 import { useState, Suspense, lazy } from 'react';
 import { LLCFormData , UpdateFormData } from '../types';
 import LoadingSpinner from '../../../../../atoms/LoadingSpinner';
+import { RiCoupon2Line, RiCheckLine, RiCloseLine } from 'react-icons/ri';
 
 // Dynamic imports for Stripe components
 const Elements = lazy(() => import('@stripe/react-stripe-js').then(mod => ({ default: mod.Elements })));
@@ -21,16 +22,101 @@ interface PaymentStepProps {
   onPrev: () => void;
 }
 
-const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepProps) => {
+const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: PaymentStepProps) => {
   const [processing, setProcessing] = useState(false);
+  const [couponInput, setCouponInput] = useState(formData.couponCode || '');
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
+  const [couponSuccess, setCouponSuccess] = useState(formData.couponCode ? `${formData.couponCode} applied!` : '');
+
+  // Formation service fee (coupon only applies to this, not state fees)
+  const FORMATION_SERVICE_FEE = 99.99;
+
+  // Handle coupon validation
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) {
+      setCouponError('Please enter a coupon code');
+      return;
+    }
+
+    setCouponLoading(true);
+    setCouponError('');
+    setCouponSuccess('');
+
+    try {
+      // Only pass the formation service fee for coupon calculation (not state fees)
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: couponInput.trim(),
+          orderTotal: FORMATION_SERVICE_FEE, // Coupon only applies to service fee
+          serviceKey: 'llc_formation',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        updateFormData('couponCode', result.coupon.code);
+        updateFormData('couponDiscount', result.coupon.discountAmount);
+        setCouponSuccess(`${result.coupon.code} applied! You save $${result.coupon.discountAmount.toFixed(2)} on formation fee`);
+      } else {
+        setCouponError(result.error || 'Invalid coupon code');
+        updateFormData('couponCode', '');
+        updateFormData('couponDiscount', 0);
+      }
+    } catch (error) {
+      console.error('Error validating coupon:', error);
+      setCouponError('Failed to validate coupon. Please try again.');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  // Remove applied coupon
+  const handleRemoveCoupon = () => {
+    setCouponInput('');
+    setCouponError('');
+    setCouponSuccess('');
+    updateFormData('couponCode', '');
+    updateFormData('couponDiscount', 0);
+  };
 
   // Calculate order breakdown - ONLY main service charged today
   const getOrderBreakdown = () => {
-    const todayItems = [
-      { name: 'LLC Formation Package', price: 124.99 }
+    const todayItems: Array<{ name: string; price: number; isDiscount?: boolean }> = [
+      { name: 'LLC Formation Package', price: 99.99 }
     ];
 
-    const todayTotal = todayItems.reduce((sum, item) => sum + item.price, 0);
+    // Add state filing fee
+    if (formData.stateFilingFee && formData.stateFilingFee > 0) {
+      todayItems.push({ 
+        name: `${formData.formationState} State Filing Fee`, 
+        price: formData.stateFilingFee 
+      });
+    }
+
+    // Add rush processing fee if selected
+    if (formData.rushProcessing && formData.stateRushFee) {
+      todayItems.push({ 
+        name: 'Rush Processing', 
+        price: formData.stateRushFee 
+      });
+    }
+
+    const subtotal = todayItems.reduce((sum, item) => sum + item.price, 0);
+    
+    // Add coupon discount as negative line item (only applies to formation fee)
+    if (formData.couponDiscount && formData.couponDiscount > 0) {
+      todayItems.push({ 
+        name: `Coupon: ${formData.couponCode} (on formation fee)`, 
+        price: -formData.couponDiscount,
+        isDiscount: true
+      });
+    }
+
+    const todayTotal = Math.max(0, subtotal - (formData.couponDiscount || 0));
     
     // Future billing items
     const futureItems: Array<{
@@ -105,6 +191,24 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
       updateFormData('paymentTransactionId', paymentId);
       updateFormData('paymentProvider', 'stripe');
       
+      // Create Payment record in database
+      try {
+        await fetch('/api/payments/record', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            paymentIntentId: paymentId,
+            orderId: formData.orderId,
+            amount: todayTotal,
+            email: formData.email,
+            paymentMethod: 'stripe',
+            description: `LLC Formation for ${formData.companyName}`
+          })
+        });
+      } catch (error) {
+        console.warn('Failed to record payment (continuing):', error);
+      }
+      
       onNext();
     } catch (error) {
       console.error('Order processing failed:', error);
@@ -135,15 +239,66 @@ const PaymentStep = ({ formData, updateFormData, onNext, onPrev }: PaymentStepPr
               💳 Charged Today
             </h4>
             {todayItems.map((item, index) => (
-              <div key={index} className="flex justify-between text-sm">
-                <span className="text-gray-600">{item.name}</span>
-                <span className="font-medium">${item.price.toFixed(2)}</span>
+              <div key={index} className={`flex justify-between text-sm ${item.isDiscount ? 'text-green-600' : ''}`}>
+                <span className={item.isDiscount ? 'text-green-600' : 'text-gray-600'}>{item.name}</span>
+                <span className={`font-medium ${item.isDiscount ? 'text-green-600' : ''}`}>
+                  {item.isDiscount ? '-' : ''}${Math.abs(item.price).toFixed(2)}
+                </span>
               </div>
             ))}
             <div className="flex justify-between text-lg font-bold border-t border-amber-200 pt-2">
               <span>Total Due Today</span>
               <span className="text-amber-900">${todayTotal.toFixed(2)}</span>
             </div>
+          </div>
+
+          {/* Coupon Code Input */}
+          <div className="mb-6 p-4 bg-white rounded-lg border border-amber-200">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <RiCoupon2Line className="inline-block w-4 h-4 mr-1" />
+              Have a coupon code?
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                placeholder="Enter code"
+                disabled={!!formData.couponCode || couponLoading}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-amber-500 focus:border-amber-500 disabled:bg-gray-100 disabled:text-gray-500 uppercase"
+              />
+              {formData.couponCode ? (
+                <button
+                  type="button"
+                  onClick={handleRemoveCoupon}
+                  className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors flex items-center gap-1"
+                >
+                  <RiCloseLine className="w-4 h-4" />
+                  Remove
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleApplyCoupon}
+                  disabled={couponLoading || !couponInput.trim()}
+                  className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {couponLoading ? 'Checking...' : 'Apply'}
+                </button>
+              )}
+            </div>
+            {couponError && (
+              <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                <RiCloseLine className="w-4 h-4" />
+                {couponError}
+              </p>
+            )}
+            {couponSuccess && (
+              <p className="mt-2 text-sm text-green-600 flex items-center gap-1">
+                <RiCheckLine className="w-4 h-4" />
+                {couponSuccess}
+              </p>
+            )}
           </div>
 
           {/* Future billing */}

@@ -10,7 +10,8 @@ import {
   RiTimeLine,
   RiCloseLine,
   RiAlertLine,
-  RiCalendarLine
+  RiCalendarLine,
+  RiBuilding2Line
 } from 'react-icons/ri';
 
 interface Subscription {
@@ -22,8 +23,12 @@ interface Subscription {
   interval: string;
   currentPeriodStart: string | null;
   currentPeriodEnd: string | null;
+  trialEndsAt: string | null;
   cancelledAt: string | null;
   createdAt: string;
+  businessId: string | null;
+  businessName: string | null;
+  orderId: string | null;
 }
 
 const statusColors: Record<string, string> = {
@@ -158,6 +163,14 @@ export default function SubscriptionsPage() {
                       </span>
                     </div>
                     
+                    {/* Business Name */}
+                    {subscription.businessName && (
+                      <div className="flex items-center gap-2 mb-2 text-sm text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg inline-flex">
+                        <RiBuilding2Line className="w-4 h-4" />
+                        <span className="font-medium">{subscription.businessName}</span>
+                      </div>
+                    )}
+                    
                     {subscription.description && (
                       <p className="text-sm text-gray-600 mb-3">{subscription.description}</p>
                     )}
@@ -165,12 +178,20 @@ export default function SubscriptionsPage() {
                     <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                       <span>Amount: <span className="font-medium">${Number(subscription.amount).toFixed(2)}/{subscription.interval}</span></span>
                       <span>Billing: <span className="font-medium">{formatInterval(subscription.interval)}</span></span>
-                      {subscription.currentPeriodEnd && subscription.status === 'ACTIVE' && (
+                      
+                      {/* Next billing date - use trialEndsAt if in grace period, otherwise currentPeriodEnd */}
+                      {subscription.trialEndsAt && new Date(subscription.trialEndsAt) > new Date() ? (
+                        <span className="flex items-center gap-1">
+                          <RiCalendarLine className="w-4 h-4" />
+                          Next billing: <span className="font-medium">{formatDate(subscription.trialEndsAt)}</span>
+                        </span>
+                      ) : subscription.currentPeriodEnd && subscription.status === 'ACTIVE' && (
                         <span className="flex items-center gap-1">
                           <RiCalendarLine className="w-4 h-4" />
                           Next billing: <span className="font-medium">{formatDate(subscription.currentPeriodEnd)}</span>
                         </span>
                       )}
+                      
                       {subscription.cancelledAt && (
                         <span className="text-red-600">Cancelled on: <span className="font-medium">{formatDate(subscription.cancelledAt)}</span></span>
                       )}

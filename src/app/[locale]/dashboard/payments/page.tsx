@@ -96,10 +96,6 @@ export default function PaymentsPage() {
     return true;
   });
 
-  const totalAmount = filteredPayments
-    .filter(p => p.status === 'SUCCEEDED')
-    .reduce((sum, p) => sum + p.amount, 0);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -128,19 +124,6 @@ export default function PaymentsPage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Payment History</h1>
             <p className="text-gray-600 mt-1">View all your payments and transactions</p>
-          </div>
-        </div>
-
-        {/* Summary Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Total Paid</p>
-              <p className="text-3xl font-bold text-gray-900">{formatCurrency(totalAmount, 'usd')}</p>
-            </div>
-            <div className="p-4 bg-green-100 rounded-full">
-              <RiBankCardLine className="w-8 h-8 text-green-600" />
-            </div>
           </div>
         </div>
 

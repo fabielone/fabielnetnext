@@ -251,3 +251,44 @@ table {
   -webkit-box-orient: horizontal;
   -webkit-line-clamp: none;
 }
+
+/* Print Styles */
+@media print {
+  /* Hide navigation, footer, and non-essential elements */
+  nav,
+  footer,
+  [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for printing */
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Ensure content is visible */
+  .space-y-8 {
+    page-break-inside: avoid;
+  }
+
+  /* Keep colored backgrounds for order confirmation sections */
+  .bg-green-50,
+  .bg-amber-50,
+  .bg-blue-50,
+  .bg-gray-50 {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1cm;
+  }
+
+  /* Avoid page breaks inside important sections */
+  .rounded-lg {
+    page-break-inside: avoid;
+  }
+}
