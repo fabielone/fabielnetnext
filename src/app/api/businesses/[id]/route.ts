@@ -26,18 +26,21 @@ export async function GET(
           orderBy: { createdAt: 'desc' },
           take: 10,
         },
-        events: {
-          where: {
-            status: { in: ['UPCOMING', 'IN_PROGRESS'] },
-            startDate: { gte: new Date() }
-          },
-          orderBy: { startDate: 'asc' },
-          take: 5,
-        },
         services: {
           orderBy: { createdAt: 'desc' },
         },
         complianceTasks: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            taskType: true,
+            dueDate: true,
+            status: true,
+            completedAt: true,
+            completedByType: true,
+            priority: true,
+          },
           orderBy: [{ status: 'asc' }, { dueDate: 'asc' }],
         },
         notes: {

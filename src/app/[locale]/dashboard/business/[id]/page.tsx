@@ -49,13 +49,6 @@ type BusinessDetail = {
     fileName: string
     createdAt: string
   }>
-  events: Array<{
-    id: string
-    title: string
-    eventType: string
-    startDate: string
-    status: string
-  }>
   services: Array<{
     id: string
     name: string
@@ -66,9 +59,13 @@ type BusinessDetail = {
   complianceTasks: Array<{
     id: string
     title: string
+    description: string | null
     taskType: string
     dueDate: string
     status: string
+    completedAt: string | null
+    completedByType: 'USER' | 'FABIELNET' | null
+    priority: string
   }>
   notes: Array<{
     id: string
@@ -103,7 +100,7 @@ type BusinessDetail = {
   } | null
 }
 
-type Tab = 'overview' | 'documents' | 'calendar' | 'subscriptions' | 'compliance' | 'settings'
+type Tab = 'overview' | 'documents' | 'subscriptions' | 'tasks' | 'settings'
 
 export default function BusinessDetailPage() {
   const { user, loading: authLoading } = useAuth()
@@ -175,15 +172,13 @@ export default function BusinessDetailPage() {
 
   const subscriptions = business.subscriptions || [];
   const documents = business.documents || [];
-  const events = business.events || [];
   // services and notes available in business object if needed
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode; count?: number }[] = [
     { id: 'overview', label: 'Overview', icon: <RiBuilding2Line className="w-4 h-4" /> },
     { id: 'documents', label: 'Files', icon: <RiFileTextLine className="w-4 h-4" />, count: documents.length },
-    { id: 'calendar', label: 'Calendar', icon: <RiCalendarLine className="w-4 h-4" />, count: events.length },
     { id: 'subscriptions', label: 'Subscriptions', icon: <RiRefreshLine className="w-4 h-4" />, count: subscriptions.length },
-    { id: 'compliance', label: 'Compliance', icon: <RiCheckboxCircleLine className="w-4 h-4" />, count: pendingTasks.length },
+    { id: 'tasks', label: 'Tasks', icon: <RiCheckboxCircleLine className="w-4 h-4" />, count: pendingTasks.length },
     { id: 'settings', label: 'Settings', icon: <RiSettings4Line className="w-4 h-4" /> },
   ]
 
@@ -428,45 +423,23 @@ export default function BusinessDetailPage() {
                 )}
               </div>
 
-              {/* Upcoming Events */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900">Upcoming Events</h3>
-                </div>
-                {events.length === 0 ? (
-                  <p className="text-gray-500 text-sm">No upcoming events</p>
-                ) : (
-                  <div className="space-y-3">
-                    {events.slice(0, 3).map(event => (
-                      <div key={event.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                        <RiCalendarLine className="w-4 h-4 text-blue-500 mt-0.5" />
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{event.title}</p>
-                          <p className="text-xs text-gray-500">
-                            {new Date(event.startDate).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
               {/* Quick Actions */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
                 <div className="space-y-2">
-                  <button className="w-full flex items-center gap-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                    <RiAddLine className="w-4 h-4" />
-                    Upload Document
+                  <button 
+                    onClick={() => setActiveTab('tasks')}
+                    className="w-full flex items-center gap-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <RiCheckboxCircleLine className="w-4 h-4" />
+                    View Tasks
                   </button>
-                  <button className="w-full flex items-center gap-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                    <RiCalendarLine className="w-4 h-4" />
-                    Add Event
-                  </button>
-                  <button className="w-full flex items-center gap-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                  <button 
+                    onClick={() => setActiveTab('settings')}
+                    className="w-full flex items-center gap-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
                     <RiSettings4Line className="w-4 h-4" />
-                    Add Service
+                    Business Settings
                   </button>
                 </div>
               </div>
@@ -476,12 +449,8 @@ export default function BusinessDetailPage() {
 
         {activeTab === 'documents' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-6">
+            <div className="mb-6">
               <h3 className="font-semibold text-gray-900">All Documents</h3>
-              <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium">
-                <RiAddLine className="w-4 h-4" />
-                Upload Document
-              </button>
             </div>
             {documents.length === 0 ? (
               <div className="text-center py-12">
@@ -508,46 +477,6 @@ export default function BusinessDetailPage() {
                       <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
                         <RiDownloadLine className="w-5 h-5" />
                       </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'calendar' && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-semibold text-gray-900">Calendar & Events</h3>
-              <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium">
-                <RiAddLine className="w-4 h-4" />
-                Add Event
-              </button>
-            </div>
-            {events.length === 0 ? (
-              <div className="text-center py-12">
-                <RiCalendarLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No events scheduled</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {events.map(event => (
-                  <div key={event.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-100 rounded-lg">
-                        <RiCalendarLine className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{event.title}</p>
-                        <p className="text-sm text-gray-500">{event.eventType}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium text-gray-900">
-                        {new Date(event.startDate).toLocaleDateString()}
-                      </p>
-                      <p className="text-sm text-gray-500">{event.status}</p>
                     </div>
                   </div>
                 ))}
@@ -618,27 +547,28 @@ export default function BusinessDetailPage() {
           </div>
         )}
 
-        {activeTab === 'compliance' && (
+        {activeTab === 'tasks' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-semibold text-gray-900">Compliance Tasks</h3>
+              <h3 className="font-semibold text-gray-900">Tasks</h3>
             </div>
             {complianceTasks.length === 0 ? (
               <div className="text-center py-12">
                 <RiCheckboxCircleLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No compliance tasks</p>
+                <p className="text-gray-500">No tasks</p>
+                <p className="text-sm text-gray-400 mt-1">Annual reports and compliance filings will appear here</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {complianceTasks.map(task => (
                   <div 
                     key={task.id} 
-                    className={`flex items-center justify-between p-4 rounded-lg ${
+                    className={`flex items-center justify-between p-4 rounded-lg border ${
                       task.status === 'COMPLETED' 
-                        ? 'bg-green-50' 
+                        ? 'bg-green-50 border-green-200' 
                         : task.status === 'OVERDUE'
-                        ? 'bg-red-50'
-                        : 'bg-amber-50'
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-amber-50 border-amber-200'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -652,21 +582,32 @@ export default function BusinessDetailPage() {
                       <div>
                         <p className="font-medium text-gray-900">{task.title}</p>
                         <p className="text-sm text-gray-500">{task.taskType.replace(/_/g, ' ')}</p>
+                        {task.description && (
+                          <p className="text-xs text-gray-400 mt-1">{task.description}</p>
+                        )}
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="font-medium text-gray-900">
                         {new Date(task.dueDate).toLocaleDateString()}
                       </p>
-                      <span className={`text-sm font-medium ${
-                        task.status === 'COMPLETED' 
-                          ? 'text-green-600' 
-                          : task.status === 'OVERDUE'
+                      {task.status === 'COMPLETED' && task.completedByType ? (
+                        <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700">
+                          {task.completedByType === 'FABIELNET' ? (
+                            <>✓ Completed by Fabiel.net</>
+                          ) : (
+                            <>✓ Completed by you</>
+                          )}
+                        </span>
+                      ) : (
+                        <span className={`text-sm font-medium ${
+                          task.status === 'OVERDUE'
                           ? 'text-red-600'
                           : 'text-amber-600'
-                      }`}>
-                        {task.status}
-                      </span>
+                        }`}>
+                          {task.status === 'PENDING' ? 'Pending' : task.status === 'IN_PROGRESS' ? 'In Progress' : task.status}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}

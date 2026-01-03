@@ -228,21 +228,25 @@ model BusinessService {
 }
 
 model ComplianceTask {
-  id           String               @id @default(cuid())
-  businessId   String               @map("business_id")
-  title        String
-  description  String?
-  taskType     ComplianceTaskType   @map("task_type")
-  dueDate      DateTime             @map("due_date")
-  reminderDate DateTime?            @map("reminder_date")
-  status       ComplianceTaskStatus @default(PENDING)
-  completedAt  DateTime?            @map("completed_at")
-  completedBy  String?              @map("completed_by")
-  notes        String?
-  documentId   String?              @map("document_id")
-  createdAt    DateTime             @default(now()) @map("created_at")
-  updatedAt    DateTime             @updatedAt @map("updated_at")
-  business     Business             @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  id             String               @id @default(cuid())
+  businessId     String               @map("business_id")
+  title          String
+  description    String?
+  taskType       ComplianceTaskType   @map("task_type")
+  dueDate        DateTime             @map("due_date")
+  reminderDate   DateTime?            @map("reminder_date")
+  status         ComplianceTaskStatus @default(PENDING)
+  completedAt    DateTime?            @map("completed_at")
+  completedBy    String?              @map("completed_by") // User ID who completed it
+  completedByType TaskCompletedByType? @map("completed_by_type") // USER or FABIELNET
+  notes          String?
+  documentId     String?              @map("document_id")
+  isSystemGenerated Boolean           @default(true) @map("is_system_generated") // Auto-generated vs admin-created
+  priority       TaskPriority         @default(MEDIUM)
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  createdBy      String?              @map("created_by") // Admin user who created it (for manual tasks)
+  business       Business             @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
   @@map("compliance_tasks")
 }
@@ -965,6 +969,18 @@ enum ComplianceTaskStatus {
   NOT_APPLICABLE @map("not_applicable")
 }
 
+enum TaskCompletedByType {
+  USER      @map("user")      // Completed by the business owner/user
+  FABIELNET @map("fabielnet") // Completed by Fabiel.net team
+}
+
+enum TaskPriority {
+  LOW    @map("low")
+  MEDIUM @map("medium")
+  HIGH   @map("high")
+  URGENT @map("urgent")
+}
+
 enum WebsiteServiceTier {
   BASIC  @map("basic")
   PRO    @map("pro")
@@ -1189,13 +1205,6 @@ enum QuestionnaireStatus {
   IN_PROGRESS @map("in_progress")
   COMPLETED   @map("completed")
   EXPIRED     @map("expired")
-}
-
-enum TaskPriority {
-  LOW    @map("low")
-  MEDIUM @map("medium")
-  HIGH   @map("high")
-  URGENT @map("urgent")
 }
 
 enum TaskStatus {
