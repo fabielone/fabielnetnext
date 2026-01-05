@@ -9,7 +9,9 @@ export async function POST(request: Request) {
       amount, 
       email, 
       paymentMethod = 'stripe',
-      description 
+      description,
+      cardLast4,
+      cardBrand
     } = await request.json();
 
     if (!paymentIntentId || !amount || !email) {
@@ -46,6 +48,42 @@ export async function POST(request: Request) {
     });
 
     if (existingPayment) {
+      // Still ensure order is updated and progress event exists
+      if (order) {
+        await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            paymentStatus: 'COMPLETED',
+            paymentTransactionId: paymentIntentId,
+            paymentCardLast4: cardLast4 || null,
+            paymentCardBrand: cardBrand || null,
+            paymentDate: new Date(),
+            status: 'PROCESSING',
+            progressLastUpdatedAt: new Date()
+          }
+        });
+
+        // Ensure ORDER_RECEIVED progress event exists
+        await prisma.orderProgressEvent.upsert({
+          where: {
+            orderId_eventType: {
+              orderId: order.id,
+              eventType: 'ORDER_RECEIVED'
+            }
+          },
+          update: {
+            completedAt: new Date(),
+            notes: 'Payment confirmed'
+          },
+          create: {
+            orderId: order.id,
+            eventType: 'ORDER_RECEIVED',
+            completedAt: new Date(),
+            notes: 'Payment confirmed'
+          }
+        });
+      }
+      
       return NextResponse.json({ 
         payment: existingPayment,
         message: 'Payment record already exists'
@@ -73,7 +111,31 @@ export async function POST(request: Request) {
         data: {
           paymentStatus: 'COMPLETED',
           paymentTransactionId: paymentIntentId,
-          paymentDate: new Date()
+          paymentCardLast4: cardLast4 || null,
+          paymentCardBrand: cardBrand || null,
+          paymentDate: new Date(),
+          status: 'PROCESSING',
+          progressLastUpdatedAt: new Date()
+        }
+      });
+
+      // Create ORDER_RECEIVED progress event when payment is confirmed
+      await prisma.orderProgressEvent.upsert({
+        where: {
+          orderId_eventType: {
+            orderId: order.id,
+            eventType: 'ORDER_RECEIVED'
+          }
+        },
+        update: {
+          completedAt: new Date(),
+          notes: 'Payment confirmed'
+        },
+        create: {
+          orderId: order.id,
+          eventType: 'ORDER_RECEIVED',
+          completedAt: new Date(),
+          notes: 'Payment confirmed'
         }
       });
     }

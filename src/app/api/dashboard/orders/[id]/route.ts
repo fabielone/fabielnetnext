@@ -52,7 +52,10 @@ export async function GET(
         priority: true,
         paymentStatus: true,
         paymentMethod: true,
+        paymentCardLast4: true,
+        paymentCardBrand: true,
         paymentDate: true,
+        progressLastUpdatedAt: true,
         stateFilingDate: true,
         stateFilingNumber: true,
         ein: true,
@@ -79,6 +82,38 @@ export async function GET(
             status: true,
             currentSection: true,
           }
+        },
+        progressEvents: {
+          select: {
+            id: true,
+            eventType: true,
+            completedAt: true,
+            notes: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'asc' }
+        },
+        subscriptionIntents: {
+          select: {
+            id: true,
+            service: true,
+            amount: true,
+            frequency: true,
+            status: true,
+            scheduledDate: true,
+            stripeSubscriptionId: true,
+            processedAt: true,
+          }
+        },
+        websiteSubscription: {
+          select: {
+            id: true,
+            tier: true,
+            monthlyPrice: true,
+            status: true,
+            nextBillingDate: true,
+            startDate: true,
+          }
         }
       }
     })
@@ -86,8 +121,23 @@ export async function GET(
     if (!order) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
+
+    // Also fetch subscriptions linked to this order (created by setup-subscriptions)
+    const subscriptions = await prisma.subscription.findMany({
+      where: { orderId: order.id },
+      select: {
+        id: true,
+        name: true,
+        amount: true,
+        interval: true,
+        status: true,
+        currentPeriodEnd: true,
+        trialEndsAt: true,
+        stripeSubscriptionId: true,
+      }
+    })
     
-    return NextResponse.json({ order })
+    return NextResponse.json({ order, subscriptions })
   } catch (error) {
     console.error('Error fetching order:', error)
     return NextResponse.json(

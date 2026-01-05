@@ -16,10 +16,16 @@ interface SavedPaymentMethod {
   stripePaymentMethodId?: string;
 }
 
+export interface PaymentSuccessData {
+  paymentId: string;
+  cardLast4?: string;
+  cardBrand?: string;
+}
+
 interface StripePaymentFormProps {
   amount: number;
   formData: LLCFormData;
-  onSuccess: (paymentId: string) => void;
+  onSuccess: (data: PaymentSuccessData) => void;
   processing: boolean;
   setProcessing: (value: boolean) => void;
   futureItems: Array<{
@@ -147,7 +153,11 @@ const StripePaymentForm = ({
               console.warn('Subscription setup scheduling failed:', e);
             }
           }
-          onSuccess(data.paymentIntentId);
+          onSuccess({ 
+            paymentId: data.paymentIntentId, 
+            cardLast4: savedMethod?.cardLast4 || undefined,
+            cardBrand: savedMethod?.cardBrand || undefined
+          });
           return;
         }
 
@@ -157,7 +167,11 @@ const StripePaymentForm = ({
         if (confirmError) throw confirmError;
         if (!paymentIntent) throw new Error('Payment failed');
 
-        onSuccess(paymentIntent.id);
+        onSuccess({ 
+          paymentId: paymentIntent.id,
+          cardLast4: savedMethod?.cardLast4 || undefined,
+          cardBrand: savedMethod?.cardBrand || undefined
+        });
         return;
       }
 
@@ -231,7 +245,24 @@ const StripePaymentForm = ({
         }
       }
 
-      // 5. Handle success: schedule subscriptions for 10 days later
+      // 5. Get card details from Stripe for the new card
+      let cardLast4: string | undefined;
+      let cardBrand: string | undefined;
+      
+      if (paymentIntent.payment_method) {
+        try {
+          const pmResponse = await fetch(`/api/payment-method-details?paymentMethodId=${paymentIntent.payment_method}`);
+          if (pmResponse.ok) {
+            const pmData = await pmResponse.json();
+            cardLast4 = pmData.last4;
+            cardBrand = pmData.brand;
+          }
+        } catch (e) {
+          console.warn('Could not fetch payment method details:', e);
+        }
+      }
+
+      // 6. Handle success: schedule subscriptions for 10 days later
       if (futureItems.length > 0 && currentCustomerId) {
         console.log('Setting up subscriptions:', {
           customerId: currentCustomerId,
@@ -279,7 +310,7 @@ const StripePaymentForm = ({
         });
       }
 
-      onSuccess(paymentIntent.id);
+      onSuccess({ paymentId: paymentIntent.id, cardLast4, cardBrand });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Payment failed');
       setProcessing(false);

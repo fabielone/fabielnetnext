@@ -1,9 +1,15 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { RiCloseLine, RiBuilding2Line, RiAddLine } from 'react-icons/ri'
 
 type AddBusinessOption = 'form-new' | 'add-existing'
+
+interface ServicePricing {
+  serviceKey: string
+  serviceName: string
+  basePrice: number
+}
 
 interface AddBusinessModalProps {
   onClose: () => void
@@ -17,6 +23,26 @@ export default function AddBusinessModal({ onClose, onSuccess, locale }: AddBusi
   const [step, setStep] = useState<'select' | 'form'>('select')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [llcFormationPrice, setLlcFormationPrice] = useState<number>(99.99) // Default fallback
+  
+  // Fetch pricing on mount
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const res = await fetch('/api/service-pricing')
+        if (res.ok) {
+          const data = await res.json()
+          const llcPricing = data.pricing?.find((p: ServicePricing) => p.serviceKey === 'llc_formation')
+          if (llcPricing) {
+            setLlcFormationPrice(llcPricing.basePrice)
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to fetch pricing, using default:', err)
+      }
+    }
+    fetchPricing()
+  }, [])
   
   // Form data for existing business
   const [formData, setFormData] = useState({
@@ -119,7 +145,7 @@ export default function AddBusinessModal({ onClose, onSuccess, locale }: AddBusi
                   <p className="text-sm text-gray-600">
                     Start fresh with a new California LLC. We&apos;ll handle the formation process for you.
                   </p>
-                  <p className="text-sm text-amber-600 font-medium mt-2">Starting at $49.99</p>
+                  <p className="text-sm text-amber-600 font-medium mt-2">Starting at ${llcFormationPrice.toFixed(2)}</p>
                 </div>
               </button>
               

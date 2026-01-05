@@ -4,6 +4,7 @@ import { useState, Suspense, lazy } from 'react';
 import { LLCFormData , UpdateFormData } from '../types';
 import LoadingSpinner from '../../../../../atoms/LoadingSpinner';
 import { RiCoupon2Line, RiCheckLine, RiCloseLine } from 'react-icons/ri';
+import type { PaymentSuccessData } from './StripePaymentForm';
 
 // Dynamic imports for Stripe components
 const Elements = lazy(() => import('@stripe/react-stripe-js').then(mod => ({ default: mod.Elements })));
@@ -184,12 +185,14 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
 
   const { todayItems, todayTotal, futureItems } = getOrderBreakdown();
 
-  const handlePaymentSuccess = async (paymentId: string) => {
+  const handlePaymentSuccess = async (data: PaymentSuccessData) => {
     setProcessing(true);
     try {
       // Update form data with payment info
-      updateFormData('paymentTransactionId', paymentId);
+      updateFormData('paymentTransactionId', data.paymentId);
       updateFormData('paymentProvider', 'stripe');
+      if (data.cardLast4) updateFormData('paymentCardLast4', data.cardLast4);
+      if (data.cardBrand) updateFormData('paymentCardBrand', data.cardBrand);
       
       // Create Payment record in database
       try {
@@ -197,12 +200,14 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            paymentIntentId: paymentId,
+            paymentIntentId: data.paymentId,
             orderId: formData.orderId,
             amount: todayTotal,
             email: formData.email,
             paymentMethod: 'stripe',
-            description: `LLC Formation for ${formData.companyName}`
+            description: `LLC Formation for ${formData.companyName}`,
+            cardLast4: data.cardLast4,
+            cardBrand: data.cardBrand
           })
         });
       } catch (error) {

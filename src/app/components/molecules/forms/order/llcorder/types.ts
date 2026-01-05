@@ -49,6 +49,8 @@ export interface LLCFormData {
   requireMeetings?: boolean;
   paymentTransactionId?: string;
   paymentProvider?: 'stripe' | 'paypal';
+  paymentCardLast4?: string;
+  paymentCardBrand?: string;
   
   // Formation State
   formationState: string;      // State code (e.g., "CA", "TX")

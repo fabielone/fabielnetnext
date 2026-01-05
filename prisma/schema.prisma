@@ -347,7 +347,10 @@ model Order {
   paymentMethod               PaymentMethod          @default(STRIPE) @map("payment_method")
   paymentStatus               PaymentStatus          @default(PENDING) @map("payment_status")
   paymentTransactionId        String?                @map("payment_transaction_id")
+  paymentCardLast4            String?                @map("payment_card_last4")
+  paymentCardBrand            String?                @map("payment_card_brand")
   paymentDate                 DateTime?              @map("payment_date")
+  progressLastUpdatedAt       DateTime?              @map("progress_last_updated_at")
   stateFilingDate             DateTime?              @map("state_filing_date")
   stateFilingNumber           String?                @map("state_filing_number")
   ein                         String?
@@ -377,6 +380,7 @@ model Order {
   questionnaire               QuestionnaireResponse?
   subscriptionIntents         SubscriptionIntent[]
   websiteSubscription         WebsiteSubscription?
+  progressEvents              OrderProgressEvent[]
 
   @@map("orders")
 }
@@ -643,6 +647,21 @@ model OrderStatusHistory {
   order          Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_status_history")
+}
+
+model OrderProgressEvent {
+  id          String                 @id @default(cuid())
+  orderId     String                 @map("order_id")
+  eventType   OrderProgressEventType @map("event_type")
+  completedAt DateTime?              @map("completed_at")
+  notes       String?
+  updatedBy   String?                @map("updated_by")
+  createdAt   DateTime               @default(now()) @map("created_at")
+  updatedAt   DateTime               @updatedAt @map("updated_at")
+  order       Order                  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([orderId, eventType])
+  @@map("order_progress_events")
 }
 
 model Communication {
@@ -1029,13 +1048,20 @@ enum CampaignStatus {
 
 enum OrderStatus {
   PENDING_PROCESSING   @map("pending_processing")
-  PROCESSING_ARTICLES  @map("processing_articles")
-  ARTICLES_FILED       @map("articles_filed")
-  OBTAINING_EIN        @map("obtaining_ein")
-  GENERATING_DOCUMENTS @map("generating_documents")
+  PROCESSING           @map("processing")
   COMPLETED            @map("completed")
   CANCELLED            @map("cancelled")
   REFUNDED             @map("refunded")
+}
+
+enum OrderProgressEventType {
+  ORDER_RECEIVED                   @map("order_received")
+  LLC_FILED                        @map("llc_filed")
+  LLC_APPROVED                     @map("llc_approved")
+  EIN_FILED                        @map("ein_filed")
+  EIN_OBTAINED                     @map("ein_obtained")
+  OPERATING_AGREEMENT_GENERATED    @map("operating_agreement_generated")
+  BANK_RESOLUTION_LETTER_GENERATED @map("bank_resolution_letter_generated")
 }
 
 enum OrderPriority {

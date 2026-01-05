@@ -9,7 +9,8 @@ import {
   RiCheckboxCircleLine,
   RiTimeLine,
   RiCloseLine,
-  RiAlertLine
+  RiAlertLine,
+  RiEyeLine
 } from 'react-icons/ri';
 
 interface Order {
@@ -28,6 +29,7 @@ const statusColors: Record<string, string> = {
   PROCESSING: 'bg-blue-100 text-blue-800',
   COMPLETED: 'bg-green-100 text-green-800',
   CANCELLED: 'bg-red-100 text-red-800',
+  REFUNDED: 'bg-gray-100 text-gray-800',
 };
 
 const statusIcons: Record<string, React.ReactNode> = {
@@ -35,6 +37,7 @@ const statusIcons: Record<string, React.ReactNode> = {
   PROCESSING: <RiTimeLine className="w-4 h-4 animate-pulse" />,
   COMPLETED: <RiCheckboxCircleLine className="w-4 h-4" />,
   CANCELLED: <RiCloseLine className="w-4 h-4" />,
+  REFUNDED: <RiCloseLine className="w-4 h-4" />,
 };
 
 export default function OrdersPage() {
@@ -161,6 +164,13 @@ export default function OrdersPage() {
 
                     {/* Actions */}
                     <div className="flex flex-col gap-2">
+                      <Link
+                        href={`/${locale}/dashboard/orders/${order.id}`}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm text-amber-600 border border-amber-200 rounded-lg hover:bg-amber-50 transition-colors"
+                      >
+                        <RiEyeLine className="w-4 h-4" />
+                        View Order
+                      </Link>
                       {order.status === 'PENDING_PROCESSING' && (
                         <button
                           onClick={() => setShowCancelModal(order.id)}

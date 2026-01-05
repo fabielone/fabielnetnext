@@ -22,6 +22,55 @@ import {
   RiCloseCircleLine,
 } from 'react-icons/ri'
 
+// Progress event types
+type ProgressEventType = 
+  | 'ORDER_RECEIVED'
+  | 'LLC_FILED'
+  | 'LLC_APPROVED'
+  | 'EIN_FILED'
+  | 'EIN_OBTAINED'
+  | 'OPERATING_AGREEMENT_GENERATED'
+  | 'BANK_RESOLUTION_LETTER_GENERATED';
+
+interface ProgressEvent {
+  id: string
+  eventType: ProgressEventType
+  completedAt: string | null
+  notes: string | null
+  createdAt: string
+}
+
+interface SubscriptionIntent {
+  id: string
+  service: string
+  amount: number
+  frequency: string
+  status: string
+  scheduledDate: string
+  stripeSubscriptionId: string | null
+  processedAt: string | null
+}
+
+interface WebsiteSubscription {
+  id: string
+  tier: string
+  monthlyPrice: number
+  status: string
+  nextBillingDate: string | null
+  startDate: string
+}
+
+interface OrderSubscription {
+  id: string
+  name: string
+  amount: number
+  interval: string
+  status: string
+  currentPeriodEnd: string | null
+  trialEndsAt: string | null
+  stripeSubscriptionId: string | null
+}
+
 interface OrderDetail {
   id: string
   orderId: string
@@ -53,7 +102,10 @@ interface OrderDetail {
   priority: string
   paymentStatus: string
   paymentMethod: string
+  paymentCardLast4: string | null
+  paymentCardBrand: string | null
   paymentDate: string | null
+  progressLastUpdatedAt: string | null
   stateFilingDate: string | null
   stateFilingNumber: string | null
   ein: string | null
@@ -67,6 +119,9 @@ interface OrderDetail {
   updatedAt: string
   completedAt: string | null
   customerNotes: string | null
+  progressEvents: ProgressEvent[]
+  subscriptionIntents: SubscriptionIntent[]
+  websiteSubscription: WebsiteSubscription | null
   business: {
     id: string
     name: string
@@ -79,6 +134,17 @@ interface OrderDetail {
   } | null
 }
 
+// Progress step configuration
+const progressStepConfig: { type: ProgressEventType; label: string; requiresService?: 'needEIN' | 'needOperatingAgreement' | 'needBankLetter' }[] = [
+  { type: 'ORDER_RECEIVED', label: 'Order Received' },
+  { type: 'LLC_FILED', label: 'LLC Filed' },
+  { type: 'LLC_APPROVED', label: 'LLC Approved' },
+  { type: 'EIN_FILED', label: 'EIN Filed', requiresService: 'needEIN' },
+  { type: 'EIN_OBTAINED', label: 'EIN Obtained', requiresService: 'needEIN' },
+  { type: 'OPERATING_AGREEMENT_GENERATED', label: 'Operating Agreement Generated', requiresService: 'needOperatingAgreement' },
+  { type: 'BANK_RESOLUTION_LETTER_GENERATED', label: 'Bank Resolution Letter Generated', requiresService: 'needBankLetter' },
+];
+
 const statusColors: Record<string, { bg: string; text: string; label: string }> = {
   PENDING_PROCESSING: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pending Processing' },
   PROCESSING: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Processing' },
@@ -86,11 +152,11 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
   CANCELLED: { bg: 'bg-red-100', text: 'text-red-800', label: 'Cancelled' },
 }
 
-const paymentStatusColors: Record<string, { bg: string; text: string }> = {
-  PENDING: { bg: 'bg-yellow-100', text: 'text-yellow-800' },
-  PAID: { bg: 'bg-green-100', text: 'text-green-800' },
-  FAILED: { bg: 'bg-red-100', text: 'text-red-800' },
-  REFUNDED: { bg: 'bg-gray-100', text: 'text-gray-800' },
+const paymentStatusColors: Record<string, { bg: string; text: string; label: string }> = {
+  PENDING: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pending' },
+  COMPLETED: { bg: 'bg-green-100', text: 'text-green-800', label: 'Paid' },
+  FAILED: { bg: 'bg-red-100', text: 'text-red-800', label: 'Failed' },
+  REFUNDED: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Refunded' },
 }
 
 export default function OrderDetailPage() {
@@ -101,6 +167,7 @@ export default function OrderDetailPage() {
   const orderId = params.id as string
   
   const [order, setOrder] = useState<OrderDetail | null>(null)
+  const [subscriptions, setSubscriptions] = useState<OrderSubscription[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchOrder = useCallback(async () => {
@@ -112,6 +179,7 @@ export default function OrderDetailPage() {
       if (res.ok) {
         const data = await res.json()
         setOrder(data.order)
+        setSubscriptions(data.subscriptions || [])
       } else if (res.status === 404) {
         router.push(`/${locale}/dashboard/orders`)
       }
@@ -163,26 +231,48 @@ export default function OrderDetailPage() {
     })
   }
 
-  // Calculate what services are included
-  const includedServices = [
-    { name: 'LLC Formation', included: true, price: order.basePrice },
-    { name: 'State Filing Fee', included: Number(order.stateFilingFee) > 0, price: order.stateFilingFee },
-    { name: 'EIN Application', included: order.needEIN, price: 0 },
-    { name: 'Operating Agreement', included: order.needOperatingAgreement, price: 0 },
-    { name: 'Banking Resolution Letter', included: order.needBankLetter, price: 0 },
-    { name: 'Registered Agent (1 year)', included: order.registeredAgent, price: order.registeredAgentPrice },
-    { name: 'Annual Compliance', included: order.compliance, price: order.compliancePrice },
-    { name: 'Rush Processing', included: order.rushProcessing, price: order.rushFee },
+  // Calculate what services are included (one-time charges)
+  const getWebsiteTierLabel = (tier: string | null) => {
+    if (!tier) return null
+    const labels: Record<string, string> = {
+      'BASIC': 'Essential Website',
+      'PRO': 'Professional Website', 
+      'GROWTH': 'Blog Pro'
+    }
+    return labels[tier] || tier
+  }
+
+  // Helper to find subscription status by service name
+  const getSubscriptionStatus = (serviceName: string): string | null => {
+    const sub = subscriptions.find(s => 
+      s.name.toLowerCase().includes(serviceName.toLowerCase())
+    )
+    return sub?.status || null
+  }
+
+  const includedServices: { name: string; included: boolean; price: number }[] = [
+    { name: 'LLC Formation', included: true, price: Number(order.basePrice) },
+    { name: `${order.formationState || order.businessState} State Filing Fee`, included: Number(order.stateFilingFee) > 0, price: Number(order.stateFilingFee) },
+    { name: 'Rush Processing', included: order.rushProcessing, price: Number(order.rushFee) },
   ].filter(s => s.included)
 
-  // Progress steps based on order status
-  const progressSteps = [
-    { label: 'Order Received', completed: true, date: order.createdAt },
-    { label: 'Payment Confirmed', completed: order.paymentStatus === 'PAID', date: order.paymentDate },
-    { label: 'State Filing', completed: !!order.stateFilingNumber, date: order.stateFilingDate },
-    { label: 'EIN Obtained', completed: order.einObtained, date: order.einIssuedDate },
-    { label: 'Completed', completed: order.status === 'COMPLETED', date: order.completedAt },
-  ]
+  // Subscription services (billed separately) with status from actual subscriptions
+  const subscriptionServices: { name: string; included: boolean; billingNote: string; status: string | null }[] = [
+    { name: 'Registered Agent', included: order.registeredAgent, billingNote: 'Billed yearly', status: getSubscriptionStatus('Registered Agent') },
+    { name: 'Annual Compliance', included: order.compliance, billingNote: 'Billed yearly', status: getSubscriptionStatus('Compliance') },
+    { name: getWebsiteTierLabel(order.websiteService) || 'Website', included: !!order.websiteService, billingNote: 'Billed monthly', status: order.websiteSubscription?.status || null },
+  ].filter(s => s.included)
+
+  // Filter progress steps based on selected services
+  const applicableSteps = progressStepConfig.filter(step => {
+    if (!step.requiresService) return true
+    return order[step.requiresService]
+  })
+
+  // Create a map of completed events
+  const completedEvents = new Map(
+    order.progressEvents.map(event => [event.eventType, event])
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -240,29 +330,39 @@ export default function OrderDetailPage() {
               <div className="relative">
                 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
                 <div className="space-y-6">
-                  {progressSteps.map((step, index) => (
-                    <div key={index} className="relative flex items-start gap-4">
-                      <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center ${
-                        step.completed 
-                          ? 'bg-green-500 text-white' 
-                          : 'bg-gray-200 text-gray-500'
-                      }`}>
-                        {step.completed ? (
-                          <RiCheckLine className="w-4 h-4" />
-                        ) : (
-                          <span className="text-sm font-medium">{index + 1}</span>
-                        )}
+                  {applicableSteps.map((step, index) => {
+                    const event = completedEvents.get(step.type)
+                    const isCompleted = !!event?.completedAt
+                    
+                    return (
+                      <div key={step.type} className="relative flex items-start gap-4">
+                        <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center ${
+                          isCompleted 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-gray-200 text-gray-400'
+                        }`}>
+                          {isCompleted ? (
+                            <RiCheckLine className="w-4 h-4" />
+                          ) : (
+                            <span className="text-sm font-medium">{index + 1}</span>
+                          )}
+                        </div>
+                        <div className="flex-1 pt-1">
+                          <p className={`font-medium ${isCompleted ? 'text-gray-900' : 'text-gray-400'}`}>
+                            {step.label}
+                          </p>
+                          {isCompleted && event?.completedAt ? (
+                            <p className="text-sm text-gray-500">{formatDate(event.completedAt)}</p>
+                          ) : (
+                            <p className="text-sm text-gray-400">Pending</p>
+                          )}
+                          {event?.notes && (
+                            <p className="text-sm text-gray-500 mt-1">{event.notes}</p>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex-1 pt-1">
-                        <p className={`font-medium ${step.completed ? 'text-gray-900' : 'text-gray-500'}`}>
-                          {step.label}
-                        </p>
-                        {step.completed && step.date && (
-                          <p className="text-sm text-gray-500">{formatDate(step.date)}</p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -438,20 +538,52 @@ export default function OrderDetailPage() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h2 className="font-semibold text-gray-900 mb-4">Order Summary</h2>
               <div className="space-y-3">
+                {/* One-time charges */}
                 {includedServices.map((service, index) => (
                   <div key={index} className="flex justify-between text-sm">
                     <span className="text-gray-600">{service.name}</span>
-                    {Number(service.price) > 0 && (
-                      <span className="text-gray-900">{formatCurrency(service.price)}</span>
-                    )}
+                    <span className="text-gray-900">{formatCurrency(service.price)}</span>
                   </div>
                 ))}
+                
                 <div className="pt-3 mt-3 border-t border-gray-200">
                   <div className="flex justify-between font-semibold">
-                    <span className="text-gray-900">Total</span>
+                    <span className="text-gray-900">Total Paid</span>
                     <span className="text-amber-600">{formatCurrency(order.totalAmount)}</span>
                   </div>
                 </div>
+
+                {/* Subscription services */}
+                {subscriptionServices.length > 0 && (
+                  <div className="pt-3 mt-3 border-t border-gray-200">
+                    <p className="text-xs text-gray-500 mb-2 font-medium">Recurring Services</p>
+                    {subscriptionServices.map((service, index) => (
+                      <div key={index} className="flex justify-between items-center text-sm py-1">
+                        <span className="text-gray-600">{service.name}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-400">{service.billingNote}</span>
+                          {service.status ? (
+                            <span className={`px-1.5 py-0.5 text-xs font-medium rounded ${
+                              service.status === 'ACTIVE' 
+                                ? 'bg-green-100 text-green-700' 
+                                : service.status === 'TRIALING'
+                                ? 'bg-amber-100 text-amber-700'
+                                : service.status === 'PENDING'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              {service.status === 'TRIALING' ? 'Trial' : service.status}
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.5 text-xs font-medium rounded bg-yellow-100 text-yellow-700">
+                              Pending
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -462,13 +594,18 @@ export default function OrderDetailPage() {
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Status</span>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${paymentStatus.bg} ${paymentStatus.text}`}>
-                    {order.paymentStatus}
+                    {paymentStatus.label}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Method</span>
-                  <span className="text-sm text-gray-900">{order.paymentMethod}</span>
-                </div>
+                {order.paymentCardLast4 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Card</span>
+                    <span className="text-sm text-gray-900">
+                      {order.paymentCardBrand && <span className="capitalize">{order.paymentCardBrand} </span>}
+                      •••• {order.paymentCardLast4}
+                    </span>
+                  </div>
+                )}
                 {order.paymentDate && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Paid on</span>
@@ -477,6 +614,99 @@ export default function OrderDetailPage() {
                 )}
               </div>
             </div>
+
+            {/* Subscriptions */}
+            {(order.subscriptionIntents.length > 0 || order.websiteSubscription || subscriptions.length > 0) && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 className="font-semibold text-gray-900 mb-4">Subscriptions</h2>
+                <div className="space-y-4">
+                  {/* Website Subscription */}
+                  {order.websiteSubscription && (
+                    <div className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          Website - {order.websiteSubscription.tier.replace(/_/g, ' ')}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {formatCurrency(order.websiteSubscription.monthlyPrice)}/month
+                        </p>
+                        {order.websiteSubscription.nextBillingDate && (
+                          <p className="text-xs text-gray-500">
+                            Next billing: {formatDate(order.websiteSubscription.nextBillingDate)}
+                          </p>
+                        )}
+                      </div>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        order.websiteSubscription.status === 'ACTIVE' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {order.websiteSubscription.status}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Subscriptions from Subscription table (Registered Agent, Compliance, etc.) */}
+                  {subscriptions.map((sub) => (
+                    <div key={sub.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{sub.name}</p>
+                        <p className="text-xs text-gray-500">
+                          {formatCurrency(Number(sub.amount))}/{sub.interval}
+                        </p>
+                        {sub.trialEndsAt && new Date(sub.trialEndsAt) > new Date() && (
+                          <p className="text-xs text-amber-600">
+                            Trial ends: {formatDate(sub.trialEndsAt)}
+                          </p>
+                        )}
+                        {sub.currentPeriodEnd && (
+                          <p className="text-xs text-gray-500">
+                            Next billing: {formatDate(sub.currentPeriodEnd)}
+                          </p>
+                        )}
+                      </div>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        sub.status === 'ACTIVE' 
+                          ? 'bg-green-100 text-green-800' 
+                          : sub.status === 'TRIALING'
+                          ? 'bg-amber-100 text-amber-800'
+                          : sub.status === 'PAUSED'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {sub.status}
+                      </span>
+                    </div>
+                  ))}
+
+                  {/* Legacy Subscription Intents */}
+                  {order.subscriptionIntents.map((sub) => (
+                    <div key={sub.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{sub.service}</p>
+                        <p className="text-xs text-gray-500">
+                          {formatCurrency(Number(sub.amount))}/{sub.frequency.toLowerCase()}
+                        </p>
+                        {sub.status === 'ACTIVE' && sub.scheduledDate && (
+                          <p className="text-xs text-gray-500">
+                            Next billing: {formatDate(sub.scheduledDate)}
+                          </p>
+                        )}
+                      </div>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        sub.status === 'ACTIVE' 
+                          ? 'bg-green-100 text-green-800' 
+                          : sub.status === 'PENDING'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {sub.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Order Dates */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -487,8 +717,8 @@ export default function OrderDetailPage() {
                   <span className="text-sm text-gray-900">{formatDate(order.createdAt)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Last Updated</span>
-                  <span className="text-sm text-gray-900">{formatDate(order.updatedAt)}</span>
+                  <span className="text-sm text-gray-600">Last Progress Update</span>
+                  <span className="text-sm text-gray-900">{formatDate(order.progressLastUpdatedAt || order.updatedAt)}</span>
                 </div>
                 {order.completedAt && (
                   <div className="flex justify-between items-center">

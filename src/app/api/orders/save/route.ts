@@ -26,6 +26,8 @@ export async function POST(req: Request) {
       websiteService = null,
       totalAmount,
       formationState,
+      paymentCardLast4,
+      paymentCardBrand,
     } = body
 
     // Use formationState if provided, otherwise fall back to businessState
@@ -77,6 +79,13 @@ export async function POST(req: Request) {
         websiteService,
         totalAmount,
         formationState: stateForFormation,
+        // Payment is already confirmed at this point
+        paymentStatus: 'COMPLETED',
+        status: 'PROCESSING',
+        paymentDate: new Date(),
+        progressLastUpdatedAt: new Date(),
+        ...(paymentCardLast4 && { paymentCardLast4 }),
+        ...(paymentCardBrand && { paymentCardBrand }),
         ...(userId && { userId }), // Link user if we found one
       },
       create: {
@@ -99,7 +108,34 @@ export async function POST(req: Request) {
         websiteService,
         totalAmount,
         formationState: stateForFormation,
+        // Payment is already confirmed at this point
+        paymentStatus: 'COMPLETED',
+        status: 'PROCESSING',
+        paymentDate: new Date(),
+        progressLastUpdatedAt: new Date(),
+        ...(paymentCardLast4 && { paymentCardLast4 }),
+        ...(paymentCardBrand && { paymentCardBrand }),
         ...(userId && { userId }), // Link user if we found one
+      }
+    })
+
+    // Create ORDER_RECEIVED progress event (payment was confirmed before reaching here)
+    await prisma.orderProgressEvent.upsert({
+      where: {
+        orderId_eventType: {
+          orderId: order.id,
+          eventType: 'ORDER_RECEIVED'
+        }
+      },
+      update: {
+        completedAt: new Date(),
+        notes: 'Payment confirmed'
+      },
+      create: {
+        orderId: order.id,
+        eventType: 'ORDER_RECEIVED',
+        completedAt: new Date(),
+        notes: 'Payment confirmed'
       }
     })
 

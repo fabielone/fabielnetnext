@@ -1,7 +1,7 @@
 import { LLCFormData } from '../types';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { CheckCircleIcon, DocumentTextIcon, EnvelopeIcon, CreditCardIcon, PrinterIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/app/components/providers/AuthProvider';
 
@@ -139,12 +139,7 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
 
         setIsProcessing(false);
 
-        // Redirect to dashboard after completion
-        if (formData.email && formData.password) {
-          setTimeout(() => {
-            redirectToDashboard();
-          }, 8000);
-        }
+        // Note: Auto-redirect removed - user clicks "Access Your Dashboard" link
       } catch (error) {
         console.error('Error processing order:', error);
         setIsProcessing(false);
@@ -191,14 +186,16 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       contactLastName: formData.lastName,
       contactEmail: recipientEmail, // Use verified email (Gmail/account) over form email
       contactPhone: formData.phone,
-      needEIN: true,
-      needOperatingAgreement: true,
-      needBankLetter: true,
+      needEIN: formData.needEIN ?? true,
+      needOperatingAgreement: formData.needOperatingAgreement ?? true,
+      needBankLetter: formData.needBankLetter ?? true,
       registeredAgent: !!formData.registeredAgent,
       compliance: !!formData.compliance,
       websiteService,
       totalAmount,
       formationState: stateCode, // Also send formation state
+      paymentCardLast4: formData.paymentCardLast4,
+      paymentCardBrand: formData.paymentCardBrand,
     };
 
     try {
@@ -281,11 +278,6 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // Send individual confirmation emails for each subscription
     }
-  };
-
-  const redirectToDashboard = () => {
-    console.log('Redirecting to dashboard...');
-    // window.location.href = '/dashboard';
   };
 
   if (isProcessing) {
@@ -537,12 +529,12 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
         <p className="text-sm text-green-600 mb-4">
           We&apos;ve sent a confirmation email to <strong>{recipientEmail}</strong> with your order details.
         </p>
-        <button 
-          onClick={redirectToDashboard}
+        <Link 
+          href={`/${locale || 'en'}/dashboard`}
           className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
         >
           Access Your Dashboard
-        </button>
+        </Link>
       </div>
 
       {/* Print Order Confirmation */}
