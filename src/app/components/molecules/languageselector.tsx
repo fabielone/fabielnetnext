@@ -23,11 +23,6 @@ export default function LanguageSelector() {
 
   const languages: LanguageOption[] = [
     { 
-      code: 'es', 
-      name: 'Español', 
-      countryCode: 'MX' // Using MX for Mexican flag
-    },
-    { 
       code: 'en', 
       name: 'English', 
       countryCode: 'US' 

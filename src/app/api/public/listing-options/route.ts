@@ -39,22 +39,22 @@ export async function GET() {
 
     // Default categories to suggest if none exist
     const defaultCategories = [
-      'Tecnología',
-      'Alimentación',
+      'Technology',
+      'Food & Beverage',
       'Retail',
-      'Servicios',
-      'Salud',
-      'Educación',
-      'Finanzas',
-      'Construcción',
-      'Transporte',
-      'Entretenimiento',
-      'Consultoría',
+      'Services',
+      'Healthcare',
+      'Education',
+      'Finance',
+      'Construction',
+      'Transportation',
+      'Entertainment',
+      'Consulting',
       'Marketing',
       'Legal',
-      'Inmobiliaria',
-      'Manufactura',
-      'Otro'
+      'Real Estate',
+      'Manufacturing',
+      'Other'
     ]
 
     // Merge default categories with existing ones

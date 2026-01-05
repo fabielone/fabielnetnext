@@ -1,4 +1,4 @@
-// app/privacidad/page.tsx
+// app/privacy/page.tsx
 import { 
   RiShieldLine, 
   RiTimeLine, 
@@ -12,11 +12,11 @@ import {
 import {BiCookie} from 'react-icons/bi'
   
 export const metadata = {
-  title: 'Política de Privacidad | Fabiel.net',
-  description: 'Conoce cómo protegemos y manejamos tu información personal.',
+  title: 'Privacy Policy | Fabiel.net',
+  description: 'Learn how we protect and handle your personal information.',
 };
   
-const lastUpdated = '15 de Diciembre de 2023';
+const lastUpdated = 'December 15, 2023';
   
 export default function PrivacyPolicyPage() {
   return (
@@ -31,15 +31,15 @@ export default function PrivacyPolicyPage() {
               </div>
             </div>
             <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
-              Política de Privacidad
+              Privacy Policy
             </h1>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Tu privacidad es importante para nosotros. Esta política describe cómo recopilamos, 
-              usamos y protegemos tu información personal.
+              Your privacy is important to us. This policy describes how we collect, 
+              use, and protect your personal information.
             </p>
             <div className="mt-6 flex items-center justify-center text-sm text-gray-500">
               <RiTimeLine className="h-5 w-5 mr-2" />
-              Última actualización: {lastUpdated}
+              Last updated: {lastUpdated}
             </div>
           </div>
         </div>
@@ -52,13 +52,13 @@ export default function PrivacyPolicyPage() {
           <div className="lg:col-span-1">
             <nav className="space-y-1 sticky top-8">
               {[
-                { id: 'recopilacion', icon: RiUserLine, text: 'Recopilación de Información' },
-                { id: 'uso', icon: RiGlobalLine, text: 'Uso de la Información' },
-                { id: 'proteccion', icon: RiLockLine, text: 'Protección de Datos' },
+                { id: 'collection', icon: RiUserLine, text: 'Information Collection' },
+                { id: 'use', icon: RiGlobalLine, text: 'Information Use' },
+                { id: 'protection', icon: RiLockLine, text: 'Data Protection' },
                 { id: 'cookies', icon: BiCookie, text: 'Cookies' },
-                { id: 'comunicaciones', icon: RiMailLine, text: 'Comunicaciones' },
-                { id: 'derechos', icon: RiShieldLine, text: 'Tus Derechos' },
-                { id: 'contacto', icon: RiQuestionLine, text: 'Contacto' },
+                { id: 'communications', icon: RiMailLine, text: 'Communications' },
+                { id: 'rights', icon: RiShieldLine, text: 'Your Rights' },
+                { id: 'contact', icon: RiQuestionLine, text: 'Contact' },
               ].map((item) => (
                 <a
                   key={item.id}
@@ -74,55 +74,55 @@ export default function PrivacyPolicyPage() {
   
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-12">
-            <section id="recopilacion" className="bg-white rounded-2xl shadow-sm p-8">
+            <section id="collection" className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Recopilación de Información
+                Information Collection
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Recopilamos información que nos proporcionas directamente cuando:
+                  We collect information that you provide directly to us when:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
-                  <li>Creas una cuenta en nuestra plataforma</li>
-                  <li>Realizas una compra o transacción</li>
-                  <li>Te comunicas con nuestro equipo de soporte</li>
-                  <li>Te suscribes a nuestro boletín</li>
-                  <li>Participas en encuestas o promociones</li>
+                  <li>You create an account on our platform</li>
+                  <li>You make a purchase or transaction</li>
+                  <li>You communicate with our support team</li>
+                  <li>You subscribe to our newsletter</li>
+                  <li>You participate in surveys or promotions</li>
                 </ul>
               </div>
             </section>
   
-            <section id="uso" className="bg-white rounded-2xl shadow-sm p-8">
+            <section id="use" className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Uso de la Información
+                Information Use
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Utilizamos la información recopilada para:
+                  We use the collected information to:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
-                  <li>Proporcionar y mantener nuestros servicios</li>
-                  <li>Procesar tus transacciones</li>
-                  <li>Enviar comunicaciones administrativas</li>
-                  <li>Mejorar nuestros servicios</li>
-                  <li>Prevenir actividades fraudulentas</li>
+                  <li>Provide and maintain our services</li>
+                  <li>Process your transactions</li>
+                  <li>Send administrative communications</li>
+                  <li>Improve our services</li>
+                  <li>Prevent fraudulent activities</li>
                 </ul>
               </div>
             </section>
   
-            <section id="proteccion" className="bg-white rounded-2xl shadow-sm p-8">
+            <section id="protection" className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Protección de Datos
+                Data Protection
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Implementamos medidas de seguridad técnicas y organizativas para proteger tu información:
+                  We implement technical and organizational security measures to protect your information:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
-                  <li>Encriptación de datos sensibles</li>
-                  <li>Acceso restringido a información personal</li>
-                  <li>Monitoreo continuo de seguridad</li>
-                  <li>Copias de seguridad regulares</li>
+                  <li>Encryption of sensitive data</li>
+                  <li>Restricted access to personal information</li>
+                  <li>Continuous security monitoring</li>
+                  <li>Regular backups</li>
                 </ul>
               </div>
             </section>
@@ -133,64 +133,64 @@ export default function PrivacyPolicyPage() {
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Utilizamos cookies y tecnologías similares para:
+                  We use cookies and similar technologies to:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
-                  <li>Mantener tu sesión activa</li>
-                  <li>Recordar tus preferencias</li>
-                  <li>Analizar el uso de nuestros servicios</li>
-                  <li>Personalizar tu experiencia</li>
+                  <li>Keep your session active</li>
+                  <li>Remember your preferences</li>
+                  <li>Analyze the use of our services</li>
+                  <li>Personalize your experience</li>
                 </ul>
               </div>
             </section>
   
-            <section id="comunicaciones" className="bg-white rounded-2xl shadow-sm p-8">
+            <section id="communications" className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Comunicaciones
+                Communications
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Podrás recibir comunicaciones nuestras relacionadas con:
+                  You may receive communications from us related to:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
-                  <li>Actualizaciones de servicio</li>
-                  <li>Cambios en políticas</li>
-                  <li>Boletines informativos (si te suscribiste)</li>
-                  <li>Ofertas especiales (con tu consentimiento)</li>
+                  <li>Service updates</li>
+                  <li>Policy changes</li>
+                  <li>Newsletters (if you subscribed)</li>
+                  <li>Special offers (with your consent)</li>
                 </ul>
               </div>
             </section>
   
-            <section id="derechos" className="bg-white rounded-2xl shadow-sm p-8">
+            <section id="rights" className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Tus Derechos
+                Your Rights
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Tienes derecho a:
+                  You have the right to:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
-                  <li>Acceder a tu información personal</li>
-                  <li>Rectificar datos incorrectos</li>
-                  <li>Solicitar la eliminación de tus datos</li>
-                  <li>Oponerte al procesamiento de datos</li>
-                  <li>Retirar tu consentimiento</li>
+                  <li>Access your personal information</li>
+                  <li>Rectify incorrect data</li>
+                  <li>Request deletion of your data</li>
+                  <li>Object to data processing</li>
+                  <li>Withdraw your consent</li>
                 </ul>
               </div>
             </section>
   
-            <section id="contacto" className="bg-white rounded-2xl shadow-sm p-8">
+            <section id="contact" className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Contacto
+                Contact
               </h2>
               <div className="prose prose-amber max-w-none">
                 <p>
-                  Para cualquier consulta sobre esta política o tus derechos, puedes contactarnos:
+                  For any questions about this policy or your rights, you can contact us:
                 </p>
                 <ul className="space-y-2 list-disc pl-5 text-gray-600">
                   <li>Email: privacy@fabiel.net</li>
-                  <li>Teléfono: +1 (555) 123-4567</li>
-                  <li>Dirección: 123 Privacy Street, Tech City, TC 12345</li>
+                  <li>Phone: +1 (555) 123-4567</li>
+                  <li>Address: 123 Privacy Street, Tech City, TC 12345</li>
                 </ul>
               </div>
             </section>
@@ -202,7 +202,7 @@ export default function PrivacyPolicyPage() {
       <div className="bg-white border-t border-gray-200 mt-12">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">
-            © {new Date().getFullYear()} Fabiel.net. Todos los derechos reservados.
+            {new Date().getFullYear()} Fabiel.net. All rights reserved.
           </p>
         </div>
       </div>

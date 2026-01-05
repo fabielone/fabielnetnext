@@ -92,12 +92,6 @@ Services
 - `nav.services.software.web`: "Web & Blog Development"
 - `nav.services.business.title`: "Business Formation"
 - `nav.services.business.llc`: "Form Your LLC"
-
-### Spanish (`messages/es/common.json`)
-- `nav.services.title`: "Nuestros Servicios"
-- `nav.services.software.title`: "Desarrollo de Software"
-- `nav.services.software.web`: "Desarrollo Web y de Blogs"
-- `nav.services.business.title`: "Formación de Empresas"
 - `nav.services.business.llc`: "Forma tu LLC"
 
 ## Testing Checklist

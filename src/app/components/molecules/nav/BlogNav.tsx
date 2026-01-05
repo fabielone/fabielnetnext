@@ -69,13 +69,13 @@ export default function Navbar() {
               href="/login"
               className="hidden md:flex text-gray-800  hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
             >
-              Iniciar Sesión /
+              Log In /
             </Link>
             <Link
               href="/join"
               className="hidden md:flex text-gray-800 hover:text-gray-600  px-3 py-2 rounded-md text-sm font-medium"
             >
-              Registrarse
+              Register
             </Link>
           </div>
         </div>

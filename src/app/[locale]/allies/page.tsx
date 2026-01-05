@@ -31,22 +31,22 @@ const fallbackProjects: Business[] = [
   {
     id: "fallback-1",
     name: "TechFlow Solutions",
-    publicDescription: "Soluciones tecnológicas y SaaS a medida.",
+    publicDescription: "Custom technology and SaaS solutions.",
     publicImageUrl: "/marketing.jpeg",
-    publicCategory: "Tecnología",
+    publicCategory: "Technology",
     publicTags: ["React", "Next.js", "SaaS"],
-    publicLocation: "México · CDMX",
+    publicLocation: "USA - New York",
     publicLink: "https://techflow.com",
   },
   {
     id: "fallback-2",
-    name: "Sabor Latino Catering",
-    publicDescription: "Catering con auténticos sabores latinoamericanos.",
+    name: "Flavor Kitchen Catering",
+    publicDescription: "Premium catering with authentic flavors.",
     publicImageUrl: "/formacion.jpeg",
-    publicCategory: "Alimentación",
-    publicTags: ["Branding", "Eventos"],
-    publicLocation: "Colombia · Medellín",
-    publicLink: "https://saborlatino.com",
+    publicCategory: "Food & Beverage",
+    publicTags: ["Branding", "Events"],
+    publicLocation: "USA - Miami",
+    publicLink: "https://flavorkitchen.com",
   }
 ];
 
