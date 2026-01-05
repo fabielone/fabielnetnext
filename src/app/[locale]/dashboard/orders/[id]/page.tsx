@@ -231,6 +231,44 @@ export default function OrderDetailPage() {
     })
   }
 
+  // Helper to safely convert Prisma Decimal/string/number to number
+  const toNumber = (value: unknown): number => {
+    if (value === null || value === undefined) return 0
+    // Handle Prisma Decimal objects (they have a toNumber method)
+    if (typeof value === 'object' && value !== null && 'toNumber' in value) {
+      return (value as { toNumber: () => number }).toNumber()
+    }
+    // Handle string representation of decimals
+    if (typeof value === 'string') {
+      const parsed = parseFloat(value)
+      return isNaN(parsed) ? 0 : parsed
+    }
+    // Handle regular numbers
+    const num = Number(value)
+    return isNaN(num) ? 0 : num
+  }
+
+  // Normalize subscription status for display
+  // PENDING, TRIALING, ACTIVE all show as "Active" (user signed up for service)
+  // Only show different status for CANCELLED, PAST_DUE, PAUSED
+  const normalizeStatus = (status: string | null): { label: string; bg: string; text: string } => {
+    if (!status) return { label: 'Active', bg: 'bg-green-100', text: 'text-green-700' }
+    const upper = status.toUpperCase()
+    if (['PENDING', 'TRIALING', 'ACTIVE', 'SCHEDULED'].includes(upper)) {
+      return { label: 'Active', bg: 'bg-green-100', text: 'text-green-700' }
+    }
+    if (upper === 'PAST_DUE' || upper === 'PASTDUE') {
+      return { label: 'Past Due', bg: 'bg-red-100', text: 'text-red-700' }
+    }
+    if (upper === 'CANCELLED' || upper === 'CANCELED') {
+      return { label: 'Cancelled', bg: 'bg-gray-100', text: 'text-gray-600' }
+    }
+    if (upper === 'PAUSED') {
+      return { label: 'Paused', bg: 'bg-yellow-100', text: 'text-yellow-700' }
+    }
+    return { label: 'Active', bg: 'bg-green-100', text: 'text-green-700' }
+  }
+
   // Calculate what services are included (one-time charges)
   const getWebsiteTierLabel = (tier: string | null) => {
     if (!tier) return null
@@ -250,23 +288,29 @@ export default function OrderDetailPage() {
     return sub?.status || null
   }
 
+  // Get numeric values with proper Prisma Decimal handling
+  const basePriceAmount = toNumber(order.basePrice)
+  const stateFilingFeeAmount = toNumber(order.stateFilingFee)
+  const rushFeeAmount = toNumber(order.rushFee)
+
   const includedServices: { name: string; included: boolean; price: number }[] = [
-    { name: 'LLC Formation', included: true, price: Number(order.basePrice) },
-    { name: `${order.formationState || order.businessState} State Filing Fee`, included: Number(order.stateFilingFee) > 0, price: Number(order.stateFilingFee) },
-    { name: 'Rush Processing', included: order.rushProcessing, price: Number(order.rushFee) },
+    { name: 'LLC Formation', included: true, price: basePriceAmount },
+    { name: `${order.formationState || order.businessState} State Filing Fee`, included: stateFilingFeeAmount > 0, price: stateFilingFeeAmount },
+    { name: 'Rush Processing', included: order.rushProcessing && rushFeeAmount > 0, price: rushFeeAmount },
   ].filter(s => s.included)
 
-  // Subscription services (billed separately) with status from actual subscriptions
-  const subscriptionServices: { name: string; included: boolean; billingNote: string; status: string | null }[] = [
-    { name: 'Registered Agent', included: order.registeredAgent, billingNote: 'Billed yearly', status: getSubscriptionStatus('Registered Agent') },
-    { name: 'Annual Compliance', included: order.compliance, billingNote: 'Billed yearly', status: getSubscriptionStatus('Compliance') },
-    { name: getWebsiteTierLabel(order.websiteService) || 'Website', included: !!order.websiteService, billingNote: 'Billed monthly', status: order.websiteSubscription?.status || null },
+  // Subscription services (billed separately) with normalized status
+  const subscriptionServices: { name: string; included: boolean; billingNote: string; statusBadge: { label: string; bg: string; text: string } }[] = [
+    { name: 'Registered Agent', included: order.registeredAgent, billingNote: 'Billed yearly', statusBadge: normalizeStatus(getSubscriptionStatus('Registered Agent')) },
+    { name: 'Annual Compliance', included: order.compliance, billingNote: 'Billed yearly', statusBadge: normalizeStatus(getSubscriptionStatus('Compliance')) },
+    { name: getWebsiteTierLabel(order.websiteService) || 'Website', included: !!order.websiteService, billingNote: 'Billed monthly', statusBadge: normalizeStatus(order.websiteSubscription?.status || null) },
   ].filter(s => s.included)
 
   // Filter progress steps based on selected services
+  // Only show steps for services that were explicitly selected (=== true)
   const applicableSteps = progressStepConfig.filter(step => {
     if (!step.requiresService) return true
-    return order[step.requiresService]
+    return order[step.requiresService] === true
   })
 
   // Create a map of completed events
@@ -562,23 +606,9 @@ export default function OrderDetailPage() {
                         <span className="text-gray-600">{service.name}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-gray-400">{service.billingNote}</span>
-                          {service.status ? (
-                            <span className={`px-1.5 py-0.5 text-xs font-medium rounded ${
-                              service.status === 'ACTIVE' 
-                                ? 'bg-green-100 text-green-700' 
-                                : service.status === 'TRIALING'
-                                ? 'bg-amber-100 text-amber-700'
-                                : service.status === 'PENDING'
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : 'bg-gray-100 text-gray-600'
-                            }`}>
-                              {service.status === 'TRIALING' ? 'Trial' : service.status}
-                            </span>
-                          ) : (
-                            <span className="px-1.5 py-0.5 text-xs font-medium rounded bg-yellow-100 text-yellow-700">
-                              Pending
-                            </span>
-                          )}
+                          <span className={`px-1.5 py-0.5 text-xs font-medium rounded ${service.statusBadge.bg} ${service.statusBadge.text}`}>
+                            {service.statusBadge.label}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -621,89 +651,80 @@ export default function OrderDetailPage() {
                 <h2 className="font-semibold text-gray-900 mb-4">Subscriptions</h2>
                 <div className="space-y-4">
                   {/* Website Subscription */}
-                  {order.websiteSubscription && (
-                    <div className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          Website - {order.websiteSubscription.tier.replace(/_/g, ' ')}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {formatCurrency(order.websiteSubscription.monthlyPrice)}/month
-                        </p>
-                        {order.websiteSubscription.nextBillingDate && (
-                          <p className="text-xs text-gray-500">
-                            Next billing: {formatDate(order.websiteSubscription.nextBillingDate)}
+                  {order.websiteSubscription && (() => {
+                    const badge = normalizeStatus(order.websiteSubscription.status)
+                    return (
+                      <div className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            Website - {order.websiteSubscription.tier.replace(/_/g, ' ')}
                           </p>
-                        )}
+                          <p className="text-xs text-gray-500">
+                            {formatCurrency(order.websiteSubscription.monthlyPrice)}/month
+                          </p>
+                          {order.websiteSubscription.nextBillingDate && (
+                            <p className="text-xs text-gray-500">
+                              Next billing: {formatDate(order.websiteSubscription.nextBillingDate)}
+                            </p>
+                          )}
+                        </div>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>
+                          {badge.label}
+                        </span>
                       </div>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        order.websiteSubscription.status === 'ACTIVE' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {order.websiteSubscription.status}
-                      </span>
-                    </div>
-                  )}
+                    )
+                  })()}
                   
                   {/* Subscriptions from Subscription table (Registered Agent, Compliance, etc.) */}
-                  {subscriptions.map((sub) => (
-                    <div key={sub.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{sub.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {formatCurrency(Number(sub.amount))}/{sub.interval}
-                        </p>
-                        {sub.trialEndsAt && new Date(sub.trialEndsAt) > new Date() && (
-                          <p className="text-xs text-amber-600">
-                            Trial ends: {formatDate(sub.trialEndsAt)}
-                          </p>
-                        )}
-                        {sub.currentPeriodEnd && (
+                  {subscriptions.map((sub) => {
+                    const badge = normalizeStatus(sub.status)
+                    return (
+                      <div key={sub.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{sub.name}</p>
                           <p className="text-xs text-gray-500">
-                            Next billing: {formatDate(sub.currentPeriodEnd)}
+                            {formatCurrency(Number(sub.amount))}/{sub.interval}
                           </p>
-                        )}
+                          {sub.trialEndsAt && new Date(sub.trialEndsAt) > new Date() && (
+                            <p className="text-xs text-amber-600">
+                              Trial ends: {formatDate(sub.trialEndsAt)}
+                            </p>
+                          )}
+                          {sub.currentPeriodEnd && (
+                            <p className="text-xs text-gray-500">
+                              Next billing: {formatDate(sub.currentPeriodEnd)}
+                            </p>
+                          )}
+                        </div>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>
+                          {badge.label}
+                        </span>
                       </div>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        sub.status === 'ACTIVE' 
-                          ? 'bg-green-100 text-green-800' 
-                          : sub.status === 'TRIALING'
-                          ? 'bg-amber-100 text-amber-800'
-                          : sub.status === 'PAUSED'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {sub.status}
-                      </span>
-                    </div>
-                  ))}
+                    )
+                  })}
 
                   {/* Legacy Subscription Intents */}
-                  {order.subscriptionIntents.map((sub) => (
-                    <div key={sub.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{sub.service}</p>
-                        <p className="text-xs text-gray-500">
-                          {formatCurrency(Number(sub.amount))}/{sub.frequency.toLowerCase()}
-                        </p>
-                        {sub.status === 'ACTIVE' && sub.scheduledDate && (
+                  {order.subscriptionIntents.map((sub) => {
+                    const badge = normalizeStatus(sub.status)
+                    return (
+                      <div key={sub.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{sub.service}</p>
                           <p className="text-xs text-gray-500">
-                            Next billing: {formatDate(sub.scheduledDate)}
+                            {formatCurrency(Number(sub.amount))}/{sub.frequency.toLowerCase()}
                           </p>
-                        )}
+                          {sub.scheduledDate && (
+                            <p className="text-xs text-gray-500">
+                              Next billing: {formatDate(sub.scheduledDate)}
+                            </p>
+                          )}
+                        </div>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>
+                          {badge.label}
+                        </span>
                       </div>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        sub.status === 'ACTIVE' 
-                          ? 'bg-green-100 text-green-800' 
-                          : sub.status === 'PENDING'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {sub.status}
-                      </span>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}

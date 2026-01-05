@@ -194,6 +194,9 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       websiteService,
       totalAmount,
       formationState: stateCode, // Also send formation state
+      stateFilingFee: formData.stateFilingFee || 0, // State filing fee
+      rushProcessing: !!formData.rushProcessing, // Rush processing flag
+      rushFee: formData.stateRushFee || 0, // Rush processing fee
       paymentCardLast4: formData.paymentCardLast4,
       paymentCardBrand: formData.paymentCardBrand,
     };

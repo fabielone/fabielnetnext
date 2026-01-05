@@ -26,6 +26,9 @@ export async function POST(req: Request) {
       websiteService = null,
       totalAmount,
       formationState,
+      stateFilingFee = 0,
+      rushProcessing = false,
+      rushFee = 0,
       paymentCardLast4,
       paymentCardBrand,
     } = body
@@ -79,6 +82,9 @@ export async function POST(req: Request) {
         websiteService,
         totalAmount,
         formationState: stateForFormation,
+        stateFilingFee,
+        rushProcessing,
+        rushFee,
         // Payment is already confirmed at this point
         paymentStatus: 'COMPLETED',
         status: 'PROCESSING',
@@ -108,6 +114,9 @@ export async function POST(req: Request) {
         websiteService,
         totalAmount,
         formationState: stateForFormation,
+        stateFilingFee,
+        rushProcessing,
+        rushFee,
         // Payment is already confirmed at this point
         paymentStatus: 'COMPLETED',
         status: 'PROCESSING',
