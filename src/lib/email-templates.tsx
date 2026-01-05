@@ -263,6 +263,142 @@ export const SubscriptionFailureEmail = ({ _email, customerName, serviceName, co
   </Html>
 );
 
+// Subscription Cancellation Confirmation Email
+export const SubscriptionCancellationEmail = ({ 
+  _email, 
+  customerName, 
+  serviceName, 
+  companyName,
+  state,
+  serviceEndDate,
+  isRegisteredAgent,
+  isCompliancePackage,
+  cancellationReason,
+  stateFileNumber
+}: { 
+  _email: string; 
+  customerName: string; 
+  serviceName: string; 
+  companyName: string;
+  state: string;
+  serviceEndDate: Date;
+  isRegisteredAgent: boolean;
+  isCompliancePackage: boolean;
+  cancellationReason?: string;
+  stateFileNumber?: string;
+}) => (
+  <Html>
+    <Head />
+    <Body style={main}>
+      <Container style={container}>
+        <Section style={header}>
+          <Img
+            src={`${baseUrl}/logo.png`}
+            width="150"
+            height="50"
+            alt="Fabiel.net"
+            style={logo}
+          />
+        </Section>
+        
+        <Section style={content}>
+          <Heading style={h1}>Subscription Cancellation Confirmed</Heading>
+          
+          <Text style={text}>
+            Dear {customerName},
+          </Text>
+          
+          <Text style={text}>
+            This email confirms that your <strong>{serviceName}</strong> subscription for <strong>{companyName}</strong> has been scheduled for cancellation.
+          </Text>
+          
+          <Section style={orderDetails}>
+            <Heading style={h2}>Cancellation Details</Heading>
+            <Text style={orderText}>
+              <strong>Service:</strong> {serviceName}<br/>
+              <strong>Business:</strong> {companyName}<br/>
+              <strong>Service End Date:</strong> {serviceEndDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}<br/>
+              <strong>Status:</strong> Active until service end date
+            </Text>
+          </Section>
+
+          {isRegisteredAgent && (
+            <Section style={errorDetails}>
+              <Heading style={h2}>⚠️ Important: Registered Agent Action Required</Heading>
+              <Text style={errorText}>
+                <strong>Canceling this service does not dissolve your LLC.</strong> As a California LLC, you are required by law to maintain a Registered Agent at all times.
+              </Text>
+              <Text style={text}>
+                Before your service ends on {serviceEndDate.toLocaleDateString()}, you must:
+              </Text>
+              <Text style={stepText}>
+                <strong>1.</strong> Appoint a new Registered Agent (can be yourself, another person, or a professional service)
+              </Text>
+              <Text style={stepText}>
+                <strong>2.</strong> File form RA-100 with the California Secretary of State to update your Registered Agent information
+              </Text>
+              <Text style={stepText}>
+                <strong>3.</strong> Pay the $20 filing fee to the Secretary of State
+              </Text>
+              {stateFileNumber && (
+                <Text style={text}>
+                  Your LLC File Number: <strong>{stateFileNumber}</strong>
+                </Text>
+              )}
+              <Text style={importantText}>
+                <strong>Warning:</strong> Failure to maintain a Registered Agent may result in a $250 penalty or the administrative dissolution/suspension of your business entity.
+              </Text>
+              <Section style={buttonContainer}>
+                <Button style={button} href="https://bizfileonline.sos.ca.gov/">
+                  File RA-100 with CA Secretary of State
+                </Button>
+              </Section>
+            </Section>
+          )}
+
+          {isCompliancePackage && (
+            <Section style={importantNote}>
+              <Heading style={h2}>📋 Compliance Responsibilities</Heading>
+              <Text style={text}>
+                After your subscription ends, you will be responsible for:
+              </Text>
+              <Text style={stepText}>
+                • <strong>Statement of Information:</strong> File annually with the Secretary of State ($20 fee)
+              </Text>
+              <Text style={stepText}>
+                • <strong>Franchise Tax:</strong> File annually with the Franchise Tax Board (minimum $800/year for LLCs)
+              </Text>
+              <Text style={stepText}>
+                • <strong>Compliance Deadlines:</strong> Track and meet all filing deadlines to avoid penalties
+              </Text>
+            </Section>
+          )}
+
+          <Section style={subscriptionDetails}>
+            <Heading style={h2}>Changed Your Mind?</Heading>
+            <Text style={text}>
+              You can reactivate your subscription at any time before {serviceEndDate.toLocaleDateString()} from your dashboard.
+            </Text>
+            <Section style={buttonContainer}>
+              <Button style={button} href={`${baseUrl}/en/dashboard/subscriptions`}>
+                Manage Subscriptions
+              </Button>
+            </Section>
+          </Section>
+          
+          <Hr style={hr} />
+          
+          <Text style={footer}>
+            This is a confirmation of your cancellation request. If you did not request this cancellation, please contact us immediately at support@fabiel.net<br/>
+            <br/>
+            Thank you for using Fabiel.Net. We hope to serve you again in the future.
+          </Text>
+        </Section>
+      </Container>
+    </Body>
+  </Html>
+);
+
 export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId, questionnaires, token }: { _email: string; customerName: string; companyName: string; orderId: string; questionnaires: string[]; token?: string }) => (
   <Html>
     <Head />

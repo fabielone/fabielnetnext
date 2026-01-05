@@ -6,6 +6,7 @@ import {
   OrderConfirmationEmail,
   SubscriptionConfirmationEmail,
   SubscriptionFailureEmail,
+  SubscriptionCancellationEmail,
   QuestionnaireEmail
 } from './email-templates';
 
@@ -139,5 +140,26 @@ export const sendQuestionnaireLink = async (data: {
     to: data.email,
     subject: `Complete Your LLC Setup - ${data.companyName}`,
     react: QuestionnaireEmail({ ...data, _email: data.email })
+  });
+};
+
+export const sendSubscriptionCancellationEmail = async (data: {
+  email: string;
+  customerName: string;
+  serviceName: string;
+  companyName: string;
+  state: string;
+  serviceEndDate: Date;
+  isRegisteredAgent: boolean;
+  isCompliancePackage: boolean;
+  cancellationReason?: string;
+  stateFileNumber?: string;
+}) => {
+  return sendEmail({
+    email: data.email,
+    companyName: data.companyName,
+    to: data.email,
+    subject: `Subscription Cancellation Confirmed - ${data.serviceName}`,
+    react: SubscriptionCancellationEmail({ ...data, _email: data.email })
   });
 };

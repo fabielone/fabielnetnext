@@ -1176,5 +1176,108 @@
         "content": "Si tienes preguntas sobre esta política de privacidad, contáctanos en privacy@fabiel.net"
       }
     }
+  },
+  "subscriptions": {
+    "title": "Mis Suscripciones",
+    "subtitle": "Administra tus suscripciones activas y facturación",
+    "noSubscriptions": "Sin Suscripciones Activas",
+    "noSubscriptionsDesc": "Aún no tienes suscripciones activas.",
+    "cancelSubscription": "Cancelar Suscripción",
+    "reactivate": "Reactivar",
+    "reactivating": "Reactivando...",
+    "amount": "Monto",
+    "billing": "Facturación",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "weekly": "Semanal",
+    "nextBilling": "Próxima factura",
+    "endsOn": "Termina el",
+    "cancelledOn": "Cancelado el",
+    "active": "Activa",
+    "cancelled": "Cancelada",
+    "paused": "Pausada",
+    "pastDue": "Vencida",
+    "pendingCancellation": "Cancelando",
+    "pendingCancellationNotice": "Tu suscripción permanecerá activa hasta {date}. Puedes reactivarla en cualquier momento antes de esa fecha."
+  },
+  "cancellation": {
+    "modalTitle": "Cancelar Suscripción",
+    "step": "Paso {current} de {total}",
+    "beforeYouGo": "Antes de Irte",
+    "impactSummaryDesc": "Por favor revisa lo que sucede cuando cancelas esta suscripción.",
+    "keepSubscription": "Mantener Suscripción",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "mustAcknowledge": "Debes reconocer las consecuencias de la cancelación para continuar.",
+    "registeredAgent": {
+      "title": "Pérdida del Agente Registrado",
+      "warning": "Tu LLC debe mantener un Agente Registrado para permanecer en buen estado. Cancelar este servicio significa que debes nombrar un nuevo agente con la Secretaría de Estado inmediatamente.",
+      "important": "Importante: Cancelar este servicio NO disuelve tu LLC.",
+      "penalty": "Debes presentar el formulario RA-100 ante la Secretaría de Estado para cambiar tu Agente Registrado. No mantener un Agente Registrado puede resultar en una multa de $250 o la suspensión de tu negocio."
+    },
+    "compliance": {
+      "title": "Responsabilidades de Cumplimiento",
+      "warning": "Después de la cancelación, serás responsable de presentar tus propios documentos de cumplimiento.",
+      "statementOfInfo": "Declaración de Información - Presentar anualmente (tarifa de $20)",
+      "franchiseTax": "Impuesto de Franquicia - Presentar anualmente (mínimo $800 para LLCs)"
+    },
+    "website": {
+      "title": "Servicio de Sitio Web/Blog",
+      "warning": "Tu sitio web quedará fuera de línea al final de tu período de facturación.",
+      "dataRetention": "Tus datos se conservarán por 30 días después de la cancelación. Contacta a soporte para exportar tu contenido."
+    },
+    "billing": {
+      "title": "Período de Servicio",
+      "serviceUntil": "Tu servicio permanecerá activo hasta {date}",
+      "noRefund": "No se proporcionan reembolsos prorrateados por períodos de facturación parciales."
+    },
+    "survey": {
+      "title": "Ayúdanos a Mejorar",
+      "description": "Nos encantaría saber por qué te vas (opcional).",
+      "reasonLabel": "¿Por qué cancelas?",
+      "reasons": {
+        "tooExpensive": "Demasiado caro",
+        "notUsing": "No estoy usando el servicio",
+        "switchingProvider": "Cambiando a otro proveedor",
+        "closingBusiness": "Cerrando mi negocio",
+        "poorService": "No satisfecho con el servicio",
+        "other": "Otra razón"
+      },
+      "feedbackLabel": "Por favor cuéntanos más",
+      "feedbackPlaceholder": "Tu retroalimentación nos ayuda a mejorar...",
+      "appointNewAgent": "Entiendo que necesito nombrar un nuevo Agente Registrado",
+      "appointNewAgentDesc": "Presentaré el formulario RA-100 ante la Secretaría de Estado de California antes de que termine mi servicio."
+    },
+    "confirm": {
+      "title": "Confirmar Cancelación",
+      "description": "Por favor revisa y confirma tu cancelación.",
+      "service": "Servicio",
+      "business": "Negocio",
+      "amount": "Monto",
+      "activeUntil": "Activo Hasta",
+      "acknowledge": "Entiendo y reconozco",
+      "acknowledgeRegisteredAgent": "Entiendo que debo nombrar un nuevo Agente Registrado y presentar el formulario RA-100 ante la Secretaría de Estado para evitar multas o suspensión del negocio.",
+      "acknowledgeGeneral": "Entiendo que mi servicio terminará en la fecha mostrada arriba y perderé acceso a los beneficios de esta suscripción.",
+      "termsPrefix": "Al cancelar, aceptas nuestros",
+      "termsLink": "Términos de Servicio",
+      "processing": "Procesando...",
+      "confirmCancellation": "Confirmar Cancelación"
+    },
+    "success": {
+      "title": "Cancelación Confirmada",
+      "description": "Tu suscripción ha sido programada para cancelación.",
+      "serviceUntil": "Tu servicio permanecerá activo hasta {date}",
+      "emailSent": "Se ha enviado un correo de confirmación a tu dirección de email.",
+      "nextSteps": "Próximos Pasos para Agente Registrado",
+      "step1": "Elige un nuevo Agente Registrado (tú mismo, una persona de confianza, o un servicio profesional)",
+      "step2": "Presenta el formulario RA-100 ante la Secretaría de Estado de California (tarifa de $20)",
+      "step3": "Completa esto antes de que termine tu servicio para mantener el cumplimiento",
+      "sosLink": "Sitio Web de la Secretaría de Estado de California",
+      "changedMind": "¿Cambiaste de Opinión?",
+      "reactivateInfo": "Puedes reactivar tu suscripción en cualquier momento antes de que termine tu servicio.",
+      "reactivate": "Reactivar Suscripción",
+      "reactivating": "Reactivando...",
+      "done": "Listo"
+    }
   }
 }
