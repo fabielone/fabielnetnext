@@ -1279,5 +1279,128 @@
       "reactivating": "Reactivando...",
       "done": "Listo"
     }
+  },
+  "orders": {
+    "title": "Mis Órdenes",
+    "subtitle": "Rastrea tus órdenes de formación de LLC",
+    "noOrders": "Sin Órdenes Aún",
+    "noOrdersDesc": "Aún no has realizado ninguna orden. ¡Comienza tu formación de LLC hoy!",
+    "startLLC": "Iniciar Formación de LLC",
+    "startFormation": "Iniciar Formación de LLC",
+    "orderNumber": "Orden #{orderId}",
+    "viewDetails": "Ver Detalles",
+    "viewOrder": "Ver Orden",
+    "cancelOrder": "Cancelar Orden",
+    "backToOrders": "Volver a Órdenes",
+    "viewBusiness": "Ver Negocio",
+    "order": "Orden",
+    "state": "Estado",
+    "total": "Total",
+    "date": "Fecha",
+    "pendingProcessing": "Pendiente",
+    "processing": "Procesando",
+    "completed": "Completada",
+    "cancelled": "Cancelada",
+    "refunded": "Reembolsada",
+    "statuses": {
+      "pending": "Pendiente",
+      "processing": "Procesando",
+      "completed": "Completada",
+      "cancelled": "Cancelada",
+      "refunded": "Reembolsada"
+    }
+  },
+  "orderCancellation": {
+    "modalTitle": "Cancelar Orden",
+    "step": "Paso {current} de {total}",
+    "loading": "Cargando detalles de cancelación...",
+    "close": "Cerrar",
+    "keepOrder": "Mantener Mi Orden",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "mustAcknowledge": "Debes reconocer las consecuencias de la cancelación para proceder.",
+    "progress": {
+      "orderReceived": "Orden Recibida",
+      "llcFiled": "LLC Presentada al Estado",
+      "llcApproved": "LLC Aprobada"
+    },
+    "blocked": {
+      "title": "No Se Puede Cancelar",
+      "description": "Esta orden ya ha sido enviada al estado y no puede cancelarse.",
+      "progressTitle": "Progreso de la Orden",
+      "pointOfNoReturn": "Punto Sin Retorno",
+      "contactSupport": "Si necesitas asistencia o tienes preguntas sobre tu orden, contacta a nuestro equipo de soporte.",
+      "emailSupport": "Enviar Email a Soporte"
+    },
+    "impact": {
+      "title": "Revisa el Impacto de Cancelar",
+      "description": "Por favor revisa lo que sucede cuando cancelas esta orden.",
+      "refundBreakdown": "Tu Reembolso",
+      "serviceFee": "Tarifa de Servicio",
+      "stateFilingFee": "Tarifa de Presentación Estatal",
+      "rushFee": "Tarifa de Procesamiento Urgente",
+      "processingFeeRetained": "Tarifa de Procesamiento (no reembolsable)",
+      "totalRefund": "Reembolso Total",
+      "processingFeeNote": "Se retiene una tarifa de procesamiento de $25 para órdenes donde el trabajo ha comenzado.",
+      "subscriptionWarning": {
+        "title": "Suscripciones Activas",
+        "description": "Tienes {count, plural, one {# suscripción activa} other {# suscripciones activas}} vinculadas a esta orden. Cancelar tu orden NO cancelará tus suscripciones.",
+        "actionRequired": "Para cancelar suscripciones, por favor visita la página de Suscripciones por separado.",
+        "subscriptionsPage": "Administrar Suscripciones"
+      },
+      "noProtection": {
+        "title": "Sin Protección de Responsabilidad",
+        "warning": "Cancelar significa que no se formará una LLC. No tendrás protección de responsabilidad personal para tus actividades comerciales."
+      },
+      "nameNotReserved": {
+        "title": "Nombre No Reservado",
+        "warning": "El nombre de la compañía que elegiste no será reservado. Cualquier otra persona puede registrar este nombre con el estado."
+      },
+      "documents": {
+        "title": "Sin Documentos de Formación",
+        "warning": "No recibirás un Acuerdo Operativo, EIN, u otros documentos de formación incluidos en tu paquete."
+      }
+    },
+    "survey": {
+      "title": "Ayúdanos a Mejorar",
+      "description": "Nos encantaría saber por qué estás cancelando (opcional).",
+      "reasonLabel": "¿Por qué estás cancelando?",
+      "reasons": {
+        "changedMind": "Cambié de opinión sobre formar una LLC",
+        "tooExpensive": "Muy caro",
+        "foundAlternative": "Encontré una mejor opción en otro lugar",
+        "notReady": "Aún no estoy listo para iniciar un negocio",
+        "wrongState": "Quería formar en un estado diferente",
+        "other": "Otra razón"
+      },
+      "feedbackLabel": "Por favor cuéntanos más",
+      "feedbackPlaceholder": "Tu retroalimentación nos ayuda a mejorar..."
+    },
+    "confirm": {
+      "title": "Confirmar Cancelación",
+      "description": "Esta acción no se puede deshacer.",
+      "company": "Compañía",
+      "state": "Estado",
+      "orderTotal": "Total de la Orden",
+      "refundAmount": "Monto del Reembolso",
+      "acknowledge": "Entiendo y confirmo",
+      "acknowledgeDetails": "No se formará una LLC, no tendré protección de responsabilidad, y el nombre de la compañía será liberado para que otros lo registren.",
+      "termsPrefix": "Al cancelar, aceptas nuestra",
+      "termsLink": "Política de Reembolso",
+      "processing": "Procesando...",
+      "confirmCancellation": "Confirmar Cancelación"
+    },
+    "success": {
+      "title": "Orden Cancelada",
+      "description": "Tu orden ha sido cancelada exitosamente.",
+      "refundInfo": "Tu reembolso de {amount} será procesado.",
+      "refundTimeframe": "Espera verlo en tu cuenta dentro de 5-10 días hábiles.",
+      "emailSent": "Correo de Confirmación Enviado",
+      "emailDetails": "Hemos enviado una confirmación de cancelación a tu email con los detalles del reembolso.",
+      "startAgain": "¿Quieres Empezar de Nuevo?",
+      "startAgainDetails": "Puedes iniciar una nueva formación de LLC en cualquier momento desde tu panel.",
+      "nameWarning": "Nota: El nombre de la compañía que seleccionaste anteriormente puede que ya no esté disponible.",
+      "done": "Listo"
+    }
   }
 }

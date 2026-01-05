@@ -7,6 +7,7 @@ import {
   SubscriptionConfirmationEmail,
   SubscriptionFailureEmail,
   SubscriptionCancellationEmail,
+  OrderCancellationEmail,
   QuestionnaireEmail
 } from './email-templates';
 
@@ -161,5 +162,37 @@ export const sendSubscriptionCancellationEmail = async (data: {
     to: data.email,
     subject: `Subscription Cancellation Confirmed - ${data.serviceName}`,
     react: SubscriptionCancellationEmail({ ...data, _email: data.email })
+  });
+};
+
+export const sendOrderCancellationEmail = async (data: {
+  email: string;
+  customerName: string;
+  companyName: string;
+  orderId: string;
+  state: string;
+  refundBreakdown: {
+    serviceFee: number;
+    processingFeeDeducted: number;
+    stateFees: number;
+    stateFeesRefundable: boolean;
+    totalRefund: number;
+  };
+  cancellationReason?: string;
+}) => {
+  console.log('[email-service] Sending cancellation email with refund breakdown:', {
+    orderId: data.orderId,
+    serviceFee: data.refundBreakdown.serviceFee,
+    processingFeeDeducted: data.refundBreakdown.processingFeeDeducted,
+    stateFees: data.refundBreakdown.stateFees,
+    totalRefund: data.refundBreakdown.totalRefund
+  });
+  
+  return sendEmail({
+    email: data.email,
+    companyName: data.companyName,
+    to: data.email,
+    subject: `Order Cancellation Confirmed - ${data.companyName}`,
+    react: OrderCancellationEmail({ ...data, _email: data.email })
   });
 };

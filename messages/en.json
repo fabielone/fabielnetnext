@@ -1280,5 +1280,128 @@
       "reactivating": "Reactivating...",
       "done": "Done"
     }
+  },
+  "orders": {
+    "title": "My Orders",
+    "subtitle": "Track your LLC formation orders",
+    "noOrders": "No Orders Yet",
+    "noOrdersDesc": "You haven't placed any orders yet. Start your LLC formation today!",
+    "startLLC": "Start LLC Formation",
+    "startFormation": "Start LLC Formation",
+    "orderNumber": "Order #{orderId}",
+    "viewDetails": "View Details",
+    "viewOrder": "View Order",
+    "cancelOrder": "Cancel Order",
+    "backToOrders": "Back to Orders",
+    "viewBusiness": "View Business",
+    "order": "Order",
+    "state": "State",
+    "total": "Total",
+    "date": "Date",
+    "pendingProcessing": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "refunded": "Refunded",
+    "statuses": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    }
+  },
+  "orderCancellation": {
+    "modalTitle": "Cancel Order",
+    "step": "Step {current} of {total}",
+    "loading": "Loading cancellation details...",
+    "close": "Close",
+    "keepOrder": "Keep My Order",
+    "continue": "Continue",
+    "back": "Back",
+    "mustAcknowledge": "You must acknowledge the consequences of cancellation to proceed.",
+    "progress": {
+      "orderReceived": "Order Received",
+      "llcFiled": "LLC Filed with State",
+      "llcApproved": "LLC Approved"
+    },
+    "blocked": {
+      "title": "Cannot Cancel Order",
+      "description": "This order has already been submitted to the state and cannot be cancelled.",
+      "progressTitle": "Order Progress",
+      "pointOfNoReturn": "Point of No Return",
+      "contactSupport": "If you need assistance or have questions about your order, please contact our support team.",
+      "emailSupport": "Email Support"
+    },
+    "impact": {
+      "title": "Review Cancellation Impact",
+      "description": "Please review what happens when you cancel this order.",
+      "refundBreakdown": "Your Refund",
+      "serviceFee": "Service Fee",
+      "stateFilingFee": "State Filing Fee",
+      "rushFee": "Rush Processing Fee",
+      "processingFeeRetained": "Processing Fee (non-refundable)",
+      "totalRefund": "Total Refund",
+      "processingFeeNote": "A $25 processing fee is retained for orders where work has begun.",
+      "subscriptionWarning": {
+        "title": "Active Subscriptions",
+        "description": "You have {count, plural, one {# active subscription} other {# active subscriptions}} linked to this order. Cancelling your order will NOT cancel your subscriptions.",
+        "actionRequired": "To cancel subscriptions, please visit the Subscriptions page separately.",
+        "subscriptionsPage": "Manage Subscriptions"
+      },
+      "noProtection": {
+        "title": "No Liability Protection",
+        "warning": "Canceling means no LLC will be formed. You will not have personal liability protection for your business activities."
+      },
+      "nameNotReserved": {
+        "title": "Name Not Reserved",
+        "warning": "The company name you chose will not be reserved. Anyone else may register this name with the state."
+      },
+      "documents": {
+        "title": "No Formation Documents",
+        "warning": "You will not receive an Operating Agreement, EIN, or other formation documents included in your package."
+      }
+    },
+    "survey": {
+      "title": "Help Us Improve",
+      "description": "We'd love to know why you're canceling (optional).",
+      "reasonLabel": "Why are you canceling?",
+      "reasons": {
+        "changedMind": "Changed my mind about forming an LLC",
+        "tooExpensive": "Too expensive",
+        "foundAlternative": "Found a better option elsewhere",
+        "notReady": "Not ready to start a business yet",
+        "wrongState": "Wanted to form in a different state",
+        "other": "Other reason"
+      },
+      "feedbackLabel": "Please tell us more",
+      "feedbackPlaceholder": "Your feedback helps us improve..."
+    },
+    "confirm": {
+      "title": "Confirm Cancellation",
+      "description": "This action cannot be undone.",
+      "company": "Company",
+      "state": "State",
+      "orderTotal": "Order Total",
+      "refundAmount": "Refund Amount",
+      "acknowledge": "I understand and confirm",
+      "acknowledgeDetails": "No LLC will be formed, I will not have liability protection, and the company name will be released for others to register.",
+      "termsPrefix": "By canceling, you agree to our",
+      "termsLink": "Refund Policy",
+      "processing": "Processing...",
+      "confirmCancellation": "Confirm Cancellation"
+    },
+    "success": {
+      "title": "Order Cancelled",
+      "description": "Your order has been successfully cancelled.",
+      "refundInfo": "Your refund of {amount} will be processed.",
+      "refundTimeframe": "Expect to see it in your account within 5-10 business days.",
+      "emailSent": "Confirmation Email Sent",
+      "emailDetails": "We've sent a cancellation confirmation to your email address with refund details.",
+      "startAgain": "Want to Start Again?",
+      "startAgainDetails": "You can start a new LLC formation order anytime from your dashboard.",
+      "nameWarning": "Note: The company name you previously selected may no longer be available.",
+      "done": "Done"
+    }
   }
 }

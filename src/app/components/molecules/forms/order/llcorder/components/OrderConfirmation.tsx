@@ -199,6 +199,7 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
       rushFee: formData.stateRushFee || 0, // Rush processing fee
       paymentCardLast4: formData.paymentCardLast4,
       paymentCardBrand: formData.paymentCardBrand,
+      paymentTransactionId: formData.paymentTransactionId, // Stripe PaymentIntent ID for refunds
     };
 
     try {
