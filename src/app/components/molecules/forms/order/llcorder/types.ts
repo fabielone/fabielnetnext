@@ -51,6 +51,8 @@ export interface LLCFormData {
   paymentProvider?: 'stripe' | 'paypal';
   paymentCardLast4?: string;
   paymentCardBrand?: string;
+  stripeCustomerId?: string;     // Stripe customer ID for subscription setup
+  stripePaymentMethodId?: string; // Stripe payment method ID for subscription setup
   
   // Formation State
   formationState: string;      // State code (e.g., "CA", "TX")

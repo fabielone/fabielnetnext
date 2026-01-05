@@ -20,6 +20,8 @@ export interface PaymentSuccessData {
   paymentId: string;
   cardLast4?: string;
   cardBrand?: string;
+  customerId?: string;
+  paymentMethodId?: string;
 }
 
 interface StripePaymentFormProps {
@@ -130,33 +132,13 @@ const StripePaymentForm = ({
 
         // If payment was already confirmed (using saved method)
         if (data.paymentIntentId && data.status === 'succeeded') {
-          // Handle subscriptions
-          if (futureItems.length > 0 && data.customerId) {
-            try {
-              await fetch('/api/setup-subscriptions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  customerId: data.customerId,
-                  paymentMethodId: data.paymentMethodId,
-                  email: formData.email,
-                  orderId: formData.orderId,
-                  subscriptions: futureItems.map((f) => ({
-                    service: f.name,
-                    amount: f.price,
-                    frequency: f.frequency,
-                    delayDays: 10,
-                  })),
-                }),
-              });
-            } catch (e) {
-              console.warn('Subscription setup scheduling failed:', e);
-            }
-          }
+          // Note: Subscriptions are now set up in OrderConfirmation after order/business is created
           onSuccess({ 
             paymentId: data.paymentIntentId, 
             cardLast4: savedMethod?.cardLast4 || undefined,
-            cardBrand: savedMethod?.cardBrand || undefined
+            cardBrand: savedMethod?.cardBrand || undefined,
+            customerId: data.customerId,
+            paymentMethodId: data.paymentMethodId
           });
           return;
         }
@@ -262,55 +244,15 @@ const StripePaymentForm = ({
         }
       }
 
-      // 6. Handle success: schedule subscriptions for 10 days later
-      if (futureItems.length > 0 && currentCustomerId) {
-        console.log('Setting up subscriptions:', {
-          customerId: currentCustomerId,
-          futureItemsCount: futureItems.length,
-          items: futureItems
-        });
-        
-        try {
-          const subResponse = await fetch('/api/setup-subscriptions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              customerId: currentCustomerId,
-              paymentMethodId: paymentIntent.payment_method as string,
-              email: formData.email,
-              orderId: formData.orderId,
-              subscriptions: futureItems.map((f) => ({
-                service: f.name,
-                amount: f.price,
-                frequency: f.frequency,
-                delayDays: 10,
-              })),
-            }),
-          });
-          
-          const subResult = await subResponse.json();
-          console.log('Subscription setup result:', subResult);
-          
-          if (!subResponse.ok) {
-            if (subResult.duplicateServices) {
-              // Show warning for duplicate subscriptions but don't block the order
-              console.warn('Duplicate subscriptions detected:', subResult.duplicateServices);
-              alert(`Warning: You already have active subscriptions for: ${subResult.duplicateServices.join(', ')}. These were not added again.`);
-            } else {
-              console.error('Subscription setup failed:', subResult);
-            }
-          }
-        } catch (e) {
-          console.error('Subscription setup scheduling failed:', e);
-        }
-      } else {
-        console.log('No subscriptions to set up:', { 
-          futureItemsCount: futureItems.length, 
-          hasCustomerId: !!currentCustomerId 
-        });
-      }
-
-      onSuccess({ paymentId: paymentIntent.id, cardLast4, cardBrand });
+      // Note: Subscriptions are now set up in OrderConfirmation after order/business is created
+      // Pass customerId and paymentMethodId so OrderConfirmation can set up subscriptions
+      onSuccess({ 
+        paymentId: paymentIntent.id, 
+        cardLast4, 
+        cardBrand,
+        customerId: currentCustomerId || undefined,
+        paymentMethodId: paymentIntent.payment_method as string
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Payment failed');
       setProcessing(false);

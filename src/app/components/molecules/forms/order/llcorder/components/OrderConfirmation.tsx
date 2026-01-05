@@ -268,18 +268,63 @@ const OrderConfirmation = ({ formData, orderId }: OrderConfirmationProps) => {
   };
 
   const processSubscriptions = async () => {
-    // Process yearly subscriptions
-    for (const service of serviceBreakdown.yearlyServices) {
-      console.log(`Processing yearly subscription: ${service.name}`);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Send individual confirmation emails for each subscription
+    // Only process if we have Stripe customer and payment method IDs
+    if (!formData.stripeCustomerId || !formData.stripePaymentMethodId) {
+      console.log('No Stripe customer/payment method - skipping subscription setup');
+      return;
     }
 
-    // Process monthly subscriptions
-    for (const service of serviceBreakdown.monthlyServices) {
-      console.log(`Processing monthly subscription: ${service.name}`);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Send individual confirmation emails for each subscription
+    const allSubscriptions = [
+      ...serviceBreakdown.yearlyServices.map(s => ({
+        service: s.name,
+        amount: s.price,
+        frequency: 'yearly' as const,
+        delayDays: 10
+      })),
+      ...serviceBreakdown.monthlyServices.map(s => ({
+        service: s.name,
+        amount: s.price,
+        frequency: 'monthly' as const,
+        delayDays: 10
+      }))
+    ];
+
+    if (allSubscriptions.length === 0) {
+      console.log('No subscriptions to set up');
+      return;
+    }
+
+    console.log('Setting up subscriptions after order save:', {
+      customerId: formData.stripeCustomerId,
+      orderId: orderId,
+      subscriptions: allSubscriptions
+    });
+
+    try {
+      const response = await fetch('/api/setup-subscriptions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerId: formData.stripeCustomerId,
+          paymentMethodId: formData.stripePaymentMethodId,
+          email: recipientEmail,
+          orderId: orderId,
+          subscriptions: allSubscriptions
+        })
+      });
+
+      const result = await response.json();
+      console.log('Subscription setup result:', result);
+
+      if (!response.ok) {
+        if (result.duplicateServices) {
+          console.warn('Duplicate subscriptions detected:', result.duplicateServices);
+        } else {
+          console.error('Subscription setup failed:', result);
+        }
+      }
+    } catch (e) {
+      console.error('Subscription setup failed:', e);
     }
   };
 

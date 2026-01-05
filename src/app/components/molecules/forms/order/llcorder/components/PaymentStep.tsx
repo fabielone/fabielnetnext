@@ -193,6 +193,8 @@ const PaymentStep = ({ formData, updateFormData, orderTotal, onNext, onPrev }: P
       updateFormData('paymentProvider', 'stripe');
       if (data.cardLast4) updateFormData('paymentCardLast4', data.cardLast4);
       if (data.cardBrand) updateFormData('paymentCardBrand', data.cardBrand);
+      if (data.customerId) updateFormData('stripeCustomerId', data.customerId);
+      if (data.paymentMethodId) updateFormData('stripePaymentMethodId', data.paymentMethodId);
       
       // Create Payment record in database
       try {

@@ -118,6 +118,19 @@ async function createBusinessForOrder(order: any) {
     }
   });
 
+  // Link any subscriptions that were created for this order but before the business existed
+  // This handles the case where setup-subscriptions ran before the business was created
+  await prisma.subscription.updateMany({
+    where: {
+      userId: order.userId,
+      businessId: null,
+      orderId: order.id // Only link subscriptions specifically for this order
+    },
+    data: {
+      businessId: business.id
+    }
+  });
+
   return business;
 }
 

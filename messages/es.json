@@ -156,7 +156,8 @@
       "signOut": "Cerrar sesión",
       "signIn": "Iniciar sesión",
       "register": "Registrarse",
-      "createAccount": "Crear Cuenta"
+      "createAccount": "Crear Cuenta",
+      "formLLC": "Formar Nueva LLC"
     },
     "footer": {
       "description": "Te ayudamos a formar tu negocio y construir soluciones de software poderosas para hacer crecer tu marca.",

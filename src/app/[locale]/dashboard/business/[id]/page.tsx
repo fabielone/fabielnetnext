@@ -23,7 +23,10 @@ import {
   RiPhoneLine,
   RiMailLine,
   RiMapPinLine,
-  RiRefreshLine
+  RiRefreshLine,
+  RiShieldUserLine,
+  RiShieldCheckLine,
+  RiComputerLine
 } from 'react-icons/ri'
 
 type BusinessDetail = {
@@ -169,6 +172,11 @@ export default function BusinessDetailPage() {
   const pendingTasks = complianceTasks.filter(t => 
     ['PENDING', 'IN_PROGRESS', 'OVERDUE'].includes(t.status)
   )
+  
+  // Check if questionnaire is pending
+  const hasIncompleteQuestionnaire = business.formationOrder?.questionnaire && 
+    ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status);
+  const totalPendingTasks = pendingTasks.length + (hasIncompleteQuestionnaire ? 1 : 0);
 
   const subscriptions = business.subscriptions || [];
   const documents = business.documents || [];
@@ -178,7 +186,7 @@ export default function BusinessDetailPage() {
     { id: 'overview', label: 'Overview', icon: <RiBuilding2Line className="w-4 h-4" /> },
     { id: 'documents', label: 'Files', icon: <RiFileTextLine className="w-4 h-4" />, count: documents.length },
     { id: 'subscriptions', label: 'Subscriptions', icon: <RiRefreshLine className="w-4 h-4" />, count: subscriptions.length },
-    { id: 'tasks', label: 'Tasks', icon: <RiCheckboxCircleLine className="w-4 h-4" />, count: pendingTasks.length },
+    { id: 'tasks', label: 'Tasks', icon: <RiCheckboxCircleLine className="w-4 h-4" />, count: totalPendingTasks },
     { id: 'settings', label: 'Settings', icon: <RiSettings4Line className="w-4 h-4" /> },
   ]
 
@@ -486,63 +494,155 @@ export default function BusinessDetailPage() {
         )}
 
         {activeTab === 'subscriptions' && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-semibold text-gray-900">Subscriptions</h3>
-              <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium">
-                <RiAddLine className="w-4 h-4" />
-                Add Service
-              </button>
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">Active Subscriptions</h3>
             </div>
+            
             {subscriptions.length === 0 ? (
-              <div className="text-center py-12">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
                 <RiRefreshLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No subscriptions for this business</p>
+                <p className="text-gray-500 mb-2">No active subscriptions</p>
+                <p className="text-sm text-gray-400">Add services like Registered Agent, Compliance Package, or Web Services to manage your business better.</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {subscriptions.map(subscription => {
-                  const isInGracePeriod = subscription.trialEndsAt && new Date(subscription.trialEndsAt) > new Date();
-                  const nextBillingDate = isInGracePeriod 
-                    ? subscription.trialEndsAt 
-                    : subscription.currentPeriodEnd;
-                  
-                  return (
-                    <div key={subscription.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <p className="font-medium text-gray-900">{subscription.name}</p>
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                              subscription.status === 'ACTIVE' 
-                                ? 'bg-green-100 text-green-700' 
-                                : subscription.status === 'CANCELLED'
-                                ? 'bg-red-100 text-red-700'
-                                : 'bg-gray-100 text-gray-600'
-                            }`}>
-                              {subscription.status}
-                            </span>
+              <>
+                {/* Categorize subscriptions */}
+                {(() => {
+                  const registeredAgentSubs = subscriptions.filter(s => 
+                    s.name.toLowerCase().includes('registered agent') || 
+                    s.name.toLowerCase().includes('agente registrado')
+                  );
+                  const complianceSubs = subscriptions.filter(s => 
+                    s.name.toLowerCase().includes('compliance') || 
+                    s.name.toLowerCase().includes('cumplimiento') ||
+                    s.name.toLowerCase().includes('annual report')
+                  );
+                  const webServiceSubs = subscriptions.filter(s => 
+                    s.name.toLowerCase().includes('web') || 
+                    s.name.toLowerCase().includes('website') ||
+                    s.name.toLowerCase().includes('hosting') ||
+                    s.name.toLowerCase().includes('domain')
+                  );
+                  const otherSubs = subscriptions.filter(s => 
+                    !registeredAgentSubs.includes(s) && 
+                    !complianceSubs.includes(s) && 
+                    !webServiceSubs.includes(s)
+                  );
+
+                  const renderSubscriptionCard = (subscription: typeof subscriptions[0], icon: React.ReactNode, iconBg: string) => {
+                    const isInGracePeriod = subscription.trialEndsAt && new Date(subscription.trialEndsAt) > new Date();
+                    const nextBillingDate = isInGracePeriod 
+                      ? subscription.trialEndsAt 
+                      : subscription.currentPeriodEnd;
+                    
+                    return (
+                      <div key={subscription.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+                        <div className="flex items-start gap-4">
+                          <div className={`p-3 rounded-xl ${iconBg}`}>
+                            {icon}
                           </div>
-                          {subscription.description && (
-                            <p className="text-sm text-gray-500 mb-2">{subscription.description}</p>
-                          )}
-                          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                            <span>
-                              Amount: <span className="font-medium">${Number(subscription.amount).toFixed(2)}/{subscription.interval}</span>
-                            </span>
-                            {nextBillingDate && subscription.status === 'ACTIVE' && (
-                              <span className="flex items-center gap-1">
-                                <RiCalendarLine className="w-4 h-4" />
-                                Next billing: <span className="font-medium">{new Date(nextBillingDate).toLocaleDateString()}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-3 mb-1">
+                              <h4 className="font-semibold text-gray-900 truncate">{subscription.name}</h4>
+                              <span className={`flex-shrink-0 px-2.5 py-1 text-xs font-medium rounded-full ${
+                                subscription.status === 'ACTIVE' 
+                                  ? 'bg-green-100 text-green-700' 
+                                  : subscription.status === 'CANCELLED'
+                                  ? 'bg-red-100 text-red-700'
+                                  : subscription.status === 'PAST_DUE'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : 'bg-gray-100 text-gray-600'
+                              }`}>
+                                {subscription.status === 'ACTIVE' ? '● Active' : subscription.status}
                               </span>
+                            </div>
+                            {subscription.description && (
+                              <p className="text-sm text-gray-500 mb-3">{subscription.description}</p>
                             )}
+                            <div className="flex flex-wrap items-center gap-4 text-sm">
+                              <span className="font-semibold text-gray-900">
+                                ${Number(subscription.amount).toFixed(2)}
+                                <span className="font-normal text-gray-500">/{subscription.interval}</span>
+                              </span>
+                              {nextBillingDate && subscription.status === 'ACTIVE' && (
+                                <span className="flex items-center gap-1.5 text-gray-500">
+                                  <RiCalendarLine className="w-4 h-4" />
+                                  Next billing: {new Date(nextBillingDate).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
+                    );
+                  };
+
+                  return (
+                    <div className="space-y-6">
+                      {/* Registered Agent Services */}
+                      {registeredAgentSubs.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                            <RiShieldUserLine className="w-4 h-4 text-blue-600" />
+                            Registered Agent Service
+                          </h4>
+                          <div className="space-y-3">
+                            {registeredAgentSubs.map(sub => 
+                              renderSubscriptionCard(sub, <RiShieldUserLine className="w-6 h-6 text-blue-600" />, 'bg-blue-50')
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Compliance Package */}
+                      {complianceSubs.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                            <RiShieldCheckLine className="w-4 h-4 text-emerald-600" />
+                            Compliance & Annual Reports
+                          </h4>
+                          <div className="space-y-3">
+                            {complianceSubs.map(sub => 
+                              renderSubscriptionCard(sub, <RiShieldCheckLine className="w-6 h-6 text-emerald-600" />, 'bg-emerald-50')
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Web Services */}
+                      {webServiceSubs.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                            <RiComputerLine className="w-4 h-4 text-purple-600" />
+                            Web Services
+                          </h4>
+                          <div className="space-y-3">
+                            {webServiceSubs.map(sub => 
+                              renderSubscriptionCard(sub, <RiComputerLine className="w-6 h-6 text-purple-600" />, 'bg-purple-50')
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Other Services */}
+                      {otherSubs.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                            <RiRefreshLine className="w-4 h-4 text-amber-600" />
+                            Other Services
+                          </h4>
+                          <div className="space-y-3">
+                            {otherSubs.map(sub => 
+                              renderSubscriptionCard(sub, <RiRefreshLine className="w-6 h-6 text-amber-600" />, 'bg-amber-50')
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
-                })}
-              </div>
+                })()}
+              </>
             )}
           </div>
         )}
@@ -552,13 +652,63 @@ export default function BusinessDetailPage() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-gray-900">Tasks</h3>
             </div>
-            {complianceTasks.length === 0 ? (
+            
+            {/* Pending Questionnaire Task */}
+            {business.formationOrder?.questionnaire && ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status) && (
+              <Link
+                href={`/${locale}/questionnaire/${business.formationOrder.questionnaire.accessToken}`}
+                className="block p-4 bg-blue-50 rounded-lg border border-blue-200 mb-4 hover:bg-blue-100 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <RiFileTextLine className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">Complete Your Formation Questionnaire</p>
+                      <p className="text-sm text-gray-500">
+                        {business.formationOrder.questionnaire.status === 'NOT_STARTED' 
+                          ? 'Required to process your LLC formation - Click to begin' 
+                          : `In progress - Section: ${business.formationOrder.questionnaire.currentSection || 'Getting started'}`}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      business.formationOrder.questionnaire.status === 'NOT_STARTED'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-blue-100 text-blue-700'
+                    }`}>
+                      {business.formationOrder.questionnaire.status === 'NOT_STARTED' ? 'Not Started' : 'In Progress'}
+                    </span>
+                    <RiArrowLeftLine className="w-5 h-5 text-blue-500 rotate-180" />
+                  </div>
+                </div>
+              </Link>
+            )}
+            
+            {/* Completed Questionnaire Status */}
+            {business.formationOrder?.questionnaire && business.formationOrder.questionnaire.status === 'COMPLETED' && (
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <RiCheckLine className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Formation Questionnaire Completed</p>
+                    <p className="text-sm text-gray-500">Your information has been submitted for processing</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {complianceTasks.length === 0 && !(business.formationOrder?.questionnaire && ['NOT_STARTED', 'IN_PROGRESS'].includes(business.formationOrder.questionnaire.status)) ? (
               <div className="text-center py-12">
                 <RiCheckboxCircleLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No tasks</p>
+                <p className="text-gray-500">No pending tasks</p>
                 <p className="text-sm text-gray-400 mt-1">Annual reports and compliance filings will appear here</p>
               </div>
-            ) : (
+            ) : complianceTasks.length > 0 && (
               <div className="space-y-3">
                 {complianceTasks.map(task => (
                   <div 

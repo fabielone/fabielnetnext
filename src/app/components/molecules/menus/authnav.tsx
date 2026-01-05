@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut, FiGrid, FiShoppingBag, FiCreditCard, FiRefreshCw } from 'react-icons/fi';
+import { FiUser, FiLogIn, FiUserPlus, FiSettings, FiLogOut, FiGrid, FiShoppingBag, FiCreditCard, FiRefreshCw, FiPlusCircle } from 'react-icons/fi';
 import { useTranslations , useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -120,6 +120,18 @@ export default function AuthNavigation() {
                     </p>
                   </div>
                 </div>
+              </div>
+
+              {/* Form LLC CTA */}
+              <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
+                <Link
+                  href={`/${locale}/checkout/businessformation`}
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-lg transition-all shadow-sm hover:shadow-md"
+                >
+                  <FiPlusCircle className="h-4 w-4" />
+                  {t('formLLC') || 'Form New LLC'}
+                </Link>
               </div>
 
               {/* Menu Items */}
