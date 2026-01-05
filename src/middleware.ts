@@ -12,7 +12,7 @@ export default async function middleware(request: NextRequest) {
   
   // Check if this is a protected path (accounting for locale prefixes)
   const isProtectedPath = protectedPaths.some(path => {
-    // Match /dashboard or /en/dashboard or /es/dashboard etc.
+    // Match /dashboard or /en/dashboard etc.
     const localePattern = /^\/[a-z]{2}/;
     const strippedPath = pathname.replace(localePattern, '') || '/';
     return strippedPath.startsWith(path);

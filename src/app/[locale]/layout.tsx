@@ -10,7 +10,7 @@ import { NavigationProvider } from 'src/app/components/providers/NavigationProvi
 import { NavigationPrefetcher } from 'src/app/components/utils/NavigationPrefetcher';
 import { ReactNode } from 'react';
 
-const locales = ['en', 'es'];
+const locales = ['en'];
 
 export default async function LocaleLayout({
   children,

@@ -35,13 +35,13 @@ interface BlogCarouselProps {
 }
 
 export default function BlogCarousel({
-  title = 'Explora Nuestro Blog',
+  title = 'Explore Our Blog',
   description = '',
   blogs = [],
   variant = 'default',
   showHeader = true,
   showCTA = true,
-  CTAText = 'Ver Biblioteca Completa',
+  CTAText = 'View Full Library',
   CTALink = '/blog',
   className = '',
 }: BlogCarouselProps): JSX.Element {

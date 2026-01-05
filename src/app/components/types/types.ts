@@ -1,5 +1,5 @@
 // types/navigation.ts
-export type Language = 'es' | 'en';
+export type Language = 'en';
 
 export interface NavItem {
   name: string;

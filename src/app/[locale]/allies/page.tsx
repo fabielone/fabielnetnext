@@ -95,8 +95,8 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
       >
         <div className="flex items-center gap-2">
           {icon && <span className="text-gray-400">{icon}</span>}
-          <span className={value === "Todas" ? "text-gray-500" : "text-gray-900 dark:text-gray-100 font-medium"}>
-            {value === "Todas" ? placeholder : value}
+          <span className={value === "All" ? "text-gray-500" : "text-gray-900 dark:text-gray-100 font-medium"}>
+            {value === "All" ? placeholder : value}
           </span>
         </div>
         <ChevronDownIcon className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -112,14 +112,14 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar..."
+                placeholder="Search..."
                 className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-gray-100 placeholder-gray-500"
               />
             </div>
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-sm text-gray-500 text-center">No hay resultados</div>
+              <div className="px-4 py-3 text-sm text-gray-500 text-center">No results</div>
             ) : (
               filteredOptions.map((opt) => (
                 <button
@@ -180,7 +180,7 @@ function ExpandableDescription({ text }: { text: string }) {
           onClick={() => setIsExpanded(!isExpanded)}
           className="mt-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
         >
-          {isExpanded ? '← Leer menos' : 'Leer más →'}
+          {isExpanded ? '← Read less' : 'Read more →'}
         </button>
       )}
     </div>
@@ -190,12 +190,12 @@ function ExpandableDescription({ text }: { text: string }) {
 export default function AlliesShowcasePage() {
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<string[]>(["Todas"]);
-  const [locations, setLocations] = useState<string[]>(["Todas"]);
+  const [categories, setCategories] = useState<string[]>(["All"]);
+  const [locations, setLocations] = useState<string[]>(["All"]);
   
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<string>("Todas");
-  const [location, setLocation] = useState<string>("Todas");
+  const [category, setCategory] = useState<string>("All");
+  const [location, setLocation] = useState<string>("All");
   const [selectedTechs, setSelectedTechs] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   
@@ -206,8 +206,8 @@ export default function AlliesShowcasePage() {
   const itemsPerPage = 12;
   
   // Pending filter states (applied only when clicking "Apply")
-  const [pendingCategory, setPendingCategory] = useState<string>("Todas");
-  const [pendingLocation, setPendingLocation] = useState<string>("Todas");
+  const [pendingCategory, setPendingCategory] = useState<string>("All");
+  const [pendingLocation, setPendingLocation] = useState<string>("All");
 
   // Fetch businesses from API
   const fetchBusinesses = async (page: number = 1) => {
@@ -216,8 +216,8 @@ export default function AlliesShowcasePage() {
       const params = new URLSearchParams();
       params.set('page', page.toString());
       params.set('limit', itemsPerPage.toString());
-      if (category !== 'Todas') params.set('category', category);
-      if (location !== 'Todas') params.set('location', location);
+      if (category !== 'All') params.set('category', category);
+      if (location !== 'All') params.set('location', location);
       if (search) params.set('search', search);
       
       const res = await fetch(`/api/public/businesses?${params.toString()}`);
@@ -225,8 +225,8 @@ export default function AlliesShowcasePage() {
         const data = await res.json();
         if (data.businesses.length > 0 || data.pagination.totalCount > 0) {
           setBusinesses(data.businesses);
-          setCategories(["Todas", ...data.filters.categories]);
-          setLocations(["Todas", ...data.filters.locations]);
+          setCategories(["All", ...data.filters.categories]);
+          setLocations(["All", ...data.filters.locations]);
           setTotalPages(data.pagination.totalPages);
           setTotalCount(data.pagination.totalCount);
           setCurrentPage(data.pagination.page);
@@ -274,11 +274,11 @@ export default function AlliesShowcasePage() {
 
   const clearAll = () => {
     setSearch("");
-    setCategory("Todas");
-    setLocation("Todas");
+    setCategory("All");
+    setLocation("All");
     setSelectedTechs([]);
-    setPendingCategory("Todas");
-    setPendingLocation("Todas");
+    setPendingCategory("All");
+    setPendingLocation("All");
     setCurrentPage(1);
   };
 
@@ -287,7 +287,7 @@ export default function AlliesShowcasePage() {
     setLocation(pendingLocation);
   };
 
-  const hasActiveFilters = search || category !== "Todas" || location !== "Todas" || selectedTechs.length > 0;
+  const hasActiveFilters = search || category !== "All" || location !== "All" || selectedTechs.length > 0;
   const hasPendingChanges = pendingCategory !== category || pendingLocation !== location;
 
   return (
@@ -298,13 +298,13 @@ export default function AlliesShowcasePage() {
           <div className="text-center">
             {/* Title with inline gradient */}
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Portafolio
-              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> y Aliados</span>
+              Portfolio
+              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> & Allies</span>
             </h1>
             
             {/* Subtitle */}
             <p className="mt-2 text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              Explora proyectos destacados. Filtra por categoría, ubicación o tecnologías.
+              Explore featured projects. Filter by category, location, or technologies.
             </p>
           </div>
         </div>
@@ -323,7 +323,7 @@ export default function AlliesShowcasePage() {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar..."
+                placeholder="Search..."
                 className="w-full pl-9 sm:pl-11 pr-3 py-2.5 sm:py-3 text-sm sm:text-base bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
               />
             </div>
@@ -334,7 +334,7 @@ export default function AlliesShowcasePage() {
               className="inline-flex items-center justify-center p-2.5 sm:px-5 sm:py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex-shrink-0"
             >
               <MagnifyingGlassIcon className="h-5 w-5" />
-              <span className="hidden sm:inline sm:ml-2">Buscar</span>
+              <span className="hidden sm:inline sm:ml-2">Search</span>
             </button>
 
             {/* Filter Toggle Button */}
@@ -347,10 +347,10 @@ export default function AlliesShowcasePage() {
               }`}
             >
               <FunnelIcon className="h-5 w-5" />
-              <span className="hidden sm:inline sm:ml-2">{showFilters ? "Ocultar" : "Filtros"}</span>
+              <span className="hidden sm:inline sm:ml-2">{showFilters ? "Hide" : "Filters"}</span>
               {hasActiveFilters && (
                 <span className="ml-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-indigo-600 text-white rounded-full">
-                  {[category !== "Todas", location !== "Todas", selectedTechs.length > 0].filter(Boolean).length}
+                  {[category !== "All", location !== "All", selectedTechs.length > 0].filter(Boolean).length}
                 </span>
               )}
             </button>
@@ -376,13 +376,13 @@ export default function AlliesShowcasePage() {
                 <div className="flex-1 min-w-0">
                   <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
                     <MapPinIcon className="inline h-4 w-4 mr-1" />
-                    Ubicación
+                    Location
                   </label>
                   <SearchableDropdown
                     options={locations}
                     value={pendingLocation}
                     onChange={setPendingLocation}
-                    placeholder="Seleccionar ubicación"
+                    placeholder="Select location"
                     icon={<MapPinIcon className="h-4 w-4" />}
                   />
                 </div>
@@ -391,13 +391,13 @@ export default function AlliesShowcasePage() {
                 <div className="flex-1 min-w-0">
                   <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
                     <FunnelIcon className="inline h-4 w-4 mr-1" />
-                    Categoría
+                    Category
                   </label>
                   <SearchableDropdown
                     options={categories}
                     value={pendingCategory}
                     onChange={setPendingCategory}
-                    placeholder="Seleccionar categoría"
+                    placeholder="Select category"
                     icon={<FunnelIcon className="h-4 w-4" />}
                   />
                 </div>
@@ -414,7 +414,7 @@ export default function AlliesShowcasePage() {
                     }`}
                   >
                     <CheckIcon className="h-5 w-5" />
-                    Aplicar
+                    Apply
                   </button>
                 </div>
               </div>
@@ -518,7 +518,7 @@ export default function AlliesShowcasePage() {
         {totalPages > 1 && (
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Mostrando {businesses.length} de {totalCount} negocios
+              Showing {businesses.length} of {totalCount} businesses
             </p>
             <div className="flex items-center gap-2">
               <button
@@ -526,7 +526,7 @@ export default function AlliesShowcasePage() {
                 disabled={currentPage === 1 || loading}
                 className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Anterior
+                Previous
               </button>
               <div className="flex items-center gap-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -559,7 +559,7 @@ export default function AlliesShowcasePage() {
                 disabled={currentPage === totalPages || loading}
                 className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Siguiente
+                Next
               </button>
             </div>
           </div>
@@ -573,14 +573,14 @@ export default function AlliesShowcasePage() {
               <FunnelIcon className="h-10 w-10 text-gray-400" />
             </div>
             <h4 className="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">
-              No hay resultados
+              No results
             </h4>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Ajusta los filtros para ver más proyectos.</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Adjust filters to see more projects.</p>
             <button
               onClick={clearAll}
               className="mt-6 px-5 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
             >
-              Limpiar filtros
+              Clear filters
             </button>
           </div>
         )}
@@ -591,7 +591,7 @@ export default function AlliesShowcasePage() {
             href="/join"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold hover:from-indigo-700 hover:to-blue-700 shadow"
           >
-            ¿Quieres unirte a la red?
+            Want to join the network?
           </Link>
         </div>
       </main>

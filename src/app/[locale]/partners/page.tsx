@@ -56,7 +56,7 @@ const partners: Partner[] = [
 ];
 
 // Get all unique tags
-const allTags = ['Todas', ...Array.from(new Set(partners.flatMap((p) => p.tags)))];
+const allTags = ['All', ...Array.from(new Set(partners.flatMap((p) => p.tags)))];
 
 // Searchable Dropdown Component
 interface SearchableDropdownProps {
@@ -103,8 +103,8 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
       >
         <div className="flex items-center gap-2">
           {icon && <span className="text-gray-400">{icon}</span>}
-          <span className={value === 'Todas' ? 'text-gray-500' : 'text-gray-900 dark:text-gray-100 font-medium'}>
-            {value === 'Todas' ? placeholder : value}
+          <span className={value === 'All' ? 'text-gray-500' : 'text-gray-900 dark:text-gray-100 font-medium'}>
+            {value === 'All' ? placeholder : value}
           </span>
         </div>
         <ChevronDownIcon className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -120,14 +120,14 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar..."
+                placeholder="Search..."
                 className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-gray-100 placeholder-gray-500"
               />
             </div>
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-sm text-gray-500 text-center">No hay resultados</div>
+              <div className="px-4 py-3 text-sm text-gray-500 text-center">No results</div>
             ) : (
               filteredOptions.map((opt) => (
                 <button
@@ -156,10 +156,10 @@ function SearchableDropdown({ options, value, onChange, placeholder, icon }: Sea
 
 export default function PartnersPage() {
   const [search, setSearch] = useState('');
-  const [selectedTag, setSelectedTag] = useState<string>('Todas');
+  const [selectedTag, setSelectedTag] = useState<string>('All');
   const [showFilters, setShowFilters] = useState(false);
   
-  const [pendingTag, setPendingTag] = useState<string>('Todas');
+  const [pendingTag, setPendingTag] = useState<string>('All');
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -171,22 +171,22 @@ export default function PartnersPage() {
         p.tags.some((t) => t.toLowerCase().includes(q)) ||
         (p.location && p.location.toLowerCase().includes(q)) ||
         p.url.toLowerCase().includes(q);
-      const matchTag = selectedTag === 'Todas' || p.tags.includes(selectedTag);
+      const matchTag = selectedTag === 'All' || p.tags.includes(selectedTag);
       return matchSearch && matchTag;
     });
   }, [search, selectedTag]);
 
   const clearAll = () => {
     setSearch('');
-    setSelectedTag('Todas');
-    setPendingTag('Todas');
+    setSelectedTag('All');
+    setPendingTag('All');
   };
 
   const applyFilters = () => {
     setSelectedTag(pendingTag);
   };
 
-  const hasActiveFilters = search || selectedTag !== 'Todas';
+  const hasActiveFilters = search || selectedTag !== 'All';
   const hasPendingChanges = pendingTag !== selectedTag;
 
   return (
@@ -244,7 +244,7 @@ export default function PartnersPage() {
             >
               <FunnelIcon className="h-5 w-5" />
               <span className="hidden sm:inline sm:ml-2">{showFilters ? 'Hide' : 'Filters'}</span>
-              {selectedTag !== 'Todas' && (
+              {selectedTag !== 'All' && (
                 <span className="ml-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-indigo-600 text-white rounded-full">
                   1
                 </span>

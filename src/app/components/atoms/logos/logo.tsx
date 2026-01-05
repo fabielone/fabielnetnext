@@ -23,14 +23,13 @@ export const Logo = ({
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Prevent navigation if already on homepage
-    // Check if current path is root or locale-based home (/, /en, /es, /en/, /es/)
+    // Check if current path is root or locale-based home (/, /en, /en/)
     const normalizedPath = pathname.endsWith('/') && pathname.length > 1 
       ? pathname.slice(0, -1) 
       : pathname;
     
     const isHomePage = normalizedPath === '/' || 
-                      normalizedPath === '/en' || 
-                      normalizedPath === '/es' ||
+                      normalizedPath === '/en' ||
                       normalizedPath.match(/^\/[a-z]{2}$/);
     
     if (isHomePage) {
