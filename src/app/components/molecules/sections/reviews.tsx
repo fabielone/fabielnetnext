@@ -45,7 +45,13 @@ const ReviewCard = ({ review }: { review: { text: string; author: string; verifi
 
 const ReviewsScroller = () => {
   const locale = useLocale();
-  const currentReviews = reviews[locale as keyof typeof reviews] || reviews.en;
+  let currentReviews: { text: string; author: string; verified: string }[] = [];
+  if (Array.isArray(reviews)) {
+    currentReviews = reviews;
+  } else {
+    const r = reviews as any;
+    currentReviews = r[locale as string] ?? r.en ?? [];
+  }
 
   return (
     <div className="relative py-16 bg-slate-50 dark:bg-slate-900 overflow-hidden">

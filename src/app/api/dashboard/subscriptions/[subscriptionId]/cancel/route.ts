@@ -115,8 +115,8 @@ export async function POST(
               status: 'CANCELLED',
               cancelledAt: new Date(),
               // Update period end from Stripe response
-              currentPeriodEnd: cancelledStripeSubscription.current_period_end 
-                ? new Date(cancelledStripeSubscription.current_period_end * 1000)
+              currentPeriodEnd: (cancelledStripeSubscription as any).current_period_end
+                ? new Date((cancelledStripeSubscription as any).current_period_end * 1000)
                 : subscription.currentPeriodEnd
             }
           });

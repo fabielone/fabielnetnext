@@ -336,6 +336,92 @@ export const QuestionnaireEmail = ({ _email, customerName, companyName, orderId,
   </Html>
 );
 
+// Subscription cancellation notification
+export const SubscriptionCancellationEmail = ({ _email, customerName, serviceName, companyName, state, serviceEndDate, isRegisteredAgent, isCompliancePackage, cancellationReason, stateFileNumber }: { _email: string; customerName: string; serviceName: string; companyName: string; state: string; serviceEndDate: Date; isRegisteredAgent: boolean; isCompliancePackage: boolean; cancellationReason?: string; stateFileNumber?: string }) => (
+  <Html>
+    <Head />
+    <Body style={main}>
+      <Container style={container}>
+        <Section style={header}>
+          <Img src={`${baseUrl}/logo.png`} width="150" height="50" alt="Fabiel.net" style={logo} />
+        </Section>
+
+        <Section style={content}>
+          <Heading style={h1}>Subscription Cancellation Confirmed</Heading>
+
+          <Text style={text}>Dear {customerName},</Text>
+
+          <Text style={text}>
+            Your subscription for <strong>{serviceName}</strong> under <strong>{companyName}</strong> has been cancelled.
+          </Text>
+
+          <Section style={orderDetails}>
+            <Text style={orderText}>
+              <strong>State:</strong> {state}<br/>
+              <strong>Service End Date:</strong> {new Date(serviceEndDate).toLocaleDateString()}<br/>
+              {stateFileNumber ? (<><strong>State File #:</strong> {stateFileNumber}<br/></>) : null}
+            </Text>
+          </Section>
+
+          {cancellationReason && (
+            <Section style={importantNote}>
+              <Text style={importantText}><strong>Reason:</strong> {cancellationReason}</Text>
+            </Section>
+          )}
+
+          <Text style={footer}>
+            If you need help or want to re-activate this service, reply to this email or contact support@fabiel.net.
+          </Text>
+        </Section>
+      </Container>
+    </Body>
+  </Html>
+);
+
+// Order cancellation with refund breakdown
+export const OrderCancellationEmail = ({ _email, customerName, companyName, orderId, state, refundBreakdown, cancellationReason }: { _email: string; customerName: string; companyName: string; orderId: string; state: string; refundBreakdown: { serviceFee: number; processingFeeDeducted: number; stateFees: number; stateFeesRefundable: boolean; totalRefund: number }; cancellationReason?: string }) => (
+  <Html>
+    <Head />
+    <Body style={main}>
+      <Container style={container}>
+        <Section style={header}>
+          <Img src={`${baseUrl}/logo.png`} width="150" height="50" alt="Fabiel.net" style={logo} />
+        </Section>
+
+        <Section style={content}>
+          <Heading style={h1}>Order Cancellation and Refund</Heading>
+
+          <Text style={text}>Dear {customerName},</Text>
+
+          <Text style={text}>
+            Your order <strong>#{orderId}</strong> for <strong>{companyName}</strong> has been cancelled.
+          </Text>
+
+          <Section style={orderDetails}>
+            <Heading style={h2}>Refund Breakdown</Heading>
+            <Text style={orderText}>
+              <strong>Service Fee:</strong> ${refundBreakdown.serviceFee.toFixed(2)}<br/>
+              <strong>Processing Fee Deducted:</strong> ${refundBreakdown.processingFeeDeducted.toFixed(2)}<br/>
+              <strong>State Fees:</strong> ${refundBreakdown.stateFees.toFixed(2)} ({refundBreakdown.stateFeesRefundable ? 'Refundable' : 'Non-refundable'})<br/>
+              <strong>Total Refund:</strong> ${refundBreakdown.totalRefund.toFixed(2)}
+            </Text>
+          </Section>
+
+          {cancellationReason && (
+            <Section style={importantNote}>
+              <Text style={importantText}><strong>Reason:</strong> {cancellationReason}</Text>
+            </Section>
+          )}
+
+          <Text style={footer}>
+            Refunds typically process within 5-10 business days. If you have questions, reply to this email or contact support@fabiel.net.
+          </Text>
+        </Section>
+      </Container>
+    </Body>
+  </Html>
+);
+
 // Email Styles
 const main = {
   backgroundColor: '#f6f9fc',
