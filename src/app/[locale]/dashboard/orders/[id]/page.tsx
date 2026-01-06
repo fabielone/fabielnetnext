@@ -2,9 +2,8 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { useLocale, useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { useAuth } from '@/app/components/providers/AuthProvider'
-import OrderCancellationFlow from '../OrderCancellationFlow'
 import { 
   RiArrowLeftLine,
   RiFileList3Line, 
@@ -165,13 +164,11 @@ export default function OrderDetailPage() {
   const router = useRouter()
   const params = useParams()
   const locale = useLocale()
-  const t = useTranslations('orders')
   const orderId = params.id as string
   
   const [order, setOrder] = useState<OrderDetail | null>(null)
   const [subscriptions, setSubscriptions] = useState<OrderSubscription[]>([])
   const [loading, setLoading] = useState(true)
-  const [showCancellationFlow, setShowCancellationFlow] = useState(false)
 
   const fetchOrder = useCallback(async () => {
     try {
@@ -321,11 +318,6 @@ export default function OrderDetailPage() {
     order.progressEvents.map(event => [event.eventType, event])
   )
 
-  // Check if order can be cancelled
-  const llcFiledEvent = order.progressEvents.find(e => e.eventType === 'LLC_FILED')
-  const isSubmittedToState = !!llcFiledEvent?.completedAt
-  const canCancel = !isSubmittedToState && ['PENDING_PROCESSING', 'PROCESSING'].includes(order.status)
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -337,7 +329,7 @@ export default function OrderDetailPage() {
               className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4"
             >
               <RiArrowLeftLine className="w-4 h-4" />
-              {t('backToOrders')}
+              Back to Orders
             </Link>
             
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -353,31 +345,20 @@ export default function OrderDetailPage() {
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">
-                    {t('orderNumber', { orderId: order.orderId })} • {order.formationState || order.businessState} LLC
+                    Order #{order.orderId} • {order.formationState || order.businessState} LLC
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                {canCancel && (
-                  <button
-                    onClick={() => setShowCancellationFlow(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium"
-                  >
-                    <RiCloseLine className="w-4 h-4" />
-                    {t('cancelOrder')}
-                  </button>
-                )}
-                {order.business && (
-                  <Link
-                    href={`/${locale}/dashboard/business/${order.business.id}`}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
-                  >
-                    <RiBuilding2Line className="w-4 h-4" />
-                    {t('viewBusiness')}
-                  </Link>
-                )}
-              </div>
+              {order.business && (
+                <Link
+                  href={`/${locale}/dashboard/business/${order.business.id}`}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+                >
+                  <RiBuilding2Line className="w-4 h-4" />
+                  View Business
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -792,24 +773,6 @@ export default function OrderDetailPage() {
           </div>
         </div>
       </main>
-
-      {/* Order Cancellation Flow */}
-      {showCancellationFlow && (
-        <OrderCancellationFlow
-          order={{
-            id: order.id,
-            orderId: order.orderId,
-            companyName: order.companyName,
-            status: order.status,
-            totalAmount: order.totalAmount,
-            formationState: order.formationState || order.businessState
-          }}
-          onCancel={() => setShowCancellationFlow(false)}
-          onComplete={() => {
-            router.push(`/${locale}/dashboard/orders`)
-          }}
-        />
-      )}
     </div>
   )
 }
