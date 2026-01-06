@@ -31,6 +31,7 @@ export async function POST(req: Request) {
       rushFee = 0,
       paymentCardLast4,
       paymentCardBrand,
+      paymentTransactionId,  // Stripe PaymentIntent ID
     } = body
 
     // Use formationState if provided, otherwise fall back to businessState
@@ -38,6 +39,31 @@ export async function POST(req: Request) {
 
     if (!orderId || !companyName || !contactEmail) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    // SAFETY CHECK: Prevent overwriting completed/processing orders
+    // This guards against stale orderId being reused from session storage
+    const existingOrder = await prisma.order.findUnique({
+      where: { orderId },
+      select: { id: true, status: true, companyName: true, paymentStatus: true }
+    })
+    
+    if (existingOrder) {
+      // If order exists and has been paid/processed, don't allow overwrite
+      const protectedStatuses = ['PROCESSING', 'COMPLETED', 'CANCELLED', 'REFUNDED']
+      if (protectedStatuses.includes(existingOrder.status) || existingOrder.paymentStatus === 'COMPLETED') {
+        console.error('Attempted to overwrite protected order:', {
+          orderId,
+          existingCompanyName: existingOrder.companyName,
+          newCompanyName: companyName,
+          existingStatus: existingOrder.status,
+          existingPaymentStatus: existingOrder.paymentStatus
+        })
+        return NextResponse.json({ 
+          error: 'Order already exists and cannot be modified. Please start a new order.',
+          code: 'ORDER_ALREADY_EXISTS'
+        }, { status: 409 })
+      }
     }
 
     // Try to get the current authenticated user
@@ -92,6 +118,7 @@ export async function POST(req: Request) {
         progressLastUpdatedAt: new Date(),
         ...(paymentCardLast4 && { paymentCardLast4 }),
         ...(paymentCardBrand && { paymentCardBrand }),
+        ...(paymentTransactionId && { paymentTransactionId }),
         ...(userId && { userId }), // Link user if we found one
       },
       create: {
@@ -124,6 +151,7 @@ export async function POST(req: Request) {
         progressLastUpdatedAt: new Date(),
         ...(paymentCardLast4 && { paymentCardLast4 }),
         ...(paymentCardBrand && { paymentCardBrand }),
+        ...(paymentTransactionId && { paymentTransactionId }),
         ...(userId && { userId }), // Link user if we found one
       }
     })

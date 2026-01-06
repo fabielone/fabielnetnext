@@ -1,0 +1,1406 @@
+{
+    "HomePage": {
+      "title": "¡Hola Mundo!",
+      "about": "Ir a la página de nosotros"
+    },
+    "LanguageSelector": {
+      "changeLanguage": "Cambiar idioma"
+    },
+    "Hero": {
+      "Heading": "Tu Empresa Construida Mejor",
+      "Subheading": "Servicios Completos de Formación LLC para Empresarios en California",
+      "PriceTimeline": "Desde $99.99 + Tasas Gubernamentales • Listo en 7-10 Días Hábiles",
+      "subtitle": "Servicios diseñados para iniciar y hacer crecer tu negocio.",
+      "bundleOffer": "Combina con Servicios Web y Ahorra Más",
+      "bundleText": "Combina con Servicios Web",
+      "bundleDiscount": "Ahorra 20%",
+      "packageTitle": "Paquete Completo de Formación Empresarial",
+      "services": {
+        "llcFormation": {
+          "title": "Formación LLC",
+          "description": "Presentación completa del estado y documentación"
+        },
+        "operatingAgreement": {
+          "title": "Acuerdo Operativo",
+          "description": "Marco legal personalizado para tu LLC"
+        },
+        "einFormation": {
+          "title": "Formación EIN",
+          "description": "Configuración de número de identificación fiscal federal"
+        },
+        "bankResolution": {
+          "title": "Carta de Resolución Bancaria",
+          "description": "Documentación de autorización bancaria"
+        }
+      },
+      "valueProposition": {
+        "price": "Los 4 Servicios: $99.99",
+        "stateFees": "+ Tasas de Presentación Estatal",
+        "benefits": {
+          "fastProcessing": "Procesamiento Rápido",
+          "clientCount": "500+ LLCs Formadas",
+          "expertSupport": "Soporte Experto",
+          "moneyBack": "Garantía de Devolución"
+        },
+        "footnote": "* Garantía de devolución disponible hasta que presentemos con el estado"
+      },
+      "cta": "Iniciar Mi Formación LLC",
+      "BenefitsTitle": "Todo lo que Necesitas para Iniciar tu LLC",
+      "Bullet1": "Formación Completa de LLC",
+      "Bullet2": "Acuerdo Operativo Personalizado",
+      "Bullet3": "Número de Identificación EIN",
+      "Bullet4": "Sitio Web Profesional + Marketing",
+      "BulletDescription1": "Artículos de incorporación presentados al estado",
+      "BulletDescription2": "Adaptado a las necesidades específicas de tu negocio",
+      "BulletDescription3": "Configuración de identificación fiscal federal",
+      "BulletDescription4": "Sitio web moderno con optimización SEO",
+      "Schedule": "Consulta Gratuita",
+      "TrustBadge1": "500+ LLCs Formadas",
+      "TrustBadge2": "Agente Licenciado",
+      "Pill1": "Formación LLC",
+      "Pill2": "Solicitud EIN",
+      "Pill3": "Acuerdo Operativo",
+      "Pill4": "Diseño Web",
+      "Pill5": "Marketing Digital",
+      "Pill6": "Configuración Bancaria",
+      "ReviewCount": "500+ reseñas"
+    },
+    "HeroRight": {
+      "title": "Expertos en Formación Empresarial",
+      "description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
+      "videoLabel": "Ver Historia de Éxito",
+      "pricing": {
+        "price": "$99.99 + Tasas Estatales",
+        "stateFees": "Las tasas estatales varían según la ubicación",
+        "benefits": {
+          "fastProcessing": "7-10 Días",
+          "clientCount": "500+ Clientes",
+          "expertSupport": "Soporte Experto",
+          "moneyBack": "Garantía Devolución"
+        },
+        "bundleDiscount": {
+          "title": "🎉 ¡Ahorra 20% en Paquetes!",
+          "description": "Combina Servicio Web + Formación y ahorra 20% en todo tu pedido, ¡incluyendo suscripciones mensuales!"
+        },
+        "footnote": "* El tiempo de procesamiento puede variar según los requisitos estatales"
+      },
+      "cta": "Iniciar Mi Formación LLC",
+      "Title": "Expertos en Formación Empresarial",
+      "Description": "Servicios profesionales de formación LLC con orientación experta durante todo el proceso.",
+      "VideoLabel": "Ver Historia de Éxito",
+      "Trust1": "500+ Empresarios Satisfechos",
+      "Trust2": "Agente Registrado Licenciado",
+      "Trust3": "Proceso Rápido de 7-10 Días"
+    },
+    "Newsletter": {
+      "title": "Mantente Informado",
+      "subtitle": "Recibe consejos empresariales, actualizaciones legales y ofertas exclusivas en tu correo.",
+      "cta": "Únete a Nuestra Comunidad",
+      "discount": "Oferta Especial",
+      "email": "Tu dirección de correo",
+      "button": "Suscribirse Ahora",
+      "thanks": "¡Gracias por suscribirte! Revisa tu correo para ofertas exclusivas."
+    },
+    "Blog": {
+      "title": "Blog",
+      "noPosts": "Aún no hay publicaciones",
+      "backToBlog": "Regreso al Blog"
+    },
+    "nav": {
+      "services": {
+        "title": "Nuestros Servicios",
+        "software": {
+          "title": "Desarrollo de Software",
+          "web": "Desarrollo Web y de Blogs",
+          "ecommerce": "Creación de Tiendas eCommerce",
+          "other": "Otros Servicios Personalizados"
+        },
+        "marketing": {
+          "title": "Servicios de Marketing",
+          "digital": "Marketing Digital y Contenido",
+          "influencers": "Influencers y Colaboraciones",
+          "campaigns": "Campañas de Publicidad",
+          "other": "Otros Servicios Personalizados"
+        },
+        "business": {
+          "title": "Formación de Empresas",
+          "llc": "Forma tu LLC",
+          "agent": "Agente Registrado",
+          "compliance": "Cumplimiento Anual",
+          "other": "Otros Servicios Personalizados"
+        },
+        "bpo": {
+          "title": "Servicios BPO",
+          "outbound": "Llamadas Outbound",
+          "backoffice": "Operaciones Back Office"
+        }
+      },
+      "clients": "Nuestros Clientes",
+      "partners": "Socios",
+      "process": "Nuestro Proceso",
+      "blog": "Blog",
+      "contact": "Contacto",
+      "mobile": {
+        "login": "Iniciar Sesión",
+        "register": "Registrarse"
+        } 
+    },
+    "auth": {
+      "account": "Cuenta",
+      "profile": "Perfil",
+      "settings": "Configuración",
+      "dashboard": "Panel",
+      "orders": "Pedidos",
+      "subscriptions": "Suscripciones",
+      "payments": "Pagos",
+      "signOut": "Cerrar sesión",
+      "signIn": "Iniciar sesión",
+      "register": "Registrarse",
+      "createAccount": "Crear Cuenta",
+      "formLLC": "Formar Nueva LLC"
+    },
+    "footer": {
+      "description": "Te ayudamos a formar tu negocio y construir soluciones de software poderosas para hacer crecer tu marca.",
+      "quickLinks": "Enlaces Rápidos",
+      "services": "Nuestros Servicios",
+      "newsletter": "Boletín Informativo",
+      "copyright": "© {year} Fabiel. Todos los derechos reservados.",
+      "links": {
+        "services": "Servicios",
+        "portfolio": "Portafolio",
+        "blog": "Blog",
+        "contact": "Contacto",
+        "terms": "Términos de Servicio",
+        "privacy": "Aviso de Privacidad",
+        "businessFormations": "Formación de Empresas",
+        "softwareDevelopment": "Desarrollo de Software",
+        "marketing": "Marketing",
+        "registeredAgent": "Agente Registrado",
+        "compliance": "Cumplimiento Anual",
+        "concierge": "Servicio de Concierge"
+      }
+    },
+    "services": {
+      "title": "Nuestros Servicios",
+      "subtitle": "Soluciones Integrales de Negocio",
+      "items": {
+        "businessFormation": {
+          "pill": "Formación de Empresas",
+          "title": "Establece tu Negocio con Confianza",
+          "subtitle": "Formación completa de LLC en 7-10 días hábiles",
+          "description": "Desde la presentación inicial hasta el cumplimiento continuo, manejamos cada aspecto de tu proceso de formación empresarial con orientación experta y precios transparentes.",
+          "features": [
+            "Registro Completo de LLC y Presentación Estatal",
+            "Solicitud de Número de ID Fiscal EIN",
+            "Plantilla de Acuerdo Operativo Personalizado",
+            "Servicio de Agente Registrado Disponible",
+            "Carta de Resolución Bancaria para Apertura de Cuenta",
+            "Soporte Continuo de Cumplimiento y Recordatorios"
+          ]
+        },
+        "webDevelopment": {
+          "pill": "Desarrollo Web",
+          "title": "Construye una Presencia Online Poderosa",
+          "subtitle": "Sitios web personalizados que convierten visitantes en clientes",
+          "description": "Sitios web modernos y responsivos construidos con las últimas tecnologías, optimizados para motores de búsqueda y diseñados para hacer crecer tu negocio en línea.",
+          "features": [
+            "Diseño Responsivo Mobile-First",
+            "Optimización SEO y Carga Rápida",
+            "Sistema de Gestión de Contenido (CMS)",
+            "Integración E-commerce y Pagos",
+            "Seguimiento de Analytics y Rendimiento",
+            "Mantenimiento Continuo y Actualizaciones de Seguridad"
+          ]
+        },
+        "digitalMarketing": {
+          "pill": "Marketing Digital",
+          "title": "Haz Crecer tu Negocio Online",
+          "subtitle": "Marketing basado en datos que entrega resultados",
+          "description": "Campañas estratégicas de marketing digital diseñadas para aumentar tu visibilidad online, atraer leads calificados e impulsar tus ingresos.",
+          "features": [
+            "Optimización para Motores de Búsqueda (SEO)",
+            "Gestión de Google Ads y Campañas PPC",
+            "Estrategia y Gestión de Redes Sociales",
+            "Marketing de Contenido y Copywriting",
+            "Automatización de Email Marketing",
+            "Analytics y Reportes Mensuales de Rendimiento"
+          ]
+        },
+        "bpo": {
+          "pill": "Servicios BPO",
+          "title": "Escala con Operaciones Expertas",
+          "subtitle": "Llamadas outbound profesionales y soporte administrativo",
+          "description": "Equipo bilingüe experimentado que proporciona llamadas outbound, agendamiento de citas y soporte back-office con métricas transparentes e integración CRM.",
+          "features": [
+            "Ventas Outbound y Generación de Leads",
+            "Agendamiento y Calificación de Citas",
+            "Servicio y Soporte al Cliente",
+            "Entrada de Datos y Tareas Administrativas",
+            "Gestión y Actualizaciones de CRM",
+            "Reportes Diarios de Rendimiento y Analytics"
+          ]
+        }
+      },
+      "buttonText": "Empezar Ahora",
+      "learnMore": "Saber Más"
+    },
+    "bpo": {
+      "hero": {
+        "heading": "Business Process Outsourcing (BPO)",
+        "subtitle": "Extiende Tu Equipo con Capacidad Operativa Confiable",
+        "description": "Proveemos llamadas outbound estructuradas y ejecución back office con métricas transparentes, QA e integración CRM.",
+        "features": ["Llamadas Outbound", "Agendamiento", "Tareas Back Office", "Métricas Diarias"],
+        "cta": "Iniciar BPO",
+        "consultationCta": "Evaluación Gratis"
+      },
+      "services": {
+        "outbound": {
+          "title": "Llamadas Outbound y Agendamiento",
+          "description": "Generación de pipeline constante con agentes bilingües entrenados y reportes diarios.",
+          "features": ["Outreach Frío y Tibio", "Agendamiento en Vivo", "Actualizaciones CRM", "Resumen Diario KPIs"]
+        },
+        "backoffice": {
+          "title": "Operaciones Back Office",
+          "description": "Ejecución basada en procesos para datos, documentación, reportes y soporte de flujos.",
+          "features": ["Ingreso de Datos", "Procesamiento Documental", "Seguimiento de Tareas", "Soporte de Reportes"]
+        }
+      },
+      "features": {
+        "title": "Capacidades BPO",
+        "subtitle": "Apalancamiento operativo sin contratar",
+        "items": [
+          {"title": "Eficiencia Outbound", "description": "Bloques de llamadas estructurados con guiones y objeciones."},
+          {"title": "Ejecución Back Office", "description": "Datos, documentación, investigación ligera y flujos."},
+          {"title": "Métricas y QA", "description": "Conectados %, citas, show rate, tareas y QA diario."},
+          {"title": "Integración CRM", "description": "Trabajamos directo en tu CRM o exportaciones estandarizadas."}
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Agregar BPO?",
+        "subtitle": "Nosotros ejecutamos mientras tú escalas",
+        "button": "Lanzar BPO",
+        "consultation": "Evaluación Gratis"
+      }
+    },
+    "outboundBpo": {
+      "hero": {
+        "heading": "Llamadas Outbound y Agendamiento",
+        "subtitle": "Pipeline Consistente con Outreach Estructurado",
+        "description": "Agentes bilingües ejecutan bloques diarios, agendan citas y registran todo en tu CRM.",
+        "features": ["Bloques 4–8 Horas", "Agentes Bilingües", "Métricas Diarias", "Agenda en Vivo"],
+        "cta": "Iniciar Outbound",
+        "consultationCta": "Solicitar Agenda"
+      },
+      "features": {
+        "title": "Componentes Outbound",
+        "subtitle": "Todo para outreach predecible",
+        "items": [
+          {"title": "Bloques de Llamadas", "description": "Ventanas de enfoque para volumen y calidad."},
+          {"title": "Guiones y Objeciones", "description": "Framework refinado de conversación y objeciones."},
+          {"title": "Agendamiento", "description": "Reserva con notas y calificación."},
+          {"title": "Métricas", "description": "% conexión, citas, show rate y QA."}
+        ]
+      },
+      "cta": {
+        "title": "¿Necesitas Más Citas?",
+        "subtitle": "Ejecutamos el outreach mientras cierras",
+        "button": "Empezar",
+        "consultation": "Evaluación"
+      }
+    },
+    "backofficeBpo": {
+      "hero": {
+        "heading": "Operaciones Back Office",
+        "subtitle": "Ejecución Confiable de Tareas",
+        "description": "Soporte estructurado para datos, documentación, reportes y flujos.",
+        "features": ["Tareas", "Datos", "Reportes", "Procesos"],
+        "cta": "Agregar Soporte",
+        "consultationCta": "Revisión"
+      },
+      "features": {
+        "title": "Soporte Operativo",
+        "subtitle": "Desbloquea tiempo de tu equipo",
+        "items": [
+          {"title": "Datos", "description": "Actualizaciones e higiene CRM / planillas."},
+          {"title": "Documentación", "description": "Organización y estandarización."},
+          {"title": "Flujos", "description": "Seguimiento de tableros y pipelines."},
+          {"title": "Reportes", "description": "Actualizaciones programadas KPIs."}
+        ]
+      },
+      "cta": {
+        "title": "¿Necesitas Capacidad?",
+        "subtitle": "Deleguemos ejecución repetitiva",
+        "button": "Obtener Soporte",
+        "consultation": "Auditoría"
+      }
+    },
+    "blogSection": {
+      "title": "Explora Nuestro Blog",
+      "subtitle": "Recursos y guías para emprendedores latinos",
+      "cta": "Ver Biblioteca Completa",
+      "posts": [
+        {
+          "title": "Cómo Formar tu LLC en Estados Unidos",
+          "description": "Una guía completa para emprendedores latinos que desean establecer su negocio en EE.UU. Aprende los pasos necesarios, requisitos y beneficios de formar una LLC.",
+          "category": "Negocios"
+        },
+        {
+          "title": "Estrategias de Marketing Digital para Empresas Latinas",
+          "description": "Descubre las mejores prácticas de marketing digital para alcanzar a tu audiencia hispana en Estados Unidos. Incluye SEO, redes sociales y email marketing.",
+          "category": "Marketing"
+        },
+        {
+          "title": "Cumplimiento Fiscal para Negocios Hispanos",
+          "description": "Todo lo que necesitas saber sobre impuestos, reportes financieros y cumplimiento legal para tu negocio en EE.UU. Mantén tu empresa al día con las regulaciones.",
+          "category": "Legal"
+        },
+        {
+          "title": "Expansión de Negocios: De Local a Nacional",
+          "description": "Guía paso a paso para escalar tu negocio local a nivel nacional. Estrategias de crecimiento, logística y gestión de operaciones multiestado.",
+          "category": "Crecimiento"
+        },
+        {
+          "title": "Construyendo tu Identidad de Marca en el Mercado de EE.UU.",
+          "description": "Consejos esenciales para crear una presencia de marca sólida que resuene tanto con audiencias hispanas como generales. Estrategias de diseño de logo, mensajería y posicionamiento.",
+          "category": "Marca"
+        },
+        {
+          "title": "Entendiendo el Comercio Electrónico para Pequeños Negocios",
+          "description": "Lanza tu tienda en línea con éxito. Aprende sobre plataformas, procesamiento de pagos, logística de envíos y mejores prácticas de servicio al cliente para emprendedores hispanos.",
+          "category": "Tecnología"
+        },
+        {
+          "title": "Networking y Asociaciones: Expandiendo tus Conexiones de Negocio",
+          "description": "Cómo construir relaciones comerciales significativas, encontrar mentores y crear asociaciones estratégicas que aceleren el crecimiento de tu empresa en el mercado americano.",
+          "category": "Networking"
+        }
+      ]
+    },
+    "blogCard": {
+      "readMore": "Leer más",
+      "authorLabel": "Autor"
+      },
+    "dashboard": {
+      "title": "Panel",
+      "subtitle": "Aquí aparecerán tus pedidos y suscripciones."
+    },
+    "questionnaire": {
+      "title": "Cuestionario de la LLC",
+      "orderId": "ID de pedido",
+      "thanks": "¡Gracias! Recibimos tus respuestas. Te contactaremos pronto.",
+      "home": "Inicio",
+      "goToDashboard": "Ir al Panel",
+      "contactHelp": "¿Necesitas ayuda?",
+      "contactSupport": "Contactar soporte"
+    },
+    "software": {
+      "hero": {
+        "heading": "Servicios de Desarrollo de Software",
+        "subtitle": "Transformamos Tus Ideas en Soluciones Digitales Poderosas",
+        "description": "Creamos software personalizado, sitios web y plataformas digitales que impulsan el crecimiento empresarial y brindan experiencias excepcionales al usuario.",
+        "cta": "Iniciar Tu Proyecto",
+        "consultationCta": "Consulta Gratuita",
+        "features": [
+          "Desarrollo Personalizado",
+          "Tecnologías Modernas",
+          "Soluciones Escalables", 
+          "Soporte Experto"
+        ]
+      },
+      "services": {
+        "title": "Nuestros Servicios de Software",
+        "subtitle": "Soluciones de desarrollo integrales para tu negocio",
+        "web": {
+          "title": "Desarrollo Web y Blog",
+          "description": "Sitios web profesionales y blogs construidos con tecnologías modernas",
+          "features": ["Diseño Responsivo", "Optimizado para SEO", "Gestión de Contenido", "Enfoque en Rendimiento"]
+        },
+        "ecommerce": {
+          "title": "Soluciones eCommerce",
+          "description": "Tiendas en línea completas con integración de pagos y gestión de inventario",
+          "features": ["Integración de Pagos", "Gestión de Inventario", "Optimizado para Móvil", "Panel de Análisis"]
+        },
+        "custom": {
+          "title": "Software Personalizado",
+          "description": "Soluciones de software adaptadas a las necesidades específicas de tu negocio",
+          "features": ["Desarrollo Personalizado", "Integración de API", "Diseño de Base de Datos", "Despliegue en la Nube"]
+        }
+      },
+      "cta": {
+        "title": "¿Listo para Iniciar Tu Proyecto de Software?",
+        "subtitle": "Construyamos algo increíble juntos",
+        "button": "Comenzar Hoy",
+        "consultation": "Agendar Consulta"
+      }
+    },
+    "marketing": {
+      "hero": {
+        "heading": "Servicios de Marketing",
+        "subtitle": "Haz Crecer Tu Negocio Con Marketing Estratégico",
+        "description": "Soluciones integrales de marketing para aumentar tu visibilidad, atraer clientes e impulsar el crecimiento sostenible de tu negocio.",
+        "features": ["Marketing Digital", "Estrategia de Contenido", "Redes Sociales", "Analytics y Reportes", "Gestión de Campañas", "Desarrollo de Marca"],
+        "cta": "Empezar Marketing",
+        "consultationCta": "Sesión de Estrategia Gratis"
+      },
+      "services": {
+        "digital": {
+          "title": "Marketing Digital y Contenido",
+          "description": "Estrategias integrales de marketing digital que generan tráfico y crean leads",
+          "features": ["Optimización SEO", "Publicidad PPC", "Marketing de Contenido", "Campañas de Email"]
+        },
+        "social": {
+          "title": "Marketing en Redes Sociales",
+          "description": "Construye la presencia de tu marca y conecta con clientes en todas las plataformas sociales",
+          "features": ["Creación de Contenido", "Gestión de Comunidad", "Publicidad Social", "Seguimiento de Analytics"]
+        },
+        "influencer": {
+          "title": "Marketing de Influencers",
+          "description": "Conecta con influencers relevantes para expandir tu alcance y credibilidad",
+          "features": ["Matching de Influencers", "Gestión de Campañas", "Colaboración de Contenido", "Seguimiento de Rendimiento"]
+        }
+      },
+      "features": {
+        "title": "Soluciones de Marketing",
+        "subtitle": "Ecosistema completo de marketing para tu negocio",
+        "items": [
+          {
+            "title": "Estrategia de Marketing Digital",
+            "description": "Estrategias personalizadas para alcanzar tu audiencia objetivo y maximizar el ROI"
+          },
+          {
+            "title": "Creación de Contenido",
+            "description": "Contenido atractivo que conecta con tu audiencia e impulsa las conversiones"
+          },
+          {
+            "title": "Gestión de Redes Sociales",
+            "description": "Construye y gestiona la presencia de tu marca en todas las plataformas sociales"
+          },
+          {
+            "title": "Analytics de Rendimiento",
+            "description": "Rastrea y optimiza tus campañas de marketing con insights detallados"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Impulsar Tu Marketing?",
+        "subtitle": "Creemos una estrategia de marketing que entregue resultados reales",
+        "button": "Empezar Marketing",
+        "consultation": "Sesión de Estrategia"
+      }
+    },
+    "digitalMarketing": {
+      "hero": {
+        "heading": "Servicios de Marketing Digital",
+        "subtitle": "Aumenta Tu Visibilidad Online y Ventas",
+        "description": "Estrategias integrales de marketing digital que generan tráfico, crean leads y aumentan las conversiones para tu negocio.",
+        "features": ["Optimización SEO", "Publicidad PPC", "Marketing en Redes Sociales", "Campañas de Email", "Marketing de Contenido", "Analytics y Reportes"],
+        "cta": "Impulsar Mi Negocio",
+        "consultationCta": "Auditoría de Marketing Gratis"
+      },
+      "features": {
+        "title": "Características del Marketing Digital",
+        "subtitle": "Todo lo que necesitas para dominar online",
+        "items": [
+          {
+            "title": "Optimización para Motores de Búsqueda",
+            "description": "Mejora tu posicionamiento en buscadores y tráfico orgánico con estrategias SEO probadas"
+          },
+          {
+            "title": "Marketing en Redes Sociales",
+            "description": "Construye la presencia de tu marca y conecta con clientes en todas las plataformas sociales"
+          },
+          {
+            "title": "Campañas de Email Marketing",
+            "description": "Crea campañas de email dirigidas que nutren leads y impulsan conversiones"
+          },
+          {
+            "title": "Analytics y Reportes",
+            "description": "Rastrea el rendimiento de tu marketing con analytics detallados e insights accionables"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Dominar el Marketing Digital?",
+        "subtitle": "Creemos campañas que impulsen el crecimiento real de tu negocio",
+        "button": "Comenzar Ahora",
+        "consultation": "Auditoría de Marketing Gratis"
+      }
+    },
+    "socialMedia": {
+      "hero": {
+        "heading": "Marketing en Redes Sociales",
+        "subtitle": "Construye Tu Marca y Conecta con Tu Audiencia",
+        "description": "Gestión estratégica de redes sociales que construye reconocimiento de marca, involucra a tu comunidad e impulsa el crecimiento del negocio.",
+        "features": ["Creación de Contenido", "Gestión de Comunidad", "Marketing de Influencers", "Publicidad Social", "Seguimiento de Analytics", "Estrategia de Marca"],
+        "cta": "Hacer Crecer Mi Audiencia",
+        "consultationCta": "Auditoría de Redes Sociales"
+      },
+      "features": {
+        "title": "Soluciones de Redes Sociales",
+        "subtitle": "Gestión completa de presencia en redes sociales",
+        "items": [
+          {
+            "title": "Creación de Contenido y Estrategia",
+            "description": "Posts, historias y videos atractivos adaptados a cada plataforma y audiencia"
+          },
+          {
+            "title": "Gestión de Comunidad",
+            "description": "Participación activa con tu audiencia para construir relaciones y lealtad"
+          },
+          {
+            "title": "Alianzas con Influencers",
+            "description": "Conecta con influencers relevantes para expandir tu alcance y credibilidad"
+          },
+          {
+            "title": "Publicidad en Redes Sociales",
+            "description": "Campañas publicitarias dirigidas que maximizan el alcance e impulsan conversiones"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Hacer Crecer Tu Presencia Social?",
+        "subtitle": "Construyamos una estrategia de redes sociales que involucre y convierta",
+        "button": "Comenzar a Crecer",
+        "consultation": "Auditoría Social Gratis"
+      }
+    },
+    "influencerMarketing": {
+      "hero": {
+        "heading": "Marketing de Influencers",
+        "subtitle": "Aprovecha Alianzas Auténticas para el Crecimiento",
+        "description": "Conecta con influencers relevantes para expandir tu alcance, construir credibilidad e impulsar el engagement auténtico con tu audiencia objetivo.",
+        "features": ["Matching de Influencers", "Gestión de Campañas", "Colaboración de Contenido", "Seguimiento de Rendimiento", "Construcción de Relaciones", "Optimización de ROI"],
+        "cta": "Encontrar Influencers",
+        "consultationCta": "Sesión de Estrategia"
+      },
+      "features": {
+        "title": "Soluciones de Marketing de Influencers",
+        "subtitle": "Alianzas auténticas que generan resultados",
+        "items": [
+          {
+            "title": "Descubrimiento y Matching de Influencers",
+            "description": "Encuentra y conecta con influencers que se alineen con tu marca y audiencia"
+          },
+          {
+            "title": "Estrategia y Gestión de Campañas",
+            "description": "Planifica y ejecuta campañas de influencers que entreguen resultados medibles"
+          },
+          {
+            "title": "Colaboración de Contenido",
+            "description": "Trabaja con influencers para crear contenido auténtico y atractivo para tu marca"
+          },
+          {
+            "title": "Analytics de Rendimiento",
+            "description": "Rastrea el rendimiento de campañas y ROI con analytics detallados y reportes"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Aliarte con Influencers?",
+        "subtitle": "Encontremos los influencers perfectos para hacer crecer tu marca",
+        "button": "Iniciar Alianza",
+        "consultation": "Encontrar Mis Influencers"
+      }
+    },
+    "business": {
+      "hero": {
+        "heading": "Servicios de Formación de Negocios",
+        "subtitle": "Inicia Tu Negocio de la Manera Correcta",
+        "description": "Servicios completos de formación de negocios para ayudarte a establecer y mantener tu empresa de manera legal y eficiente en Estados Unidos.",
+        "features": ["Formación de LLC", "Agente Registrado", "Soporte de Cumplimiento", "Documentación Legal", "Guía Fiscal", "Soporte Continuo"],
+        "cta": "Formar Mi Negocio",
+        "consultationCta": "Consulta de Negocios Gratis"
+      },
+      "services": {
+        "llc": {
+          "title": "Formación de LLC",
+          "description": "Proceso completo de formación de LLC con toda la documentación requerida y presentación",
+          "features": ["Presentación Estatal", "Acuerdo Operativo", "Número de ID Fiscal", "Paquete de Cumplimiento"]
+        },
+        "agent": {
+          "title": "Agente Registrado",
+          "description": "Servicio profesional de agente registrado para recibir documentos legales en tu nombre",
+          "features": ["Recepción de Documentos Legales", "Protección de Privacidad", "Monitoreo de Cumplimiento", "Reenvío de Documentos"]
+        },
+        "compliance": {
+          "title": "Cumplimiento Anual",
+          "description": "Soporte continuo de cumplimiento para mantener tu negocio en buen estado",
+          "features": ["Reportes Anuales", "Cumplimiento Fiscal", "Renovaciones de Licencias", "Seguimiento de Fechas Límite"]
+        }
+      },
+      "features": {
+        "title": "Soluciones de Formación de Negocios",
+        "subtitle": "Todo lo que necesitas para iniciar tu negocio",
+        "items": [
+          {
+            "title": "Formación de LLC",
+            "description": "Proceso completo de formación de LLC con toda la documentación requerida y presentación"
+          },
+          {
+            "title": "Servicio de Agente Registrado",
+            "description": "Servicio profesional de agente registrado para recibir documentos legales en tu nombre"
+          },
+          {
+            "title": "Gestión de Cumplimiento",
+            "description": "Soporte continuo de cumplimiento para mantener tu negocio en buen estado"
+          },
+          {
+            "title": "Documentación Legal",
+            "description": "Acuerdos operativos y otros documentos legales esenciales para tu negocio"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Iniciar Tu Negocio?",
+        "subtitle": "Comencemos con la formación de tu negocio hoy",
+        "button": "Formar Mi Negocio",
+        "consultation": "Consulta Gratis"
+      }
+    },
+    "llcFormation": {
+      "hero": {
+        "heading": "Servicios de Formación de LLC",
+        "subtitle": "Forma Tu LLC Rápida y Fácilmente",
+        "description": "Servicios profesionales de formación de LLC con todo el papeleo manejado por nosotros. Inicia tu negocio de la manera correcta con guía experta y soporte.",
+        "features": ["Presentación Estatal", "Acuerdo Operativo", "Número de ID Fiscal", "Paquete de Cumplimiento", "Agente Registrado", "Soporte Experto"],
+        "cta": "Formar Mi LLC",
+        "consultationCta": "Comenzar Hoy"
+      },
+      "features": {
+        "title": "Características de Formación de LLC",
+        "subtitle": "Paquete completo de formación de LLC",
+        "items": [
+          {
+            "title": "Presentación y Registro Estatal",
+            "description": "Manejamos todo el papeleo estatal y requisitos de presentación para establecer tu LLC"
+          },
+          {
+            "title": "Acuerdo Operativo",
+            "description": "Acuerdo operativo personalizado adaptado a tu estructura de negocio y necesidades"
+          },
+          {
+            "title": "ID Fiscal Federal (EIN)",
+            "description": "Obtén tu Número de Identificación del Empleador Federal para propósitos fiscales y bancarios"
+          },
+          {
+            "title": "Paquete de Cumplimiento",
+            "description": "Paquete completo para mantener tu LLC en cumplimiento con los requisitos estatales"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Formar Tu LLC?",
+        "subtitle": "Inicia tu proceso de formación de negocio hoy",
+        "button": "Comenzar Formación de LLC",
+        "consultation": "Consulta Gratis"
+      }
+    },
+    "registeredAgent": {
+      "hero": {
+        "heading": "Servicios de Agente Registrado",
+        "subtitle": "Agente Registrado Profesional para Tu Negocio",
+        "description": "Servicios confiables de agente registrado para recibir documentos legales y mantener el cumplimiento de tu negocio. Disponible en los 50 estados.",
+        "features": ["Recepción de Documentos Legales", "Protección de Privacidad", "Monitoreo de Cumplimiento", "Reenvío de Documentos", "Dirección Profesional", "Cobertura Estatal"],
+        "cta": "Obtener Agente Registrado",
+        "consultationCta": "Saber Más"
+      },
+      "features": {
+        "title": "Beneficios del Agente Registrado",
+        "subtitle": "Servicio profesional en el que puedes confiar",
+        "items": [
+          {
+            "title": "Recepción de Documentos Legales",
+            "description": "Recibir y reenviar todos los documentos legales, notificaciones de proceso y correspondencia oficial"
+          },
+          {
+            "title": "Protección de Privacidad",
+            "description": "Mantén tu dirección personal privada usando nuestra dirección comercial profesional"
+          },
+          {
+            "title": "Monitoreo de Cumplimiento",
+            "description": "Mantente informado sobre fechas límite importantes y requisitos de cumplimiento"
+          },
+          {
+            "title": "Gestión Segura de Documentos",
+            "description": "Escaneo digital y almacenamiento seguro de todos los documentos recibidos"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Necesitas un Agente Registrado?",
+        "subtitle": "Servicio profesional de agente registrado para tu negocio",
+        "button": "Comenzar",
+        "consultation": "Saber Más"
+      }
+    },
+    "compliance": {
+      "hero": {
+        "heading": "Servicios de Cumplimiento Empresarial",
+        "subtitle": "Mantente en Cumplimiento y Evita Penalidades",
+        "description": "Servicios integrales de cumplimiento para mantener tu negocio en buen estado con todos los requisitos estatales y federales. Evita penalidades costosas y problemas legales.",
+        "features": ["Reportes Anuales", "Cumplimiento Fiscal", "Renovaciones de Licencias", "Seguimiento de Fechas Límite", "Gestión de Documentos", "Guía Experta"],
+        "cta": "Mantener Cumplimiento",
+        "consultationCta": "Auditoría de Cumplimiento"
+      },
+      "features": {
+        "title": "Soluciones de Cumplimiento",
+        "subtitle": "Gestión completa de cumplimiento para tu negocio",
+        "items": [
+          {
+            "title": "Presentación de Reportes Anuales",
+            "description": "Presentación oportuna de reportes anuales requeridos para mantener buen estado"
+          },
+          {
+            "title": "Soporte de Cumplimiento Fiscal",
+            "description": "Guía sobre obligaciones fiscales y requisitos de presentación para tu negocio"
+          },
+          {
+            "title": "Renovaciones de Licencias y Permisos",
+            "description": "Rastrea y gestiona renovaciones para todas las licencias y permisos comerciales"
+          },
+          {
+            "title": "Gestión de Fechas Límite",
+            "description": "Nunca pierdas fechas límite importantes con nuestro sistema integral de seguimiento"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Mantener el Cumplimiento?",
+        "subtitle": "Déjanos manejar los requisitos de cumplimiento de tu negocio",
+        "button": "Obtener Ayuda de Cumplimiento",
+        "consultation": "Auditoría de Cumplimiento Gratis"
+      }
+    },
+    "webBlog": {
+      "hero": {
+        "heading": "Desarrollo Web y Blog",
+        "subtitle": "Sitios Web Profesionales Que Generan Resultados",
+        "description": "Crea sitios web impresionantes y responsivos y blogs atractivos que capten a tu audiencia y hagan crecer tu negocio en línea.",
+        "features": ["Diseño Responsivo", "SEO Optimizado", "Gestión de Contenido", "Enfoque en Rendimiento", "Integración de Blog", "Listo para Redes Sociales"],
+        "cta": "Iniciar Tu Sitio Web",
+        "consultationCta": "Cotización Gratuita"
+      },
+      "features": {
+        "title": "Características del Sitio Web",
+        "subtitle": "Todo lo que necesitas para el éxito en línea",
+        "items": [
+          {
+            "title": "Diseño Responsivo",
+            "description": "Visualización perfecta en todos los dispositivos - escritorio, tablet y móvil"
+          },
+          {
+            "title": "Optimizado para SEO",
+            "description": "Construido para motores de búsqueda para ayudar a que los clientes te encuentren en línea"
+          },
+          {
+            "title": "Carga Rápida",
+            "description": "Rendimiento optimizado para mejor experiencia de usuario y clasificaciones"
+          },
+          {
+            "title": "Gestión de Contenido",
+            "description": "Sistema fácil de usar para actualizar tu contenido y entradas del blog"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Construir Tu Sitio Web?",
+        "subtitle": "Creemos un sitio web que genere resultados para tu negocio",
+        "button": "Iniciar Tu Sitio Web",
+        "consultation": "Cotización Gratuita"
+      }
+    },
+    "ecommerce": {
+      "hero": {
+        "heading": "Desarrollo de Tienda eCommerce",
+        "subtitle": "Vende en Línea con Confianza",
+        "description": "Construye una tienda en línea poderosa que convierta visitantes en clientes con pagos seguros, gestión de inventario y optimización móvil.",
+        "features": ["Integración de Pagos", "Gestión de Inventario", "Optimizado para Móvil", "Panel de Analíticas", "Catálogo de Productos", "Gestión de Clientes"],
+        "cta": "Construir Mi Tienda",
+        "consultationCta": "Consulta Gratuita"
+      },
+      "features": {
+        "title": "Características eCommerce",
+        "subtitle": "Todo lo que necesitas para vender en línea",
+        "items": [
+          {
+            "title": "Pagos Seguros",
+            "description": "Acepta tarjetas de crédito, PayPal y otros métodos de pago de forma segura"
+          },
+          {
+            "title": "Gestión de Inventario",
+            "description": "Rastrea productos, niveles de stock y automatiza alertas de inventario bajo"
+          }
+        ]
+      },
+      "cta": {
+        "title": "¿Listo para Lanzar Tu Tienda en Línea?",
+        "subtitle": "Comienza a vender en línea con una solución eCommerce profesional",
+        "button": "Construir Mi Tienda",
+        "consultation": "Consulta Gratuita"
+      }
+    },
+    "customSoftware": {
+      "hero": {
+        "heading": "Desarrollo de Software Personalizado",
+        "subtitle": "Soluciones Adaptadas Para Tu Negocio",
+        "description": "Construye aplicaciones personalizadas, APIs y soluciones de software diseñadas específicamente para los requisitos únicos y flujos de trabajo de tu negocio.",
+        "features": ["Desarrollo Personalizado", "Integración API", "Diseño de Base de Datos", "Despliegue en la Nube", "Arquitectura Escalable", "Seguridad Empresarial"],
+        "cta": "Iniciar Proyecto Personalizado",
+        "consultationCta": "Discutir Tus Necesidades"
+      },
+      "cta": {
+        "title": "¿Listo para Construir Tu Solución Personalizada?",
+        "subtitle": "Discutamos tus requisitos únicos y creemos la solución de software perfecta",
+        "button": "Iniciar Proyecto Personalizado",
+        "consultation": "Discutir Tus Necesidades"
+      }
+    }
+  ,
+  "allies": {
+    "title": "Nuestros Aliados Comerciales",
+    "subtitle": "Descubre negocios y organizaciones que apoyan y fortalecen nuestra comunidad",
+    "filters": {
+      "search": "Buscar negocio...",
+      "allCountries": "Todos los Países",
+      "allStates": "Todos los Estados", 
+      "allCities": "Todas las Ciudades",
+      "allCategories": "Todas las Categorías",
+      "allIndustries": "Todas las Industrias",
+      "allModalities": "Todas las Modalidades",
+      "clearFilters": "Limpiar Filtros",
+      "showFilters": "Mostrar Filtros",
+      "hideFilters": "Ocultar Filtros"
+    },
+    "modalities": {
+      "online": "En Línea",
+      "inPerson": "Presencial", 
+      "hybrid": "Híbrido"
+    },
+    "categories": {
+      "technology": "Tecnología",
+      "services": "Servicios",
+      "commerce": "Comercio",
+      "food": "Alimentación"
+    },
+    "industries": {
+      "software": "Software",
+      "hardware": "Hardware",
+      "saas": "SaaS",
+      "itConsulting": "Consultoría IT",
+      "consulting": "Consultoría",
+      "marketing": "Marketing",
+      "design": "Diseño",
+      "education": "Educación",
+      "retail": "Retail",
+      "ecommerce": "E-commerce",
+      "products": "Productos",
+      "distribution": "Distribución",
+      "restaurants": "Restaurantes",
+      "catering": "Catering",
+      "production": "Producción"
+    },
+    "card": {
+      "website": "Sitio Web",
+      "contact": "Contacto"
+    },
+    "cta": {
+      "joinNetwork": "Únete a la Red de Negocios",
+      "learnMore": "Saber Más"
+    },
+    "noResults": {
+      "title": "No se encontraron negocios",
+      "description": "Intenta ajustar los filtros de búsqueda"
+    },
+    "resultsCount": "Mostrando {count} de {total} negocios"
+  },
+  "partners": {
+    "meta": {
+      "title": "Socios Comerciales | Servicios Confiables para Emprendedores",
+      "description": "Descubre nuestros socios comerciales de confianza que ofrecen servicios esenciales para emprendedores: hosting, buzón virtual y servicios de formación empresarial."
+    },
+    "title": "Socios Comerciales de Confianza",
+    "subtitle": "Servicios cuidadosamente seleccionados para ayudar a hacer crecer tu negocio.",
+    "featuresTitle": "Características Principales",
+    "visitService": "Visitar",
+    "morePartnersComingSoon": "Más socios próximamente...",
+    "disclaimer": "Podemos recibir compensación cuando uses servicios a través de nuestros enlaces de socios. Esto nos ayuda a continuar proporcionando recursos gratuitos mientras recomendamos solo servicios en los que confiamos y usamos nosotros mismos.",
+    "categories": {
+      "hosting": "Hosting Web",
+      "mailbox": "Buzón Virtual",
+      "formation": "Formación Empresarial"
+    },
+    "services": {
+      "ionos": {
+        "description": "Hosting web profesional con seguridad y rendimiento de nivel empresarial para el sitio web de tu negocio."
+      },
+      "ipostal1": {
+        "description": "Servicio de buzón virtual que le da a tu negocio una dirección profesional de EE.UU. con escaneo y reenvío de correo."
+      },
+      "corpnet": {
+        "description": "Servicios profesionales de formación empresarial con orientación experta para manejar todo tu papeleo de incorporación."
+      }
+    }
+  },
+  "contact": {
+    "title": "Conecta",
+    "titleHighlight": "Con Nosotros",
+    "subtitle": "Ya sea que estés interesado en nuestros servicios o necesites soporte, nuestro equipo está listo para ayudarte.",
+    "salesTeam": {
+      "title": "Equipo de Ventas",
+      "subtitle": "Crezcamos juntos",
+      "available": "Disponible",
+      "hours": "8:00 AM - 5:00 PM (Hora del Pacífico)",
+      "liveChat": "Chat en Vivo Disponible",
+      "followUs": "Síguenos"
+    },
+    "support": {
+      "title": "Soporte al Cliente",
+      "subtitle": "Estamos aquí para ayudar",
+      "availability": "24/7",
+      "phoneComing": "Líneas Telefónicas Próximamente",
+      "priorityChat": "Chat de Soporte Prioritario",
+      "followUs": "Síguenos"
+    },
+    "additional": {
+      "title": "Otras Formas de Conectar",
+      "liveChat": {
+        "title": "Chat en Vivo",
+        "description": "Obtén respuestas instantáneas a través de nuestro sistema de chat."
+      },
+      "socialMedia": {
+        "title": "Redes Sociales",
+        "description": "Síguenos y contáctanos a través de tu red social preferida."
+      },
+      "email": {
+        "title": "Correo Electrónico",
+        "description": "Envíanos un correo y responderemos en 24 horas."
+      }
+    },
+    "quickLinks": {
+      "title": "¿Buscas Respuestas Rápidas?",
+      "subtitle": "Consulta nuestras preguntas frecuentes o explora recursos útiles.",
+      "faq": "FAQ y Proceso",
+      "resources": "Recursos y Guías"
+    }
+  },
+  "login": {
+    "title": "Bienvenido de nuevo",
+    "noAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crea una aquí",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "rememberMe": "Recordarme",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión...",
+    "orContinueWith": "O continúa con",
+    "google": "Continuar con Google",
+    "secureLogin": "Tu inicio de sesión está protegido con encriptación de nivel industrial"
+  },
+  "join": {
+    "title": "Crea tu cuenta",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Inicia sesión aquí",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "phone": "Número de teléfono (opcional)",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "passwordRequirements": {
+      "minLength": "Al menos 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "number": "Un número",
+      "special": "Un carácter especial (!@#$%^&*)"
+    },
+    "agreements": {
+      "terms": "Acepto los",
+      "termsLink": "Términos de Servicio",
+      "privacy": "Acepto la",
+      "privacyLink": "Política de Privacidad",
+      "marketing": "Quiero recibir actualizaciones y correos de marketing"
+    },
+    "createAccount": "Crear Cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "orContinueWith": "O continúa con",
+    "google": "Continuar con Google",
+    "secure": "Tu información está protegida con seguridad de nivel empresarial"
+  },
+  "forgotPassword": {
+    "title": "¿Olvidaste tu contraseña?",
+    "subtitle": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "email": "Correo electrónico",
+    "sendLink": "Enviar Enlace de Restablecimiento",
+    "sending": "Enviando...",
+    "backToLogin": "Volver al inicio de sesión",
+    "success": {
+      "title": "Revisa Tu Correo",
+      "message": "Si existe una cuenta con {email}, hemos enviado instrucciones para restablecer la contraseña a esa dirección.",
+      "tips": {
+        "title": "¿No recibiste el correo?",
+        "spam": "Revisa tu carpeta de spam o correo no deseado",
+        "correct": "Asegúrate de haber ingresado el correo correcto",
+        "wait": "Espera unos minutos e intenta de nuevo"
+      },
+      "tryDifferent": "Intentar con otro correo",
+      "backToLogin": "Volver al inicio de sesión"
+    }
+  },
+  "resetPassword": {
+    "title": "Restablece Tu Contraseña",
+    "subtitle": "Crea una nueva contraseña segura para tu cuenta.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "resetButton": "Restablecer Contraseña",
+    "resetting": "Restableciendo...",
+    "passwordsMatch": "Las contraseñas coinciden",
+    "passwordsDontMatch": "Las contraseñas no coinciden",
+    "success": {
+      "title": "Contraseña Restablecida Exitosamente",
+      "message": "Tu contraseña ha sido actualizada. Ahora puedes iniciar sesión con tu nueva contraseña.",
+      "signIn": "Iniciar sesión en tu cuenta"
+    },
+    "invalidToken": {
+      "title": "Enlace de Restablecimiento Inválido",
+      "requestNew": "Solicitar Nuevo Enlace"
+    },
+    "verifying": "Verificando tu enlace de restablecimiento..."
+  },
+  "ourProcess": {
+    "title": "Nuestro",
+    "titleHighlight": "Proceso",
+    "subtitle": "De principio a fin, esto es lo que puedes esperar al trabajar con nosotros.",
+    "steps": {
+      "select": {
+        "title": "Seleccionar Servicio",
+        "description": "Elige de nuestros servicios principales o combínalos según tus necesidades."
+      },
+      "consultation": {
+        "title": "Consulta",
+        "description": "Si es necesario, habla con un especialista para asesoría personalizada."
+      },
+      "process": {
+        "title": "Procesar Pedido",
+        "description": "Confirmamos los detalles y comenzamos a trabajar en tu solicitud."
+      },
+      "additional": {
+        "title": "Requisitos Adicionales",
+        "description": "Si necesitamos más información, nos comunicaremos rápidamente."
+      },
+      "completed": {
+        "title": "Completado",
+        "description": "Finalizamos el proceso y entregamos los resultados acordados."
+      }
+    },
+    "services": {
+      "title": "Nuestros Servicios Principales",
+      "formation": {
+        "name": "Formación de Negocios",
+        "description": "Constitución legal de LLCs, corporaciones y otros tipos de entidades comerciales."
+      },
+      "software": {
+        "name": "Desarrollo de Software",
+        "description": "Soluciones tecnológicas personalizadas para optimizar tus operaciones."
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": {
+        "question": "¿Cómo selecciono el servicio adecuado?",
+        "answer": "Nuestra página de servicios detalla cada opción. Si tienes preguntas, puedes solicitar una consulta gratuita con un agente para recomendaciones personalizadas."
+      },
+      "q2": {
+        "question": "¿Qué información necesitan para procesar mi pedido?",
+        "answer": "Depende del servicio. Para formación de negocios necesitaremos documentos de identificación y detalles del negocio. Para desarrollo de software, analizaremos tus requisitos específicos."
+      },
+      "q3": {
+        "question": "¿Puedo agregar servicios adicionales después?",
+        "answer": "Sí, nuestro sistema es flexible. Puedes complementar tu pedido inicial con otros servicios cuando lo necesites."
+      },
+      "q4": {
+        "question": "¿Qué pasa si no respondo a las solicitudes de información adicional?",
+        "answer": "Pausaremos temporalmente el procesamiento hasta recibir toda la información necesaria, pero siempre comunicaremos claramente sobre los plazos."
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Comenzar?",
+      "subtitle": "Déjanos manejar la complejidad mientras tú te enfocas en tu negocio.",
+      "button": "Iniciar Tu Pedido"
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "subtitle": "Tu privacidad es importante para nosotros. Esta política describe cómo recopilamos, usamos y protegemos tu información personal.",
+    "lastUpdated": "Última actualización",
+    "sections": {
+      "collection": {
+        "title": "Recopilación de Información",
+        "intro": "Recopilamos información que nos proporcionas directamente cuando:",
+        "items": [
+          "Creas una cuenta en nuestra plataforma",
+          "Realizas una compra o transacción",
+          "Te comunicas con nuestro equipo de soporte",
+          "Te suscribes a nuestro boletín",
+          "Participas en encuestas o promociones"
+        ]
+      },
+      "use": {
+        "title": "Uso de la Información",
+        "intro": "Usamos tu información para:",
+        "items": [
+          "Procesar tus pedidos y transacciones",
+          "Proporcionar soporte al cliente",
+          "Enviar actualizaciones relevantes y marketing (con consentimiento)",
+          "Mejorar nuestros servicios y experiencia de usuario",
+          "Cumplir con obligaciones legales"
+        ]
+      },
+      "protection": {
+        "title": "Protección de Datos",
+        "content": "Implementamos medidas de seguridad estándar de la industria para proteger tu información personal del acceso no autorizado, divulgación o mal uso."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "content": "Usamos cookies y tecnologías similares para mejorar tu experiencia, analizar patrones de uso y entregar contenido personalizado."
+      },
+      "communications": {
+        "title": "Comunicaciones",
+        "content": "Podemos enviarte correos transaccionales relacionados con tus pedidos. Las comunicaciones de marketing son opcionales y puedes darte de baja en cualquier momento."
+      },
+      "rights": {
+        "title": "Tus Derechos",
+        "content": "Tienes derecho a acceder, corregir o eliminar tu información personal. Contáctanos para ejercer estos derechos."
+      },
+      "contact": {
+        "title": "Contacto",
+        "content": "Si tienes preguntas sobre esta política de privacidad, contáctanos en privacy@fabiel.net"
+      }
+    }
+  },
+  "subscriptions": {
+    "title": "Mis Suscripciones",
+    "subtitle": "Administra tus suscripciones activas y facturación",
+    "noSubscriptions": "Sin Suscripciones Activas",
+    "noSubscriptionsDesc": "Aún no tienes suscripciones activas.",
+    "cancelSubscription": "Cancelar Suscripción",
+    "reactivate": "Reactivar",
+    "reactivating": "Reactivando...",
+    "amount": "Monto",
+    "billing": "Facturación",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "weekly": "Semanal",
+    "nextBilling": "Próxima factura",
+    "endsOn": "Termina el",
+    "cancelledOn": "Cancelado el",
+    "active": "Activa",
+    "cancelled": "Cancelada",
+    "paused": "Pausada",
+    "pastDue": "Vencida",
+    "pendingCancellation": "Cancelando",
+    "pendingCancellationNotice": "Tu suscripción permanecerá activa hasta {date}. Puedes reactivarla en cualquier momento antes de esa fecha."
+  },
+  "cancellation": {
+    "modalTitle": "Cancelar Suscripción",
+    "step": "Paso {current} de {total}",
+    "beforeYouGo": "Antes de Irte",
+    "impactSummaryDesc": "Por favor revisa lo que sucede cuando cancelas esta suscripción.",
+    "keepSubscription": "Mantener Suscripción",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "mustAcknowledge": "Debes reconocer las consecuencias de la cancelación para continuar.",
+    "registeredAgent": {
+      "title": "Pérdida del Agente Registrado",
+      "warning": "Tu LLC debe mantener un Agente Registrado para permanecer en buen estado. Cancelar este servicio significa que debes nombrar un nuevo agente con la Secretaría de Estado inmediatamente.",
+      "important": "Importante: Cancelar este servicio NO disuelve tu LLC.",
+      "penalty": "Debes presentar el formulario RA-100 ante la Secretaría de Estado para cambiar tu Agente Registrado. No mantener un Agente Registrado puede resultar en una multa de $250 o la suspensión de tu negocio."
+    },
+    "compliance": {
+      "title": "Responsabilidades de Cumplimiento",
+      "warning": "Después de la cancelación, serás responsable de presentar tus propios documentos de cumplimiento.",
+      "statementOfInfo": "Declaración de Información - Presentar anualmente (tarifa de $20)",
+      "franchiseTax": "Impuesto de Franquicia - Presentar anualmente (mínimo $800 para LLCs)"
+    },
+    "website": {
+      "title": "Servicio de Sitio Web/Blog",
+      "warning": "Tu sitio web quedará fuera de línea al final de tu período de facturación.",
+      "dataRetention": "Tus datos se conservarán por 30 días después de la cancelación. Contacta a soporte para exportar tu contenido."
+    },
+    "billing": {
+      "title": "Período de Servicio",
+      "serviceUntil": "Tu servicio permanecerá activo hasta {date}",
+      "noRefund": "No se proporcionan reembolsos prorrateados por períodos de facturación parciales."
+    },
+    "survey": {
+      "title": "Ayúdanos a Mejorar",
+      "description": "Nos encantaría saber por qué te vas (opcional).",
+      "reasonLabel": "¿Por qué cancelas?",
+      "reasons": {
+        "tooExpensive": "Demasiado caro",
+        "notUsing": "No estoy usando el servicio",
+        "switchingProvider": "Cambiando a otro proveedor",
+        "closingBusiness": "Cerrando mi negocio",
+        "poorService": "No satisfecho con el servicio",
+        "other": "Otra razón"
+      },
+      "feedbackLabel": "Por favor cuéntanos más",
+      "feedbackPlaceholder": "Tu retroalimentación nos ayuda a mejorar...",
+      "appointNewAgent": "Entiendo que necesito nombrar un nuevo Agente Registrado",
+      "appointNewAgentDesc": "Presentaré el formulario RA-100 ante la Secretaría de Estado de California antes de que termine mi servicio."
+    },
+    "confirm": {
+      "title": "Confirmar Cancelación",
+      "description": "Por favor revisa y confirma tu cancelación.",
+      "service": "Servicio",
+      "business": "Negocio",
+      "amount": "Monto",
+      "activeUntil": "Activo Hasta",
+      "acknowledge": "Entiendo y reconozco",
+      "acknowledgeRegisteredAgent": "Entiendo que debo nombrar un nuevo Agente Registrado y presentar el formulario RA-100 ante la Secretaría de Estado para evitar multas o suspensión del negocio.",
+      "acknowledgeGeneral": "Entiendo que mi servicio terminará en la fecha mostrada arriba y perderé acceso a los beneficios de esta suscripción.",
+      "termsPrefix": "Al cancelar, aceptas nuestros",
+      "termsLink": "Términos de Servicio",
+      "processing": "Procesando...",
+      "confirmCancellation": "Confirmar Cancelación"
+    },
+    "success": {
+      "title": "Cancelación Confirmada",
+      "description": "Tu suscripción ha sido programada para cancelación.",
+      "serviceUntil": "Tu servicio permanecerá activo hasta {date}",
+      "emailSent": "Se ha enviado un correo de confirmación a tu dirección de email.",
+      "nextSteps": "Próximos Pasos para Agente Registrado",
+      "step1": "Elige un nuevo Agente Registrado (tú mismo, una persona de confianza, o un servicio profesional)",
+      "step2": "Presenta el formulario RA-100 ante la Secretaría de Estado de California (tarifa de $20)",
+      "step3": "Completa esto antes de que termine tu servicio para mantener el cumplimiento",
+      "sosLink": "Sitio Web de la Secretaría de Estado de California",
+      "changedMind": "¿Cambiaste de Opinión?",
+      "reactivateInfo": "Puedes reactivar tu suscripción en cualquier momento antes de que termine tu servicio.",
+      "reactivate": "Reactivar Suscripción",
+      "reactivating": "Reactivando...",
+      "done": "Listo"
+    }
+  },
+  "orders": {
+    "title": "Mis Órdenes",
+    "subtitle": "Rastrea tus órdenes de formación de LLC",
+    "noOrders": "Sin Órdenes Aún",
+    "noOrdersDesc": "Aún no has realizado ninguna orden. ¡Comienza tu formación de LLC hoy!",
+    "startLLC": "Iniciar Formación de LLC",
+    "startFormation": "Iniciar Formación de LLC",
+    "orderNumber": "Orden #{orderId}",
+    "viewDetails": "Ver Detalles",
+    "viewOrder": "Ver Orden",
+    "cancelOrder": "Cancelar Orden",
+    "backToOrders": "Volver a Órdenes",
+    "viewBusiness": "Ver Negocio",
+    "order": "Orden",
+    "state": "Estado",
+    "total": "Total",
+    "date": "Fecha",
+    "pendingProcessing": "Pendiente",
+    "processing": "Procesando",
+    "completed": "Completada",
+    "cancelled": "Cancelada",
+    "refunded": "Reembolsada",
+    "statuses": {
+      "pending": "Pendiente",
+      "processing": "Procesando",
+      "completed": "Completada",
+      "cancelled": "Cancelada",
+      "refunded": "Reembolsada"
+    }
+  },
+  "orderCancellation": {
+    "modalTitle": "Cancelar Orden",
+    "step": "Paso {current} de {total}",
+    "loading": "Cargando detalles de cancelación...",
+    "close": "Cerrar",
+    "keepOrder": "Mantener Mi Orden",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "mustAcknowledge": "Debes reconocer las consecuencias de la cancelación para proceder.",
+    "progress": {
+      "orderReceived": "Orden Recibida",
+      "llcFiled": "LLC Presentada al Estado",
+      "llcApproved": "LLC Aprobada"
+    },
+    "blocked": {
+      "title": "No Se Puede Cancelar",
+      "description": "Esta orden ya ha sido enviada al estado y no puede cancelarse.",
+      "progressTitle": "Progreso de la Orden",
+      "pointOfNoReturn": "Punto Sin Retorno",
+      "contactSupport": "Si necesitas asistencia o tienes preguntas sobre tu orden, contacta a nuestro equipo de soporte.",
+      "emailSupport": "Enviar Email a Soporte"
+    },
+    "impact": {
+      "title": "Revisa el Impacto de Cancelar",
+      "description": "Por favor revisa lo que sucede cuando cancelas esta orden.",
+      "refundBreakdown": "Tu Reembolso",
+      "serviceFee": "Tarifa de Servicio",
+      "stateFilingFee": "Tarifa de Presentación Estatal",
+      "rushFee": "Tarifa de Procesamiento Urgente",
+      "processingFeeRetained": "Tarifa de Procesamiento (no reembolsable)",
+      "totalRefund": "Reembolso Total",
+      "processingFeeNote": "Se retiene una tarifa de procesamiento de $25 para órdenes donde el trabajo ha comenzado.",
+      "subscriptionWarning": {
+        "title": "Suscripciones Activas",
+        "description": "Tienes {count, plural, one {# suscripción activa} other {# suscripciones activas}} vinculadas a esta orden. Cancelar tu orden NO cancelará tus suscripciones.",
+        "actionRequired": "Para cancelar suscripciones, por favor visita la página de Suscripciones por separado.",
+        "subscriptionsPage": "Administrar Suscripciones"
+      },
+      "noProtection": {
+        "title": "Sin Protección de Responsabilidad",
+        "warning": "Cancelar significa que no se formará una LLC. No tendrás protección de responsabilidad personal para tus actividades comerciales."
+      },
+      "nameNotReserved": {
+        "title": "Nombre No Reservado",
+        "warning": "El nombre de la compañía que elegiste no será reservado. Cualquier otra persona puede registrar este nombre con el estado."
+      },
+      "documents": {
+        "title": "Sin Documentos de Formación",
+        "warning": "No recibirás un Acuerdo Operativo, EIN, u otros documentos de formación incluidos en tu paquete."
+      }
+    },
+    "survey": {
+      "title": "Ayúdanos a Mejorar",
+      "description": "Nos encantaría saber por qué estás cancelando (opcional).",
+      "reasonLabel": "¿Por qué estás cancelando?",
+      "reasons": {
+        "changedMind": "Cambié de opinión sobre formar una LLC",
+        "tooExpensive": "Muy caro",
+        "foundAlternative": "Encontré una mejor opción en otro lugar",
+        "notReady": "Aún no estoy listo para iniciar un negocio",
+        "wrongState": "Quería formar en un estado diferente",
+        "other": "Otra razón"
+      },
+      "feedbackLabel": "Por favor cuéntanos más",
+      "feedbackPlaceholder": "Tu retroalimentación nos ayuda a mejorar..."
+    },
+    "confirm": {
+      "title": "Confirmar Cancelación",
+      "description": "Esta acción no se puede deshacer.",
+      "company": "Compañía",
+      "state": "Estado",
+      "orderTotal": "Total de la Orden",
+      "refundAmount": "Monto del Reembolso",
+      "acknowledge": "Entiendo y confirmo",
+      "acknowledgeDetails": "No se formará una LLC, no tendré protección de responsabilidad, y el nombre de la compañía será liberado para que otros lo registren.",
+      "termsPrefix": "Al cancelar, aceptas nuestra",
+      "termsLink": "Política de Reembolso",
+      "processing": "Procesando...",
+      "confirmCancellation": "Confirmar Cancelación"
+    },
+    "success": {
+      "title": "Orden Cancelada",
+      "description": "Tu orden ha sido cancelada exitosamente.",
+      "refundInfo": "Tu reembolso de {amount} será procesado.",
+      "refundTimeframe": "Espera verlo en tu cuenta dentro de 5-10 días hábiles.",
+      "emailSent": "Correo de Confirmación Enviado",
+      "emailDetails": "Hemos enviado una confirmación de cancelación a tu email con los detalles del reembolso.",
+      "startAgain": "¿Quieres Empezar de Nuevo?",
+      "startAgainDetails": "Puedes iniciar una nueva formación de LLC en cualquier momento desde tu panel.",
+      "nameWarning": "Nota: El nombre de la compañía que seleccionaste anteriormente puede que ya no esté disponible.",
+      "done": "Listo"
+    }
+  }
+}

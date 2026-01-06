@@ -45,6 +45,7 @@ export async function GET() {
         currentPeriodEnd: sub.currentPeriodEnd,
         trialEndsAt: sub.trialEndsAt,
         cancelledAt: sub.cancelledAt,
+        cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
         createdAt: sub.createdAt,
         businessId: sub.businessId,
         businessName: sub.businessId ? businessMap.get(sub.businessId) || null : null,

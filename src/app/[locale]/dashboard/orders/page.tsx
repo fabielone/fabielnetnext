@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { 
   RiFileList3Line,
   RiArrowLeftLine,
@@ -12,6 +12,7 @@ import {
   RiAlertLine,
   RiEyeLine
 } from 'react-icons/ri';
+import OrderCancellationFlow from './OrderCancellationFlow';
 
 interface Order {
   id: string;
@@ -43,9 +44,9 @@ const statusIcons: Record<string, React.ReactNode> = {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [cancelling, setCancelling] = useState<string | null>(null);
-  const [showCancelModal, setShowCancelModal] = useState<string | null>(null);
+  const [showCancellationFlow, setShowCancellationFlow] = useState<Order | null>(null);
   const locale = useLocale();
+  const t = useTranslations('orders');
 
   useEffect(() => {
     fetchOrders();
@@ -65,26 +66,25 @@ export default function OrdersPage() {
     }
   };
 
-  const handleCancelOrder = async (orderId: string) => {
-    setCancelling(orderId);
-    try {
-      const res = await fetch(`/api/orders/${orderId}/cancel`, {
-        method: 'POST',
-        credentials: 'include'
-      });
-      if (res.ok) {
-        // Refresh orders
-        await fetchOrders();
-      } else {
-        const data = await res.json();
-        alert(data.error || 'Failed to cancel order');
-      }
-    } catch (error) {
-      console.error('Failed to cancel order:', error);
-      alert('Failed to cancel order');
-    } finally {
-      setCancelling(null);
-      setShowCancelModal(null);
+  // Check if order can be cancelled (PENDING_PROCESSING or PROCESSING)
+  const canCancelOrder = (order: Order) => {
+    return ['PENDING_PROCESSING', 'PROCESSING'].includes(order.status);
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'PENDING_PROCESSING':
+        return t('pendingProcessing');
+      case 'PROCESSING':
+        return t('processing');
+      case 'COMPLETED':
+        return t('completed');
+      case 'CANCELLED':
+        return t('cancelled');
+      case 'REFUNDED':
+        return t('refunded');
+      default:
+        return status.replace(/_/g, ' ');
     }
   };
 
@@ -114,8 +114,8 @@ export default function OrdersPage() {
             <RiArrowLeftLine className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Orders</h1>
-            <p className="text-gray-600 mt-1">View and manage your LLC formation orders</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+            <p className="text-gray-600 mt-1">{t('subtitle')}</p>
           </div>
         </div>
 
@@ -123,13 +123,13 @@ export default function OrdersPage() {
         {orders.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <RiFileList3Line className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">No Orders Yet</h2>
-            <p className="text-gray-500 mb-6">You haven&apos;t placed any LLC formation orders yet.</p>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">{t('noOrders')}</h2>
+            <p className="text-gray-500 mb-6">{t('noOrdersDesc')}</p>
             <Link
               href={`/${locale}/checkout/businessformation`}
               className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
             >
-              Start Your LLC Formation
+              {t('startFormation')}
             </Link>
           </div>
         ) : (
@@ -150,15 +150,15 @@ export default function OrdersPage() {
                         </h3>
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-700'}`}>
                           {statusIcons[order.status]}
-                          {order.status.replace(/_/g, ' ')}
+                          {getStatusLabel(order.status)}
                         </span>
                       </div>
                       
                       <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                        <span>Order: <span className="font-medium">{order.orderId}</span></span>
-                        <span>State: <span className="font-medium">{state}</span></span>
-                        <span>Total: <span className="font-medium">${Number(order.totalAmount).toFixed(2)}</span></span>
-                        <span>Date: <span className="font-medium">{new Date(order.createdAt).toLocaleDateString()}</span></span>
+                        <span>{t('order')}: <span className="font-medium">{order.orderId}</span></span>
+                        <span>{t('state')}: <span className="font-medium">{state}</span></span>
+                        <span>{t('total')}: <span className="font-medium">${Number(order.totalAmount).toFixed(2)}</span></span>
+                        <span>{t('date')}: <span className="font-medium">{new Date(order.createdAt).toLocaleDateString()}</span></span>
                       </div>
                     </div>
 
@@ -169,14 +169,14 @@ export default function OrdersPage() {
                         className="inline-flex items-center gap-2 px-4 py-2 text-sm text-amber-600 border border-amber-200 rounded-lg hover:bg-amber-50 transition-colors"
                       >
                         <RiEyeLine className="w-4 h-4" />
-                        View Order
+                        {t('viewOrder')}
                       </Link>
-                      {order.status === 'PENDING_PROCESSING' && (
+                      {canCancelOrder(order) && (
                         <button
-                          onClick={() => setShowCancelModal(order.id)}
+                          onClick={() => setShowCancellationFlow(order)}
                           className="px-4 py-2 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
                         >
-                          Cancel Order
+                          {t('cancelOrder')}
                         </button>
                       )}
                     </div>
@@ -187,38 +187,16 @@ export default function OrdersPage() {
           </div>
         )}
 
-        {/* Cancel Modal */}
-        {showCancelModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-red-100 rounded-full">
-                  <RiAlertLine className="w-6 h-6 text-red-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900">Cancel Order</h3>
-              </div>
-              
-              <p className="text-gray-600 mb-6">
-                Are you sure you want to cancel this order? This will also cancel any associated questionnaires. This action cannot be undone.
-              </p>
-              
-              <div className="flex gap-3 justify-end">
-                <button
-                  onClick={() => setShowCancelModal(null)}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Keep Order
-                </button>
-                <button
-                  onClick={() => handleCancelOrder(showCancelModal)}
-                  disabled={cancelling === showCancelModal}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
-                >
-                  {cancelling === showCancelModal ? 'Cancelling...' : 'Cancel Order'}
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Order Cancellation Flow Modal */}
+        {showCancellationFlow && (
+          <OrderCancellationFlow
+            order={showCancellationFlow}
+            onCancel={() => setShowCancellationFlow(null)}
+            onComplete={() => {
+              setShowCancellationFlow(null);
+              fetchOrders();
+            }}
+          />
         )}
       </div>
     </div>

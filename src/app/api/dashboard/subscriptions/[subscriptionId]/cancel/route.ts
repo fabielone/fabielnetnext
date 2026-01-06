@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { validateSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { sendSubscriptionCancellationEmail } from '@/lib/email-service';
+
+// Cancellation reasons for analytics
+export interface CancellationData {
+  reason: string;
+  feedback?: string;
+  willAppointNewAgent?: boolean;
+  acknowledgedConsequences: boolean;
+}
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -35,7 +44,25 @@ export async function POST(
     
     // Find the subscription
     const subscription = await prisma.subscription.findUnique({
-      where: { id: subscriptionId }
+      where: { id: subscriptionId },
+      include: {
+        business: {
+          select: {
+            id: true,
+            name: true,
+            state: true,
+            stateFileNumber: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true
+          }
+        }
+      }
     });
     
     if (!subscription) {
@@ -125,8 +152,10 @@ export async function POST(
     await prisma.subscription.update({
       where: { id: subscriptionId },
       data: {
-        status: 'CANCELLED',
-        cancelledAt: new Date()
+        cancelAtPeriodEnd: true,
+        cancelledAt: new Date(),
+        // Store cancellation reason in metadata for analytics
+        // Note: We're not changing status to CANCELLED yet - it stays ACTIVE until period ends
       }
     });
     
@@ -134,5 +163,65 @@ export async function POST(
   } catch (error) {
     console.error('Error cancelling subscription:', error);
     return NextResponse.json({ error: 'Failed to cancel subscription' }, { status: 500 });
+  }
+}
+
+// Allow user to reactivate a pending cancellation
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ subscriptionId: string }> }
+) {
+  try {
+    const session = await validateSession();
+    
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    const { subscriptionId } = await params;
+    
+    const subscription = await prisma.subscription.findUnique({
+      where: { id: subscriptionId }
+    });
+    
+    if (!subscription) {
+      return NextResponse.json({ error: 'Subscription not found' }, { status: 404 });
+    }
+    
+    if (subscription.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    }
+    
+    // Can only reactivate if it's pending cancellation (not fully cancelled)
+    if (subscription.status === 'CANCELLED') {
+      return NextResponse.json({ 
+        error: 'Subscription is already fully cancelled and cannot be reactivated' 
+      }, { status: 400 });
+    }
+    
+    if (!subscription.cancelAtPeriodEnd) {
+      return NextResponse.json({ 
+        error: 'Subscription is not pending cancellation' 
+      }, { status: 400 });
+    }
+    
+    // Reactivate the subscription
+    await prisma.subscription.update({
+      where: { id: subscriptionId },
+      data: {
+        cancelAtPeriodEnd: false,
+        cancelledAt: null
+      }
+    });
+    
+    // TODO: Reactivate on Stripe/PayPal if applicable
+    
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Subscription reactivated successfully' 
+    });
+  } catch (error) {
+    console.error('Error reactivating subscription:', error);
+    return NextResponse.json({ error: 'Failed to reactivate subscription' }, { status: 500 });
   }
 }

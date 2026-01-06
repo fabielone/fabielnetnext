@@ -1177,5 +1177,231 @@
         "content": "If you have questions about this privacy policy, please contact us at privacy@fabiel.net"
       }
     }
+  },
+  "subscriptions": {
+    "title": "My Subscriptions",
+    "subtitle": "Manage your active subscriptions and billing",
+    "noSubscriptions": "No Active Subscriptions",
+    "noSubscriptionsDesc": "You don't have any active subscriptions yet.",
+    "cancelSubscription": "Cancel Subscription",
+    "reactivate": "Reactivate",
+    "reactivating": "Reactivating...",
+    "amount": "Amount",
+    "billing": "Billing",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "weekly": "Weekly",
+    "nextBilling": "Next billing",
+    "endsOn": "Ends on",
+    "cancelledOn": "Cancelled on",
+    "active": "Active",
+    "cancelled": "Cancelled",
+    "paused": "Paused",
+    "pastDue": "Past Due",
+    "pendingCancellation": "Cancelling",
+    "pendingCancellationNotice": "Your subscription will remain active until {date}. You can reactivate anytime before then."
+  },
+  "cancellation": {
+    "modalTitle": "Cancel Subscription",
+    "step": "Step {current} of {total}",
+    "beforeYouGo": "Before You Go",
+    "impactSummaryDesc": "Please review what happens when you cancel this subscription.",
+    "keepSubscription": "Keep Subscription",
+    "continue": "Continue",
+    "back": "Back",
+    "mustAcknowledge": "You must acknowledge the consequences of cancellation to proceed.",
+    "registeredAgent": {
+      "title": "Loss of Registered Agent",
+      "warning": "Your LLC must maintain a Registered Agent to remain in good standing. Canceling this service means you must appoint a new agent with the Secretary of State immediately.",
+      "important": "Important: Canceling this service does NOT dissolve your LLC.",
+      "penalty": "You must file form RA-100 with the Secretary of State to change your Registered Agent. Failure to maintain a Registered Agent may result in a $250 penalty or business suspension."
+    },
+    "compliance": {
+      "title": "Compliance Responsibilities",
+      "warning": "After cancellation, you will be responsible for filing your own compliance documents.",
+      "statementOfInfo": "Statement of Information - File annually ($20 fee)",
+      "franchiseTax": "Franchise Tax - File annually (minimum $800 for LLCs)"
+    },
+    "website": {
+      "title": "Website/Blog Service",
+      "warning": "Your website will go offline at the end of your billing period.",
+      "dataRetention": "Your data will be retained for 30 days after cancellation. Contact support to export your content."
+    },
+    "billing": {
+      "title": "Service Period",
+      "serviceUntil": "Your service will remain active until {date}",
+      "noRefund": "No prorated refunds are provided for partial billing periods."
+    },
+    "survey": {
+      "title": "Help Us Improve",
+      "description": "We'd love to know why you're leaving (optional).",
+      "reasonLabel": "Why are you canceling?",
+      "reasons": {
+        "tooExpensive": "Too expensive",
+        "notUsing": "Not using the service",
+        "switchingProvider": "Switching to another provider",
+        "closingBusiness": "Closing my business",
+        "poorService": "Not satisfied with the service",
+        "other": "Other reason"
+      },
+      "feedbackLabel": "Please tell us more",
+      "feedbackPlaceholder": "Your feedback helps us improve...",
+      "appointNewAgent": "I understand I need to appoint a new Registered Agent",
+      "appointNewAgentDesc": "I will file form RA-100 with the California Secretary of State before my service ends."
+    },
+    "confirm": {
+      "title": "Confirm Cancellation",
+      "description": "Please review and confirm your cancellation.",
+      "service": "Service",
+      "business": "Business",
+      "amount": "Amount",
+      "activeUntil": "Active Until",
+      "acknowledge": "I understand and acknowledge",
+      "acknowledgeRegisteredAgent": "I understand that I must appoint a new Registered Agent and file form RA-100 with the Secretary of State to avoid penalties or business suspension.",
+      "acknowledgeGeneral": "I understand that my service will end on the date shown above and I will lose access to the benefits of this subscription.",
+      "termsPrefix": "By canceling, you agree to our",
+      "termsLink": "Terms of Service",
+      "processing": "Processing...",
+      "confirmCancellation": "Confirm Cancellation"
+    },
+    "success": {
+      "title": "Cancellation Confirmed",
+      "description": "Your subscription has been scheduled for cancellation.",
+      "serviceUntil": "Your service will remain active until {date}",
+      "emailSent": "A confirmation email has been sent to your email address.",
+      "nextSteps": "Next Steps for Registered Agent",
+      "step1": "Choose a new Registered Agent (yourself, a trusted person, or a professional service)",
+      "step2": "File form RA-100 with the California Secretary of State ($20 fee)",
+      "step3": "Complete this before your service ends to maintain compliance",
+      "sosLink": "California Secretary of State Website",
+      "changedMind": "Changed Your Mind?",
+      "reactivateInfo": "You can reactivate your subscription at any time before your service ends.",
+      "reactivate": "Reactivate Subscription",
+      "reactivating": "Reactivating...",
+      "done": "Done"
+    }
+  },
+  "orders": {
+    "title": "My Orders",
+    "subtitle": "Track your LLC formation orders",
+    "noOrders": "No Orders Yet",
+    "noOrdersDesc": "You haven't placed any orders yet. Start your LLC formation today!",
+    "startLLC": "Start LLC Formation",
+    "startFormation": "Start LLC Formation",
+    "orderNumber": "Order #{orderId}",
+    "viewDetails": "View Details",
+    "viewOrder": "View Order",
+    "cancelOrder": "Cancel Order",
+    "backToOrders": "Back to Orders",
+    "viewBusiness": "View Business",
+    "order": "Order",
+    "state": "State",
+    "total": "Total",
+    "date": "Date",
+    "pendingProcessing": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "refunded": "Refunded",
+    "statuses": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    }
+  },
+  "orderCancellation": {
+    "modalTitle": "Cancel Order",
+    "step": "Step {current} of {total}",
+    "loading": "Loading cancellation details...",
+    "close": "Close",
+    "keepOrder": "Keep My Order",
+    "continue": "Continue",
+    "back": "Back",
+    "mustAcknowledge": "You must acknowledge the consequences of cancellation to proceed.",
+    "progress": {
+      "orderReceived": "Order Received",
+      "llcFiled": "LLC Filed with State",
+      "llcApproved": "LLC Approved"
+    },
+    "blocked": {
+      "title": "Cannot Cancel Order",
+      "description": "This order has already been submitted to the state and cannot be cancelled.",
+      "progressTitle": "Order Progress",
+      "pointOfNoReturn": "Point of No Return",
+      "contactSupport": "If you need assistance or have questions about your order, please contact our support team.",
+      "emailSupport": "Email Support"
+    },
+    "impact": {
+      "title": "Review Cancellation Impact",
+      "description": "Please review what happens when you cancel this order.",
+      "refundBreakdown": "Your Refund",
+      "serviceFee": "Service Fee",
+      "stateFilingFee": "State Filing Fee",
+      "rushFee": "Rush Processing Fee",
+      "processingFeeRetained": "Processing Fee (non-refundable)",
+      "totalRefund": "Total Refund",
+      "processingFeeNote": "A $25 processing fee is retained for orders where work has begun.",
+      "subscriptionWarning": {
+        "title": "Active Subscriptions",
+        "description": "You have {count, plural, one {# active subscription} other {# active subscriptions}} linked to this order. Cancelling your order will NOT cancel your subscriptions.",
+        "actionRequired": "To cancel subscriptions, please visit the Subscriptions page separately.",
+        "subscriptionsPage": "Manage Subscriptions"
+      },
+      "noProtection": {
+        "title": "No Liability Protection",
+        "warning": "Canceling means no LLC will be formed. You will not have personal liability protection for your business activities."
+      },
+      "nameNotReserved": {
+        "title": "Name Not Reserved",
+        "warning": "The company name you chose will not be reserved. Anyone else may register this name with the state."
+      },
+      "documents": {
+        "title": "No Formation Documents",
+        "warning": "You will not receive an Operating Agreement, EIN, or other formation documents included in your package."
+      }
+    },
+    "survey": {
+      "title": "Help Us Improve",
+      "description": "We'd love to know why you're canceling (optional).",
+      "reasonLabel": "Why are you canceling?",
+      "reasons": {
+        "changedMind": "Changed my mind about forming an LLC",
+        "tooExpensive": "Too expensive",
+        "foundAlternative": "Found a better option elsewhere",
+        "notReady": "Not ready to start a business yet",
+        "wrongState": "Wanted to form in a different state",
+        "other": "Other reason"
+      },
+      "feedbackLabel": "Please tell us more",
+      "feedbackPlaceholder": "Your feedback helps us improve..."
+    },
+    "confirm": {
+      "title": "Confirm Cancellation",
+      "description": "This action cannot be undone.",
+      "company": "Company",
+      "state": "State",
+      "orderTotal": "Order Total",
+      "refundAmount": "Refund Amount",
+      "acknowledge": "I understand and confirm",
+      "acknowledgeDetails": "No LLC will be formed, I will not have liability protection, and the company name will be released for others to register.",
+      "termsPrefix": "By canceling, you agree to our",
+      "termsLink": "Refund Policy",
+      "processing": "Processing...",
+      "confirmCancellation": "Confirm Cancellation"
+    },
+    "success": {
+      "title": "Order Cancelled",
+      "description": "Your order has been successfully cancelled.",
+      "refundInfo": "Your refund of {amount} will be processed.",
+      "refundTimeframe": "Expect to see it in your account within 5-10 business days.",
+      "emailSent": "Confirmation Email Sent",
+      "emailDetails": "We've sent a cancellation confirmation to your email address with refund details.",
+      "startAgain": "Want to Start Again?",
+      "startAgainDetails": "You can start a new LLC formation order anytime from your dashboard.",
+      "nameWarning": "Note: The company name you previously selected may no longer be available.",
+      "done": "Done"
+    }
   }
 }
