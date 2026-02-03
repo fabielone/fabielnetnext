@@ -8,6 +8,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import ChatwootScript from 'src/app/components/utils/chatwoot';
 import { NavigationProvider } from 'src/app/components/providers/NavigationProvider';
 import { NavigationPrefetcher } from 'src/app/components/utils/NavigationPrefetcher';
+import CookieConsentProvider from 'src/app/components/providers/CookieConsentProvider';
+import ConsentGate from 'src/app/components/utils/ConsentGate';
 import { ReactNode } from 'react';
 
 const locales = ['en', 'es'];
@@ -42,9 +44,15 @@ export default async function LocaleLayout({
           {children}
         </main>
         <Footer />
-        <Analytics />
-        <SpeedInsights />
-        <ChatwootScript />  
+        <CookieConsentProvider>
+          <ConsentGate category="analytics">
+            <Analytics />
+            <SpeedInsights />
+          </ConsentGate>
+          <ConsentGate category="marketing">
+            <ChatwootScript />
+          </ConsentGate>
+        </CookieConsentProvider>
       </NavigationProvider>
     </NextIntlClientProvider>
   );

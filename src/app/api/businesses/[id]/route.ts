@@ -58,6 +58,13 @@ export async function GET(
             companyName: true,
             totalAmount: true,
             createdAt: true,
+            needEIN: true,
+            needOperatingAgreement: true,
+            needBankLetter: true,
+            articlesGenerated: true,
+            operatingAgreementGenerated: true,
+            bankLetterGenerated: true,
+            einObtained: true,
             questionnaire: {
               select: {
                 id: true,
@@ -66,6 +73,16 @@ export async function GET(
                 createdAt: true,
                 accessToken: true,
               }
+            },
+            documents: {
+              select: {
+                id: true,
+                documentType: true,
+                fileName: true,
+                filePath: true,
+                generatedAt: true,
+              },
+              orderBy: { generatedAt: 'desc' }
             }
           }
         }

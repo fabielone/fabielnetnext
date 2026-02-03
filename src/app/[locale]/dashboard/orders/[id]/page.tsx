@@ -21,6 +21,8 @@ import {
   RiBankLine,
   RiCheckLine,
   RiCloseCircleLine,
+  RiDownloadLine,
+  RiLoader4Line,
 } from 'react-icons/ri'
 
 // Progress event types
@@ -135,6 +137,15 @@ interface OrderDetail {
   } | null
 }
 
+interface OrderDocument {
+  id: string | null
+  fileName: string
+  documentType: string
+  path: string
+  url: string | null
+  generatedAt: string | null
+}
+
 // Progress step configuration
 const progressStepConfig: { type: ProgressEventType; label: string; requiresService?: 'needEIN' | 'needOperatingAgreement' | 'needBankLetter' }[] = [
   { type: 'ORDER_RECEIVED', label: 'Order Received' },
@@ -170,8 +181,29 @@ export default function OrderDetailPage() {
   
   const [order, setOrder] = useState<OrderDetail | null>(null)
   const [subscriptions, setSubscriptions] = useState<OrderSubscription[]>([])
+  const [documents, setDocuments] = useState<OrderDocument[]>([])
   const [loading, setLoading] = useState(true)
   const [showCancellationFlow, setShowCancellationFlow] = useState(false)
+  const [loadingDocuments, setLoadingDocuments] = useState(false)
+
+  // Fetch order documents from storage
+  const fetchDocuments = useCallback(async (orderIdString: string) => {
+    try {
+      setLoadingDocuments(true)
+      const res = await fetch(`/api/orders/${orderIdString}/storage`, { 
+        credentials: 'include' 
+      })
+      
+      if (res.ok) {
+        const data = await res.json()
+        setDocuments(data.documents || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch documents:', error)
+    } finally {
+      setLoadingDocuments(false)
+    }
+  }, [])
 
   const fetchOrder = useCallback(async () => {
     try {
@@ -183,6 +215,10 @@ export default function OrderDetailPage() {
         const data = await res.json()
         setOrder(data.order)
         setSubscriptions(data.subscriptions || [])
+        // Fetch documents after we have the order data
+        if (data.order?.orderId) {
+          fetchDocuments(data.order.orderId)
+        }
       } else if (res.status === 404) {
         router.push(`/${locale}/dashboard/orders`)
       }
@@ -191,7 +227,7 @@ export default function OrderDetailPage() {
     } finally {
       setLoading(false)
     }
-  }, [orderId, router, locale])
+  }, [orderId, router, locale, fetchDocuments])
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -430,6 +466,183 @@ export default function OrderDetailPage() {
               </div>
             </div>
 
+            {/* Documents Section - Unified */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="font-semibold text-gray-900 mb-4">Documents</h2>
+              {loadingDocuments ? (
+                <div className="flex items-center justify-center py-8">
+                  <RiLoader4Line className="w-6 h-6 text-amber-600 animate-spin" />
+                  <span className="ml-2 text-gray-500">Loading documents...</span>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {/* Articles of Organization - Always shown for LLC orders */}
+                  {(() => {
+                    const articlesDoc = documents.find(d => d.documentType === 'ARTICLES_OF_ORGANIZATION')
+                    return (
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <RiFileTextLine className="w-5 h-5 text-gray-400" />
+                          <div>
+                            <span className="text-sm font-medium text-gray-900">Articles of Organization</span>
+                            {articlesDoc && (
+                              <p className="text-xs text-gray-500">{articlesDoc.fileName}</p>
+                            )}
+                          </div>
+                        </div>
+                        {articlesDoc?.url ? (
+                          <a 
+                            href={articlesDoc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-amber-600 hover:text-amber-700 text-sm font-medium"
+                          >
+                            <RiDownloadLine className="w-4 h-4" /> Download
+                          </a>
+                        ) : (
+                          <span className="flex items-center gap-1 text-gray-400 text-sm">
+                            <RiTimeLine className="w-4 h-4" /> Pending
+                          </span>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  {/* Operating Agreement - Only if selected */}
+                  {order.needOperatingAgreement && (() => {
+                    const opAgreeDoc = documents.find(d => d.documentType === 'OPERATING_AGREEMENT')
+                    return (
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <RiFileTextLine className="w-5 h-5 text-gray-400" />
+                          <div>
+                            <span className="text-sm font-medium text-gray-900">Operating Agreement</span>
+                            {opAgreeDoc && (
+                              <p className="text-xs text-gray-500">{opAgreeDoc.fileName}</p>
+                            )}
+                          </div>
+                        </div>
+                        {opAgreeDoc?.url ? (
+                          <a 
+                            href={opAgreeDoc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-amber-600 hover:text-amber-700 text-sm font-medium"
+                          >
+                            <RiDownloadLine className="w-4 h-4" /> Download
+                          </a>
+                        ) : (
+                          <span className="flex items-center gap-1 text-gray-400 text-sm">
+                            <RiTimeLine className="w-4 h-4" /> Pending
+                          </span>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  {/* Bank Resolution Letter - Only if selected */}
+                  {order.needBankLetter && (() => {
+                    const bankDoc = documents.find(d => d.documentType === 'BANK_RESOLUTION_LETTER')
+                    return (
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <RiBankLine className="w-5 h-5 text-gray-400" />
+                          <div>
+                            <span className="text-sm font-medium text-gray-900">Banking Resolution Letter</span>
+                            {bankDoc && (
+                              <p className="text-xs text-gray-500">{bankDoc.fileName}</p>
+                            )}
+                          </div>
+                        </div>
+                        {bankDoc?.url ? (
+                          <a 
+                            href={bankDoc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-amber-600 hover:text-amber-700 text-sm font-medium"
+                          >
+                            <RiDownloadLine className="w-4 h-4" /> Download
+                          </a>
+                        ) : (
+                          <span className="flex items-center gap-1 text-gray-400 text-sm">
+                            <RiTimeLine className="w-4 h-4" /> Pending
+                          </span>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  {/* EIN Confirmation - Only if selected */}
+                  {order.needEIN && (() => {
+                    const einDoc = documents.find(d => d.documentType === 'EIN_CONFIRMATION')
+                    return (
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <RiFileTextLine className="w-5 h-5 text-gray-400" />
+                          <div>
+                            <span className="text-sm font-medium text-gray-900">EIN Confirmation Letter</span>
+                            {einDoc && (
+                              <p className="text-xs text-gray-500">{einDoc.fileName}</p>
+                            )}
+                          </div>
+                        </div>
+                        {einDoc?.url ? (
+                          <a 
+                            href={einDoc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-amber-600 hover:text-amber-700 text-sm font-medium"
+                          >
+                            <RiDownloadLine className="w-4 h-4" /> Download
+                          </a>
+                        ) : (
+                          <span className="flex items-center gap-1 text-gray-400 text-sm">
+                            <RiTimeLine className="w-4 h-4" /> Pending
+                          </span>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  {/* Other documents (Invoice, Receipt, etc.) */}
+                  {documents
+                    .filter(d => !['ARTICLES_OF_ORGANIZATION', 'OPERATING_AGREEMENT', 'BANK_RESOLUTION_LETTER', 'EIN_CONFIRMATION'].includes(d.documentType))
+                    .map((doc, index) => {
+                      const docTypeLabels: Record<string, string> = {
+                        'INVOICE': 'Invoice',
+                        'RECEIPT': 'Receipt',
+                        'OTHER': 'Document'
+                      }
+                      const docName = docTypeLabels[doc.documentType] || doc.documentType.replace(/_/g, ' ')
+                      
+                      return (
+                        <div key={doc.id || index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <RiFileTextLine className="w-5 h-5 text-gray-400" />
+                            <div>
+                              <span className="text-sm font-medium text-gray-900">{docName}</span>
+                              <p className="text-xs text-gray-500">{doc.fileName}</p>
+                            </div>
+                          </div>
+                          {doc.url ? (
+                            <a 
+                              href={doc.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-amber-600 hover:text-amber-700 text-sm font-medium"
+                            >
+                              <RiDownloadLine className="w-4 h-4" /> Download
+                            </a>
+                          ) : (
+                            <span className="text-sm text-gray-400">Unavailable</span>
+                          )}
+                        </div>
+                      )
+                    })}
+                </div>
+              )}
+            </div>
+
             {/* Business Details */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h2 className="font-semibold text-gray-900 mb-4">Business Details</h2>
@@ -517,82 +730,6 @@ export default function OrderDetailPage() {
                 </div>
               </div>
             )}
-
-            {/* Documents Generated */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="font-semibold text-gray-900 mb-4">Documents</h2>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <RiFileTextLine className="w-5 h-5 text-gray-400" />
-                    <span className="text-sm text-gray-900">Articles of Organization</span>
-                  </div>
-                  {order.articlesGenerated ? (
-                    <span className="flex items-center gap-1 text-green-600 text-sm">
-                      <RiCheckboxCircleLine className="w-4 h-4" /> Ready
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-gray-400 text-sm">
-                      <RiTimeLine className="w-4 h-4" /> Pending
-                    </span>
-                  )}
-                </div>
-                
-                {order.needOperatingAgreement && (
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <RiFileTextLine className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-900">Operating Agreement</span>
-                    </div>
-                    {order.operatingAgreementGenerated ? (
-                      <span className="flex items-center gap-1 text-green-600 text-sm">
-                        <RiCheckboxCircleLine className="w-4 h-4" /> Ready
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-gray-400 text-sm">
-                        <RiTimeLine className="w-4 h-4" /> Pending
-                      </span>
-                    )}
-                  </div>
-                )}
-                
-                {order.needBankLetter && (
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <RiBankLine className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-900">Banking Resolution Letter</span>
-                    </div>
-                    {order.bankLetterGenerated ? (
-                      <span className="flex items-center gap-1 text-green-600 text-sm">
-                        <RiCheckboxCircleLine className="w-4 h-4" /> Ready
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-gray-400 text-sm">
-                        <RiTimeLine className="w-4 h-4" /> Pending
-                      </span>
-                    )}
-                  </div>
-                )}
-                
-                {order.needEIN && (
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <RiFileTextLine className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-900">EIN Confirmation Letter</span>
-                    </div>
-                    {order.einObtained ? (
-                      <span className="flex items-center gap-1 text-green-600 text-sm">
-                        <RiCheckboxCircleLine className="w-4 h-4" /> Ready
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-gray-400 text-sm">
-                        <RiTimeLine className="w-4 h-4" /> Pending
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
 
           {/* Sidebar */}

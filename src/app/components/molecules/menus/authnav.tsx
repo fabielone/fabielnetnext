@@ -29,9 +29,15 @@ export default function AuthNavigation() {
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
-    await logout();
-    setIsOpen(false);
-    window.location.href = `/${locale}`;
+    try {
+      await logout();
+      setIsOpen(false);
+      // Force a full page reload to clear all state
+      window.location.replace(`/${locale}`);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setIsLoggingOut(false);
+    }
   };
 
   // Get user initials

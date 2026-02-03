@@ -47,6 +47,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshUser = useCallback(async () => {
     try {
       const res = await fetch('/api/auth/me', { credentials: 'include' })
+      if (!res.ok) {
+        // Non-OK response (404, 500, HTML error page) — treat as unauthenticated
+        setUser(null)
+        return
+      }
+
+      // Only parse JSON when the response is OK
+      const contentType = res.headers.get('content-type') || ''
+      if (!contentType.includes('application/json')) {
+        setUser(null)
+        return
+      }
+
       const data = await res.json()
       setUser(data.user || null)
     } catch (error) {
@@ -69,11 +82,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
         credentials: 'include',
       })
-
-      const data = await res.json()
+      let data: any = {}
+      try {
+        const contentType = res.headers.get('content-type') || ''
+        if (contentType.includes('application/json')) data = await res.json()
+      } catch (e) {
+        console.error('Failed to parse login response as JSON', e)
+      }
 
       if (!res.ok) {
-        return { success: false, error: data.error || 'Login failed' }
+        return { success: false, error: (data && data.error) || 'Login failed' }
       }
 
       setUser(data.user)
@@ -92,11 +110,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify(registerData),
         credentials: 'include',
       })
-
-      const data = await res.json()
+      let data: any = {}
+      try {
+        const contentType = res.headers.get('content-type') || ''
+        if (contentType.includes('application/json')) data = await res.json()
+      } catch (e) {
+        console.error('Failed to parse register response as JSON', e)
+      }
 
       if (!res.ok) {
-        return { success: false, error: data.error || 'Registration failed' }
+        return { success: false, error: (data && data.error) || 'Registration failed' }
       }
 
       setUser(data.user)
@@ -114,9 +137,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         credentials: 'include',
       })
       setUser(null)
-      router.push('/login')
+      // Don't redirect here - let the calling component handle it
+      // This prevents double redirects
     } catch (error) {
       console.error('Logout error:', error)
+      // Still clear user on error
+      setUser(null)
     }
   }
 

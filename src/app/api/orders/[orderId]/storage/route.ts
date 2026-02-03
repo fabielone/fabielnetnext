@@ -99,21 +99,59 @@ export async function GET(
       return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
 
-    // List documents from Supabase storage
-    const storageDocuments = await listOrderDocuments(orderId)
+    // First, get documents from the database (more reliable)
+    const dbDocuments = await prisma.document.findMany({
+      where: { orderId: order.id },
+      orderBy: { generatedAt: 'desc' }
+    })
 
-    // Generate signed URLs for each document
+    // Generate signed URLs for database documents
     const documentsWithUrls = await Promise.all(
-      storageDocuments.map(async (fileName) => {
-        const path = `orders/${orderId}/${fileName}`
-        const signedUrl = await getSignedDocumentUrl(path)
+      dbDocuments.map(async (doc) => {
+        let url: string | null = null
+        
+        if (doc.filePath) {
+          // Check if filePath is already a full URL (public bucket) or relative path (private bucket)
+          if (doc.filePath.startsWith('http://') || doc.filePath.startsWith('https://')) {
+            // Already a public URL - use directly
+            url = doc.filePath
+          } else {
+            // Relative path - generate signed URL
+            url = await getSignedDocumentUrl(doc.filePath)
+          }
+        }
+        
         return {
-          fileName,
-          path,
-          url: signedUrl
+          id: doc.id,
+          fileName: doc.fileName,
+          documentType: doc.documentType,
+          path: doc.filePath,
+          url,
+          generatedAt: doc.generatedAt
         }
       })
     )
+
+    // Also check storage directly for any files not in DB
+    // Note: Files are stored under the order's database ID, not the orderId string
+    const storageDocuments = await listOrderDocuments(order.id)
+    const dbFilePaths = new Set(dbDocuments.map(d => d.filePath))
+    
+    // Add storage-only documents (not in DB)
+    for (const fileName of storageDocuments) {
+      const path = `orders/${order.id}/${fileName}`
+      if (!dbFilePaths.has(path)) {
+        const signedUrl = await getSignedDocumentUrl(path)
+        documentsWithUrls.push({
+          id: null,
+          fileName,
+          documentType: 'OTHER',
+          path,
+          url: signedUrl,
+          generatedAt: null
+        })
+      }
+    }
 
     return NextResponse.json({ 
       success: true,

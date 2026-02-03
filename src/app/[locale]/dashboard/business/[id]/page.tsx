@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { useAuth } from '@/app/components/providers/AuthProvider'
 import BusinessSettingsTab from './components/BusinessSettingsTab'
+import { RiLoader4Line } from 'react-icons/ri'
 import { 
   RiArrowLeftLine,
   RiBuilding2Line, 
@@ -93,6 +94,13 @@ type BusinessDetail = {
     orderId: string
     status: string
     companyName: string
+    needEIN: boolean
+    needOperatingAgreement: boolean
+    needBankLetter: boolean
+    articlesGenerated: boolean
+    operatingAgreementGenerated: boolean
+    bankLetterGenerated: boolean
+    einObtained: boolean
     questionnaire?: {
       id: string
       status: string
@@ -100,6 +108,13 @@ type BusinessDetail = {
       createdAt: string
       accessToken: string
     } | null
+    documents: Array<{
+      id: string
+      documentType: string
+      fileName: string
+      filePath: string
+      generatedAt: string
+    }>
   } | null
 }
 
@@ -115,6 +130,32 @@ export default function BusinessDetailPage() {
   const [business, setBusiness] = useState<BusinessDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>('overview')
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null)
+
+  // Handle document download with signed URL
+  const handleDownloadDocument = async (docId: string) => {
+    try {
+      setDownloadingDocId(docId)
+      const res = await fetch(`/api/businesses/${businessId}/documents/${docId}`, {
+        credentials: 'include'
+      })
+      
+      if (res.ok) {
+        const data = await res.json()
+        // Open the signed URL in a new tab for download/view
+        window.open(data.url, '_blank')
+      } else {
+        const error = await res.json()
+        console.error('Failed to get document URL:', error.error)
+        alert('Failed to download document. Please try again.')
+      }
+    } catch (error) {
+      console.error('Download error:', error)
+      alert('Failed to download document. Please try again.')
+    } finally {
+      setDownloadingDocId(null)
+    }
+  }
 
   const fetchBusiness = useCallback(async () => {
     try {
@@ -179,12 +220,33 @@ export default function BusinessDetailPage() {
   const totalPendingTasks = pendingTasks.length + (hasIncompleteQuestionnaire ? 1 : 0);
 
   const subscriptions = business.subscriptions || [];
-  const documents = business.documents || [];
-  // services and notes available in business object if needed
+  const businessDocuments = business.documents || [];
+  const orderDocuments = business.formationOrder?.documents || [];
+  
+  // Helper to get document name from type
+  const getDocumentName = (type: string) => {
+    const names: Record<string, string> = {
+      'ARTICLES_OF_ORGANIZATION': 'Articles of Organization',
+      'OPERATING_AGREEMENT': 'Operating Agreement',
+      'BANK_RESOLUTION_LETTER': 'Bank Resolution Letter',
+      'EIN_CONFIRMATION': 'EIN Confirmation',
+      'INVOICE': 'Invoice',
+      'RECEIPT': 'Receipt',
+    };
+    return names[type] || type.replace(/_/g, ' ');
+  };
+
+  // Get order document by type
+  const getOrderDocument = (type: string) => {
+    return orderDocuments.find(d => d.documentType === type);
+  };
+
+  // Total documents count for tab
+  const totalDocuments = businessDocuments.length + orderDocuments.length;
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode; count?: number }[] = [
     { id: 'overview', label: 'Overview', icon: <RiBuilding2Line className="w-4 h-4" /> },
-    { id: 'documents', label: 'Files', icon: <RiFileTextLine className="w-4 h-4" />, count: documents.length },
+    { id: 'documents', label: 'Files', icon: <RiFileTextLine className="w-4 h-4" />, count: totalDocuments },
     { id: 'subscriptions', label: 'Subscriptions', icon: <RiRefreshLine className="w-4 h-4" />, count: subscriptions.length },
     { id: 'tasks', label: 'Tasks', icon: <RiCheckboxCircleLine className="w-4 h-4" />, count: totalPendingTasks },
     { id: 'settings', label: 'Settings', icon: <RiSettings4Line className="w-4 h-4" /> },
@@ -341,25 +403,44 @@ export default function BusinessDetailPage() {
                     View All →
                   </button>
                 </div>
-                {documents.length === 0 ? (
+                {orderDocuments.length === 0 && businessDocuments.length === 0 ? (
                   <p className="text-gray-500 text-sm">No documents yet</p>
                 ) : (
                   <div className="space-y-2">
-                    {documents.slice(0, 5).map(doc => (
+                    {/* Order documents */}
+                    {orderDocuments.slice(0, 5).map(doc => (
                       <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                         <div className="flex items-center gap-3">
                           <RiFileTextLine className="w-5 h-5 text-gray-400" />
                           <div>
-                            <p className="text-sm font-medium text-gray-900">{doc.name}</p>
-                            <p className="text-xs text-gray-500">{doc.category}</p>
+                            <p className="text-sm font-medium text-gray-900">{getDocumentName(doc.documentType)}</p>
+                            <p className="text-xs text-gray-500">{new Date(doc.generatedAt).toLocaleDateString()}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
-                            <RiEyeLine className="w-4 h-4" />
+                          <button 
+                            onClick={() => handleDownloadDocument(doc.id)}
+                            disabled={downloadingDocId === doc.id}
+                            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors disabled:opacity-50"
+                            title="View Document"
+                          >
+                            {downloadingDocId === doc.id ? (
+                              <RiLoader4Line className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <RiEyeLine className="w-4 h-4" />
+                            )}
                           </button>
-                          <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
-                            <RiDownloadLine className="w-4 h-4" />
+                          <button 
+                            onClick={() => handleDownloadDocument(doc.id)}
+                            disabled={downloadingDocId === doc.id}
+                            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors disabled:opacity-50"
+                            title="Download Document"
+                          >
+                            {downloadingDocId === doc.id ? (
+                              <RiLoader4Line className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <RiDownloadLine className="w-4 h-4" />
+                            )}
                           </button>
                         </div>
                       </div>
@@ -459,37 +540,206 @@ export default function BusinessDetailPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="mb-6">
               <h3 className="font-semibold text-gray-900">All Documents</h3>
+              <p className="text-sm text-gray-500 mt-1">Formation and business documents</p>
             </div>
-            {documents.length === 0 ? (
-              <div className="text-center py-12">
-                <RiFileTextLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No documents uploaded yet</p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {documents.map(doc => (
+            
+            <div className="space-y-3">
+              {/* Articles of Organization - Always shown for formation */}
+              {business.formationOrder && (
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <RiFileTextLine className="w-6 h-6 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-gray-900">Articles of Organization</p>
+                      <p className="text-sm text-gray-500">Formation Document</p>
+                    </div>
+                  </div>
+                  {(() => {
+                    const doc = getOrderDocument('ARTICLES_OF_ORGANIZATION');
+                    return doc ? (
+                      <button
+                        onClick={() => handleDownloadDocument(doc.id)}
+                        disabled={downloadingDocId === doc.id}
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-50"
+                      >
+                        {downloadingDocId === doc.id ? (
+                          <RiLoader4Line className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <RiDownloadLine className="w-4 h-4" />
+                        )}
+                        Download
+                      </button>
+                    ) : (
+                      <span className="flex items-center gap-1 text-gray-400 text-sm">
+                        <RiTimeLine className="w-4 h-4" /> Pending
+                      </span>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* Operating Agreement - Only if selected */}
+              {business.formationOrder?.needOperatingAgreement && (
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <RiFileTextLine className="w-6 h-6 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-gray-900">Operating Agreement</p>
+                      <p className="text-sm text-gray-500">Legal Document</p>
+                    </div>
+                  </div>
+                  {(() => {
+                    const doc = getOrderDocument('OPERATING_AGREEMENT');
+                    return doc ? (
+                      <button
+                        onClick={() => handleDownloadDocument(doc.id)}
+                        disabled={downloadingDocId === doc.id}
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-50"
+                      >
+                        {downloadingDocId === doc.id ? (
+                          <RiLoader4Line className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <RiDownloadLine className="w-4 h-4" />
+                        )}
+                        Download
+                      </button>
+                    ) : (
+                      <span className="flex items-center gap-1 text-gray-400 text-sm">
+                        <RiTimeLine className="w-4 h-4" /> Pending
+                      </span>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* Bank Resolution Letter - Only if selected */}
+              {business.formationOrder?.needBankLetter && (
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <RiFileTextLine className="w-6 h-6 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-gray-900">Bank Resolution Letter</p>
+                      <p className="text-sm text-gray-500">Banking Document</p>
+                    </div>
+                  </div>
+                  {(() => {
+                    const doc = getOrderDocument('BANK_RESOLUTION_LETTER');
+                    return doc ? (
+                      <button
+                        onClick={() => handleDownloadDocument(doc.id)}
+                        disabled={downloadingDocId === doc.id}
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-50"
+                      >
+                        {downloadingDocId === doc.id ? (
+                          <RiLoader4Line className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <RiDownloadLine className="w-4 h-4" />
+                        )}
+                        Download
+                      </button>
+                    ) : (
+                      <span className="flex items-center gap-1 text-gray-400 text-sm">
+                        <RiTimeLine className="w-4 h-4" /> Pending
+                      </span>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* EIN Confirmation - Only if selected */}
+              {business.formationOrder?.needEIN && (
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <RiFileTextLine className="w-6 h-6 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-gray-900">EIN Confirmation</p>
+                      <p className="text-sm text-gray-500">Tax Document</p>
+                    </div>
+                  </div>
+                  {(() => {
+                    const doc = getOrderDocument('EIN_CONFIRMATION');
+                    return doc ? (
+                      <button
+                        onClick={() => handleDownloadDocument(doc.id)}
+                        disabled={downloadingDocId === doc.id}
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-50"
+                      >
+                        {downloadingDocId === doc.id ? (
+                          <RiLoader4Line className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <RiDownloadLine className="w-4 h-4" />
+                        )}
+                        Download
+                      </button>
+                    ) : (
+                      <span className="flex items-center gap-1 text-gray-400 text-sm">
+                        <RiTimeLine className="w-4 h-4" /> Pending
+                      </span>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* Other order documents (Invoice, Receipt, etc.) */}
+              {orderDocuments
+                .filter(doc => !['ARTICLES_OF_ORGANIZATION', 'OPERATING_AGREEMENT', 'BANK_RESOLUTION_LETTER', 'EIN_CONFIRMATION'].includes(doc.documentType))
+                .map(doc => (
                   <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <div className="flex items-center gap-3">
                       <RiFileTextLine className="w-6 h-6 text-gray-400" />
                       <div>
-                        <p className="font-medium text-gray-900">{doc.name}</p>
-                        <p className="text-sm text-gray-500">
-                          {doc.category} • {new Date(doc.createdAt).toLocaleDateString()}
-                        </p>
+                        <p className="font-medium text-gray-900">{getDocumentName(doc.documentType)}</p>
+                        <p className="text-sm text-gray-500">{new Date(doc.generatedAt).toLocaleDateString()}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
-                        <RiEyeLine className="w-5 h-5" />
-                      </button>
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
-                        <RiDownloadLine className="w-5 h-5" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleDownloadDocument(doc.id)}
+                      disabled={downloadingDocId === doc.id}
+                      className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-50"
+                    >
+                      {downloadingDocId === doc.id ? (
+                        <RiLoader4Line className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <RiDownloadLine className="w-4 h-4" />
+                      )}
+                      Download
+                    </button>
                   </div>
                 ))}
-              </div>
-            )}
+
+              {/* Business documents (if any) */}
+              {businessDocuments.map(doc => (
+                <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <RiFileTextLine className="w-6 h-6 text-gray-400" />
+                    <div>
+                      <p className="font-medium text-gray-900">{doc.name}</p>
+                      <p className="text-sm text-gray-500">{doc.category} • {new Date(doc.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDownloadDocument(doc.id)}
+                    disabled={downloadingDocId === doc.id}
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-50"
+                  >
+                    {downloadingDocId === doc.id ? (
+                      <RiLoader4Line className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <RiDownloadLine className="w-4 h-4" />
+                    )}
+                    Download
+                  </button>
+                </div>
+              ))}
+
+              {/* Empty state */}
+              {!business.formationOrder && businessDocuments.length === 0 && (
+                <div className="text-center py-12">
+                  <RiFileTextLine className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">No documents uploaded yet</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
