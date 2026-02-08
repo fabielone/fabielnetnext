@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { FiSun, FiMoon } from 'react-icons/fi'
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   // useEffect only runs on the client, so now we can safely show the UI
@@ -21,13 +21,15 @@ export default function ThemeToggle() {
     )
   }
 
+  const isDark = theme === 'dark' || resolvedTheme === 'dark'
+
   return (
     <button
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
+      {isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
     </button>
   )
 }
