@@ -127,6 +127,7 @@
           "llc": "Forma tu LLC",
           "agent": "Agente Registrado",
           "compliance": "Cumplimiento Anual",
+          "compliancePackage": "Paquete Cumplimiento + AR",
           "other": "Otros Servicios Personalizados"
         },
         "bpo": {

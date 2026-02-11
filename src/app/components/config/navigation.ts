@@ -15,13 +15,10 @@ export const navItems: NavItem[] = [
         name: 'services.business.title',
         subSections: [
           { name: 'services.business.llc', path: '/business' },
+          { name: 'services.business.compliancePackage', path: '/compliance' },
         ]
       }
     ]
-  },
-  {
-    name: 'clients',
-    path: '/allies'
   },
   {
     name: 'partners',

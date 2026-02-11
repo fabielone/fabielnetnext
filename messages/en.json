@@ -128,6 +128,7 @@
           "llc": "Form Your LLC",
           "agent": "Registered Agent",
           "compliance": "Annual Compliance",
+          "compliancePackage": "Compliance + RA Package",
           "other": "Other Custom Services"
         },
         "bpo": {
