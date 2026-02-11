@@ -27,7 +27,7 @@ export async function GET(
     }
 
     // First try to find in BusinessDocument table
-    let document = await prisma.businessDocument.findFirst({
+    const document = await prisma.businessDocument.findFirst({
       where: { id: docId, businessId }
     })
 

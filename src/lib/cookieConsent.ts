@@ -10,12 +10,12 @@ export type ConsentRecord = {
   consent: Consent;
 };
 
-const STORAGE_KEY = "fabiel_cookie_consent";
-const CURRENT_VERSION = "v1";
+const STORAGE_KEY = 'fabiel_cookie_consent';
+const CURRENT_VERSION = 'v1';
 
 export function getConsentFromStorage(): ConsentRecord | null {
   try {
-    if (typeof window === "undefined") return null;
+    if (typeof window === 'undefined') return null;
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as ConsentRecord;
@@ -27,7 +27,7 @@ export function getConsentFromStorage(): ConsentRecord | null {
 
 export function saveConsentToStorage(c: Consent) {
   try {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     const record: ConsentRecord = { version: CURRENT_VERSION, ts: new Date().toISOString(), consent: c };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
   } catch (e) {}
@@ -35,7 +35,7 @@ export function saveConsentToStorage(c: Consent) {
 
 export function clearConsentStorage() {
   try {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     localStorage.removeItem(STORAGE_KEY);
   } catch (e) {}
 }

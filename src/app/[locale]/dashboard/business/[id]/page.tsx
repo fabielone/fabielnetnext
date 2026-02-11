@@ -5,8 +5,7 @@ import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import { useAuth } from '@/app/components/providers/AuthProvider'
 import BusinessSettingsTab from './components/BusinessSettingsTab'
-import { RiLoader4Line } from 'react-icons/ri'
-import { 
+import { RiLoader4Line , 
   RiArrowLeftLine,
   RiBuilding2Line, 
   RiFileTextLine, 

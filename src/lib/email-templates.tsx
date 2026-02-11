@@ -538,7 +538,7 @@ export const OrderCancellationEmail = ({
               <strong>Processing Fee Retained:</strong> -${refundBreakdown.processingFeeDeducted.toFixed(2)}<br/>
               <strong>State Filing Fees:</strong> {refundBreakdown.stateFeesRefundable 
                 ? `$${refundBreakdown.stateFees.toFixed(2)} (refundable - not yet paid to state)` 
-                : `$0.00 (not refundable - already paid to state)`
+                : '$0.00 (not refundable - already paid to state)'
               }<br/>
               <Hr style={{...hr, margin: '10px 0'}} />
               <strong style={{fontSize: '18px'}}>Total Refund: ${refundBreakdown.totalRefund.toFixed(2)}</strong>

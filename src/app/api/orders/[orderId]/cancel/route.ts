@@ -319,7 +319,7 @@ export async function POST(
         const refund = await stripe.refunds.create(refundParams);
         
         stripeRefundId = refund.id;
-        console.log(`Stripe refund created successfully:`, {
+        console.log('Stripe refund created successfully:', {
           refundId: refund.id,
           status: refund.status,
           amount: refund.amount / 100
