@@ -72,25 +72,17 @@ export default function Hero() {
 
           {/* State Pills */}
           <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {states.map((state, i) => (
-              <motion.div
+            {states.map((state) => (
+              <div
                 key={state}
                 className="px-3 py-1.5 rounded-full bg-slate-200/80 dark:bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 text-sm font-medium text-slate-700 dark:text-white/80"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                transition={{ delay: 0.3 + i * 0.05 }}
               >
                 {state}
-              </motion.div>
+              </div>
             ))}
-            <motion.div
-              className="px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/30 text-sm font-medium text-amber-600 dark:text-amber-400"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-              transition={{ delay: 0.6 }}
-            >
+            <div className="px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/30 text-sm font-medium text-amber-600 dark:text-amber-400">
               + 42 more
-            </motion.div>
+            </div>
           </div>
         </motion.div>
 

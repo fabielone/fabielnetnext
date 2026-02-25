@@ -16,17 +16,21 @@ export const NavigationPrefetcher = () => {
   const router = useRouter()
 
   useEffect(() => {
-    // Prefetch important routes after initial page load
+    // Prefetch important routes only when the browser is idle, well after initial load
     const prefetchRoutes = () => {
       PREFETCH_ROUTES.forEach(route => {
         router.prefetch(route)
       })
     }
 
-    // Start prefetching after a short delay to not interfere with initial page load
-    const timeout = setTimeout(prefetchRoutes, 2000)
-
-    return () => clearTimeout(timeout)
+    let id: ReturnType<typeof setTimeout>
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const idleId = (window as any).requestIdleCallback(prefetchRoutes, { timeout: 8000 })
+      return () => (window as any).cancelIdleCallback(idleId)
+    } else {
+      id = setTimeout(prefetchRoutes, 6000)
+      return () => clearTimeout(id)
+    }
   }, [router])
 
   useEffect(() => {

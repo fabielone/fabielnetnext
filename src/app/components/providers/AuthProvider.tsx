@@ -41,7 +41,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  // Start as false so pages render immediately; auth state fills in after the API call
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const refreshUser = useCallback(async () => {

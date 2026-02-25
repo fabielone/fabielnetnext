@@ -30,22 +30,8 @@ export const useLinkOptimizer = () => {
       navigateWithLoading(href)
     }
 
-    const enhanceLinkStyling = () => {
-      // Add hover effects to all internal links
-      const links = document.querySelectorAll('a[href]')
-      links.forEach(link => {
-        const href = link.getAttribute('href')
-        if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
-          link.classList.add('transition-all', 'duration-200', 'hover:scale-[1.02]', 'hover:shadow-sm')
-        }
-      })
-    }
-
     // Add click listeners to all links on the page
     document.addEventListener('click', handleLinkClick)
-    
-    // Enhance link styling after component mounts
-    enhanceLinkStyling()
 
     return () => {
       document.removeEventListener('click', handleLinkClick)

@@ -1,35 +1,24 @@
-'use client';
-
-import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 import Hero from '../components/molecules/hero/hero'
-import PerformanceMonitor from '../components/utils/performance-monitor'
 import { LinkOptimizer } from '../components/hooks/useLinkOptimizer'
-
-// Dynamically import components that are below the fold
-const MyServices = dynamic(() => import('../components/molecules/services'), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
-})
-
-const BlogList = dynamic(() => import('../components/molecules/blogsection'), {
-  ssr: false,
-  loading: () => <div className="h-64 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
-})
-
-const ReviewsScroller = dynamic(() => import('../components/molecules/sections/reviews'), {
-  ssr: false,
-  loading: () => <div className="h-48 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
-})
+import MyServices from '../components/molecules/services'
+import BlogList from '../components/molecules/blogsection'
+import ReviewsScroller from '../components/molecules/sections/reviews'
 
 export default function Page() {
   return (
     <section>
       <LinkOptimizer />
-      <PerformanceMonitor />
-      <Hero/>
-      <ReviewsScroller />
-      <MyServices /> 
-      <BlogList />
+      <Hero />
+      <Suspense fallback={<div className="h-48 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />}>
+        <ReviewsScroller />
+      </Suspense>
+      <Suspense fallback={<div className="h-96 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />}>
+        <MyServices />
+      </Suspense>
+      <Suspense fallback={<div className="h-64 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />}>
+        <BlogList />
+      </Suspense>
     </section>
   )
 }
