@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { getConsentFromStorage, saveConsentToStorage, Consent, buildDefaultConsent } from "src/lib/cookieConsent";
-import CookieConsentBanner from "src/app/components/molecules/CookieConsentBanner";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getConsentFromStorage, saveConsentToStorage, Consent, buildDefaultConsent } from 'src/lib/cookieConsent';
+import CookieConsentBanner from 'src/app/components/molecules/CookieConsentBanner';
 
 type ContextValue = {
   record: { consent: Consent } | null;
@@ -23,13 +23,13 @@ export function CookieConsentProvider({ children }: { children: React.ReactNode 
     if (stored) setRecord({ consent: stored.consent });
   }, []);
 
-  const setConsent = (c: Consent, source = "ui") => {
+  const setConsent = (c: Consent, source = 'ui') => {
     setRecord({ consent: c });
     saveConsentToStorage(c);
     // send to server for logging (include source and timestamp client-side)
-    fetch(`/api/cookie-consent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('/api/cookie-consent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ consent: c, ts: new Date().toISOString(), source })
     }).catch(() => {});
   };
@@ -47,7 +47,7 @@ export function CookieConsentProvider({ children }: { children: React.ReactNode 
 
 export function useCookieConsent() {
   const ctx = useContext(CookieConsentContext);
-  if (!ctx) throw new Error("useCookieConsent must be used within CookieConsentProvider");
+  if (!ctx) throw new Error('useCookieConsent must be used within CookieConsentProvider');
   return ctx;
 }
 

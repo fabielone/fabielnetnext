@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { useCookieConsent } from "src/app/components/providers/CookieConsentProvider";
+import { useEffect, useRef } from 'react';
+import { useCookieConsent } from 'src/app/components/providers/CookieConsentProvider';
 
 type Props = {
   id?: string;
   src?: string;
   inline?: string; // inline script content
-  category: "analytics" | "marketing" | "necessary";
+  category: 'analytics' | 'marketing' | 'necessary';
   attrs?: Record<string, string>;
 };
 
@@ -18,15 +18,15 @@ export default function ScriptLoader({ id, src, inline, category, attrs }: Props
   useEffect(() => {
     const consent = record?.consent;
     if (loadedRef.current) return;
-    if (category === "necessary") {
+    if (category === 'necessary') {
       // always load
     } else if (!consent) {
       return;
-    } else if (category === "analytics" && !consent.analytics) return;
-    else if (category === "marketing" && !consent.marketing) return;
+    } else if (category === 'analytics' && !consent.analytics) return;
+    else if (category === 'marketing' && !consent.marketing) return;
 
     // inject script
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     if (id) script.id = id;
     if (src) script.src = src;
     if (inline) script.text = inline;

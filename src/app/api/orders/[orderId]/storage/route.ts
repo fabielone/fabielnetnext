@@ -143,12 +143,12 @@ export async function GET(
       if (!dbFilePaths.has(path)) {
         const signedUrl = await getSignedDocumentUrl(path)
         documentsWithUrls.push({
-          id: null,
+          id: '',
           fileName,
-          documentType: 'OTHER',
+          documentType: 'RECEIPT',
           path,
           url: signedUrl,
-          generatedAt: null
+          generatedAt: new Date()
         })
       }
     }

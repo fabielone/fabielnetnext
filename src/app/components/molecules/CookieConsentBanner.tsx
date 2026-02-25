@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { useCookieConsent } from "src/app/components/providers/CookieConsentProvider";
-import { buildDefaultConsent } from "src/lib/cookieConsent";
+import React, { useEffect, useRef, useState } from 'react';
+import { useCookieConsent } from 'src/app/components/providers/CookieConsentProvider';
+import { buildDefaultConsent } from 'src/lib/cookieConsent';
 
 // Accessible sticky bottom bar with settings dialog
 export default function CookieConsentBanner() {
@@ -18,7 +18,7 @@ export default function CookieConsentBanner() {
   useEffect(() => {
     // trap focus when settings open
     if (settingsOpen && dialogRef.current) {
-      const nodes = dialogRef.current.querySelectorAll<HTMLElement>("button,input,a,select,textarea");
+      const nodes = dialogRef.current.querySelectorAll<HTMLElement>('button,input,a,select,textarea');
       if (nodes.length) nodes[0].focus();
     }
   }, [settingsOpen]);
@@ -29,8 +29,8 @@ export default function CookieConsentBanner() {
 
   const defaultConsent = buildDefaultConsent();
 
-  const acceptAll = () => setConsent({ ...defaultConsent, analytics: true, marketing: true }, "accept_all");
-  const necessaryOnly = () => setConsent(defaultConsent, "necessary_only");
+  const acceptAll = () => setConsent({ ...defaultConsent, analytics: true, marketing: true }, 'accept_all');
+  const necessaryOnly = () => setConsent(defaultConsent, 'necessary_only');
 
   return (
     <div className="fixed inset-x-4 md:inset-x-8 bottom-6 z-50">
@@ -50,7 +50,7 @@ export default function CookieConsentBanner() {
           <div ref={dialogRef} className="mt-3 bg-white rounded shadow p-4" role="dialog" aria-modal="true" aria-label="Cookie settings">
             <h3 className="text-lg font-semibold">Cookie Settings</h3>
             <p className="text-sm text-gray-600">Choose which cookies you allow. You can change this anytime.</p>
-            <SettingsForm current={record?.consent || defaultConsent} onSave={(c) => { setConsent(c, "save_preferences"); closeSettings(); }} onCancel={closeSettings} />
+            <SettingsForm current={record?.consent || defaultConsent} onSave={(c) => { setConsent(c, 'save_preferences'); closeSettings(); }} onCancel={closeSettings} />
           </div>
         )}
       </div>
